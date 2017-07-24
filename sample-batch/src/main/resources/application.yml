@@ -1,0 +1,57 @@
+# 共通の設定を定義する
+spring:
+    profiles:
+        # デフォルトを明示的に指定する
+        # 開発環境以外は環境変数でプロファイルを切り替える
+        default: development
+        active: development
+    messages:
+        # メッセージ定義ファイルのパスを含めて設定する
+        basename: messages,ValidationMessages
+        cache-seconds: -1
+        encoding: UTF-8
+    jackson:
+        # JSONのキーをアンダースコア区切りの文字列にする
+        property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+    flyway:
+        # 開発中のみ有効にする
+        enabled: false
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        autoCommit: false
+        connectionTimeout: 30000
+        maxLifetime: 1800000
+        idleTimeout: 5000
+        connectionTestQuery: select 1
+        minimumIdle: 20
+        maximumPoolSize: 30
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        jdbc4ConnectionTest: true
+    batch:
+        initializer:
+            # ジョブ管理テーブルを自動的に作成する
+            enabled: true
+        job:
+            # 自動的にバッチジョブが起動しないようにする
+            enabled: false
+jmx:
+    enabled: false
+
+# Doma2
+doma:
+    dialect: mysql
+    # 小文字のスネークケースに変換する（firstName → first_name）
+    naming: SNAKE_LOWER_CASE
+    # SQLファイルをキャッシュする
+    sql-file-repository: greedy_cache
+    #
+    batch-size: 1000
+
+
+####
+# アプリケーションの設定
+application:
+    fileUploadLocation: /tmp/sample
+    mailTemplateLocation: mail/

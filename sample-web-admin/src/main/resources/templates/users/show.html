@@ -1,0 +1,42 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{common/layout}" th:with="menu='users'"><!--/* menuItemにパラメータを渡す */-->
+    <head layout:fragment="~{common/layout::header}">
+        <title>ユーザー管理</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <h2>ユーザー詳細</h2>
+
+            <table class="table table-striped" th:object="${user}">
+                <tr>
+                    <th>ID</th>
+                    <td th:text="*{id.value}"></td>
+                </tr>
+                <tr>
+                    <th>氏名</th>
+                    <td><b th:text="*{firstName + ' ' + lastName}"></b></td>
+                </tr>
+                <tr>
+                    <th>メールアドレス</th>
+                    <td th:text="*{email}"></td>
+                </tr>
+                <tr>
+                    <th>住所</th>
+                    <td th:text="*{address}"></td>
+                </tr>
+                <tr>
+                    <th>電話番号</th>
+                    <td th:text="*{tel}"></td>
+                </tr>
+                <tr>
+                    <th>添付画像</th>
+                    <td><img th:src="${image}"></td>
+                </tr>
+            </table>
+
+            <a th:href="@{/users/edit/{id}(id=${user.id.value})}" class="btn btn-default">編集</a>
+        </div>
+    </body>
+</html>

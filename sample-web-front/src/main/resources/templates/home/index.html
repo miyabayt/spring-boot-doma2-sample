@@ -1,0 +1,13 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}" th:with="menu='home'"><!--/* menuItemにパラメータを渡す */-->
+    <head layout:fragment="~{common/layout::header}">
+        <title>Home</title>
+    </head>
+    <body>
+        <!--/* この形式のコメントはHTMLソースから削除される */-->
+        <div layout:fragment="content">
+            <h2>Front Home</h2>
+        </div>
+    </body>
+</html>

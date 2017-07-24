@@ -1,0 +1,44 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{common/layout}">
+    <head layout:fragment="~{common/layout::header}">
+        <title>管理側ログイン</title>
+    </head>
+    <body>
+        <nav layout:fragment="navi" class=""></nav>
+        <div layout:fragment="content">
+            <form class="form-horizontal" th:object="${loginForm}" th:action="@{'/login'}" method="post">
+                <div class="form-group has-feedback">
+                    <div class="form-group" th:with="invalid=${#fields.hasErrors('loginId')}" th:class="${'form-group' + (invalid ? ' has-error' : '')}">
+                        <label class="col-sm-2 control-label">ログインID</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="loginId" placeholder="please input your login id" autofocus="" th:value="*{loginId}" />
+                            <span th:if="${!invalid}" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                            <th:block th:if="${invalid}">
+                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                <span class="help-inline" th:errors="*{loginId}">Error</span>
+                            </th:block>
+                        </div>
+                    </div>
+                    <div class="form-group" th:with="invalid=${#fields.hasErrors('password')}" th:class="${'form-group' + (invalid ? ' has-error' : '')}">
+                        <label class="col-sm-2 control-label">パスワード</label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control" name="password" placeholder="please input your password" />
+                            <span th:if="${!invalid}" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                            <th:block th:if="${invalid}">
+                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                <span class="help-inline" th:errors="*{password}">Error</span>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-6">
+                        <button type="submit" class="btn btn-default">Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

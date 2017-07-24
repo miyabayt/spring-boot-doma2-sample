@@ -1,0 +1,2 @@
+include "sample-common", "sample-domain", "sample-web-base", "sample-web-front", "sample-web-admin", "sample-batch"
+
