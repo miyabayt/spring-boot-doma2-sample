@@ -1,0 +1,59 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}" th:with="menu='uploadfiles'"><!--/* menuItemにパラメータを渡す */-->
+    <head layout:fragment="~{common/layout::header}">
+        <title>ファイルアップロード</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <h2>ファイル一覧</h2>
+
+            <table id="files" class="table table-striped" th:if="${filenames} != null">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>ファイル名</th>
+                        <th>ファイル</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="filename, stat : ${filenames}">
+                        <td th:text="${stat.index + 1}" />
+                        <td>
+                            <a th:href="@{/uploadfiles/download/} + ${filename}" th:text="${filename}"></a>
+                        </td>
+                        <td>
+                            <img th:src="@{/uploadfiles/} + ${filename}" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br />
+            <div>
+                <form th:action="@{'/uploadfiles/upload'}" enctype="multipart/form-data" method="post">
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="file" name="file" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <br />
+                                <input type="submit" class="btn btn-default" value="Upload" />
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </body>
+    <div layout:fragment="scripts">
+        <script type="text/javascript" th:inline="javascript">
+            $(document).ready(function() {
+                console.log("test");
+            });
+        </script>
+    </div>
+</html>

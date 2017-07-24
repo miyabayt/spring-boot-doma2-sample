@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{common/layout}" th:with="menu='users'"><!--/* menuItemにパラメータを渡す */-->
+    <head layout:fragment="~{common/layout::header}">
+        <title>ユーザー管理</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <h2>ユーザー検索</h2>
+
+            <form th:object="${searchUserForm}" th:action="@{/users/find(page=1)}" method="post" class="form-horizontal">
+                <div class="form-group">
+                    <div class="control-group" id="lastName">
+                        <label class="col-sm-2 control-label">名前</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" th:field="*{lastName}" size="30" maxlength="80" />
+                            <span class="help-inline">
+                                <div th:if="${#fields.hasAnyErrors()}">
+                                    <p th:each="err : ${#fields.allErrors()}" th:text="${err}">Error</p>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" name="find" class="btn btn-default">検索</button>
+                        <div class="dropdown pull-right">
+                            <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                操作
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a th:href="@{/users/new}">ユーザー登録</a></li>
+                                <li><a th:href="@{/users/download/users.csv}">CSVダウンロード</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <br />
+            <table id="users" class="table table-striped" th:if="${pages} != null">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th style="width: 150px;">氏名</th>
+                        <th>メールアドレス</th>
+                        <th style="width: 120px">電話番号</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user : ${pages.data}">
+                        <td th:text="${user.id.value}" />
+                        <td>
+                            <a th:href="@{/users/show/__${user.id.value}__}" th:text="${user.firstName + ' ' + user.lastName}" />
+                        </td>
+                        <td th:text="${user.email}" />
+                        <td th:text="${user.tel}" />
+                    </tr>
+                </tbody>
+            </table>
+
+            <div th:replace="~{common/paginator :: paginator (${pages}, '/users/find')}" />
+        </div>
+    </body>
+    <div layout:fragment="scripts">
+        <script type="text/javascript" th:inline="javascript">
+            $(document).ready(function() {
+                console.log("test");
+            });
+        </script>
+    </div>
+</html>

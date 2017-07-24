@@ -1,0 +1,272 @@
+buildscript {
+    ext {
+        springBootVersion = "1.5.4.RELEASE"
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        maven { url "http://repo.spring.io/plugins-release" }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "io.spring.gradle:propdeps-plugin:0.0.9.RELEASE" // optionalとprovidedが使えるようにする
+        classpath "com.bmuschko:gradle-docker-plugin:3.0.12" // Dockerイメージをビルドできるようにする
+        classpath "com.github.tntim96:fakesmtp:2.0" // ローカルでダミーのSMTPサーバを立てる
+    }
+}
+
+configure(subprojects) {
+    apply plugin: "propdeps"
+    apply plugin: "propdeps-maven"
+    apply plugin: "propdeps-idea"
+    apply plugin: "propdeps-eclipse"
+}
+
+subprojects {
+    apply plugin: "java"
+    apply plugin: "groovy"
+    apply plugin: "idea"
+    apply plugin: "eclipse"
+    apply plugin: "org.springframework.boot" // for Maven BOM
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.encoding = "UTF-8"
+    [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.compilerArgs = ["-Xlint:all"]
+
+    repositories {
+        mavenCentral()
+        jcenter()
+
+        // jasperreports
+        maven { url "http://jasperreports.sourceforge.net/maven2/" }
+        maven { url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/" }
+    }
+
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+            
+            inheritOutputDirs = false
+            outputDir = compileJava.destinationDir
+            testOutputDir = compileTestJava.destinationDir
+        }
+    }
+
+    eclipse {
+        classpath {
+            containers.remove("org.eclipse.jdt.launching.JRE_CONTAINER")
+            containers "org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"
+        }
+    }
+
+    // Support Thymeleaf 3
+    //     https://github.com/spring-projects/spring-boot/issues/4393
+    ext["thymeleaf.version"] = "3.0.6.RELEASE"
+    ext["thymeleaf-extras-conditionalcomments.version"] = "2.1.2.RELEASE"
+    ext["thymeleaf-layout-dialect.version"] = "2.2.2"
+    ext["thymeleaf-extras-java8time.version"] = "3.0.0.RELEASE"
+
+    ext["assertj.version"] = "3.8.0"
+    ext["spock.version"] = "1.1-groovy-2.4"
+    ext["groovy.version"] = "2.4.12"
+    ext["mockito.version"] = "2.+"
+
+    dependencies {
+        optional "org.projectlombok:lombok"
+
+        testCompile "org.assertj:assertj-core"
+        testCompile "org.codehaus.groovy:groovy-all"
+        testCompile "org.spockframework:spock-core"
+        testCompile "org.mockito:mockito-core"
+    }
+}
+
+project(":sample-common") {
+    dependencies {
+        compile "org.apache.commons:commons-lang3:3.1"
+        compile "org.apache.commons:commons-compress:1.14"
+        compile "commons-collections:commons-collections"
+        compile "commons-codec:commons-codec"
+        compile "commons-digester:commons-digester"
+        compile "commons-io:commons-io:2.5"
+        compile "org.apache.tika:tika-core:1.15"
+        compile "org.asynchttpclient:async-http-client:2.0.32"
+        compile "dom4j:dom4j"
+        compile "com.ibm.icu:icu4j:59.1"
+    }
+}
+
+project(":sample-domain") {
+    // for Doma 2
+    // JavaクラスとSQLファイルの出力先ディレクトリを同じにする
+    processResources.destinationDir = compileJava.destinationDir
+    // コンパイルより前にSQLファイルを出力先ディレクトリにコピーするために依存関係を逆転する
+    compileJava.dependsOn processResources
+
+    dependencies {
+        compile project(":sample-common")
+
+        // aspectj
+        compile "org.aspectj:aspectjrt"
+
+        // springframework
+        compile "org.springframework.boot:spring-boot-configuration-processor"
+        compile "org.springframework.boot:spring-boot-starter-aop"
+        compile "org.springframework.boot:spring-boot-starter-validation"
+        compile "org.springframework.boot:spring-boot-starter-mail"
+        compile("org.springframework.boot:spring-boot-starter-jdbc") {
+            // exclude tomcat-jdbc to use HikariCP
+            exclude group: "org.apache.tomcat", module: "tomcat-jdbc"
+        }
+
+        // doma exclude springframework
+        compile("org.seasar.doma.boot:doma-spring-boot-starter:1.1.0") {
+            exclude group: "org.springframework.boot"
+        }
+
+        // jackson
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+        compile "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
+
+        // mysql database
+        compile "mysql:mysql-connector-java"
+        compile "org.flywaydb:flyway-core"
+        compile "com.zaxxer:HikariCP"
+
+        testCompile "org.springframework.boot:spring-boot-starter-test"
+        testCompile "org.spockframework:spock-spring"
+    }
+}
+
+project(":sample-web-base") {
+    dependencies {
+        compile project(":sample-domain")
+
+        // springframework
+        compile "org.springframework.boot:spring-boot-starter-actuator"
+        compile "org.springframework.boot:spring-boot-starter-cache"
+        compile("org.springframework.boot:spring-boot-starter-web") {
+            // exclude embedded tomcat to use Jetty
+            exclude module: "spring-boot-starter-tomcat"
+        }
+        compile "org.springframework.boot:spring-boot-starter-security"
+        compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+        compile "org.springframework.boot:spring-boot-starter-mobile" // デバイス判定
+        compile "org.springframework.boot:spring-boot-starter-jetty"
+        compile "org.springframework.session:spring-session-jdbc" // セッション格納先にDBを使う場合
+        //compile "org.springframework.boot:spring-boot-starter-data-redis" // セッション格納先にredisを使う場合
+
+        // thymeleaf
+        compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4"
+        compile "org.thymeleaf.extras:thymeleaf-extras-java8time"
+        compile "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments"
+
+        // modelmapper
+        compile "org.modelmapper:modelmapper:0.7.5"
+
+        // jasperreports
+        compile "net.sf.jasperreports:jasperreports:6.4.0"
+        compile "com.lowagie:itext:2.1.7.js5"
+
+        // EhCache
+        compile "net.sf.ehcache:ehcache"
+
+        // webjars
+        compile "org.webjars:webjars-locator"
+        compile "org.webjars:bootstrap:3.3.7"
+        compile "org.webjars:jquery:2.2.4"
+        compile "org.webjars:html5shiv:3.7.3"
+        compile "org.webjars:respond:1.4.2"
+
+        testCompile "org.springframework.security:spring-security-test"
+        testCompile "org.springframework.boot:spring-boot-starter-test"
+        testCompile "org.spockframework:spock-spring"
+    }
+}
+
+project(":sample-web-admin") {
+    bootRun {
+        addResources = true
+        jvmArgs "-XX:TieredStopAtLevel=1", "-Xverify:none"
+    }
+
+    dependencies {
+        compile project(":sample-web-base")
+        optional "org.springframework.boot:spring-boot-devtools"
+
+        testCompile "org.springframework.boot:spring-boot-starter-test"
+        testCompile "org.spockframework:spock-spring"
+    }
+}
+
+project(":sample-web-front") {
+    bootRun {
+        addResources = true
+        jvmArgs "-XX:TieredStopAtLevel=1", "-Xverify:none"
+    }
+
+    dependencies {
+        compile project(":sample-web-base")
+        optional "org.springframework.boot:spring-boot-devtools"
+
+        testCompile "org.springframework.security:spring-security-test"
+        testCompile "org.springframework.boot:spring-boot-starter-test"
+        testCompile "org.spockframework:spock-spring"
+    }
+}
+
+project(":sample-batch") {
+    dependencies {
+        compile project(":sample-domain")
+
+        // springframework
+        compile "org.springframework.boot:spring-boot-starter-batch"
+        
+        testCompile "org.springframework.boot:spring-boot-starter-test"
+        testCompile "org.springframework.batch:spring-batch-test"
+        testCompile "org.spockframework:spock-spring"
+    }
+}
+
+task startFakeSmtpServer(type: JavaExec) {
+    classpath = buildscript.configurations.classpath
+    args = ["--start-server", '-m'] // -m (memory-mode)
+    main = "com.nilhcem.fakesmtp.FakeSMTP"
+}
+
+apply plugin: "com.bmuschko.docker-remote-api"
+
+import com.bmuschko.gradle.docker.tasks.container.*
+import com.bmuschko.gradle.docker.tasks.image.*
+
+task buildDockerImage(type: DockerBuildImage) {
+    inputDir = file("$projectDir/docker")
+    tag = "sample"
+}
+
+task createDockerContainer(type: DockerCreateContainer) {
+    dependsOn buildDockerImage
+    targetImageId { buildDockerImage.getImageId() }
+    portBindings = ["22:22", "3306:3306"]
+}
+
+task startDockerContainer(type: DockerStartContainer) {
+    dependsOn createDockerContainer
+    targetContainerId { createDockerContainer.getContainerId() }
+}
+
+task stopDockerContainer(type: DockerStopContainer) {
+    targetContainerId { createDockerContainer.getContainerId() }
+}
+
+task startDockerBeforeTest(type: Test) {
+    dependsOn startDockerContainer
+    finalizedBy stopDockerContainer
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "2.9"
+}

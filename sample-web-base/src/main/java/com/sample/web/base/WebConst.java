@@ -1,0 +1,51 @@
+package com.sample.web.base;
+
+/**
+ * 定数定義
+ */
+public interface WebConst {
+
+    /** ---- MDC ---- **/
+    String MDC_LOGIN_USER_ID = "LOGIN_USER_ID";
+
+    String MDC_FUNCTION_NAME = "FUNCTION_NAME";
+
+    /** ---- Message ---- **/
+    String GLOBAL_MESSAGE = "globalMessage";
+
+    String VALIDATION_ERROR = "ValidationError";
+
+    String OPTIMISTIC_LOCKING_FAILURE_ERROR = "OptimisticLockingFailureError";
+
+    String INVALID_CSRF_TOKEN_ERROR = "InvalidCsrfTokenError";
+
+    /** ---- View ---- **/
+    String ERROR_VIEW = "error";
+
+    String NOTFOUND_VIEW = "notfound";
+
+    String FORBIDDEN_VIEW = "forbidden";
+
+    /** ---- URLs ---- **/
+    String HOME_URL = "/";
+
+    String ERROR_URL = "/error";
+
+    String NOTFOUND_URL = "/notfound";
+
+    String FORBIDDEN_URL = "/forbidden";
+
+    String LOGIN_URL = "/login";
+
+    String LOGIN_PROCESSING_URL = "/authenticate";
+
+    String LOGIN_SUCCESS_URL = "/loginSuccess";
+
+    String LOGIN_FAILURE_URL = "/loginFailure";
+
+    String LOGOUT_URL = "/logout";
+
+    String WEBJARS_URL = "/webjars/**";
+
+    String STATIC_RESOURCES_URL = "/static/**";
+}

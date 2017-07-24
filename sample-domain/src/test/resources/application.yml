@@ -1,0 +1,30 @@
+# 共通の設定を定義する
+spring:
+    profiles:
+        # デフォルトを明示的に指定する
+        # 開発環境以外は環境変数でプロファイルを切り替える
+        default: development
+        active: development
+    datasource:
+        platform: mysql
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/sample?characterEncoding=UTF-8
+        username: root
+        password: passw0rd
+        autoCommit: false
+# Doma2
+doma:
+    dialect: mysql
+    # 小文字のスネークケースに変換する（firstName → first_name）
+    naming: SNAKE_LOWER_CASE
+    # SQLファイルをキャッシュする
+    sql-file-repository: no_cache
+    #
+    batch-size: 1000
+
+
+####
+# アプリケーションの設定
+application:
+    fileUploadLocation: /tmp/sample
+    mailTemplateLocation: mail/
