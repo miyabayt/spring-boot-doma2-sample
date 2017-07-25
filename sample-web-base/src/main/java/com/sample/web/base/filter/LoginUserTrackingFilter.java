@@ -44,11 +44,7 @@ public class LoginUserTrackingFilter extends OncePerRequestFilter {
                 getUserId().ifPresent(userId -> MDC.put(MDC_LOGIN_USER_ID, userId));
             }
         } finally {
-            try {
-                filterChain.doFilter(request, response);
-            } finally {
-                MDC.remove(MDC_LOGIN_USER_ID);
-            }
+            filterChain.doFilter(request, response);
         }
     }
 
