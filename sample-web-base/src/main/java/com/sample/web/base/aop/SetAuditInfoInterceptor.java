@@ -19,7 +19,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 処理時間をDEBUGログに出力する
+ * ログインユーザーを監査情報ホルダーに設定する
  */
 @Slf4j
 public class SetAuditInfoInterceptor extends HandlerInterceptorAdapter {
