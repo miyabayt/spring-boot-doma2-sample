@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.seasar.doma.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sample.domain.dto.common.DomaDtoImpl;
 import com.sample.domain.dto.common.ID;
 
@@ -21,6 +22,7 @@ public class User extends DomaDtoImpl {
     private static final long serialVersionUID = 4512633005852272922L;
 
     @OriginalStates // 差分UPDATEのために定義する
+    @JsonIgnore // APIのレスポンスに含めない
     User originalStates;
 
     @Id
@@ -29,6 +31,7 @@ public class User extends DomaDtoImpl {
     ID<User> id;
 
     // ハッシュ化されたパスワード
+    @JsonIgnore
     String password;
 
     // 名前
@@ -54,9 +57,11 @@ public class User extends DomaDtoImpl {
     String address;
 
     // 添付ファイルID
+    @JsonIgnore
     ID<UploadFile> uploadFileId;
 
     // 添付ファイル
     @Transient // Domaで永続化しない
+    @JsonIgnore
     UploadFile uploadFile;
 }
