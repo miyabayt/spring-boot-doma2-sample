@@ -2,8 +2,6 @@ package com.sample.web.base.controller.html;
 
 import static com.sample.web.base.WebConst.*;
 
-import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,17 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.web.csrf.InvalidCsrfTokenException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.sample.domain.exception.FileNotFoundException;
 import com.sample.domain.exception.NoDataFoundException;
 
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -47,7 +45,23 @@ public class HtmlExceptionHandler {
             log.debug("not found.", e);
         }
 
-        return "redirect:" + NOTFOUND_URL;
+        return "forward:" + NOTFOUND_URL;
+    }
+
+    /**
+     * 権限不足エラーの例外をハンドリングする
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler({ AccessDeniedException.class })
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String handleAccessDeniedException(Exception e) {
+        if (log.isDebugEnabled()) {
+            log.debug("forbidden.", e);
+        }
+
+        return "forward:" + FORBIDDEN_URL;
     }
 
     /**
@@ -58,7 +72,7 @@ public class HtmlExceptionHandler {
      * @param response
      * @return
      */
-    @ExceptionHandler({ OptimisticLockingFailureException.class, InvalidCsrfTokenException.class })
+    @ExceptionHandler({ OptimisticLockingFailureException.class })
     public RedirectView handleOptimisticLockingFailureException(Exception e, HttpServletRequest request,
             HttpServletResponse response) {
         if (log.isDebugEnabled()) {
@@ -66,24 +80,20 @@ public class HtmlExceptionHandler {
         }
 
         // 共通メッセージを取得する
-        Locale locale = RequestContextUtils.getLocale(request);
-        String messageCode = null;
-        if (e instanceof OptimisticLockingFailureException) {
-            messageCode = OPTIMISTIC_LOCKING_FAILURE_ERROR;
-        } else if (e instanceof InvalidCsrfTokenException) {
-            messageCode = INVALID_CSRF_TOKEN_ERROR;
-        }
+        val locale = RequestContextUtils.getLocale(request);
+        val messageCode = OPTIMISTIC_LOCKING_FAILURE_ERROR;
 
-        // 排他エラーのメッセージを遷移先に表示する
-        String message = messageSource.getMessage(messageCode, null, locale);
-        FlashMap flashMap = RequestContextUtils.getOutputFlashMap(request);
+        // メッセージを遷移先に表示する
+        val message = messageSource.getMessage(messageCode, null, locale);
+        val flashMap = RequestContextUtils.getOutputFlashMap(request);
         flashMap.put(GLOBAL_MESSAGE, message);
 
         // flashMapを書き込む
-        RequestContextUtils.getFlashMapManager(request).saveOutputFlashMap(flashMap, request, response);
+        val flashManager = RequestContextUtils.getFlashMapManager(request);
+        flashManager.saveOutputFlashMap(flashMap, request, response);
 
-        String requestURI = request.getRequestURI();
-        RedirectView redirectView = new RedirectView(requestURI);
+        val requestURI = request.getRequestURI();
+        val redirectView = new RedirectView(requestURI);
 
         return redirectView;
     }
