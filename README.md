@@ -49,20 +49,33 @@ cd /path/to/spring-boot-doma2-sample
 # admin application
 cd /path/to/spring-boot-doma2-sample/sample-web-admin
 ./gradlew bootRun
-    
+```
+
+
+```
 # front application
 cd /path/to/spring-boot-doma2-sample/sample-web-front
 ./gradlew bootRun
 ```
+
+* 管理側URL
+  * http://localhost:18081/admin
+
+* フロント側URL
+  * http://localhost:18080/
+
 
 ## 開発環境（IntelliJ）
 
 ### 必要なプラグイン・設定
 
 * Lombok pluginをインストールする。
-* Settings > Build, Excecution, Deployment > Compiler > Annotation Processor > `Enable Annotation Processing`をONにする。
+  * Settings > Build, Excecution, Deployment > Compiler > Annotation Processor > `Enable Annotation Processing`をONにする。
 * Eclipse Code Formatterをインストールする。
-* Intellij > Ctrl+Shift+A > type Registry... > `compiler.automake.allow.when.app.running`をONにする。
+  * Settings > Other Settings > Eclipse Code Formatter > `Use the Eclipse code formatter`をONにする。
+    * `Eclipse Java Formatter config file`に`eclipse-formatter.xml`を指定する。
+* bootRunを実行している場合でもビルドされるようにする。
+  * Intellij > Ctrl+Shift+A > type Registry... > `compiler.automake.allow.when.app.running`をONにする。
 
 ### Tips
 
@@ -71,16 +84,18 @@ cd /path/to/spring-boot-doma2-sample/sample-web-front
 ## 参考
 
 |プロジェクト|概要|
+|:--|:--|
 |[Springframework](https://projects.spring.io/spring-framework/)|Spring Framework|
+|[Spring Security](https://projects.spring.io/spring-security/)|authentication and access-control framework|
 |[Spring Mobile](http://projects.spring.io/spring-mobile/)|a framework that provides capabilities to detect the type of device|
-|[Apache Shiro](https://shiro.apache.org/)|Security, Session Management|
 |[Doma2](https://doma.readthedocs.io/ja/stable/)|ORM|
-|[spring-boot-doma2](https://github.com/domaframework/doma-spring-boot)||
+|[spring-boot-doma2](https://github.com/domaframework/doma-spring-boot)|Spring Boot Support for Doma|
+|[Flyway](https://flywaydb.org/)|database migrations|
 |[Thymeleaf](http://www.thymeleaf.org/)|Template Engine|
+|[Thymeleaf Layout Dialect](https://ultraq.github.io/thymeleaf-layout-dialect/)|layouts and reusable templates|
 |[WebJars](https://www.webjars.org/)|client-side web libraries (e.g. jQuery & Bootstrap) packaged into JAR|
 |[ModelMapper](http://modelmapper.org/)|Object Mapping|
 |[Apache Tika](https://tika.apache.org/)|detect and extract metadata|
 |[Ehcache](http://www.ehcache.org/)|Java-based cache|
 |[Spock](http://spockframework.org/)|unit test framework|
 |[Mockito](http://site.mockito.org/)|mocking framework|
-
