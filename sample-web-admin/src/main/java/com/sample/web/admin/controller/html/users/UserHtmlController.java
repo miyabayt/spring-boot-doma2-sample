@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -248,5 +249,16 @@ public class UserHtmlController extends AbstractHtmlController {
         val response = csvDownloadService.createResponseEntity(UserCsv.class, destCsvList, filename);
 
         return response;
+    }
+
+    /**
+     * 権限テスト
+     *
+     * @return
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/testRole")
+    public String testRole() {
+        return "redirect:/";
     }
 }
