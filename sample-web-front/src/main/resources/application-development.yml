@@ -10,7 +10,6 @@ spring:
         password: passw0rd
     flyway:
         baseline-on-migrate: true
-        locations: db/migration
     session:
         jdbc:
             # spring-session-jdbcに必要なテーブルを作成する

@@ -9,8 +9,8 @@ spring:
         username: root
         password: passw0rd
     flyway:
+        enable: true
         baseline-on-migrate: true
-        locations: db/migration
     session:
         jdbc:
             # spring-session-jdbcに必要なテーブルを作成する
