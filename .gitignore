@@ -103,7 +103,5 @@ gradle-app.setting
 !gradle-wrapper.jar
 
 ### modified ###
-db/
-
 node_modules/
 .springBeans

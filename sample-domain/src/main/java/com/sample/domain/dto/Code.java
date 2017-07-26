@@ -55,7 +55,7 @@ public class Code extends DomaDtoImpl {
     String attribute6;
 
     // 表示順
-    Integer rank;
+    Integer displayOrder;
 
     // 無効フラグ
     Boolean isInvalid;
