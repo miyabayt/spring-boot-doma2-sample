@@ -16,9 +16,6 @@ spring:
     thymeleaf:
         # HTML5モードが非推奨になったのでHTMLモードにする
         mode: HTML
-    flyway:
-        # 開発中のみ有効にする
-        enabled: false
     session:
         jdbc:
             # spring-session-jdbcに必要なテーブルを作成する
@@ -53,6 +50,17 @@ spring:
         properties:
             mail:
                 from: from@sample.com
+flyway:
+    # 開発中のみ有効にする
+    enabled: false
+doma:
+    dialect: mysql
+    # 小文字のスネークケースに変換する（firstName → first_name）
+    naming: SNAKE_LOWER_CASE
+    # SQLファイルをキャッシュする
+    sql-file-repository: no_cache
+    #
+    batch-size: 1000
 jmx:
     enabled: false
 security:
@@ -62,15 +70,6 @@ security:
 management:
     security:
         enabled: false
-# Doma2
-doma:
-    dialect: mysql
-    # 小文字のスネークケースに変換する（firstName → first_name）
-    naming: SNAKE_LOWER_CASE
-    # SQLファイルをキャッシュする
-    sql-file-repository: no_cache
-    #
-    batch-size: 1000
 server:
     port: 18081
     session:

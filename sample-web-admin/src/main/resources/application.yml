@@ -16,9 +16,6 @@ spring:
     thymeleaf:
         # HTML5モードが非推奨になったのでHTMLモードにする
         mode: HTML
-    flyway:
-        # 開発中のみ有効にする
-        enabled: false
     session:
         jdbc:
             # spring-session-jdbcに必要なテーブルを作成する
@@ -43,17 +40,14 @@ spring:
             max-request-size: 5MB
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        autoCommit: false
-        connectionTimeout: 30000
-        maxLifetime: 1800000
-        idleTimeout: 5000
-        connectionTestQuery: select 1
-        minimumIdle: 20
-        maximumPoolSize: 30
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        jdbc4ConnectionTest: true
+        hikari:
+          autoCommit: false
+          connectionTimeout: 30000
+          idleTimeout: 5000
+          maxLifetime: 1800000
+          connectionTestQuery: SELECT 1
+          minimumIdle: 10
+          maximumPoolSize: 30
     batch:
         job:
             # 自動的にバッチジョブが起動しないようにする
@@ -68,7 +62,8 @@ spring:
         properties:
             mail:
                 from: from@sample.com
-jmx:
+flyway:
+    # 開発中のみ有効にする
     enabled: false
 security:
     basic:
@@ -78,10 +73,6 @@ security:
     user:
         name: test@sample.com
         password: passw0rd
-management:
-    security:
-        enabled: false
-# Doma2
 doma:
     dialect: mysql
     # 小文字のスネークケースに変換する（firstName → first_name）
@@ -90,6 +81,11 @@ doma:
     sql-file-repository: greedy_cache
     #
     batch-size: 1000
+jmx:
+    enabled: false
+management:
+    security:
+        enabled: false
 server:
     port: 18081
     session:

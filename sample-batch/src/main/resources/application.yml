@@ -13,33 +13,27 @@ spring:
     jackson:
         # JSONのキーをアンダースコア区切りの文字列にする
         property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
-    flyway:
-        # 開発中のみ有効にする
-        enabled: false
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        autoCommit: false
-        connectionTimeout: 30000
-        maxLifetime: 1800000
-        idleTimeout: 5000
-        connectionTestQuery: select 1
-        minimumIdle: 20
-        maximumPoolSize: 30
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        jdbc4ConnectionTest: true
+        hikari:
+          autoCommit: false
+          connectionTimeout: 30000
+          idleTimeout: 5000
+          maxLifetime: 1800000
+          connectionTestQuery: SELECT 1
+          minimumIdle: 10
+          maximumPoolSize: 30
     batch:
         initializer:
             # ジョブ管理テーブルを自動的に作成する
             enabled: true
+        table-prefix: SPRING_
         job:
             # 自動的にバッチジョブが起動しないようにする
             enabled: false
-jmx:
+flyway:
+    # 開発中のみ有効にする
     enabled: false
-
-# Doma2
 doma:
     dialect: mysql
     # 小文字のスネークケースに変換する（firstName → first_name）
@@ -48,6 +42,8 @@ doma:
     sql-file-repository: greedy_cache
     #
     batch-size: 1000
+jmx:
+    enabled: false
 
 
 ####
