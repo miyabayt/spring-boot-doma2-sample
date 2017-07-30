@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.sample.domain.dto.UploadFile;
 import com.sample.domain.dto.User;
@@ -22,6 +22,7 @@ import com.sample.domain.dto.common.ID;
 import com.sample.domain.service.user.UserService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.util.MultipartFileUtils;
+import com.sample.web.base.view.CsvView;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -235,20 +236,18 @@ public class UserHtmlController extends AbstractHtmlController {
      * @param filename
      * @return
      */
-    @GetMapping("/download/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<String> downloadCsv(@PathVariable String filename) {
+    @GetMapping("/download/{filename:.+\\.csv}")
+    public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
         val users = userService.findAll(new User(), new DefaultPageable(1, Integer.MAX_VALUE));
 
-        val listType = new TypeToken<List<UserCsv>>() {
-        }.getType();
-        List<UserCsv> destCsvList = modelMapper.map(users.getData(), listType);
+        val listType = new TypeToken<List<UserCsv>>() {}.getType();
+        List<UserCsv> csvList = modelMapper.map(users.getData(), listType);
 
         // レスポンスを設定する
-        val response = csvDownloadService.createResponseEntity(UserCsv.class, destCsvList, filename);
+        val view = new CsvView(UserCsv.class, csvList, filename);
 
-        return response;
+        return new ModelAndView(view);
     }
 
     /**
