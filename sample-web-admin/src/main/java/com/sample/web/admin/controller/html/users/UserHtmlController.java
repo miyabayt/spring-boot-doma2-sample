@@ -1,6 +1,8 @@
 package com.sample.web.admin.controller.html.users;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import com.sample.domain.service.user.UserService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.util.MultipartFileUtils;
 import com.sample.web.base.view.CsvView;
+import com.sample.web.base.view.ExcelView;
+import com.sample.web.base.view.PdfView;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -248,6 +252,44 @@ public class UserHtmlController extends AbstractHtmlController {
         val view = new CsvView(UserCsv.class, csvList, filename);
 
         return new ModelAndView(view);
+    }
+
+    /**
+     * Excelダウンロード
+     * 
+     * @param filename
+     * @return
+     */
+    @GetMapping(path = "/download/{filename:.+\\.xlsx}")
+    public ModelAndView downloadExcel(@PathVariable String filename) {
+        // 全件取得する
+        val users = userService.findAll(new User(), new DefaultPageable(1, Integer.MAX_VALUE));
+        val view = new ExcelView(filename, new UserExcel());
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("data", users.getData());
+
+        return new ModelAndView(view, params);
+    }
+
+    /**
+     * PDFダウンロード
+     * 
+     * @param filename
+     * @return
+     */
+    @GetMapping(path = "/download/{filename:.+\\.pdf}")
+    public ModelAndView downloadPdf(@PathVariable String filename) {
+        // 全件取得する
+        val users = userService.findAll(new User(), new DefaultPageable(1, Integer.MAX_VALUE));
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("data", users.getData());
+
+        val view = new PdfView("reports/users.jrxml", params, filename);
+        view.setApplicationContext(getApplicationContext());
+
+        return new ModelAndView(view, params);
     }
 
     /**

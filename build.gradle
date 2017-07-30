@@ -171,6 +171,10 @@ project(":sample-web-base") {
         compile "net.sf.jasperreports:jasperreports:6.4.0"
         compile "com.lowagie:itext:2.1.7.js5"
 
+        // apache POI
+        compile "org.apache.poi:poi:3.16"
+        compile "org.apache.poi:poi-ooxml:3.16"
+
         // EhCache
         compile "net.sf.ehcache:ehcache"
 

@@ -46,6 +46,9 @@ import com.sample.web.base.helper.DeviceHelper;
 
 import lombok.val;
 
+/**
+ * 基底アプリケーション設定
+ */
 public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         implements EmbeddedServletContainerCustomizer {
 
