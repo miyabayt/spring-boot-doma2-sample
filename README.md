@@ -3,99 +3,126 @@
 ## ローカル環境
 
 ソースのダウンロード
+```bash
+$ git clone https://github.com/miyabayt/spring-boot-doma2-sample.git
 ```
-git clone https://github.com/miyabayt/spring-boot-doma2-sample.git
-```
+
+### 開発環境（IntelliJ）
+
+#### 必要なプラグイン・設定
+
+- Lombok pluginをインストールする。
+  - Settings > Build, Excecution, Deployment > Compiler > Annotation Processor > `Enable Annotation Processing`をONにする。
+- Eclipse Code Formatterをインストールする。
+  - Settings > Other Settings > Eclipse Code Formatter > `Use the Eclipse code formatter`をONにする。
+    - `Eclipse Java Formatter config file`に`eclipse-formatter.xml`を指定する。
+- bootRunを実行している場合でもビルドされるようにする。
+  - Intellij > Ctrl+Shift+A > type Registry... > `compiler.automake.allow.when.app.running`をONにする。
+- Windowsの場合は、コンソール出力が文字化けするため、`C:¥Program Files¥JetBrains¥IntelliJ Idea xx.x.x¥bin`の中にある`idea64.exe.vmoptions`ファイルに`-Dfile.encoding=UTF-8`を追記する。
+- ブラウザにLiveReload機能拡張をインストールする。
+  - `http://livereload.com/extensions/`から各ブラウザの機能拡張をダウンロードする。
 
 ### Docker APIの有効化
 
-Windows10の場合
+#### Windows10の場合
 * Settings > General > `Expose daemon on tcp://...`をONにする。
 
-MacOSXの場合
+#### MacOSXの場合
 * デフォルトで`unix:///var/run/docker.sock`に接続できる。
 * TCPでAPIを利用したい場合は、下記を実施する。
 
+```bash
+$ brew install socat
+$ socat -4 TCP-LISTEN:2375,fork UNIX-CONNECT:/var/run/docker.sock &
 ```
-brew install socat
-socat -4 TCP-LISTEN:2375,fork UNIX-CONNECT:/var/run/docker.sock &
-```
+
+#### Docker Toolboxの場合
+* 後述の`Dockerの起動`の手順を実施する。
+
 
 ### Dockerの起動
-
 MySQLなどのサーバーを立ち上げる。
 
+#### Windows10、MacOSXの場合
+```bash
+$ cd /path/to/spring-boot-doma2-sample
+$ ./gradlew startDockerContainer
 ```
-cd /path/to/spring-boot-doma2-sample
-./gradlew startDockerContainer
+
+#### Docker Toolboxの場合
+* `Docker CLI`でbuildとrunを実行する。
+```bash
+$ cd /path/to/spring-boot-doma2-sample/docker
+$ docker build --no-cache --rm -t sample:latest .
+```
+
+* `application-development.yml`を編集する。
+  * `spring.datasource.url`の`127.0.0.1:3306`を`192.168.99.100:3306`に変更する。
+```bash
+$ # 初回の場合
+$ docker run -it -p 22:22 -p 3306:3306 --name sample sample:latest /usr/bin/supervisord
+# dockerから抜ける
+ctrl + pしてからctrl押しっぱなしでqを押す
+
+$ # コンテナが存在する場合
+$ docker start sample
 ```
 
 ### FakeSMTPの起動
-
 メール送信のテストのためFakeSMTPを立ち上げる。
 
+```bash
+$ cd /path/to/spring-boot-doma2-sample
+$ ./gradlew startFakeSmtpServer
 ```
-cd /path/to/spring-boot-doma2-sample
-./gradlew startFakeSmtpServer
-```
-   
+
 ### アプリケーションの起動
 
-デモ用アカウント
+```bash
+$ # admin application
+$ cd /path/to/spring-boot-doma2-sample/sample-web-admin
+$ ./gradlew bootRun
 
-* test@sample.com / passw0rd
-
-```
-# admin application
-cd /path/to/spring-boot-doma2-sample/sample-web-admin
-./gradlew bootRun
-```
-
-
-```
-# front application
-cd /path/to/spring-boot-doma2-sample/sample-web-front
-./gradlew bootRun
+$ # front application
+$ cd /path/to/spring-boot-doma2-sample/sample-web-front
+$ ./gradlew bootRun
 ```
 
-* 管理側URL
-  * http://localhost:18081/admin
+### 接続先情報
+#### テストユーザー test@sample.com / passw0rd
 
-* フロント側URL
-  * http://localhost:18080/
+| 接続先    | URL                                      |
+| :----- | :--------------------------------------- |
+| 管理側画面  | http://localhost:18081/admin             |
+| 管理側API | http://localhost:18081/admin/api/v1/users.json |
+| フロント側  | http://localhost:18080/                  |
+
+#### データベース接続先
+
+```
+tcp://127.0.0.1:3306/sample
+または
+tcp://192.168.99.100:3306/sample
+```
 
 
-## 開発環境（IntelliJ）
-
-### 必要なプラグイン・設定
-
-* Lombok pluginをインストールする。
-  * Settings > Build, Excecution, Deployment > Compiler > Annotation Processor > `Enable Annotation Processing`をONにする。
-* Eclipse Code Formatterをインストールする。
-  * Settings > Other Settings > Eclipse Code Formatter > `Use the Eclipse code formatter`をONにする。
-    * `Eclipse Java Formatter config file`に`eclipse-formatter.xml`を指定する。
-* bootRunを実行している場合でもビルドされるようにする。
-  * Intellij > Ctrl+Shift+A > type Registry... > `compiler.automake.allow.when.app.running`をONにする。
-
-### Tips
-
-* Windowsの場合は、コンソール出力が文字化けするため、`C:¥Program Files¥JetBrains¥IntelliJ Idea xx.x.x¥bin`の中にある`idea64.exe.vmoptions`ファイルに`-Dfile.encoding=UTF-8`を追記する。
 
 ## 参考
 
-|プロジェクト|概要|
-|:--|:--|
-|[Springframework](https://projects.spring.io/spring-framework/)|Spring Framework|
-|[Spring Security](https://projects.spring.io/spring-security/)|authentication and access-control framework|
-|[Spring Mobile](http://projects.spring.io/spring-mobile/)|a framework that provides capabilities to detect the type of device|
-|[Doma2](https://doma.readthedocs.io/ja/stable/)|ORM|
-|[spring-boot-doma2](https://github.com/domaframework/doma-spring-boot)|Spring Boot Support for Doma|
-|[Flyway](https://flywaydb.org/)|database migrations|
-|[Thymeleaf](http://www.thymeleaf.org/)|Template Engine|
-|[Thymeleaf Layout Dialect](https://ultraq.github.io/thymeleaf-layout-dialect/)|layouts and reusable templates|
-|[WebJars](https://www.webjars.org/)|client-side web libraries (e.g. jQuery & Bootstrap) packaged into JAR|
-|[ModelMapper](http://modelmapper.org/)|Object Mapping|
-|[Apache Tika](https://tika.apache.org/)|detect and extract metadata|
-|[Ehcache](http://www.ehcache.org/)|Java-based cache|
-|[Spock](http://spockframework.org/)|unit test framework|
-|[Mockito](http://site.mockito.org/)|mocking framework|
+| プロジェクト                                   | 概要                               |
+| :--------------------------------------- | :------------------------------- |
+| [Lombok Project](https://projectlombok.org/) | 定型的な構文を書かなくても                    |
+| [Springframework](https://projects.spring.io/spring-framework/) | Spring Framework                 |
+| [Spring Security](https://projects.spring.io/spring-security/) | セキュリティ対策、認証・認可のフレームワーク           |
+| [Spring Mobile](http://projects.spring.io/spring-mobile/) | モバイルデバイス検知、解像度検知を行うフレームワーク       |
+| [Doma2](https://doma.readthedocs.io/ja/stable/) | O/Rマッパー                          |
+| [spring-boot-doma2](https://github.com/domaframework/doma-spring-boot) | Doma2とSpring Bootを連携する           |
+| [Flyway](https://flywaydb.org/)          | DBマイグレーションツール                    |
+| [Thymeleaf](http://www.thymeleaf.org/)   | テンプレートエンジン                       |
+| [Thymeleaf Layout Dialect](https://ultraq.github.io/thymeleaf-layout-dialect/) | テンプレートをレイアウト化する                  |
+| [WebJars](https://www.webjars.org/)      | jQueryなどのクライアント側ライブラリをJARとして組み込む |
+| [ModelMapper](http://modelmapper.org/)   | Beanマッピングライブラリ                   |
+| [Ehcache](http://www.ehcache.org/)       | キャッシュライブラリ                       |
+| [Spock](http://spockframework.org/)      | テストフレームワーク                       |
+| [Mockito](http://site.mockito.org/)      | モッキングフレームワーク                     |
+
