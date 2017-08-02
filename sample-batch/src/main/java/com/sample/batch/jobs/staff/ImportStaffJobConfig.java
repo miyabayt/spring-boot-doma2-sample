@@ -1,4 +1,4 @@
-package com.sample.batch.jobs.user;
+package com.sample.batch.jobs.staff;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
@@ -17,16 +17,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import com.sample.domain.dto.User;
+import com.sample.domain.dto.Staff;
 
 import lombok.val;
 
 /**
- * ユーザー情報取り込み
+ * 担当者情報取り込み
  */
 @Configuration
 @EnableBatchProcessing
-public class ImportUserJobConfig {
+public class ImportStaffJobConfig {
 
     @Autowired
     JobBuilderFactory jobBuilderFactory;
@@ -35,20 +35,20 @@ public class ImportUserJobConfig {
     StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public FlatFileItemReader<User> userItemReader() {
-        val reader = new FlatFileItemReader<User>();
-        reader.setResource(new ClassPathResource("sample_users.csv"));
+    public FlatFileItemReader<Staff> staffItemreader() {
+        val reader = new FlatFileItemReader<Staff>();
+        reader.setResource(new ClassPathResource("sample_staffs.csv"));
         reader.setLinesToSkip(1); // ヘッダーをスキップする
-        reader.setLineMapper(new DefaultLineMapper<User>() {
+        reader.setLineMapper(new DefaultLineMapper<Staff>() {
             {
                 setLineTokenizer(new DelimitedLineTokenizer() {
                     {
-                        setNames(new String[] { "firstName", "lastName", "email", "tel", "zip", "address" });
+                        setNames(new String[] { "firstName", "lastName", "email", "tel" });
                     }
                 });
-                setFieldSetMapper(new BeanWrapperFieldSetMapper<User>() {
+                setFieldSetMapper(new BeanWrapperFieldSetMapper<Staff>() {
                     {
-                        setTargetType(User.class);
+                        setTargetType(Staff.class);
                     }
                 });
             }
@@ -57,29 +57,29 @@ public class ImportUserJobConfig {
     }
 
     @Bean
-    public UserItemProcessor userItemProcessor() {
-        return new UserItemProcessor();
+    public StaffItemProcessor staffItemProcessor() {
+        return new StaffItemProcessor();
     }
 
     @Bean
-    public ItemWriter<User> userItemWriter() {
-        return new UserItemWriter();
+    public ItemWriter<Staff> staffItemWriter() {
+        return new StaffItemWriter();
     }
 
     @Bean
-    public JobExecutionListener importUserJobListener() {
-        return new ImportUserJobListener();
+    public JobExecutionListener importStaffJobListener() {
+        return new ImportStaffJobListener();
     }
 
     @Bean
-    public Job importUserJob() {
-        return jobBuilderFactory.get("importUserJob").incrementer(new RunIdIncrementer())
-                .listener(importUserJobListener()).flow(importUserStep()).end().build();
+    public Job importStaffJob() {
+        return jobBuilderFactory.get("importStaffJob").incrementer(new RunIdIncrementer())
+                .listener(importStaffJobListener()).flow(importStaffStep()).end().build();
     }
 
     @Bean
-    public Step importUserStep() {
-        return stepBuilderFactory.get("importUserStep").<User, User>chunk(1000).reader(userItemReader())
-                .processor(userItemProcessor()).writer(userItemWriter()).build();
+    public Step importStaffStep() {
+        return stepBuilderFactory.get("importStaffStep").<Staff, Staff>chunk(100).reader(staffItemreader())
+                .processor(staffItemProcessor()).writer(staffItemWriter()).build();
     }
 }

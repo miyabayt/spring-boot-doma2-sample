@@ -3,6 +3,7 @@ package com.sample.batch.jobs.user;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
+import com.sample.batch.context.BatchContext;
 import com.sample.batch.jobs.BaseItemProcessor;
 import com.sample.domain.dto.User;
 
@@ -12,15 +13,18 @@ import com.sample.domain.dto.User;
 public class UserItemProcessor extends BaseItemProcessor<User, User> {
 
     @Override
-    protected void onValidationError(BindingResult result, User item) {
+    protected void onValidationError(BatchContext context, BindingResult result, User item) {
     }
 
     @Override
-    protected User doProcess(User user) {
+    protected User doProcess(BatchContext context, User user) {
         User transform = new User();
-        transform.setFirstName(user.getFirstName());
         transform.setLastName(user.getLastName());
+        transform.setFirstName(user.getFirstName());
         transform.setEmail(user.getEmail());
+        transform.setTel(user.getTel());
+        transform.setZip(user.getZip());
+        transform.setAddress(user.getAddress());
         return transform;
     }
 

@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  * 日付ユーティリティ
  */
 @Slf4j
-public class LocalDateTimeUtils {
+public class DateUtils {
 
     /**
      * Date型の値を指定されたDateTimeFormatterフォーマットした値を返します。
@@ -37,5 +37,15 @@ public class LocalDateTimeUtils {
     public static String format(final LocalDateTime fromLocalDateTime, final DateTimeFormatter formatter) {
         val result = formatter.format(fromLocalDateTime);
         return result;
+    }
+
+    /**
+     * Date型の値をLocalDateTime型に変換して返します。
+     * 
+     * @param fromDate
+     * @return
+     */
+    public static LocalDateTime toLocalDateTime(final Date fromDate) {
+        return fromDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 }
