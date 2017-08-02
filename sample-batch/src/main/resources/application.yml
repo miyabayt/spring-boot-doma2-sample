@@ -27,7 +27,6 @@ spring:
         initializer:
             # ジョブ管理テーブルを自動的に作成する
             enabled: true
-        table-prefix: SPRING_
         job:
             # 自動的にバッチジョブが起動しないようにする
             enabled: false
@@ -40,10 +39,14 @@ doma:
     naming: SNAKE_LOWER_CASE
     # SQLファイルをキャッシュする
     sql-file-repository: greedy_cache
-    #
+    # バルクインサート・アップデートのサイズ
     batch-size: 1000
 jmx:
     enabled: false
+logging:
+    pattern:
+        # MDCで設定した値を出力する
+        level: "[%X{BATCH_ID}] %5p"
 
 
 ####

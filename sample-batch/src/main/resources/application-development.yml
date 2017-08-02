@@ -22,6 +22,10 @@ flyway:
 logging:
     level:
         org.springframework: INFO
+        com.sample.batch: DEBUG
+        # SQL文を表示したいときはINFOにする
+        org.seasar.doma.jdbc: WARN
+
 
 ####
 # アプリケーションの設定

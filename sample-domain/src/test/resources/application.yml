@@ -19,7 +19,7 @@ doma:
     naming: SNAKE_LOWER_CASE
     # SQLファイルをキャッシュする
     sql-file-repository: no_cache
-    #
+    # バルクインサート・アップデートのサイズ
     batch-size: 1000
 
 

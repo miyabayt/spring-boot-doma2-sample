@@ -6,6 +6,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 import org.springframework.validation.Validator;
 
+import com.sample.batch.context.BatchContext;
+import com.sample.batch.context.BatchContextHolder;
+
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +24,10 @@ public abstract class BaseItemProcessor<I, O> implements ItemProcessor<I, O> {
     @Override
     public O process(I item) {
         val validator = getValidator();
+        val context = BatchContextHolder.getContext();
+
+        // 対象件数を加算する
+        context.increaseTotalCount();
 
         if (validator != null) {
             val binder = new DataBinder(item);
@@ -30,32 +37,73 @@ public abstract class BaseItemProcessor<I, O> implements ItemProcessor<I, O> {
             val result = binder.getBindingResult();
             if (result.hasErrors()) {
                 // バリデーションエラーがある場合
-                onValidationError(result, item);
-                return null; // ItemProcessorでnullを返すと後続のWriterで処理されない
+                onValidationError(context, result, item);
+
+                // エラー件数をカウントする
+                increaseErrorCount(context, result, item);
+
+                // nullを返すとItemWriterに渡されない
+                return null;
             }
         }
 
         // 実処理
-        O output = doProcess(item);
+        O output = doProcess(context, item);
+
+        // 処理件数をカウントする
+        increaseProcessCount(context, item);
 
         return output;
     }
 
     /**
-     * バリデーションエラーが発生した場合に処理します。
+     * エラー件数を加算します。
      * 
+     * @param context
      * @param result
      * @param item
      */
-    protected abstract void onValidationError(BindingResult result, I item);
+    protected void increaseErrorCount(BatchContext context, BindingResult result, I item) {
+        context.increaseErrorCount();
+    }
+
+    /**
+     * 処理件数を加算します。
+     *
+     * @param context
+     * @param item
+     */
+    protected void increaseProcessCount(BatchContext context, I item) {
+        context.increaseProcessCount();
+    }
+
+    /**
+     * 対象件数を加算します。
+     *
+     * @param context
+     * @param item
+     */
+    protected void increaseTotalCount(BatchContext context, I item) {
+        context.increaseProcessCount();
+    }
+
+    /**
+     * バリデーションエラーが発生した場合に処理します。
+     * 
+     * @param context
+     * @param result
+     * @param item
+     */
+    protected abstract void onValidationError(BatchContext context, BindingResult result, I item);
 
     /**
      * 実処理を実施します。
-     *
+     * 
+     * @param context
      * @param item
      * @return
      */
-    protected abstract O doProcess(I item);
+    protected abstract O doProcess(BatchContext context, I item);
 
     /**
      * バリデーターを取得します。

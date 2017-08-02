@@ -78,14 +78,25 @@ $ ./gradlew startFakeSmtpServer
 
 ### アプリケーションの起動
 
+#### 管理側
 ```bash
 $ # admin application
 $ cd /path/to/spring-boot-doma2-sample/sample-web-admin
-$ ./gradlew bootRun
+$ ../gradlew bootRun
+```
 
+#### フロント側
+```
 $ # front application
 $ cd /path/to/spring-boot-doma2-sample/sample-web-front
-$ ./gradlew bootRun
+$ ../gradlew bootRun
+```
+
+#### バッチ
+```
+$ # 担当者情報取り込みバッチを起動する
+$ cd /path/to/spring-boot-doma2-sample/sample-batch
+$ ../gradlew bootRun -Pargs="--job=importStaffJob"
 ```
 
 ### 接続先情報
@@ -111,7 +122,7 @@ tcp://192.168.99.100:3306/sample
 
 | プロジェクト                                   | 概要                               |
 | :--------------------------------------- | :------------------------------- |
-| [Lombok Project](https://projectlombok.org/) | 定型的な構文を書かなくても                    |
+| [Lombok Project](https://projectlombok.org/) | 定型的なコードを書かなくてもよくする               |
 | [Springframework](https://projects.spring.io/spring-framework/) | Spring Framework                 |
 | [Spring Security](https://projects.spring.io/spring-security/) | セキュリティ対策、認証・認可のフレームワーク           |
 | [Spring Mobile](http://projects.spring.io/spring-mobile/) | モバイルデバイス検知、解像度検知を行うフレームワーク       |
