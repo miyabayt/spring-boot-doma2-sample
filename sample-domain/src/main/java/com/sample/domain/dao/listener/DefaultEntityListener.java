@@ -19,40 +19,39 @@ public class DefaultEntityListener<ENTITY> implements EntityListener<ENTITY> {
     @Override
     public void preInsert(ENTITY entity, PreInsertContext<ENTITY> context) {
         val domaDto = getDomaDto(entity);
+        val createdAt = AuditInfoHolder.getAuditDateTime();
+        val createdBy = AuditInfoHolder.getAuditUser();
 
-        // 作成日
-        domaDto.setCreatedAt(AuditInfoHolder.getAuditDateTime());
-        // 作成者
-        domaDto.setCreatedBy(AuditInfoHolder.getAuditUser());
+        domaDto.setCreatedAt(createdAt); // 作成日
+        domaDto.setCreatedBy(createdBy); // 作成者
     }
 
     @Override
     public void preUpdate(ENTITY entity, PreUpdateContext<ENTITY> context) {
         val domaDto = getDomaDto(entity);
+        val updatedAt = AuditInfoHolder.getAuditDateTime();
+        val updatedBy = AuditInfoHolder.getAuditUser();
 
         val methodName = context.getMethod().getName();
-
         if (StringUtils.startsWith("delete", methodName)) {
-            // 削除日
-            domaDto.setDeletedAt(AuditInfoHolder.getAuditDateTime());
-            // 削除者
-            domaDto.setDeletedBy(AuditInfoHolder.getAuditUser());
+            domaDto.setDeletedAt(updatedAt); // 削除日
+            domaDto.setDeletedBy(updatedBy); // 削除者
         } else {
-            // 更新日
-            domaDto.setUpdatedAt(AuditInfoHolder.getAuditDateTime());
-            // 更新者
-            domaDto.setUpdatedBy(AuditInfoHolder.getAuditUser());
+            domaDto.setUpdatedAt(updatedAt); // 更新日
+            domaDto.setUpdatedBy(updatedBy); // 更新者
         }
     }
 
     @Override
     public void preDelete(ENTITY entity, PreDeleteContext<ENTITY> context) {
         val domaDto = getDomaDto(entity);
+        val deletedAt = AuditInfoHolder.getAuditDateTime();
+        val deletedBy = AuditInfoHolder.getAuditUser();
         val canonicalName = domaDto.getClass().getCanonicalName();
 
         // 物理削除した場合はログ出力する
-        log.info("{} id={}, deletedBy={}, deletedAt={}", canonicalName, domaDto.getId(), AuditInfoHolder.getAuditUser(),
-                AuditInfoHolder.getAuditDateTime().toString());
+        log.info("{} id={}, deletedBy={}, deletedAt={}", canonicalName, domaDto.getId(), deletedBy,
+                deletedAt.toString());
     }
 
     private DomaDto getDomaDto(ENTITY entity) {

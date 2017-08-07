@@ -1,4 +1,4 @@
-package com.sample.web.base.helper;
+package com.sample.domain.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,17 +33,14 @@ public class SendMailHelper {
      * @param fromAddress
      * @param toAddress
      * @param subject
-     * @param template
-     * @param objectName
-     * @param object
+     * @param body
      */
-    public void sendMail(String fromAddress, String[] toAddress, String subject, String template, String objectName,
-            Object object) {
+    public void sendMail(String fromAddress, String[] toAddress, String subject, String body) {
         val message = new SimpleMailMessage();
         message.setFrom(fromAddress);
         message.setTo(toAddress);
         message.setSubject(subject);
-        message.setText(getMailText(template, objectName, object));
+        message.setText(body);
 
         try {
             javaMailSender.send(message);
@@ -53,7 +50,15 @@ public class SendMailHelper {
         }
     }
 
-    protected String getMailText(String template, String objectName, Object object) {
+    /**
+     * 指定したテンプレートのメール本文を返します。
+     *
+     * @param template
+     * @param objectName
+     * @param object
+     * @return
+     */
+    public String getMailBody(String template, String objectName, Object object) {
         val templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(emailTemplateResolver());
 

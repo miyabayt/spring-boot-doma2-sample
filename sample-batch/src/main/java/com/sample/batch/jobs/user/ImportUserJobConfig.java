@@ -7,6 +7,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
+import com.sample.batch.listener.DefaultStepExecutionListener;
 import com.sample.domain.dto.User;
 
 import lombok.val;
@@ -35,7 +37,7 @@ public class ImportUserJobConfig {
     StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public FlatFileItemReader<User> userItemReader() {
+    public ItemReader<User> userItemReader() {
         val reader = new FlatFileItemReader<User>();
         reader.setResource(new ClassPathResource("sample_users.csv"));
         reader.setLinesToSkip(1); // ヘッダーをスキップする
@@ -79,7 +81,8 @@ public class ImportUserJobConfig {
 
     @Bean
     public Step importUserStep() {
-        return stepBuilderFactory.get("importUserStep").<User, User>chunk(1000).reader(userItemReader())
-                .processor(userItemProcessor()).writer(userItemWriter()).build();
+        return stepBuilderFactory.get("importUserStep").listener(new DefaultStepExecutionListener())
+                .<User, User>chunk(1000).reader(userItemReader()).processor(userItemProcessor())
+                .writer(userItemWriter()).build();
     }
 }
