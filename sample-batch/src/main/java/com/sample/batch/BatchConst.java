@@ -4,7 +4,5 @@ public class BatchConst {
 
     public static final String MDC_BATCH_ID = "BATCH_ID";
 
-    public static final String MDC_BATCH_NAME = "BATCH_NAME";
-
     public static final String EXECUTION_STATUS_SKIP = "SKIP";
 }

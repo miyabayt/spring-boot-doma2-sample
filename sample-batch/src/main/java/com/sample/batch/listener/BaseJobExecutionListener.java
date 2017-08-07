@@ -1,7 +1,6 @@
 package com.sample.batch.listener;
 
 import static com.sample.batch.BatchConst.MDC_BATCH_ID;
-import static com.sample.batch.BatchConst.MDC_BATCH_NAME;
 import static com.sample.domain.Const.YYYY_MM_DD_HHmmss;
 
 import org.slf4j.MDC;
@@ -12,6 +11,7 @@ import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 import com.sample.batch.context.BatchContext;
 import com.sample.batch.context.BatchContextHolder;
 import com.sample.common.util.DateUtils;
+import com.sample.common.util.MDCUtils;
 import com.sample.domain.dao.listener.AuditInfoHolder;
 
 import lombok.val;
@@ -25,9 +25,9 @@ public abstract class BaseJobExecutionListener extends JobExecutionListenerSuppo
         val batchId = getBatchId();
         val batchName = getBatchName();
         val startTime = jobExecution.getStartTime();
+        val startDateTime = DateUtils.toLocalDateTime(startTime);
 
-        MDC.put(MDC_BATCH_ID, batchId);
-        MDC.put(MDC_BATCH_NAME, batchName);
+        MDCUtils.putIfAbsent(MDC_BATCH_ID, batchId);
 
         log.info("*********************************************");
         log.info("* バッチID : {}", batchId);
@@ -36,13 +36,14 @@ public abstract class BaseJobExecutionListener extends JobExecutionListenerSuppo
         log.info("*********************************************");
 
         // 監査情報を設定する
-        AuditInfoHolder.set(batchId, DateUtils.toLocalDateTime(startTime));
+        AuditInfoHolder.set(batchId, startDateTime);
 
         // コンテキストを設定する
-        BatchContextHolder.setIdAndName(batchId, batchName);
+        val context = BatchContextHolder.getContext();
+        context.set(batchId, batchName, startDateTime);
 
         // 機能別の初期化処理を呼び出す
-        before(jobExecution, BatchContextHolder.getContext());
+        before(jobExecution, context);
     }
 
     @Override
@@ -87,13 +88,12 @@ public abstract class BaseJobExecutionListener extends JobExecutionListenerSuppo
                 }
             } finally {
                 MDC.remove(MDC_BATCH_ID);
-                MDC.remove(MDC_BATCH_NAME);
 
                 // 監査情報をクリアする
                 AuditInfoHolder.clear();
 
                 // ジョブコンテキストをクリアする
-                BatchContextHolder.clear();
+                context.clear();
             }
         }
     }

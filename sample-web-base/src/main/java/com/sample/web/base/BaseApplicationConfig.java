@@ -240,7 +240,7 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
 
     @Bean
     public SetAuditInfoInterceptor setAuditInfoInterceptor() {
-        // ThreadLocalにシステム制御項目を保存してDB保存時に利用する
+        // システム制御項目を保存してDB保存時に利用する
         return new SetAuditInfoInterceptor();
     }
 

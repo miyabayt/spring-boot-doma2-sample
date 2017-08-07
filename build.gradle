@@ -117,6 +117,7 @@ project(":sample-domain") {
         compile "org.springframework.boot:spring-boot-starter-aop"
         compile "org.springframework.boot:spring-boot-starter-validation"
         compile "org.springframework.boot:spring-boot-starter-mail"
+        compile "org.springframework.boot:spring-boot-starter-thymeleaf"
         compile("org.springframework.boot:spring-boot-starter-jdbc") {
             // exclude tomcat-jdbc to use HikariCP
             exclude group: "org.apache.tomcat", module: "tomcat-jdbc"
@@ -153,7 +154,6 @@ project(":sample-web-base") {
             exclude module: "spring-boot-starter-tomcat"
         }
         compile "org.springframework.boot:spring-boot-starter-security"
-        compile "org.springframework.boot:spring-boot-starter-thymeleaf"
         compile "org.springframework.boot:spring-boot-starter-mobile" // デバイス判定
         compile "org.springframework.boot:spring-boot-starter-jetty"
         compile "org.springframework.session:spring-session-jdbc" // セッション格納先にDBを使う場合
