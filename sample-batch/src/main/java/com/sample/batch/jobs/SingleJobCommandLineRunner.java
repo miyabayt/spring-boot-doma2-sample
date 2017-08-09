@@ -1,5 +1,9 @@
 package com.sample.batch.jobs;
 
+import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 import org.springframework.batch.core.*;
@@ -11,11 +15,14 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.batch.JobExecutionEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.util.StringUtils;
+
+import com.sample.common.util.FileUtils;
 
 import lombok.Getter;
 import lombok.val;
@@ -26,6 +33,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class SingleJobCommandLineRunner implements CommandLineRunner, ApplicationEventPublisherAware {
+
+    @Value("${application.processFileLocation:#{systemProperties['java.io.tmpdir']}}")
+    private String processFileLocation;
 
     public static final String JOB_PARAMETER_JOB_NAME = "--job";
 
@@ -54,7 +64,7 @@ public class SingleJobCommandLineRunner implements CommandLineRunner, Applicatio
     }
 
     @Override
-    public void run(String... args) throws JobExecutionException {
+    public void run(String... args) throws JobExecutionException, IOException {
         val jobParameters = getJobParameters(args);
 
         if (jobParameters == null) {
@@ -68,8 +78,14 @@ public class SingleJobCommandLineRunner implements CommandLineRunner, Applicatio
         Job job = jobOpt
                 .orElseThrow(() -> new IllegalArgumentException("指定されたジョブが見つかりません。[jobName=" + targetJobName + "]"));
 
+        // 二重起動防止ファイルを作成する
+        createProcessFile(processFileLocation, targetJobName);
+
         // ジョブを実行する
-        execute(job, jobParameters);
+        val status = execute(job, jobParameters);
+
+        // 二重起動防止ファイルを削除する
+        deleteProcessFile(status, processFileLocation, targetJobName);
     }
 
     /**
@@ -89,10 +105,49 @@ public class SingleJobCommandLineRunner implements CommandLineRunner, Applicatio
         return converter.getJobParameters(props);
     }
 
-    protected void execute(Job job, JobParameters jobParameters)
+    /**
+     * 二重起動防止ファイルを作成する。
+     *
+     * @param processFileLocation
+     * @param jobName
+     */
+    protected void createProcessFile(String processFileLocation, String jobName) throws IOException {
+        // 二重起動防止ファイルの保存先を作成する
+        val location = Paths.get(processFileLocation);
+        FileUtils.createPathIfNessesary(location);
+
+        // 二重起動防止ファイルを作成する
+        val path = location.resolve(jobName);
+        try {
+            Files.createFile(path);
+        } catch (FileAlreadyExistsException e) {
+            log.error("二重起動防止ファイルが存在するため処理を中断します。[path={}]", path.toAbsolutePath().toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 二重起動防止ファイルを削除する。
+     * 
+     * @param status
+     * @param processFileLocation
+     * @param jobName
+     */
+    protected void deleteProcessFile(BatchStatus status, String processFileLocation, String jobName)
+            throws IOException {
+
+        if (status == BatchStatus.COMPLETED) {
+            val location = Paths.get(processFileLocation);
+            val path = location.resolve(jobName);
+            Files.deleteIfExists(path);
+        }
+    }
+
+    protected BatchStatus execute(Job job, JobParameters jobParameters)
             throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException,
             JobParametersInvalidException, JobParametersNotFoundException {
 
+        BatchStatus status = BatchStatus.UNKNOWN;
         val nextParameters = getNextJobParameters(job, jobParameters);
 
         if (nextParameters != null) {
@@ -101,7 +156,11 @@ public class SingleJobCommandLineRunner implements CommandLineRunner, Applicatio
             if (publisher != null) {
                 publisher.publishEvent(new JobExecutionEvent(execution));
             }
+
+            status = execution.getStatus();
         }
+
+        return status;
     }
 
     protected JobParameters getNextJobParameters(Job job, JobParameters parameters) {
