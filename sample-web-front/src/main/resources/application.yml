@@ -99,5 +99,5 @@ logging:
 ####
 # アプリケーションの設定
 application:
-    fileUploadLocation: /tmp/sample
+    fileUploadLocation: build/sample
     mailTemplateLocation: mail/

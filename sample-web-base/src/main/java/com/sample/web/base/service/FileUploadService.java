@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sample.common.util.FileUtils;
 import com.sample.domain.exception.FileNotFoundException;
 import com.sample.domain.service.BaseService;
 
@@ -29,7 +30,7 @@ public class FileUploadService extends BaseService {
      */
     public Stream<Path> listAllFiles(Path location) {
         try {
-            createPathIfNessesary(location);
+            FileUtils.createPathIfNessesary(location);
 
             return Files.walk(location, 1).filter(path -> !path.equals(location))
                     .map(path -> location.relativize(path));
@@ -78,25 +79,12 @@ public class FileUploadService extends BaseService {
                 throw new IllegalArgumentException("cloud not save empty file. " + filename);
             }
 
-            createPathIfNessesary(location);
+            FileUtils.createPathIfNessesary(location);
 
             Files.copy(file.getInputStream(), location.resolve(filename));
 
         } catch (IOException e) {
             throw new IllegalStateException("failed to save file. " + filename, e);
-        }
-    }
-
-    /**
-     * ディレクトリがない場合は作成する
-     */
-    protected void createPathIfNessesary(Path location) {
-        try {
-            if (!Files.isDirectory(location)) {
-                Files.createDirectory(location);
-            }
-        } catch (IOException e) {
-            throw new IllegalArgumentException("could not create ditectory. " + location.toString(), e);
         }
     }
 }
