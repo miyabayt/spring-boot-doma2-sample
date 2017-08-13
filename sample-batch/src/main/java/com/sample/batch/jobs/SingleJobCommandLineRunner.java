@@ -114,7 +114,7 @@ public class SingleJobCommandLineRunner implements CommandLineRunner, Applicatio
     protected void createProcessFile(String processFileLocation, String jobName) throws IOException {
         // 二重起動防止ファイルの保存先を作成する
         val location = Paths.get(processFileLocation);
-        FileUtils.createPathIfNessesary(location);
+        FileUtils.createDirectory(location);
 
         // 二重起動防止ファイルを作成する
         val path = location.resolve(jobName);
@@ -128,7 +128,7 @@ public class SingleJobCommandLineRunner implements CommandLineRunner, Applicatio
 
     /**
      * 二重起動防止ファイルを削除する。
-     * 
+     *
      * @param status
      * @param processFileLocation
      * @param jobName

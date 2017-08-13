@@ -29,7 +29,7 @@ public @interface ZenKana {
     @Target({ FIELD })
     @Retention(RUNTIME)
     @Documented
-    public @interface List {
+    @interface List {
         ZenKana[] value();
     }
 }

@@ -1,10 +1,11 @@
 package com.sample.web.base.util;
 
-import lombok.val;
-import org.springframework.web.util.WebUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.web.util.WebUtils;
+
+import lombok.val;
 
 public class SessionUtils {
 

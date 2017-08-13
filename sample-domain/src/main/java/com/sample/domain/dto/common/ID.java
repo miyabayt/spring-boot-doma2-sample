@@ -75,11 +75,11 @@ public class ID<T> implements Serializable {
         }
 
         final ID<?> id = (ID<?>) o;
-        return value == id.value;
+        return value.equals(id.value);
     }
 
     @Override
     public int hashCode() {
-        return (value ^ (value >>> 32));
+        return value.hashCode();
     }
 }

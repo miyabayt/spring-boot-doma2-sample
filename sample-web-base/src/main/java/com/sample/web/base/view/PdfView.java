@@ -3,8 +3,6 @@ package com.sample.web.base.view;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Collection;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,22 +19,16 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class PdfView extends JasperReportsPdfView {
 
-    protected Map<String, Object> params;
-
-    protected Collection<?> data;
-
     protected String filename;
 
     /**
      * コンストラクタ
-     * 
+     *
      * @param location
-     * @param params
      * @param filename
      */
-    public PdfView(String location, Map<String, Object> params, String filename) {
+    public PdfView(String location, String filename) {
         super();
-        this.params = params;
         this.filename = filename;
 
         setUrl("classpath:" + location);

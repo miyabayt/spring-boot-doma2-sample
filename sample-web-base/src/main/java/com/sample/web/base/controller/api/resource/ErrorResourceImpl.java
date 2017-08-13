@@ -4,19 +4,21 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+@Setter
+@Getter
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ErrorResourceImpl extends ResourceImpl {
 
     // リクエストID
-    private String requestId;
+    String requestId;
 
     // 入力エラー
-    private List<FieldErrorResource> fieldErrors;
+    List<FieldErrorResource> fieldErrors;
 
     public ErrorResourceImpl() {
     }

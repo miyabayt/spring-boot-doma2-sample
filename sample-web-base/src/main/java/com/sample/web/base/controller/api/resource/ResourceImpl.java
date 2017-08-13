@@ -6,10 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sample.domain.dto.common.Dto;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResourceImpl implements Resource {
 
