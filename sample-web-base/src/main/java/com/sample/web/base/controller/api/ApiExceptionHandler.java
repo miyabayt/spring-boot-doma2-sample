@@ -3,7 +3,6 @@ package com.sample.web.base.controller.api;
 import static com.sample.web.base.WebConst.VALIDATION_ERROR;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.MDC;
@@ -12,7 +11,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,39 +36,38 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     MessageSource messageSource;
 
     /**
-     * Customize the response for ValidationErrorException.
-     * <p>
-     * This method logs a warning and delegates to
-     * {@link #handleExceptionInternal}.
+     * 入力チェックエラーのハンドリング
      *
      * @param ex
-     *            the exception
      * @param request
-     *            the current request
-     * @return a {@code ResponseEntity} instance
+     * @return
      */
     @ExceptionHandler(ValidationErrorException.class)
     public ResponseEntity<Object> handleValidationErrorException(Exception ex, WebRequest request) {
-        val vee = (ValidationErrorException) ex;
         val headers = new HttpHeaders();
         val status = HttpStatus.BAD_REQUEST;
         val fieldErrorContexts = new ArrayList<FieldErrorResource>();
 
-        vee.getErrors().ifPresent(errors -> {
-            List<FieldError> fieldErrors = errors.getFieldErrors();
+        if (ex instanceof ValidationErrorException) {
+            val vee = (ValidationErrorException) ex;
 
-            if (fieldErrors != null) {
-                fieldErrors.forEach(fieldError -> {
-                    FieldErrorResource fieldErrorResource = new FieldErrorResource();
-                    fieldErrorResource.setFieldName(fieldError.getField());
-                    fieldErrorResource.setErrorType(fieldError.getCode());
-                    fieldErrorResource.setErrorMessage(fieldError.getDefaultMessage());
-                    fieldErrorContexts.add(fieldErrorResource);
-                });
-            }
-        });
+            vee.getErrors().ifPresent(errors -> {
+                val fieldErrors = errors.getFieldErrors();
 
-        val message = messageSource.getMessage(VALIDATION_ERROR, null, "validation error", request.getLocale());
+                if (fieldErrors != null) {
+                    fieldErrors.forEach(fieldError -> {
+                        val fieldErrorResource = new FieldErrorResource();
+                        fieldErrorResource.setFieldName(fieldError.getField());
+                        fieldErrorResource.setErrorType(fieldError.getCode());
+                        fieldErrorResource.setErrorMessage(fieldError.getDefaultMessage());
+                        fieldErrorContexts.add(fieldErrorResource);
+                    });
+                }
+            });
+        }
+
+        val locale = request.getLocale();
+        val message = messageSource.getMessage(VALIDATION_ERROR, null, "validation error", locale);
         val errorContext = new ErrorResourceImpl();
         errorContext.setMessage(message);
         errorContext.setFieldErrors(fieldErrorContexts);
@@ -79,16 +76,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Customize the response for NoDataFoundException.
-     * <p>
-     * This method logs a warning and delegates to
-     * {@link #handleExceptionInternal}.
+     * データ不存在エラーのハンドリング
      *
      * @param ex
-     *            the exception
      * @param request
-     *            the current request
-     * @return a {@code ResponseEntity} instance
+     * @return
      */
     @ExceptionHandler(NoDataFoundException.class)
     public ResponseEntity<Object> handleNoDataFoundException(Exception ex, WebRequest request) {
@@ -108,16 +100,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Customize the response for Any unexpected Exception.
-     * <p>
-     * This method logs a warning and delegates to
-     * {@link #handleExceptionInternal}.
+     * 予期せぬ例外のハンドリング
      *
      * @param ex
-     *            the exception
      * @param request
-     *            the current request
-     * @return a {@code ResponseEntity} instance
+     * @return
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUnexpectedException(Exception ex, WebRequest request) {
@@ -130,8 +117,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String parameterDump = this.dumpParameterMap(request.getParameterMap());
         log.error(String.format("unexpected error has occurred. dump: %s", parameterDump), ex);
 
-        String message = messageSource.getMessage("UnexpectedError.message", null, "unexpected error",
-                request.getLocale());
+        val locale = request.getLocale();
+        val message = messageSource.getMessage("UnexpectedError.message", null, "unexpected error", locale);
         val errorResource = new ErrorResourceImpl();
         errorResource.setRequestId(String.valueOf(MDC.get("X-Track-Id")));
         errorResource.setMessage(message);
@@ -143,26 +130,25 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResource, headers, status);
     }
 
-    // TODO
-    private String dumpParameterMap(Map<String, String[]> parameterMap) {
-        try {
-            StringBuilder sb = new StringBuilder(256);
-            parameterMap.forEach((key, values) -> {
-                sb.append(key).append("=").append("[");
-                for (String value : values) {
-                    sb.append(value).append(",");
-                }
-                sb.delete(sb.length() - 1, sb.length()).append("], ");
-            });
-            int length = sb.length();
-            if (2 <= length)
-                sb.delete(length - 2, length);
+    /**
+     * パラメータをダンプする。
+     *
+     * @param parameterMap
+     * @return
+     */
+    protected String dumpParameterMap(Map<String, String[]> parameterMap) {
+        StringBuilder sb = new StringBuilder(256);
+        parameterMap.forEach((key, values) -> {
+            sb.append(key).append("=").append("[");
+            for (String value : values) {
+                sb.append(value).append(",");
+            }
+            sb.delete(sb.length() - 1, sb.length()).append("], ");
+        });
+        int length = sb.length();
+        if (2 <= length)
+            sb.delete(length - 2, length);
 
-            return sb.toString();
-        } catch (Throwable t) {
-            // ignore
-        }
-
-        return "";
+        return sb.toString();
     }
 }

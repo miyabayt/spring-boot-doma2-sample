@@ -1,16 +1,19 @@
 package com.sample.web.base.aop;
 
-import com.sample.domain.dao.listener.DoubleSubmitCheckTokenHolder;
-import com.sample.web.base.security.DoubleSubmitCheckToken;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
+import java.util.Objects;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Objects;
+import com.sample.domain.dao.listener.DoubleSubmitCheckTokenHolder;
+import com.sample.web.base.security.DoubleSubmitCheckToken;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 二重送信防止チェックのトークンをセッションに設定する

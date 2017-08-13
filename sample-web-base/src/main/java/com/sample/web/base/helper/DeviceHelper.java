@@ -26,7 +26,7 @@ public class DeviceHelper {
         FP, PC, SP, Tablet
     }
 
-    public static final List<String> FP_USER_AGENTS = Arrays.asList("DoCoMo", "KDDI", "DDIPOKET", "UP.Browser",
+    private static final List<String> FP_USER_AGENTS = Arrays.asList("DoCoMo", "KDDI", "DDIPOKET", "UP.Browser",
             "J-PHONE", "Vodafone", "SoftBank");
 
     /**

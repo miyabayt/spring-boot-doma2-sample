@@ -1,5 +1,9 @@
 package com.sample.common;
 
+import java.util.concurrent.TimeUnit;
+
+import lombok.val;
+
 /**
  * スロットリングする
  */
@@ -9,7 +13,7 @@ public class Throttler {
 
     private long timePeriodMillis = 1000;
 
-    private volatile TimeSlot slot = null;
+    private TimeSlot timeSlot = null;
 
     /**
      * コンストラクタ
@@ -43,48 +47,45 @@ public class Throttler {
      * @throws InterruptedException
      */
     protected void delay(long delay) {
-        if (delay < 0) {
-            return;
-        } else {
+        if (0 < delay) {
             try {
-                Thread.sleep(delay);
+                TimeUnit.MICROSECONDS.sleep(delay);
             } catch (InterruptedException e) {
             }
         }
     }
 
-    protected long calculateDelay() {
+    protected synchronized long calculateDelay() {
         TimeSlot slot = nextSlot();
 
         if (!slot.isActive()) {
-            long delay = slot.startTime - System.currentTimeMillis();
-            return delay;
+            return slot.startTime - System.currentTimeMillis();
         }
 
         return 0;
     }
 
     protected synchronized TimeSlot nextSlot() {
-        if (slot == null) {
-            slot = new TimeSlot();
+        if (timeSlot == null) {
+            timeSlot = new TimeSlot();
         }
 
-        if (slot.isFull()) {
-            slot = slot.next();
+        if (timeSlot.isFull()) {
+            timeSlot = timeSlot.next();
         }
 
-        slot.assign();
+        timeSlot.assign();
 
-        return slot;
+        return timeSlot;
     }
 
     protected class TimeSlot {
 
-        private volatile long capacity = Throttler.this.maxRequestsPerPeriod;
+        private long capacity = Throttler.this.maxRequestsPerPeriod;
 
-        private final long duration = Throttler.this.timePeriodMillis;
+        private long duration = Throttler.this.timePeriodMillis;
 
-        private final long startTime;
+        private long startTime;
 
         protected TimeSlot() {
             this(System.currentTimeMillis());
@@ -94,24 +95,26 @@ public class Throttler {
             this.startTime = startTime;
         }
 
-        protected void assign() {
+        protected synchronized void assign() {
             capacity--;
         }
 
-        protected TimeSlot next() {
-            return new TimeSlot(Math.max(System.currentTimeMillis(), this.startTime + this.duration));
+        protected synchronized TimeSlot next() {
+            val startTime = Math.max(System.currentTimeMillis(), this.startTime + this.duration);
+            val slot = new TimeSlot(startTime);
+            return slot;
         }
 
-        protected boolean isActive() {
+        protected synchronized boolean isActive() {
             return startTime <= System.currentTimeMillis();
         }
 
-        protected boolean isFull() {
+        protected synchronized boolean isFull() {
             return capacity <= 0;
         }
     }
 
     public interface Callback<T> {
-        public T execute();
+        T execute();
     }
 }

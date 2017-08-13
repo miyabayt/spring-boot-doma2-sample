@@ -29,7 +29,7 @@ public @interface ZipCode {
     @Target({ FIELD })
     @Retention(RUNTIME)
     @Documented
-    public @interface List {
+    @interface List {
         ZipCode[] value();
     }
 }

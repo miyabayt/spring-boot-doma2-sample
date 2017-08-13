@@ -1,11 +1,13 @@
 package com.sample.web.base.security;
 
-import com.sample.common.XORShiftRandom;
-import com.sample.web.base.util.SessionUtils;
-import lombok.val;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.collections.map.LRUMap;
 
-import javax.servlet.http.HttpServletRequest;
+import com.sample.common.XORShiftRandom;
+import com.sample.web.base.util.SessionUtils;
+
+import lombok.val;
 
 public class DoubleSubmitCheckToken {
 
@@ -59,10 +61,13 @@ public class DoubleSubmitCheckToken {
         val token = generateToken();
 
         Object mutex = SessionUtils.getMutex(request);
-        synchronized (mutex) {
-            setToken(request, key, token);
-            return token;
+        if (mutex != null) {
+            synchronized (mutex) {
+                setToken(request, key, token);
+            }
         }
+
+        return token;
     }
 
     /**

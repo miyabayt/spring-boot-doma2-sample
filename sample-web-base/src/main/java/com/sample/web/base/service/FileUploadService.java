@@ -30,7 +30,7 @@ public class FileUploadService extends BaseService {
      */
     public Stream<Path> listAllFiles(Path location) {
         try {
-            FileUtils.createPathIfNessesary(location);
+            FileUtils.createDirectory(location);
 
             return Files.walk(location, 1).filter(path -> !path.equals(location))
                     .map(path -> location.relativize(path));
@@ -65,7 +65,7 @@ public class FileUploadService extends BaseService {
 
     /**
      * ファイルを保存します。
-     * 
+     *
      * @param location
      * @param file
      *            保存先ディレクトリ
@@ -79,7 +79,7 @@ public class FileUploadService extends BaseService {
                 throw new IllegalArgumentException("cloud not save empty file. " + filename);
             }
 
-            FileUtils.createPathIfNessesary(location);
+            FileUtils.createDirectory(location);
 
             Files.copy(file.getInputStream(), location.resolve(filename));
 

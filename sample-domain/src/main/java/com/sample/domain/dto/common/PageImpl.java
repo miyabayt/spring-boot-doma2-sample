@@ -33,6 +33,6 @@ public class PageImpl<T> implements Page<T>, Serializable {
         this.count = count;
         this.page = pageable.getPage();
         this.perpage = pageable.getPerpage();
-        this.totalPages = Math.max(1, (int) Math.ceil(count / perpage));
+        this.totalPages = Math.max(1, (int) Math.ceil((double) count / perpage));
     }
 }

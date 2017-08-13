@@ -7,7 +7,6 @@ import org.seasar.doma.Domain;
 
 import com.sample.common.util.CompressUtils;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.val;
 
@@ -17,7 +16,6 @@ public class BZip2Data implements Serializable {
 
     private static final long serialVersionUID = -4805556024192461766L;
 
-    @Getter
     byte[] data;
 
     byte[] bzip2;
