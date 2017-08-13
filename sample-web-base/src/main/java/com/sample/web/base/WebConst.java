@@ -17,7 +17,7 @@ public interface WebConst {
 
     String OPTIMISTIC_LOCKING_FAILURE_ERROR = "OptimisticLockingFailureError";
 
-    String INVALID_CSRF_TOKEN_ERROR = "InvalidCsrfTokenError";
+    String DOUBLE_SUBMIT_ERROR = "DoubleSubmitError";
 
     /** ---- View ---- **/
     String ERROR_VIEW = "error";

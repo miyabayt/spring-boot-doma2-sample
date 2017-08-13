@@ -39,6 +39,7 @@ import com.sample.domain.dto.common.ID;
 import com.sample.web.base.aop.LoggingFunctionNameInterceptor;
 import com.sample.web.base.aop.RequestTrackingInterceptor;
 import com.sample.web.base.aop.SetAuditInfoInterceptor;
+import com.sample.web.base.aop.SetDoubleSubmitCheckTokenInterceptor;
 import com.sample.web.base.filter.ClearMDCFilter;
 import com.sample.web.base.filter.CustomCharacterEncodingFilter;
 import com.sample.web.base.filter.LoginUserTrackingFilter;
@@ -244,11 +245,18 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         return new SetAuditInfoInterceptor();
     }
 
+    @Bean
+    public SetDoubleSubmitCheckTokenInterceptor setDoubleSubmitCheckTokenInterceptor() {
+        // 二重送信をチェックする
+        return new SetDoubleSubmitCheckTokenInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
         registry.addInterceptor(requestTrackingInterceptor());
         registry.addInterceptor(loggingFunctionNameInterceptor());
         registry.addInterceptor(setAuditInfoInterceptor());
+        registry.addInterceptor(setDoubleSubmitCheckTokenInterceptor());
     }
 }
