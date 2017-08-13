@@ -1,5 +1,7 @@
 package com.sample.domain.dao.listener;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
 import org.seasar.doma.jdbc.entity.EntityListener;
 import org.seasar.doma.jdbc.entity.PreDeleteContext;
@@ -7,6 +9,7 @@ import org.seasar.doma.jdbc.entity.PreInsertContext;
 import org.seasar.doma.jdbc.entity.PreUpdateContext;
 
 import com.sample.domain.dto.common.DomaDto;
+import com.sample.domain.exception.DoubleSubmitErrorException;
 
 import lombok.NoArgsConstructor;
 import lombok.val;
@@ -18,6 +21,14 @@ public class DefaultEntityListener<ENTITY> implements EntityListener<ENTITY> {
 
     @Override
     public void preInsert(ENTITY entity, PreInsertContext<ENTITY> context) {
+        // 二重送信防止チェック
+        val expected = DoubleSubmitCheckTokenHolder.getExpectedToken();
+        val actual = DoubleSubmitCheckTokenHolder.getActualToken();
+
+        if (expected != null && actual != null && !Objects.equals(expected, actual)) {
+            throw new DoubleSubmitErrorException();
+        }
+
         val domaDto = getDomaDto(entity);
         val createdAt = AuditInfoHolder.getAuditDateTime();
         val createdBy = AuditInfoHolder.getAuditUser();

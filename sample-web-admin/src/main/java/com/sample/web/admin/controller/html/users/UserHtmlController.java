@@ -16,6 +16,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.domain.dto.UploadFile;
 import com.sample.domain.dto.User;
@@ -72,12 +73,18 @@ public class UserHtmlController extends AbstractHtmlController {
     /**
      * 登録画面 初期表示
      *
+     * @param form
      * @param model
      * @return
      */
     @GetMapping("/new")
-    public String newUser(Model model) {
-        model.addAttribute("userForm", new UserForm());
+    public String newUser(@ModelAttribute("userForm") UserForm form, Model model) {
+        // 登録処理の入力チェック結果を引き継ぐ
+        if (model.containsAttribute("errors")) {
+            val key = BindingResult.MODEL_KEY_PREFIX + "userForm";
+            model.addAttribute(key, model.asMap().get("errors"));
+        }
+
         return "users/new";
     }
 
@@ -86,13 +93,16 @@ public class UserHtmlController extends AbstractHtmlController {
      *
      * @param form
      * @param result
+     * @param attributes
      * @return
      */
     @PostMapping("/new")
-    public String newUser(@Validated @ModelAttribute("userForm") UserForm form, BindingResult result) {
+    public String newUser(@Validated @ModelAttribute("userForm") UserForm form, BindingResult result,
+            RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
-            return "users/new";
+            attributes.addFlashAttribute("errors", result);
+            return "redirect:/users/new";
         }
 
         // 入力値からDTOを作成する
@@ -130,16 +140,19 @@ public class UserHtmlController extends AbstractHtmlController {
 
     /**
      * 検索結果
-     * 
+     *
      * @param form
      * @param result
+     * @param attributes
      * @return
      */
     @PostMapping("/find")
-    public String findUser(@Validated @ModelAttribute("searchUserForm") SearchUserForm form, BindingResult result) {
+    public String findUser(@Validated @ModelAttribute("searchUserForm") SearchUserForm form, BindingResult result,
+            RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
-            return "users/find";
+            attributes.addFlashAttribute("errors", result);
+            return "redirect:/users/find";
         }
 
         return "redirect:/users/find";
@@ -149,6 +162,7 @@ public class UserHtmlController extends AbstractHtmlController {
      * 詳細画面
      *
      * @param userId
+     * @param model
      * @return
      */
     @GetMapping("/show/{userId}")
@@ -173,13 +187,14 @@ public class UserHtmlController extends AbstractHtmlController {
 
     /**
      * 編集画面 初期表示
-     * 
+     *
      * @param userId
      * @param form
+     * @param model
      * @return
      */
     @GetMapping("/edit/{userId}")
-    public String editUser(@PathVariable Integer userId, @ModelAttribute UserForm form) {
+    public String editUser(@PathVariable Integer userId, @ModelAttribute("userForm") UserForm form, Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (form.getId() == null) {
             // 1件取得する
@@ -189,24 +204,32 @@ public class UserHtmlController extends AbstractHtmlController {
             modelMapper.map(user, form);
         }
 
+        // 更新処理の入力チェック結果を引き継ぐ
+        if (model.containsAttribute("errors")) {
+            val key = BindingResult.MODEL_KEY_PREFIX + "userForm";
+            model.addAttribute(key, model.asMap().get("errors"));
+        }
+
         return "users/new";
     }
 
     /**
      * 編集画面 更新処理
-     * 
+     *
      * @param form
      * @param result
      * @param userId
      * @param sessionStatus
+     * @param attributes
      * @return
      */
     @PostMapping("/edit/{userId}")
     public String editUser(@Validated @ModelAttribute("userForm") UserForm form, BindingResult result,
-            @PathVariable Integer userId, SessionStatus sessionStatus) {
+            @PathVariable Integer userId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
-            return "users/new";
+            attributes.addFlashAttribute("errors", result);
+            return "redirect:/users/edit/" + userId;
         }
 
         // 更新対象を取得する
@@ -236,7 +259,7 @@ public class UserHtmlController extends AbstractHtmlController {
 
     /**
      * CSVダウンロード
-     * 
+     *
      * @param filename
      * @return
      */
@@ -256,7 +279,7 @@ public class UserHtmlController extends AbstractHtmlController {
 
     /**
      * Excelダウンロード
-     * 
+     *
      * @param filename
      * @return
      */
@@ -274,7 +297,7 @@ public class UserHtmlController extends AbstractHtmlController {
 
     /**
      * PDFダウンロード
-     * 
+     *
      * @param filename
      * @return
      */
