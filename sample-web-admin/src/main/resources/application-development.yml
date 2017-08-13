@@ -8,9 +8,6 @@ spring:
         url: jdbc:mysql://127.0.0.1:3306/sample?characterEncoding=UTF-8
         username: root
         password: passw0rd
-    flyway:
-        enable: true
-        baseline-on-migrate: true
     session:
         jdbc:
             # spring-session-jdbcに必要なテーブルを作成する
@@ -18,6 +15,9 @@ spring:
     resources:
         # キャッシュの無効化
         cache-period: 0
+flyway:
+    enable: true
+    baseline-on-migrate: true
 doma:
     # SQLファイルをキャッシュしない
     sql-file-repository: no_cache
