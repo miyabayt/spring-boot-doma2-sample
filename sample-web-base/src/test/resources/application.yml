@@ -16,9 +16,6 @@ spring:
     thymeleaf:
         # HTML5モードが非推奨になったのでHTMLモードにする
         mode: HTML
-    flyway:
-        # 開発中のみ有効にする
-        enabled: false
     session:
         jdbc:
             # spring-session-jdbcに必要なテーブルを作成する

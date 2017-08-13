@@ -30,9 +30,6 @@ spring:
         job:
             # 自動的にバッチジョブが起動しないようにする
             enabled: false
-flyway:
-    # 開発中のみ有効にする
-    enabled: false
 doma:
     dialect: mysql
     # 小文字のスネークケースに変換する（firstName → first_name）

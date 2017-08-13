@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = "1.5.5.RELEASE"
+        springBootVersion = "1.5.6.RELEASE"
     }
     repositories {
         mavenLocal()
@@ -48,7 +48,7 @@ subprojects {
         module {
             downloadJavadoc = true
             downloadSources = true
-            
+
             inheritOutputDirs = false
             outputDir = compileJava.destinationDir
             testOutputDir = compileTestJava.destinationDir
