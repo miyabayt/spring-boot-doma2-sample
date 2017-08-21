@@ -18,4 +18,6 @@ public class LoginForm implements Serializable {
 
     @NotEmpty
     String password;
+
+    boolean rememberMe;
 }

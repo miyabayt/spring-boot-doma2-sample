@@ -9,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.web.base.controller.html.AbstractHtmlController;
@@ -62,7 +61,7 @@ public class LoginHtmlController extends AbstractHtmlController {
      * @param attributes
      * @return
      */
-    @RequestMapping(LOGIN_SUCCESS_URL)
+    @PostMapping(LOGIN_SUCCESS_URL)
     public String loginSuccess(@ModelAttribute LoginForm form, RedirectAttributes attributes) {
         attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage("login.success"));
         return "redirect:/";
@@ -75,7 +74,7 @@ public class LoginHtmlController extends AbstractHtmlController {
      * @param model
      * @return
      */
-    @RequestMapping(LOGIN_FAILURE_URL)
+    @GetMapping(LOGIN_FAILURE_URL)
     public String loginFailure(@ModelAttribute LoginForm form, Model model) {
         model.addAttribute(GLOBAL_MESSAGE, getMessage("login.failed"));
         return "login/login";
@@ -86,7 +85,7 @@ public class LoginHtmlController extends AbstractHtmlController {
      *
      * @return
      */
-    @RequestMapping(LOGOUT_URL)
+    @PostMapping(LOGOUT_URL)
     public String logout(@ModelAttribute LoginForm form, RedirectAttributes attributes) {
         attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage("logout.success"));
         return "redirect:/login";

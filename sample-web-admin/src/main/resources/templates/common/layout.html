@@ -47,9 +47,11 @@
                             <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
                             <span>Upload Files</span>
                         </li>
-                        <li th:replace="~{common/menuItem :: menuItem ('/logout', 'logout', '', 'log-out', 'Logout')}">
-                            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-                            <span>Logout</span>
+                        <li>
+                            <a href="#" id="logout" title="logout">
+                                <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                                <span>Logout</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -93,5 +95,13 @@
                     th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
         </div>
         <div layout:fragment="scripts" th:remove="tag" />
+        <form name="logout" th:action="@{/logout}" method="post"></form>
+        <script type="text/javascript" th:inline="javascript">
+            $(document).ready(function() {
+                $("#logout").bind("click", function() {
+                    $("form[name='logout']").submit();
+                });
+            });
+        </script>
     </body>
 </html>
