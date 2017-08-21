@@ -85,7 +85,6 @@ server:
         timeout: 7200
         # URLにセッションIDを出力しないようにする
         tracking-modes: cookie
-    # RequestMappingに/adminを含めな
     contextPath: /
 logging:
     pattern:

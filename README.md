@@ -110,10 +110,12 @@ $ ../gradlew bootRun -Pargs="--job=importStaffJob"
 
 #### データベース接続先
 
-```
-tcp://127.0.0.1:3306/sample
-または
-tcp://192.168.99.100:3306/sample
+```bash
+# Windows10、MacOSXの場合
+mysql -h 127.0.0.1 -P 3306 -uroot -ppassw0rd sample
+
+# Docker Toolboxの場合
+mysql -h 192.168.99.100 -P 3306 -uroot -ppassw0rd sample
 ```
 
 
