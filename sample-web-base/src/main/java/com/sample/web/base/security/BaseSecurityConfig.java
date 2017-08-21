@@ -15,10 +15,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.sample.web.base.security.rememberme.MultiDeviceRememberMeServices;
+import com.sample.web.base.security.rememberme.MultiDeviceTokenRepository;
+import com.sample.web.base.security.rememberme.PurgePersistentLoginTask;
 
 import lombok.val;
 
@@ -27,8 +29,14 @@ public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${application.security.secureCookie:false}")
     Boolean secureCookie;
 
+    @Value("${application.security.rememberMe.cookieName:rememberMe}")
+    String rememberMeCookieName;
+
     @Value("${application.security.tokenValiditySeconds:86400}")
     Integer tokenValiditySeconds;
+
+    @Value("${application.security.tokenPurgeSeconds:2592000}") // 30 days
+    Integer tokenPurgeSeconds;
 
     @Autowired
     DataSource dataSource;
@@ -36,38 +44,61 @@ public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserDetailsService userDetailsService;
 
-    @Bean
-    public PersistentTokenRepository jdbcTokenRepository() {
-        // TODO: デバイス単位で記憶するようにする
-        val repository = new JdbcTokenRepositoryImpl();
-        repository.setDataSource(dataSource);
-        return repository;
-    }
+    private static final String REMEMBER_ME_KEY = "sampleRememberMeKey";
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public MultiDeviceTokenRepository multiDeviceTokenRepository() {
+        val tokenRepository = new MultiDeviceTokenRepository(true);
+        tokenRepository.setDataSource(dataSource);
+        return tokenRepository;
+    }
+
+    @Bean
+    public MultiDeviceRememberMeServices multiDeviceRememberMeServices() {
+        val rememberMeService = new MultiDeviceRememberMeServices(REMEMBER_ME_KEY, userDetailsService(),
+                multiDeviceTokenRepository());
+        rememberMeService.setParameter("rememberMe");
+        rememberMeService.setCookieName(rememberMeCookieName);
+        rememberMeService.setUseSecureCookie(secureCookie);
+        rememberMeService.setTokenValiditySeconds(tokenValiditySeconds);
+        return rememberMeService;
+    }
+
+    @Bean
+    public PurgePersistentLoginTask purgePersistentLoginTask() {
+        val task = new PurgePersistentLoginTask();
+        task.setTokenPurgeSeconds(tokenPurgeSeconds);
+        task.setDataSource(dataSource);
+        return task;
+    }
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         // 静的ファイルへのアクセスは認証をかけない
-        web.ignoring().antMatchers(WEBJARS_URL, STATIC_RESOURCES_URL);
+        web.ignoring()//
+                .antMatchers(WEBJARS_URL, STATIC_RESOURCES_URL);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService)//
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // CookieにCSRFトークンを保存する
-        http.csrf().csrfTokenRepository(new CookieCsrfTokenRepository());
+        http.csrf()//
+                .csrfTokenRepository(new CookieCsrfTokenRepository());
 
         http.authorizeRequests()
                 // エラー画面は認証をかけない
-                .antMatchers(FORBIDDEN_URL, ERROR_URL).permitAll()
+                .antMatchers(FORBIDDEN_URL, ERROR_URL, "/management/health").permitAll()
                 // エラー画面以外は、認証をかける
                 .anyRequest().authenticated();
 
@@ -86,9 +117,10 @@ public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password").permitAll();
 
         // ログアウト設定
-        http.logout().logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL))
+        http.logout()//
+                .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL))
                 // Cookieを破棄する
-                .deleteCookies("SESSION", "rememberMe")
+                .deleteCookies("SESSION", rememberMeCookieName)
                 // ログアウト画面のURL
                 .logoutUrl(LOGOUT_URL)
                 // ログアウト後の遷移先
@@ -100,12 +132,7 @@ public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true).permitAll();
 
         // RememberMe
-        http.rememberMe().tokenRepository(jdbcTokenRepository())
-                // Cookie名
-                .rememberMeCookieName("rememberMe")
-                // TODO: 本番ではsecure=trueにする
-                .alwaysRemember(true).useSecureCookie(secureCookie)
-                // 1日ごとにリフレッシュする
-                .tokenValiditySeconds(tokenValiditySeconds);
+        http.rememberMe().key(REMEMBER_ME_KEY)//
+                .rememberMeServices(multiDeviceRememberMeServices());
     }
 }
