@@ -21,6 +21,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.sample.web.base.security.rememberme.MultiDeviceRememberMeServices;
 import com.sample.web.base.security.rememberme.MultiDeviceTokenRepository;
 import com.sample.web.base.security.rememberme.PurgePersistentLoginTask;
+import com.sample.web.base.util.RequestUtils;
 
 import lombok.val;
 
@@ -127,7 +128,7 @@ public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl(LOGIN_URL)
                 // ajaxの場合は、HTTPステータスを返す
                 .defaultLogoutSuccessHandlerFor(new HttpStatusReturningLogoutSuccessHandler(),
-                        request -> "XMLHttpRequest".equals(request.getHeader("X-Requested-With")))
+                        request -> RequestUtils.isAjaxRequest(request))
                 // セッションを破棄する
                 .invalidateHttpSession(true).permitAll();
 

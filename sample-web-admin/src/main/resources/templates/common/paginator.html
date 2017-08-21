@@ -9,7 +9,7 @@
 					</li>
 					<li th:each="i : ${#numbers.sequence(1, p.totalPages)}" th:class="(${i} == ${p.page}) ? 'active' : ''" style="display:inline">
 						<span th:if="${i} == ${p.page}" th:text="${i}">1</span>
-						<a th:if="${i} != ${p.page}" th:href="@{${url}(page=${i})}">
+						<a th:if="${i} != ${p.page} and (${p.page} - 5) < ${i} and ${i} < (${p.page} + 5)" th:href="@{${url}(page=${i})}">
 							<span th:text="${i}">1</span>
 						</a>
 					</li>

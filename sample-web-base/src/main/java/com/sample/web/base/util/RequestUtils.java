@@ -20,7 +20,7 @@ public class RequestUtils {
      * @return
      */
     public static String getUserAgent(HttpServletRequest request) {
-        return StringUtils.trimToEmpty(request.getParameter(HttpHeaders.USER_AGENT));
+        return StringUtils.trimToEmpty(request.getHeader(HttpHeaders.USER_AGENT));
     }
 
     /**

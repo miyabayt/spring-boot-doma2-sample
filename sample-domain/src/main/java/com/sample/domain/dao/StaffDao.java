@@ -9,7 +9,6 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.Staff;
-import com.sample.domain.dto.User;
 import com.sample.domain.dto.common.ID;
 
 @ConfigAutowireable
@@ -24,7 +23,7 @@ public interface StaffDao {
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final Staff staff, final SelectOptions options, final Collector<User, ?, R> collector);
+    <R> R selectAll(final Staff staff, final SelectOptions options, final Collector<Staff, ?, R> collector);
 
     /**
      * 担当者を1件取得します。

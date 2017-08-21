@@ -34,7 +34,9 @@ public class DoubleSubmitCheckingRequestDataValueProcessor implements RequestDat
             token = DoubleSubmitCheckToken.renewToken(request);
         }
 
-        map.put(DoubleSubmitCheckToken.DOUBLE_SUBMIT_CHECK_PARAMETER, token);
+        if (!map.isEmpty()) {
+            map.put(DoubleSubmitCheckToken.DOUBLE_SUBMIT_CHECK_PARAMETER, token);
+        }
         return map;
     }
 

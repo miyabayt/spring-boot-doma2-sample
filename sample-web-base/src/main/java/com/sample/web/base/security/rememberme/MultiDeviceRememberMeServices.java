@@ -16,8 +16,6 @@ import org.springframework.security.web.authentication.rememberme.AbstractRememb
 import org.springframework.security.web.authentication.rememberme.CookieTheftException;
 import org.springframework.security.web.authentication.rememberme.InvalidCookieException;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationException;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sample.common.util.DateUtils;
 import com.sample.web.base.util.RequestUtils;
@@ -26,7 +24,6 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Transactional(rollbackFor = Throwable.class, propagation = Propagation.REQUIRES_NEW)
 public class MultiDeviceRememberMeServices extends AbstractRememberMeServices {
 
     public static final int DEFAULT_SERIES_LENGTH = 16;

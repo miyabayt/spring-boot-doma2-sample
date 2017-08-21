@@ -79,6 +79,11 @@ public class UserHtmlController extends AbstractHtmlController {
      */
     @GetMapping("/new")
     public String newUser(@ModelAttribute("userForm") UserForm form, Model model) {
+        if (!form.isNew()) {
+            // SessionAttributeに残っている場合は再生成する
+            model.addAttribute("userForm", new UserForm());
+        }
+
         // 登録処理の入力チェック結果を引き継ぐ
         if (model.containsAttribute("errors")) {
             val key = BindingResult.MODEL_KEY_PREFIX + "userForm";
