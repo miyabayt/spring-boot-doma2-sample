@@ -43,6 +43,10 @@
                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                             <span>Find Users</span>
                         </li>
+                        <li th:replace="~{common/menuItem :: menuItem ('/staffs/find(page=1)', 'staffs', 'find staffs', 'search', 'Find Staffs')}">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            <span>Find Staffs</span>
+                        </li>
                         <li th:replace="~{common/menuItem :: menuItem ('/uploadfiles/list', 'uploadfiles', 'upload files', 'th-list', 'Upload Files')}">
                             <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
                             <span>Upload Files</span>

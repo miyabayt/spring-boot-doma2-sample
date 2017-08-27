@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{common/layout}" th:with="menu='staffs'"><!--/* menuItemにパラメータを渡す */-->
+    <head layout:fragment="~{common/layout::header}">
+        <title>担当者管理</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <h2 th:with="text=${staffForm['new']} ? '担当者登録' : '担当者編集'" th:text="${text}">担当者登録</h2>
+
+            <form th:object="${staffForm}" th:action="${action}" th:with="action=${staffForm['new']} ? @{/staffs/new} : @{/staffs/edit/{id}(id=*{id})}" class="form-horizontal" enctype="multipart/form-data" method="post">
+                <div class="form-group has-feedback">
+                    <input th:replace="~{common/inputField :: input ('text', '名前', 'firstName')}" />
+                    <input th:replace="~{common/inputField :: input ('text', '苗字', 'lastName')}" />
+                    <input th:replace="~{common/inputField :: input ('password', 'パスワード', 'password')}" />
+                    <input th:replace="~{common/inputField :: input ('password', '確認パスワード', 'passwordConfirm')}" />
+                    <input th:replace="~{common/inputField :: input ('text', 'メールアドレス', 'email')}" />
+                    <input th:replace="~{common/inputField :: input ('text', '電話番号', 'tel')}" />
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button class="btn btn-default" type="submit"
+                                th:with="text=${staffForm['new']} ? '登録' : '編集'" th:text="${text}">
+                            Add Staff
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
