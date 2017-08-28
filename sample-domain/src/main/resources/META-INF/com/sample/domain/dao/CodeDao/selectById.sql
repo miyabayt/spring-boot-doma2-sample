@@ -26,17 +26,5 @@ INNER JOIN code_category cc
 ON c.code_category_id = cc.code_category_id
 AND cc.deleted_at IS NULL
 WHERE
-    c.deleted_at IS NULL
-/*%if code.id != null */
-AND c.code_id = /* code.id */1
-/*%end*/
-/*%if code.codeKey != null */
-AND c.code_key = /* code.codeKey */'01'
-/*%end*/
-/*%if code.codeValue != null */
-AND c.code_value = /* code.codeValue */'男'
-/*%end*/
-/*%if code.categoryKey != null && code.categoryKey != "ALL" */
-AND cc.category_key = /* code.categoryKey */1
-/*%end*/
-ORDER BY c.code_id ASC, cc.category_key ASC, c.display_order ASC
+  c.deleted_at IS NULL
+  AND c.code_id = /* id */1
