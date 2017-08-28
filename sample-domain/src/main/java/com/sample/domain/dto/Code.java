@@ -24,8 +24,11 @@ public class Code extends DomaDtoImpl {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     ID<Code> id;
 
-    // コード分類ID
-    Integer codeCategoryId;
+    // コード分類キー
+    String categoryKey;
+
+    // コード分類名
+    String categoryName;
 
     // コードキー
     String codeKey;
