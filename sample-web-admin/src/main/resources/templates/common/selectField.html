@@ -1,27 +1,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <body>
         <form>
-            <th:block th:fragment="select (label, name, items)">
-                <div th:with="valid=${!#fields.hasErrors(name)}"
-                     th:class="${'form-group' + (valid ? '' : ' has-error')}"
-                     class="form-group">
+            <th:block th:fragment="select (label, name, items, k, v)">
+                <div th:with="valid=${!#fields.hasErrors(name)}" th:class="${'form-group' + (valid ? '' : ' has-error')}" class="form-group">
                     <label class="col-sm-2 control-label" th:text="${label}">Label</label>
-
-                    <div class="col-sm-10">
-                        <select th:field="*{__${name}__}">
-                            <option th:each="item : ${items}" th:value="${item}"
-                                    th:text="${item}">dog
+                    <div class="col-sm-2">
+                        <select class="form-control" th:field="*{__${name}__}">
+                            <option th:value="ALL"
+                                    th:text="${Const['PulldownOption']}">pick one
+                            </option>
+                            <option th:each="item : ${items}" th:value="${item['__${k}__']}"
+                                    th:text="${item['__${v}__']}">dog
                             </option>
                         </select>
-                        <span th:if="${valid}"
-                              class="glyphicon glyphicon-ok form-control-feedback"
-                              aria-hidden="true"></span>
-                        <th:block th:if="${!valid}">
-                    <span
-                            class="glyphicon glyphicon-remove form-control-feedback"
-                            aria-hidden="true"></span>
-                            <span class="help-inline" th:errors="*{__${name}__}">Error</span>
-                        </th:block>
                     </div>
                 </div>
             </th:block>

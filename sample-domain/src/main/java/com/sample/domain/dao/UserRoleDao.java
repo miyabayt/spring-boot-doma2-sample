@@ -9,22 +9,36 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.Permission;
+import com.sample.domain.dto.User;
+import com.sample.domain.dto.UserRole;
 import com.sample.domain.dto.common.ID;
 
 @ConfigAutowireable
 @Dao
-public interface PermissionDao {
+public interface UserRoleDao {
 
     /**
      * 権限を取得します。
      *
+     * @param user
      * @param permission
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final Permission permission, final SelectOptions options,
-            final Collector<Permission, ?, R> collector);
+    <R> R selectAll(final User user, final Permission permission, final SelectOptions options,
+            final Collector<UserRole, ?, R> collector);
+
+    /**
+     * 権限を取得します。
+     * 
+     * @param id
+     * @param collector
+     * @param <R>
+     * @return
+     */
+    @Select(strategy = SelectType.COLLECT)
+    <R> R selectByUserId(ID<User> id, final Collector<UserRole, ?, R> collector);
 
     /**
      * 権限を1件取得します。
@@ -47,36 +61,36 @@ public interface PermissionDao {
     /**
      * 権限を登録します。
      *
-     * @param Permission
+     * @param userRole
      * @return
      */
     @Insert
-    int insert(Permission Permission);
+    int insert(UserRole userRole);
 
     /**
      * 権限を更新します。
      *
-     * @param permission
+     * @param userRole
      * @return
      */
     @Update
-    int update(Permission permission);
+    int update(UserRole userRole);
 
     /**
      * 権限を論理削除します。
      *
-     * @param permission
+     * @param userRole
      * @return
      */
     @Update(excludeNull = true) // NULLの項目は更新対象にしない
-    int delete(Permission permission);
+    int delete(UserRole userRole);
 
     /**
      * 権限を一括登録します。
      *
-     * @param permissions
+     * @param userRoles
      * @return
      */
     @BatchInsert
-    int[] insert(List<Permission> permissions);
+    int[] insert(List<UserRole> userRoles);
 }

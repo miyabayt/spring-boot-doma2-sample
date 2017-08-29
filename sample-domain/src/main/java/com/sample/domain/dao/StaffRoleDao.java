@@ -27,15 +27,18 @@ public interface StaffRoleDao {
      */
     @Select(strategy = SelectType.COLLECT)
     <R> R selectAll(final Staff staff, final Permission permission, final SelectOptions options,
-            final Collector<Permission, ?, R> collector);
+            final Collector<StaffRole, ?, R> collector);
 
     /**
      * 担当者権限を取得します。
-     *
+     * 
+     * @param id
+     * @param collector
+     * @param <R>
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectByStaffId(ID<Staff> id, final Collector<Permission, ?, R> collector);
+    <R> R selectByStaffId(ID<Staff> id, final Collector<StaffRole, ?, R> collector);
 
     /**
      * 担当者権限を1件取得します。

@@ -1,23 +1,12 @@
 SELECT
-  r.role_key
-  , r.role_name
-  , p.category_key
-  , p.permission_key
-  , p.permission_name
-  , sr.version
+  /*%expand*/*
 FROM
-  staff_roles sr
-  LEFT JOIN roles r
-    ON sr.role_id = r.role_id
-    AND r.deleted_at IS NULL
-  LEFT JOIN permissions p
-    ON r.permission_id = p.permission_id
-    AND p.deleted_at IS NULL
+  permissions
 WHERE
-  sr.deleted_at IS NULL
-/*%if staff.id != null */
-  AND sr.staff_id = /* staff.id */1
+  deleted_at IS NULL
+/*%if permission.id != null */
+  AND permission_id = /* permission.id */1
 /*%end*/
-/*%if permission.permissionKey != null */
-  AND p.permission_key = /* permission.permissionKey */'01'
+/*%if permission.categoryKey != null */
+  AND p.category_key = /* permission.categoryKey */'01'
 /*%end*/

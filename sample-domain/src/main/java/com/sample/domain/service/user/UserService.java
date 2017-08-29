@@ -10,7 +10,9 @@ import org.springframework.util.Assert;
 
 import com.sample.domain.dao.UploadFileDao;
 import com.sample.domain.dao.UserDao;
+import com.sample.domain.dao.UserRoleDao;
 import com.sample.domain.dto.User;
+import com.sample.domain.dto.UserRole;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.PageFactory;
@@ -28,6 +30,9 @@ public class UserService extends BaseTransactionalService {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    UserRoleDao userRoleDao;
 
     @Autowired
     UploadFileDao uploadFileDao;
@@ -78,6 +83,12 @@ public class UserService extends BaseTransactionalService {
 
         // 1件登録
         userDao.insert(inputUser);
+
+        // 役割権限紐付けを登録する
+        val userRole = new UserRole();
+        userRole.setUserId(inputUser.getId());
+        userRole.setRoleKey("user");
+        userRoleDao.insert(userRole);
 
         return inputUser;
     }
