@@ -2,6 +2,7 @@ package com.sample.domain.service
 
 import com.sample.domain.dto.User
 import com.sample.domain.dto.common.DefaultPageable
+import com.sample.domain.dto.common.Pageable
 import com.sample.domain.service.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -23,7 +24,7 @@ class UserServiceTest extends Specification {
         def where = new User()
         where.setEmail("aaaa")
 
-        def pages = userService.findAll(where, new DefaultPageable(1, 10))
+        def pages = userService.findAll(where, Pageable.DEFAULT_PAGEABLE)
 
         then:
         pages.getCount() == 0

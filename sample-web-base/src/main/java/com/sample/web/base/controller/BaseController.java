@@ -6,7 +6,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
+
+import com.sample.web.base.util.MessageUtils;
 
 public class BaseController {
 
@@ -41,25 +42,24 @@ public class BaseController {
 
     /**
      * メッセージを取得します。
-     * 
+     *
      * @param key
      * @param args
      * @return
      */
     protected String getMessage(String key, Object... args) {
-        Locale locale = LocaleContextHolder.getLocale();
-        return messageSource.getMessage(key, args, locale);
+        return MessageUtils.getMessage(key, args);
     }
 
     /**
      * ロケールを指定してメッセージを取得します。
-     * 
+     *
      * @param key
      * @param args
      * @param locale
      * @return
      */
     protected String getMessage(String key, Object[] args, Locale locale) {
-        return messageSource.getMessage(key, args, locale);
+        return MessageUtils.getMessage(key, args, locale);
     }
 }

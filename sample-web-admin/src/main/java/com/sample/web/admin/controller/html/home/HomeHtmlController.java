@@ -1,5 +1,7 @@
 package com.sample.web.admin.controller.html.home;
 
+import static com.sample.web.base.WebConst.HOME_URL;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  * ホーム
  */
 @Controller
-@RequestMapping(path = { "/", "/home" })
+@RequestMapping(path = { HOME_URL, "/home" })
 @Slf4j
 public class HomeHtmlController extends AbstractHtmlController {
 
