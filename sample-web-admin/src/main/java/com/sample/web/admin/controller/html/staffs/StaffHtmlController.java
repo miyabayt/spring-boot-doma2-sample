@@ -17,8 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.domain.dto.Staff;
-import com.sample.domain.dto.common.DefaultPageable;
 import com.sample.domain.dto.common.ID;
+import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.service.staff.StaffService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.view.CsvView;
@@ -251,7 +251,7 @@ public class StaffHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val staffs = staffService.findAll(new Staff(), new DefaultPageable(1, Integer.MAX_VALUE));
+        val staffs = staffService.findAll(new Staff(), Pageable.NO_LIMIT_PAGEABLE);
 
         val listType = new TypeToken<List<StaffCsv>>() {
         }.getType();

@@ -9,9 +9,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.sample.domain.dto.User;
-import com.sample.domain.dto.common.DefaultPageable;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
+import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.service.user.UserService;
 import com.sample.web.base.controller.api.AbstractRestController;
 import com.sample.web.base.controller.api.resource.PageableResource;
@@ -40,7 +40,7 @@ public class UserRestController extends AbstractRestController {
     @GetMapping
     public PageableResource index(@RequestParam(required = false, defaultValue = "1") int page) {
         // 10件で区切って取得する
-        Page<User> users = userService.findAll(new User(), new DefaultPageable(page, 10));
+        Page<User> users = userService.findAll(new User(), Pageable.DEFAULT_PAGEABLE);
 
         PageableResource resource = modelMapper.map(users, PageableResourceImpl.class);
         resource.setMessage(getMessage("Success"));
