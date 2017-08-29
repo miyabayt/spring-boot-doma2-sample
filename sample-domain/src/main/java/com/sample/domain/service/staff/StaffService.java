@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.sample.domain.dao.StaffDao;
+import com.sample.domain.dao.StaffRoleDao;
 import com.sample.domain.dto.Staff;
+import com.sample.domain.dto.StaffRole;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.PageFactory;
@@ -26,6 +28,9 @@ public class StaffService extends BaseTransactionalService {
 
     @Autowired
     StaffDao staffDao;
+
+    @Autowired
+    StaffRoleDao staffRoleDao;
 
     /**
      * 担当者を一括取得します。
@@ -67,6 +72,12 @@ public class StaffService extends BaseTransactionalService {
 
         // 1件登録
         staffDao.insert(inputStaff);
+
+        // 役割権限紐付けを登録する
+        val staffRole = new StaffRole();
+        staffRole.setStaffId(inputStaff.getId());
+        staffRole.setRoleKey("admin");
+        staffRoleDao.insert(staffRole);
 
         return inputStaff;
     }

@@ -1,0 +1,51 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{common/layout}" th:with="menu='roles'"><!--/* menuItemにパラメータを渡す */-->
+    <head layout:fragment="~{common/layout::header}">
+        <title>役割管理</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <h2>役割詳細</h2>
+
+            <table class="table table-striped" th:object="${role}">
+                <tr>
+                    <th>ID</th>
+                    <td th:text="*{id.value}"></td>
+                </tr>
+                <tr>
+                    <th>役割キー</th>
+                    <td><b th:text="*{roleKey}"></b></td>
+                </tr>
+                <tr>
+                    <th>役割名</th>
+                    <td th:text="*{roleName}"></td>
+                </tr>
+            </table>
+
+            <table id="permissions" class="table table-striped" th:if="${permissions} != null and ${permissions.data} != null">
+                <thead>
+                <tr>
+                    <th style="width: 10%;">ID</th>
+                    <th style="width: 20%;">権限カテゴリキー</th>
+                    <th style="width: 20%;">権限キー</th>
+                    <th>権限名</th>
+                    <th style="width: 5%;">適用</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="permission : ${permissions.data}">
+                    <td th:text="${permission.id.value}" />
+                    <td th:text="${permission.categoryKey}" />
+                    <td th:text="${permission.permissionKey}" />
+                    <td th:text="${permission.permissionName}" />
+                    <td th:text="${enabled}" th:with="enabled=${role.permissions} != null and ${role.permissions[__${permission.id.value}__]}" />
+                </tr>
+                </tbody>
+            </table>
+
+            <a th:href="@{/roles/edit/{id}(id=${role.id.value})}" class="btn btn-default">編集</a>
+        </div>
+    </body>
+</html>

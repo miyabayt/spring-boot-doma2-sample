@@ -1,6 +1,8 @@
 package com.sample.web.front.security;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
 
 import com.sample.domain.dto.User;
 
@@ -15,10 +17,11 @@ public class LoginUser extends org.springframework.security.core.userdetails.Use
 
     /**
      * コンストラクタ
-     *
+     * 
      * @param user
+     * @param authorities
      */
-    public LoginUser(User user) {
-        super(String.valueOf(user.getId().getValue()), user.getPassword(), Collections.emptySet());
+    public LoginUser(User user, Collection<? extends GrantedAuthority> authorities) {
+        super(String.valueOf(user.getId().getValue()), user.getPassword(), authorities);
     }
 }

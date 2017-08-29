@@ -36,14 +36,13 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import com.sample.domain.dto.common.DomaDto;
 import com.sample.domain.dto.common.ID;
-import com.sample.web.base.aop.LoggingFunctionNameInterceptor;
-import com.sample.web.base.aop.RequestTrackingInterceptor;
-import com.sample.web.base.aop.SetAuditInfoInterceptor;
-import com.sample.web.base.aop.SetDoubleSubmitCheckTokenInterceptor;
+import com.sample.web.base.aop.*;
 import com.sample.web.base.filter.ClearMDCFilter;
 import com.sample.web.base.filter.CustomCharacterEncodingFilter;
 import com.sample.web.base.filter.LoginUserTrackingFilter;
 import com.sample.web.base.helper.DeviceHelper;
+import com.sample.web.base.security.authorization.DefaultPermissionKeyResolver;
+import com.sample.web.base.security.authorization.PermissionKeyResolver;
 
 import lombok.val;
 
@@ -251,6 +250,21 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         return new SetDoubleSubmitCheckTokenInterceptor();
     }
 
+    @Bean
+    public SetModelAndViewInterceptor setModelAndViewInterceptor() {
+        return new SetModelAndViewInterceptor();
+    }
+
+    @Bean
+    public PermissionKeyResolver permissionKeyResolver() {
+        return new DefaultPermissionKeyResolver();
+    }
+
+    @Bean
+    public AuthorizationInterceptor authorizationInterceptor() {
+        return new AuthorizationInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
@@ -258,5 +272,7 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         registry.addInterceptor(loggingFunctionNameInterceptor());
         registry.addInterceptor(setAuditInfoInterceptor());
         registry.addInterceptor(setDoubleSubmitCheckTokenInterceptor());
+        registry.addInterceptor(setModelAndViewInterceptor());
+        registry.addInterceptor(authorizationInterceptor());
     }
 }

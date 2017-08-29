@@ -1,7 +1,5 @@
 package com.sample.domain.dto;
 
-import java.util.Map;
-
 import org.seasar.doma.*;
 
 import com.sample.domain.dto.common.DomaDtoImpl;
@@ -10,29 +8,25 @@ import com.sample.domain.dto.common.ID;
 import lombok.Getter;
 import lombok.Setter;
 
-@Table(name = "roles")
+@Table(name = "role_permissions")
 @Entity
 @Getter
 @Setter
-public class Role extends DomaDtoImpl {
+public class RolePermission extends DomaDtoImpl {
 
-    private static final long serialVersionUID = 4825745231712286767L;
+    private static final long serialVersionUID = 4915898548766398327L;
 
     @OriginalStates // 差分UPDATEのために定義する
-    Role originalStates;
+    RolePermission originalStates;
 
     @Id
-    @Column(name = "role_id")
+    @Column(name = "role_permission_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    ID<Role> id;
+    ID<RolePermission> id;
 
     // 役割キー
     String roleKey;
 
-    // 役割名
-    String roleName;
-
-    // 権限
-    @Transient
-    Map<Integer, Boolean> permissions;
+    // 権限ID
+    Integer permissionId;
 }

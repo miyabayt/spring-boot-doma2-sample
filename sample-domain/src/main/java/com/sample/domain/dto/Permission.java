@@ -22,12 +22,6 @@ public class Permission extends DomaDtoImpl {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     ID<Permission> id;
 
-    // 役割キー
-    String roleKey;
-
-    // 役割名
-    String roleName;
-
     // 権限カテゴリキー
     String categoryKey;
 

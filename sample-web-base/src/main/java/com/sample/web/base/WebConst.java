@@ -26,6 +26,13 @@ public interface WebConst {
 
     String FORBIDDEN_VIEW = "forbidden";
 
+    /** ---- ViewComponents ---- **/
+    String MAV_CONST = "Const";
+
+    String MAV_PULLDOWN_OPTION = "PulldownOption";
+
+    String MAV_CODE_CATEGORIES = "CodeCategories";
+
     /** ---- URLs ---- **/
     String HOME_URL = "/";
 

@@ -9,7 +9,6 @@ import org.springframework.util.Assert;
 
 import com.sample.domain.dao.PermissionDao;
 import com.sample.domain.dto.Permission;
-import com.sample.domain.dto.Staff;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.PageFactory;
@@ -30,19 +29,18 @@ public class PermissionService extends BaseTransactionalService {
 
     /**
      * 権限を一括取得します。
-     * 
-     * @param staff
+     *
      * @param where
      * @param pageable
      * @return
      */
     @Transactional(readOnly = true) // 読み取りのみの場合は指定する
-    public Page<Permission> findAll(Staff staff, Permission where, Pageable pageable) {
+    public Page<Permission> findAll(Permission where, Pageable pageable) {
         Assert.notNull(where, "where must not be null");
 
         // ページングを指定する
         val options = createSearchOptions(pageable).count();
-        val permissions = permissionDao.selectAll(staff, where, options, toList());
+        val permissions = permissionDao.selectAll(where, options, toList());
 
         return PageFactory.create(permissions, pageable, options.getCount());
     }

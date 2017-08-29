@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 
 import com.sample.domain.dao.StaffDao;
 import com.sample.domain.dao.StaffRoleDao;
-import com.sample.domain.dto.Permission;
 import com.sample.domain.dto.Staff;
+import com.sample.domain.dto.StaffRole;
 import com.sample.web.base.security.BaseRealm;
 
 import lombok.extern.slf4j.Slf4j;
@@ -51,23 +51,32 @@ public class StaffDaoRealm extends BaseRealm {
             staff = staffDao.select(where)
                     .orElseThrow(() -> new UsernameNotFoundException("no staff found [id=" + loginId + "]"));
 
-            // 権限を取得する
-            List<Permission> permissions = staffRoleDao.selectByStaffId(staff.getId(), toList());
-            Set<String> roles = permissions.stream().map(Permission::getRoleKey).map(r -> {
-                if (!r.startsWith("ROLE_")) {
+            // 担当者権限を取得する
+            List<StaffRole> staffRoles = staffRoleDao.selectByStaffId(staff.getId(), toList());
+
+            // 役割キーにプレフィックスをつけてまとめる
+            Set<String> roleKeys = staffRoles.stream().map(StaffRole::getRoleKey).map(r -> {
+                if (r != null && !r.startsWith("ROLE_")) {
                     r = "ROLE_" + r;
                 }
                 return r;
             }).collect(toSet());
-            Set<String> permissionSet = permissions.stream().map(Permission::getPermissionKey).collect(toSet());
+
+            // 権限キーをまとめる
+            Set<String> permissionKeys = staffRoles.stream().map(StaffRole::getPermissionKey).collect(toSet());
 
             // 役割と権限を両方ともGrantedAuthorityとして渡す
             Set<String> authorities = new HashSet<>();
-            authorities.addAll(roles);
-            authorities.addAll(permissionSet);
+            authorities.addAll(roleKeys);
+            authorities.addAll(permissionKeys);
             authorityList = AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]));
 
         } catch (Exception e) {
+            if (e instanceof IllegalArgumentException) {
+                log.error("failed to getLoginUser. ", e);
+                throw e;
+            }
+
             // 0件例外がスローされた場合は何もしない
             // それ以外の例外は、認証エラーの例外で包む
             if (!(e instanceof NoResultException)) {
