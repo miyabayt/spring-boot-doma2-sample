@@ -43,7 +43,7 @@ spring:
         hikari:
           autoCommit: false
           connectionTimeout: 30000
-          idleTimeout: 5000
+          idleTimeout: 30000
           maxLifetime: 1800000
           connectionTestQuery: SELECT 1
           minimumIdle: 10

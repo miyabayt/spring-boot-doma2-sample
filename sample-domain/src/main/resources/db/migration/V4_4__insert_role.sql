@@ -32,8 +32,8 @@ INSERT INTO permissions (category_key, permission_key, permission_name, created_
 INSERT INTO permissions (category_key, permission_key, permission_name, created_by, created_at, version) VALUES ('staff', 'Staff.showStaff', '担当者詳細', 'none', NOW(), 1);
 INSERT INTO permissions (category_key, permission_key, permission_name, created_by, created_at, version) VALUES ('staff', 'Staff.downloadCsv', '担当者CSVダウンロード', 'none', NOW(), 1);
 
-INSERT INTO role_permissions (role_key, permission_id, created_by, created_at, version) VALUES ('admin', 1, 'none', NOW(), 1);
+INSERT INTO role_permissions (role_key, permission_id, created_by, created_at, version) VALUES ('system_admin', 1, 'none', NOW(), 1);
 INSERT INTO role_permissions (role_key, permission_id, created_by, created_at, version) VALUES ('user', 1, 'none', NOW(), 1);
 
-INSERT INTO staff_roles (staff_id, role_key, created_by, created_at, version) VALUES (1, 'admin', 'none', NOW(), 1);
+INSERT INTO staff_roles (staff_id, role_key, created_by, created_at, version) VALUES (1, 'system_admin', 'none', NOW(), 1);
 INSERT INTO user_roles (user_id, role_key, created_by, created_at, version) VALUES (1, 'user', 'none', NOW(), 1);
