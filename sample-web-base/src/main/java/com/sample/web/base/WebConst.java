@@ -26,6 +26,11 @@ public interface WebConst {
 
     String FORBIDDEN_VIEW = "forbidden";
 
+    /** ---- DateFormat ---- **/
+    String LOCALDATE_FORMAT = "yyyy/MM/dd";
+
+    String LOCALDATETIME_FORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
+
     /** ---- ViewComponents ---- **/
     String MAV_CONST = "Const";
 

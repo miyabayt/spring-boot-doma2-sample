@@ -20,6 +20,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -37,6 +38,8 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import com.sample.domain.dto.common.DomaDto;
 import com.sample.domain.dto.common.ID;
 import com.sample.web.base.aop.*;
+import com.sample.web.base.controller.LocalDateConverter;
+import com.sample.web.base.controller.LocalDateTimeConverter;
 import com.sample.web.base.filter.ClearMDCFilter;
 import com.sample.web.base.filter.CustomCharacterEncodingFilter;
 import com.sample.web.base.filter.LoginUserTrackingFilter;
@@ -73,6 +76,12 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         registry.addViewController(FORBIDDEN_URL).setViewName(FORBIDDEN_VIEW);
         registry.addViewController(ERROR_URL).setViewName(ERROR_VIEW);
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new LocalDateConverter(LOCALDATE_FORMAT));
+        registry.addConverter(new LocalDateTimeConverter(LOCALDATETIME_FORMAT));
     }
 
     @Bean
@@ -252,16 +261,19 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
 
     @Bean
     public SetModelAndViewInterceptor setModelAndViewInterceptor() {
+        // 共通的な定数定義などを画面変数に設定する
         return new SetModelAndViewInterceptor();
     }
 
     @Bean
     public PermissionKeyResolver permissionKeyResolver() {
+        // コントローラー・メソッド名から権限キーを解決する
         return new DefaultPermissionKeyResolver();
     }
 
     @Bean
     public AuthorizationInterceptor authorizationInterceptor() {
+        // ログインユーザーの操作を認可する
         return new AuthorizationInterceptor();
     }
 
