@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sample.batch.context.BatchContext;
 import com.sample.batch.jobs.BaseItemWriter;
-import com.sample.domain.dao.StaffDao;
-import com.sample.domain.dto.Staff;
+import com.sample.domain.dao.system.StaffDao;
+import com.sample.domain.dto.system.Staff;
 
 /**
  * 担当者

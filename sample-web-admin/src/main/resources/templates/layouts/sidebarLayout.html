@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="ja" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="ja" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="ja" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="ja" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      lang="ja" class="no-js"><!--<![endif]-->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="robots" content="noodp">
+
+        <link rel="shortcut icon" type="image/x-icon" th:href="@{/static/images/favicon.png}" />
+        <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">Sample</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"
+              type="text/css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css"
+              th:href="@{/webjars/bootstrap-datepicker/css/bootstrap-datepicker.min.css}"
+              type="text/css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/AdminLTE.min.css"
+              th:href="@{/webjars/AdminLTE/dist/css/AdminLTE.min.css}"
+              type="text/css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/skins/skin-purple.min.css"
+              th:href="@{/webjars/AdminLTE/dist/css/skins/skin-purple.min.css}"
+              type="text/css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+              th:href="@{/webjars/font-awesome/css/font-awesome.min.css}"
+              type="text/css" />
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
+              th:href="@{/webjars/ionicons/css/ionicons.min.css}"
+              type="text/css" />
+
+        <!--/* original */-->
+        <link rel="stylesheet" href="../public/static/css/style.css" th:href="@{/static/css/style.css}" type="text/css" />
+        <!--link /-->
+    </head>
+    <body class="skin-purple sidebar-mini" style="height: auto; min-height: 100%;">
+        <div class="wrapper" style="height: auto; min-height: 100%;">
+            <!--/* トップメニュー */-->
+            <header class="main-header">
+                <a th:href="@{/}" class="logo">
+                    <span class="logo-mini"><b>A</b></span>
+                    <span class="logo-lg"><b>Sample</b> Admin</span>
+                </a>
+                <!--/* トップメニュー */-->
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!--/* サイドバー制御 */-->
+                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                        <span class="sr-only">Toggle navigation</span>
+                    </a>
+                    <div class="navbar-custom-menu">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="#" id="logout"><i class="fa fa-sign-out"></i> ログアウト</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header><!--/* end header */-->
+            <!--/* サイドバー */-->
+            <aside class="main-sidebar" layout:fragment="sidebar">
+                <section class="sidebar">
+                    <ul class="sidebar-menu">
+                        <!--/* メニューヘッダー */-->
+                        <!--li class="header">機能一覧</li-->
+                        <!--/* メニュー項目 */-->
+                        <li class="treeview">
+                            <a href="#"><i class="fa fa-circle-o"></i>Parent<i class="fa fa-angle-left pull-right"></i></a>
+                            <ul class="treeview-menu">
+                                <li><a href="#">Child</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </aside><<!--/* end sidebar */-->
+            <!--/* content */-->
+            <div class="content-wrapper">
+                <!--/* コンテンツヘッダー */-->
+                <section layout:fragment="content-header" class="content-header">
+                    <h1>ページタイトル</h1>
+                    <!--/* パンくず */-->
+                    <ol class="breadcrumb">
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li>現在地</li>
+                    </ol>
+                </section>
+                <!--/* コンテンツ */-->
+                <section layout:fragment="content" class="content">
+                    <!--/* コンテンツ1 */-->
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">ボックスタイトル</h3>
+                        </div>
+                        <div class="box-body">
+                            <p>ボックスボディー</p>
+                        </div>
+                    </div>
+                </section>
+            </div><!--/* end content */-->
+            <!--/* フッター */-->
+            <footer class="main-footer">
+                <div class="pull-right hidden-xs">Version 1.0</div>
+                <strong>Copyright &copy; 2015</strong>, All rights reserved.
+            </footer><!--/* end footer */-->
+        </div><!--/* end wrapper */-->
+
+        <div layout:fragment="footer" th:remove="tag">
+            <script type="text/javascript" th:inline="javascript">
+                var AdminLTEOptions = {
+                    animationSpeed: 100,
+                    sidebarToggleSelector: "[data-toggle='offcanvas']"
+                };
+            </script>
+            <!--[if lt IE 9]>
+            <script type="text/javascript" src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"
+                    th:src="@{/webjars/html5shiv/html5shiv.min.js}"></script>
+            <script type="text/javascript" src="https://oss.maxcdn.com/respond/respond.js/1.4.2/respond.min.js"
+                    th:src="@{/webjars/respond/respond.min.js}"></script>
+            <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+            <![endif]-->
+            <!--[if gte IE 9]><!-->
+            <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"
+                    th:src="@{/webjars/jquery/jquery.min.js}"></script>
+            <!--<![endif]-->
+            <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+                    th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/js/app.min.js"
+                    th:src="@{/webjars/AdminLTE/dist/js/app.min.js}"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"
+                    th:src="@{/webjars/iCheck/icheck.min.js}"></script>
+        </div>
+        <div layout:fragment="scripts" th:remove="tag" />
+        <form name="logout" th:action="@{/logout}" method="post"></form>
+        <script type="text/javascript" th:inline="javascript">
+            $(document).ready(function() {
+                $("#logout").bind("click", function() {
+                    $("form[name='logout']").submit();
+                });
+            });
+        </script>
+    </body>
+</html>

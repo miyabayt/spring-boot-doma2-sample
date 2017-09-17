@@ -1,0 +1,10 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<body>
+		<li th:fragment="menuItem (path, active, title, glyph, text)" class="active" th:class="${active==menu ? 'active' : ''}">
+			<a th:href="@{__${path}__}" th:title="${title}">
+				<span th:class="'glyphicon glyphicon-'+${glyph}" class="glyphicon glyphicon-home" aria-hidden="true"></span>
+				<span th:text="${text}">Template</span>
+			</a>
+		</li>
+	</body>
+</html>

@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{layouts/sidebarLayout}">
+    <head>
+        <title>ロール管理</title>
+    </head>
+    <body>
+        <div layout:fragment="sidebar">
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'role')}"></div>
+        </div>
+        <section layout:fragment="content-header">
+            <h1 th:with="text=${roleForm.isNew()} ? 'ロール登録' : 'ロール編集'" th:text="${text}">ロール登録</h1>
+            <ol class="breadcrumb">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/system/roles/find(page=1)}">ロール検索</a></li>
+                <li>ロール編集</li>
+            </ol>
+        </section>
+        <section layout:fragment="content">
+            <form th:object="${roleForm}" th:action="${action}"
+                  th:with="action=${roleForm.isNew()} ? @{/system/roles/new} : @{/system/roles/edit/{id}(id=*{id})}"
+                  class="form-horizontal" enctype="multipart/form-data" method="post">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">ロール情報</h3>
+                    </div>
+                    <div class="box-body">
+                        <input th:replace="~{fragments/inputField :: input ('text', 'ロールキー', 'roleKey')}" />
+                        <input th:replace="~{fragments/inputField :: input ('text', 'ロール名', 'roleName')}" />
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">権限情報</h3>
+                    </div>
+                    <div class="box-body table-responsive">
+                        <table id="permissions" class="table table-hover" th:if="${permissions} != null and ${permissions.data} != null">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>権限カテゴリキー</th>
+                                    <th>権限キー</th>
+                                    <th>権限名</th>
+                                    <th>適用</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="permission : ${permissions.data}">
+                                    <td th:text="${permission.id.value}" />
+                                    <td th:text="${permission.categoryKey}" />
+                                    <td th:text="${permission.permissionKey}" />
+                                    <td th:text="${permission.permissionName}" />
+                                    <td>
+                                        <!--/* 複数行の値をマップ変数にバインドする */-->
+                                        <input type="checkbox" class="form-check-input" th:name="${inputName}"
+                                               th:field="${roleForm.permissions[__${permission.id.value}__]}"
+                                               th:value="true"
+                                               th:with="inputName=${'permissions[' + permission.id.value + ']'}" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer">
+                        <button class="btn btn-default bg-purple" type="submit"
+                                th:with="text=${roleForm.isNew()} ? '登録' : '保存'" th:text="${text}">
+                            Add Role
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </body>
+</html>

@@ -8,17 +8,20 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.servlet.view.AbstractView;
 
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.sample.common.util.EncodeUtils;
 
+import lombok.Setter;
 import lombok.val;
 
 /**
@@ -26,13 +29,17 @@ import lombok.val;
  */
 public class CsvView extends AbstractView {
 
+    protected static final CsvMapper csvMapper = createCsvMapper();
+
     protected Class<?> clazz;
 
     protected Collection<?> data;
 
+    @Setter
     protected String filename;
 
-    protected static final CsvMapper csvMapper = createCsvMapper();
+    @Setter
+    protected List<String> columns;
 
     /**
      * CSVマッパーを生成する。
@@ -42,22 +49,17 @@ public class CsvView extends AbstractView {
     static CsvMapper createCsvMapper() {
         CsvMapper mapper = new CsvMapper();
         mapper.configure(ALWAYS_QUOTE_STRINGS, true);
+        mapper.findAndRegisterModules();
         return mapper;
     }
 
     /**
      * コンストラクタ
      */
-    public CsvView() {
+    public CsvView(Class<?> clazz, Collection<?> data) {
         setContentType("application/octet-stream; charset=Windows-31J;");
-    }
-
-    public CsvView(Class<?> clazz, Collection<?> data, String filename) {
-        this();
-
         this.clazz = clazz;
         this.data = data;
-        this.filename = filename;
     }
 
     @Override
@@ -78,6 +80,15 @@ public class CsvView extends AbstractView {
 
         // CSVヘッダをオブジェクトから作成する
         CsvSchema schema = csvMapper.schemaFor(clazz).withHeader();
+
+        if (CollectionUtils.isNotEmpty(columns)) {
+            // カラムが指定された場合は、スキーマを再構築する
+            val builder = schema.rebuild().clearColumns();
+            for (String column : columns) {
+                builder.addColumn(column);
+            }
+            schema = builder.build();
+        }
 
         // 書き出し
         OutputStream outputStream = response.getOutputStream();

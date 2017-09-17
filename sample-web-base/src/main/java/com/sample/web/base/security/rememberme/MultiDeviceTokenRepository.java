@@ -16,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional(rollbackFor = Throwable.class, propagation = Propagation.REQUIRES_NEW)
 public class MultiDeviceTokenRepository extends JdbcDaoSupport {
 
-    public static final String CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS persistent_logins (username VARCHAR(64) NOT NULL, ip_address VARCHAR(64) NOT NULL, user_agent VARCHAR(200) NOT NULL, series VARCHAR(64) PRIMARY KEY, token VARCHAR(64) NOT NULL, last_used DATETIME NOT NULL)";
-
     public static final String tokensBySeriesSql = "SELECT username, ip_address, user_agent, series, token, last_used FROM persistent_logins WHERE series = ?";
 
     public static final String insertTokenSql = "INSERT INTO persistent_logins (username, ip_address, user_agent, series, token, last_used) VALUES (?, ?, ?, ?, ?, ?)";
@@ -28,22 +26,15 @@ public class MultiDeviceTokenRepository extends JdbcDaoSupport {
 
     public static final String removeUserTokensSql = "DELETE FROM persistent_logins WHERE username = ? AND ip_address = ? AND user_agent = ?";
 
-    private boolean createTableOnStartup;
-
     /**
      * コンストラクタ
-     * 
-     * @param createTable
      */
-    public MultiDeviceTokenRepository(boolean createTable) {
-        this.createTableOnStartup = createTable;
+    public MultiDeviceTokenRepository() {
+
     }
 
     @Override
     protected void initDao() {
-        if (createTableOnStartup) {
-            getJdbcTemplate().execute(CREATE_TABLE_SQL);
-        }
     }
 
     /**

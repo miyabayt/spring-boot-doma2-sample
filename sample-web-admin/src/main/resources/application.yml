@@ -7,7 +7,7 @@ spring:
         active: development
     messages:
         # メッセージ定義ファイルのパスを含めて設定する
-        basename: messages,ValidationMessages
+        basename: messages,ValidationMessages,PropertyNames
         cache-seconds: -1
         encoding: UTF-8
     jackson:
@@ -67,9 +67,6 @@ security:
         # spring-securityのベーシック認証を無効化する
         enabled: false
     enable-csrf: true
-    user:
-        name: test@sample.com
-        password: passw0rd
 doma:
     dialect: mysql
     # 小文字のスネークケースに変換する（firstName → first_name）
@@ -99,5 +96,5 @@ logging:
 ####
 # アプリケーションの設定
 application:
-    fileUploadLocation: /tmp/sample
+    fileUploadLocation: build/sample
     mailTemplateLocation: mail/

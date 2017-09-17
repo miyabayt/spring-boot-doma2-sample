@@ -93,7 +93,7 @@ public class MultiDeviceRememberMeServices extends AbstractRememberMeServices {
         // *same* series number.
         if (log.isDebugEnabled()) {
             log.debug("Refreshing persistent login token for user '{}', series '{}'",
-                    new String[] { username, series });
+                    new Object[] { username, series });
         }
 
         val newTokenValue = generateTokenData();

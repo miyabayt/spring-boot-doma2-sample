@@ -74,6 +74,9 @@ subprojects {
     ext["groovy.version"] = "2.4.12"
     ext["mockito.version"] = "2.+"
 
+    // v3.2.1 -> 4.2.0
+    ext["flyway.version"] = "4.2.0"
+
     dependencies {
         optional "org.projectlombok:lombok"
 
@@ -89,6 +92,10 @@ project(":sample-common") {
         enabled = false
     }
     dependencies {
+        // springframework
+        compile "org.springframework.boot:spring-boot-configuration-processor"
+        compile "org.springframework:spring-context"
+
         compile "org.apache.commons:commons-lang3:3.1"
         compile "org.apache.commons:commons-compress:1.14"
         compile "commons-collections:commons-collections"
@@ -119,7 +126,6 @@ project(":sample-domain") {
         compile "org.aspectj:aspectjrt"
 
         // springframework
-        compile "org.springframework.boot:spring-boot-configuration-processor"
         compile "org.springframework.boot:spring-boot-starter-aop"
         compile "org.springframework.boot:spring-boot-starter-validation"
         compile "org.springframework.boot:spring-boot-starter-mail"
@@ -130,7 +136,7 @@ project(":sample-domain") {
         }
 
         // doma exclude springframework
-        compile("org.seasar.doma.boot:doma-spring-boot-starter:1.1.0") {
+        compile("org.seasar.doma.boot:doma-spring-boot-starter:1.1.1") {
             exclude group: "org.springframework.boot"
         }
 
@@ -138,6 +144,11 @@ project(":sample-domain") {
         compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
         compile "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
+
+        // thymeleaf for text template engine
+        compile "org.thymeleaf:thymeleaf"
+        compile "org.thymeleaf.extras:thymeleaf-extras-java8time"
+        compile "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments"
 
         // mysql database
         compile "mysql:mysql-connector-java"
@@ -189,8 +200,15 @@ project(":sample-web-base") {
         compile "org.webjars:webjars-locator"
         compile "org.webjars:bootstrap:3.3.7"
         compile "org.webjars:jquery:2.2.4"
+        compile "org.webjars:bootstrap-datepicker:1.7.1"
+        compile("org.webjars.bower:iCheck:1.0.2") {
+            exclude module: "jquery"
+        }
         compile "org.webjars:html5shiv:3.7.3"
         compile "org.webjars:respond:1.4.2"
+        compile "org.webjars:AdminLTE:2.3.8"
+        compile "org.webjars:font-awesome:4.7.0"
+        compile "org.webjars:ionicons:2.0.1"
 
         testCompile "org.springframework.security:spring-security-test"
         testCompile "org.springframework.boot:spring-boot-starter-test"

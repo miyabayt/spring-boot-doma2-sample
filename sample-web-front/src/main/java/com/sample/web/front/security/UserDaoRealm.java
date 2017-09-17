@@ -15,10 +15,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.sample.domain.dao.UserDao;
-import com.sample.domain.dao.UserRoleDao;
-import com.sample.domain.dto.User;
-import com.sample.domain.dto.UserRole;
+import com.sample.domain.dao.user.UserDao;
+import com.sample.domain.dao.user.UserRoleDao;
+import com.sample.domain.dto.user.User;
+import com.sample.domain.dto.user.UserRole;
 import com.sample.web.base.security.BaseRealm;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,6 @@ public class UserDaoRealm extends BaseRealm {
 
     @Override
     protected UserDetails getLoginUser(String loginId) {
-
         User user = null;
         List<GrantedAuthority> authorityList = null;
 
@@ -55,12 +54,7 @@ public class UserDaoRealm extends BaseRealm {
             List<UserRole> userRoles = userRoleDao.selectByUserId(user.getId(), toList());
 
             // 役割キーにプレフィックスをつけてまとめる
-            Set<String> roleKeys = userRoles.stream().map(UserRole::getRoleKey).map(r -> {
-                if (r != null && !r.startsWith("ROLE_")) {
-                    r = "ROLE_" + r;
-                }
-                return r;
-            }).collect(toSet());
+            Set<String> roleKeys = userRoles.stream().map(UserRole::getRoleKey).collect(toSet());
 
             // 権限キーをまとめる
             Set<String> permissionKeys = userRoles.stream().map(UserRole::getPermissionKey).collect(toSet());

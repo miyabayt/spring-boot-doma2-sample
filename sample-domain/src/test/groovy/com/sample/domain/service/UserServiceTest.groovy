@@ -1,7 +1,6 @@
 package com.sample.domain.service
 
-import com.sample.domain.dto.User
-import com.sample.domain.dto.common.DefaultPageable
+import com.sample.domain.dto.user.User
 import com.sample.domain.dto.common.Pageable
 import com.sample.domain.service.user.UserService
 import org.springframework.beans.factory.annotation.Autowired

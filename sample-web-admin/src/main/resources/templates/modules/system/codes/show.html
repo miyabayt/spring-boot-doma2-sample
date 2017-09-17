@@ -1,0 +1,60 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{layouts/sidebarLayout}">
+    <head>
+        <title>コード管理</title>
+    </head>
+    <body>
+        <div layout:fragment="sidebar">
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'code')}"></div>
+        </div>
+        <section layout:fragment="content-header">
+            <h1>コード詳細</h1>
+            <ol class="breadcrumb">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/system/codes/find(page=1)}">コード検索</a></li>
+                <li>コード詳細</li>
+            </ol>
+        </section>
+        <section layout:fragment="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <table class="table table-hover" th:object="${code}">
+                        <tr>
+                            <th>ID</th>
+                            <td th:text="*{id.value}"></td>
+                        </tr>
+                        <tr>
+                            <th>コード分類</th>
+                            <td><b th:text="*{categoryName}"></b></td>
+                        </tr>
+                        <tr>
+                            <th>コードキー</th>
+                            <td><b th:text="*{codeKey}"></b></td>
+                        </tr>
+                        <tr>
+                            <th>コード値</th>
+                            <td th:text="*{codeValue}"></td>
+                        </tr>
+                        <tr>
+                            <th>コードエイリアス</th>
+                            <td th:text="*{codeAlias}"></td>
+                        </tr>
+                        <tr>
+                            <th>表示順</th>
+                            <td th:text="*{displayOrder}"></td>
+                        </tr>
+                        <tr>
+                            <th>無効フラグ</th>
+                            <td th:text="${invalid}" th:with="invalid=${code.isInvalid eq true}"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    <a th:href="@{/system/codes/edit/{id}(id=${code.id.value})}" class="btn btn-default bg-purple">編集</a>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

@@ -12,7 +12,7 @@ import com.sample.batch.context.BatchContext;
 import com.sample.batch.context.BatchContextHolder;
 import com.sample.common.util.DateUtils;
 import com.sample.common.util.MDCUtils;
-import com.sample.domain.dao.listener.AuditInfoHolder;
+import com.sample.domain.dao.AuditInfoHolder;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;

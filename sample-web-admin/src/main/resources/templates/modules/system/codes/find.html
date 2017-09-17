@@ -1,0 +1,100 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{layouts/sidebarLayout}">
+    <head>
+        <title>コード管理</title>
+    </head>
+    <body>
+        <div layout:fragment="sidebar">
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'code')}"></div>
+        </div>
+        <section layout:fragment="content-header">
+            <h1>コード検索</h1>
+            <ol class="breadcrumb">
+                <li><a th:href="@{/}">Home</a></li>
+                <li>コード検索</li>
+            </ol>
+        </section>
+        <section layout:fragment="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">検索条件</h3>
+                    <form th:object="${searchCodeForm}" th:action="@{/system/codes/find(page=1)}" method="post" class="form-horizontal">
+                        <input th:replace="~{fragments/selectField :: select ('コード分類', 'categoryKey', ${CodeCategories}, 'categoryKey', 'categoryName')}" />
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">コード値</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" th:field="*{codeValue}" size="10" maxlength="80" />
+                                <span class="help-inline">
+                                    <div th:if="${#fields.hasAnyErrors()}">
+                                        <p th:each="err : ${#fields.allErrors()}" th:text="${err}">Error</p>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" name="find" class="btn btn-default bg-purple">検索</button>
+                                <div class="dropdown pull-right">
+                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        操作
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <li><a th:href="@{/system/codes/new}">コード登録</a></li>
+                                        <li><a th:href="@{/system/codes/download/コード.csv}">CSVダウンロード</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">検索結果</h3>
+                </div>
+                <div class="box-body table-responsive">
+                    <table id="codes" class="table table-hover" th:if="${pages} != null and ${pages.data} != null">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>コード分類キー</th>
+                                <th>コード分類名</th>
+                                <th>コードキー</th>
+                                <th>コード値</th>
+                                <th>コードエイリアス</th>
+                                <th>表示順</th>
+                                <th>無効フラグ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="code : ${pages.data}">
+                                <td>
+                                    <a th:href="@{/system/codes/show/__${code.id.value}__}" th:text="${code.id.value}" />
+                                </td>
+                                <td th:text="${code.categoryKey}" />
+                                <td th:text="${code.categoryName}" />
+                                <td th:text="${code.codeKey}" />
+                                <td th:text="${code.codeValue}" />
+                                <td th:text="${code.codeAlias}" />
+                                <td th:text="${code.displayOrder}" />
+                                <td th:text="${invalid}" th:with="invalid=${code.isInvalid eq true}" />
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    <div th:replace="~{fragments/paginator :: paginator (${pages}, '/system/codes/find')}" />
+                </div>
+            </div>
+        </section>
+    </body>
+    <div layout:fragment="scripts">
+        <script type="text/javascript" th:inline="javascript">
+            $(document).ready(function() {
+            });
+        </script>
+    </div>
+</html>

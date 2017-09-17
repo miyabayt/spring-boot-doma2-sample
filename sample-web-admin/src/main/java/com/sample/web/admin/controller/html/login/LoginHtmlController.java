@@ -24,7 +24,7 @@ public class LoginHtmlController extends AbstractHtmlController {
 
     @Override
     public String getFunctionName() {
-        return "A_Login";
+        return "A_LOGIN";
     }
 
     /**
@@ -34,7 +34,7 @@ public class LoginHtmlController extends AbstractHtmlController {
      */
     @GetMapping(LOGIN_URL)
     public String index(@ModelAttribute LoginForm form) {
-        return "login/login";
+        return "modules/login/login";
     }
 
     /**
@@ -48,7 +48,7 @@ public class LoginHtmlController extends AbstractHtmlController {
     public String index(@Validated @ModelAttribute LoginForm form, BindingResult result) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
-            return "login/login";
+            return "modules/login/login";
         }
 
         return "forward:" + LOGIN_PROCESSING_URL;
@@ -77,7 +77,7 @@ public class LoginHtmlController extends AbstractHtmlController {
     @GetMapping(LOGIN_FAILURE_URL)
     public String loginFailure(@ModelAttribute LoginForm form, Model model) {
         model.addAttribute(GLOBAL_MESSAGE, getMessage("login.failed"));
-        return "login/login";
+        return "modules/login/login";
     }
 
     /**

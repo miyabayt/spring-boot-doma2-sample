@@ -5,9 +5,8 @@ import java.util.Locale;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.MessageSource;
 
-import com.sample.web.base.util.MessageUtils;
+import com.sample.common.util.MessageUtils;
 
 public class BaseController {
 
@@ -15,9 +14,6 @@ public class BaseController {
 
     @Autowired
     protected ApplicationContext applicationContext;
-
-    @Autowired
-    protected MessageSource messageSource;
 
     @Autowired
     protected ModelMapper modelMapper;

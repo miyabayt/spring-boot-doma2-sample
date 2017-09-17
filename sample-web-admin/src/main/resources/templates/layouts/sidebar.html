@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <body>
+        <aside class="main-sidebar" th:fragment="sidebar (category, item)">
+            <section class="sidebar">
+                <ul class="sidebar-menu">
+                    <!--/* メニューヘッダー */-->
+                    <!--/* Font-Awesomeアイコン http://fontawesome.io/icons/ */-->
+                    <!--li class="header">機能一覧</li-->
+                    <!--/* メニュー項目 */-->
+                    <li class="treeview" th:class="|treeview ${category=='user' ? 'active' : ''}|">
+                        <a href="#"><i class="fa fa-user-plus"></i>
+                            <span>顧客管理</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li th:class="${item=='user' ? 'active' : ''}"><a href="#" th:href="@{/user/users/find(page=1)}"><i class="fa fa-user-o"></i>顧客マスタ</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview" th:class="|treeview ${category=='system' ? 'active' : ''}|">
+                        <a href="#"><i class="fa fa-cogs"></i>
+                            <span>システム設定</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li th:class="${item=='staff' ? 'active' : ''}"><a href="#" th:href="@{/system/staffs/find(page=1)}"><i class="fa fa-user-o"></i>担当者マスタ</a></li>
+                            <li th:class="${item=='role' ? 'active' : ''}"><a href="#" th:href="@{/system/roles/find(page=1)}"><i class="fa fa-circle-o"></i>ロール管理</a></li>
+                            <li th:class="${item=='code' ? 'active' : ''}"><a href="#" th:href="@{/system/codes/find(page=1)}"><i class="fa fa-circle-o"></i>コードマスタ</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+    </body>
+</html>

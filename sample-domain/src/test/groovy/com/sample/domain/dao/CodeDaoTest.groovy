@@ -1,5 +1,6 @@
 package com.sample.domain.dao
 
+import com.sample.domain.dao.system.CodeDao
 import org.spockframework.util.Assert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

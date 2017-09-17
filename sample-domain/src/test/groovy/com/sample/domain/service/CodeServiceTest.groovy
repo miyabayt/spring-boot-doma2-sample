@@ -1,6 +1,6 @@
 package com.sample.domain.service
 
-import com.sample.domain.service.code.CodeService
+import com.sample.domain.service.system.CodeService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification

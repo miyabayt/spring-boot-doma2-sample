@@ -11,13 +11,15 @@ public interface WebConst {
     String MDC_FUNCTION_NAME = "FUNCTION_NAME";
 
     /** ---- Message ---- **/
-    String GLOBAL_MESSAGE = "globalMessage";
+    String GLOBAL_MESSAGE = "GlobalMessage";
 
     String VALIDATION_ERROR = "ValidationError";
 
     String OPTIMISTIC_LOCKING_FAILURE_ERROR = "OptimisticLockingFailureError";
 
     String DOUBLE_SUBMIT_ERROR = "DoubleSubmitError";
+
+    String DELETED = "Deleted";
 
     /** ---- View ---- **/
     String ERROR_VIEW = "error";
@@ -29,10 +31,12 @@ public interface WebConst {
     /** ---- DateFormat ---- **/
     String LOCALDATE_FORMAT = "yyyy/MM/dd";
 
-    String LOCALDATETIME_FORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
+    String LOCALDATETIME_FORMAT = "yyyy/[]M/[]d []H:[]m:[]s";
 
     /** ---- ViewComponents ---- **/
     String MAV_CONST = "Const";
+
+    String MAV_ERRORS = "errors";
 
     String MAV_PULLDOWN_OPTION = "PulldownOption";
 

@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.sample.domain.dao.UploadFileDao;
-import com.sample.domain.dao.UserDao;
-import com.sample.domain.dao.UserRoleDao;
-import com.sample.domain.dto.User;
-import com.sample.domain.dto.UserRole;
+import com.sample.domain.dao.system.UploadFileDao;
+import com.sample.domain.dao.user.UserDao;
+import com.sample.domain.dao.user.UserRoleDao;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.PageFactory;
 import com.sample.domain.dto.common.Pageable;
+import com.sample.domain.dto.user.User;
+import com.sample.domain.dto.user.UserRole;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseTransactionalService;
 

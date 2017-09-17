@@ -2,6 +2,7 @@ package com.sample.domain.dto.common;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.seasar.doma.Column;
 import org.seasar.doma.Entity;
@@ -9,17 +10,16 @@ import org.seasar.doma.Transient;
 import org.seasar.doma.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sample.domain.dao.listener.DefaultEntityListener;
+import com.sample.domain.dao.DefaultEntityListener;
 
 import lombok.Getter;
 import lombok.Setter;
 
+@SuppressWarnings("serial")
 @Entity(listener = DefaultEntityListener.class) // 自動的にシステム制御項目を更新するためにリスナーを指定する
 @Setter
 @Getter
 public abstract class DomaDtoImpl implements DomaDto, Serializable {
-
-    private static final long serialVersionUID = 953778060125924886L;
 
     // 作成者
     @JsonIgnore
@@ -60,6 +60,26 @@ public abstract class DomaDtoImpl implements DomaDto, Serializable {
     @Transient
     @JsonIgnore
     LocalDateTime auditDateTime;
+
+    // 更新されたプロパティ名
+    @Transient
+    @JsonIgnore
+    List<String> changedProperties;
+
+    // 更新項目名
+    @Transient
+    @JsonIgnore
+    String changedPropertyNames;
+
+    // 更新者ID
+    @Transient
+    @JsonIgnore
+    Integer changedBy;
+
+    // 更新日時
+    @Transient
+    @JsonIgnore
+    LocalDateTime changedAt;
 
     /**
      * 既存レコードがないデータであるか
