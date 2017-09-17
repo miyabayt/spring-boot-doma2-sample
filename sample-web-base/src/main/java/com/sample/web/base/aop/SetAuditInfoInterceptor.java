@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.sample.domain.dao.listener.AuditInfoHolder;
+import com.sample.domain.dao.AuditInfoHolder;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;

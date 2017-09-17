@@ -1,6 +1,8 @@
 package com.sample.web.base.util;
 
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.expression.spel.SpelParserConfiguration;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,14 +10,19 @@ import lombok.val;
 
 public class WebSecurityUtils {
 
+    private static final SpelParserConfiguration config = new SpelParserConfiguration(true, true);
+
+    private static final SpelExpressionParser parser = new SpelExpressionParser(config);
+
     /**
      * 認証情報を取得します。
      * 
      * @return
      */
-    public static Object getPrincipal() {
+    @SuppressWarnings("unchecked")
+    public static <T> T getPrincipal() {
         val auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth.getPrincipal();
+        return (T) auth.getPrincipal();
     }
 
     /**
@@ -28,12 +35,19 @@ public class WebSecurityUtils {
         val auth = SecurityContextHolder.getContext().getAuthentication();
         val authorities = auth.getAuthorities();
 
-        boolean isPermittedAll = authorities.stream().anyMatch(a -> "*".equals(a.getAuthority()));
-        if (isPermittedAll) {
-            return true;
+        boolean isAllowed = false;
+        for (GrantedAuthority ga : authorities) {
+            val authority = ga.getAuthority();
+            val expressionString = String.format("'%s' matches '%s'", role, authority);
+            val expression = parser.parseExpression(expressionString);
+
+            isAllowed = expression.getValue(Boolean.class);
+            if (isAllowed) {
+                break;
+            }
         }
 
-        return authorities.stream().anyMatch(a -> StringUtils.equalsIgnoreCase(role, a.getAuthority()));
+        return isAllowed;
     }
 
     /**

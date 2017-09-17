@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.sample.domain.dao.listener.DoubleSubmitCheckTokenHolder;
+import com.sample.domain.dao.DoubleSubmitCheckTokenHolder;
 import com.sample.web.base.security.DoubleSubmitCheckToken;
 
 import lombok.val;

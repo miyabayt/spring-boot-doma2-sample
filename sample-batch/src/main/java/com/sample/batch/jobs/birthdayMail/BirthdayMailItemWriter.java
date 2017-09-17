@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sample.batch.context.BatchContext;
 import com.sample.batch.jobs.BaseItemWriter;
-import com.sample.domain.dao.SendMailQueueDao;
-import com.sample.domain.dto.SendMailQueue;
+import com.sample.domain.dao.system.SendMailQueueDao;
+import com.sample.domain.dto.system.SendMailQueue;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -31,6 +31,6 @@ public class HomeHtmlController extends AbstractHtmlController {
      */
     @GetMapping
     public String index(Model model) {
-        return "home/index";
+        return "modules/home/index";
     }
 }

@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 import com.sample.batch.listener.DefaultStepExecutionListener;
-import com.sample.domain.dto.User;
+import com.sample.domain.dto.user.User;
 
 import lombok.val;
 

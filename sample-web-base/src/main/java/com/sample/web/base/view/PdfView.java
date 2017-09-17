@@ -35,6 +35,7 @@ public class PdfView extends JasperReportsPdfView {
         setReportDataKey("data");
     }
 
+    @SuppressWarnings({ "rawtypes", "deprecation" })
     @Override
     protected void renderReportUsingOutputStream(net.sf.jasperreports.engine.JRExporter exporter,
             JasperPrint populatedReport, HttpServletResponse response) throws Exception {

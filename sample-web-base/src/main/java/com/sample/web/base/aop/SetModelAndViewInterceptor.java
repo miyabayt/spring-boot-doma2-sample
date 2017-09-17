@@ -12,14 +12,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.sample.domain.dto.CodeCategory;
-import com.sample.domain.dto.common.DefaultPageable;
+import com.sample.common.util.MessageUtils;
 import com.sample.domain.dto.common.Pageable;
-import com.sample.domain.service.codecategory.CodeCategoryService;
-import com.sample.web.base.util.MessageUtils;
+import com.sample.domain.dto.system.CodeCategory;
+import com.sample.domain.service.system.CodeCategoryService;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -44,16 +45,17 @@ public class SetModelAndViewInterceptor extends HandlerInterceptorAdapter {
         val locale = LocaleContextHolder.getLocale();
         val pulldownOption = MessageUtils.getMessage(MAV_PULLDOWN_OPTION, locale);
 
-        // 定数定義
+        // 定数定義を画面に渡す
         Map<String, Object> constants = new HashMap<>();
         constants.put(MAV_PULLDOWN_OPTION, pulldownOption);
+        modelAndView.addObject(MAV_CONST, constants);
 
         // 定形のリスト等
         val codeCategories = getCodeCategories();
-
-        // 画面に値を渡す
-        modelAndView.addObject(MAV_CONST, constants);
         modelAndView.addObject(MAV_CODE_CATEGORIES, codeCategories);
+
+        // 入力エラーを画面オブジェクトに設定する
+        retainValidateErrors(modelAndView);
     }
 
     @Override
@@ -62,6 +64,11 @@ public class SetModelAndViewInterceptor extends HandlerInterceptorAdapter {
         // 処理完了後
     }
 
+    /**
+     * コード分類一覧を画面に設定する
+     * 
+     * @return
+     */
     protected List<CodeCategory> getCodeCategories() {
         List<CodeCategory> data = Collections.emptyList();
 
@@ -76,5 +83,28 @@ public class SetModelAndViewInterceptor extends HandlerInterceptorAdapter {
         }
 
         return data;
+    }
+
+    /**
+     * 入力エラーを画面オブジェクトに設定する
+     * 
+     * @param modelAndView
+     */
+    protected void retainValidateErrors(ModelAndView modelAndView) {
+        val model = modelAndView.getModelMap();
+
+        if (model != null && model.containsAttribute(MAV_ERRORS)) {
+            val errors = model.get(MAV_ERRORS);
+
+            if (errors != null && errors instanceof BeanPropertyBindingResult) {
+                val br = ((BeanPropertyBindingResult) errors);
+
+                if (br != null && br.hasErrors()) {
+                    val formName = br.getObjectName();
+                    val key = BindingResult.MODEL_KEY_PREFIX + formName;
+                    model.addAttribute(key, errors);
+                }
+            }
+        }
     }
 }

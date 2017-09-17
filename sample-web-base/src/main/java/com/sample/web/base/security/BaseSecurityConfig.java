@@ -54,7 +54,7 @@ public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public MultiDeviceTokenRepository multiDeviceTokenRepository() {
-        val tokenRepository = new MultiDeviceTokenRepository(true);
+        val tokenRepository = new MultiDeviceTokenRepository();
         tokenRepository.setDataSource(dataSource);
         return tokenRepository;
     }

@@ -5,7 +5,7 @@ import org.springframework.validation.Validator;
 
 import com.sample.batch.context.BatchContext;
 import com.sample.batch.jobs.BaseItemProcessor;
-import com.sample.domain.dto.User;
+import com.sample.domain.dto.user.User;
 
 /**
  * ユーザー

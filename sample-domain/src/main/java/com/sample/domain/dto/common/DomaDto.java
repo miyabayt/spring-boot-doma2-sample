@@ -1,6 +1,7 @@
 package com.sample.domain.dto.common;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 // TODO: コメントを書く
 public interface DomaDto extends Dto {
@@ -32,6 +33,18 @@ public interface DomaDto extends Dto {
     Integer getVersion();
 
     void setVersion(Integer version);
+
+    List<String> getChangedProperties();
+
+    void setChangedProperties(List<String> changedProperties);
+
+    Integer getChangedBy();
+
+    void setChangedBy(Integer changedBy);
+
+    LocalDateTime getChangedAt();
+
+    void setChangedAt(LocalDateTime changedAt);
 
     boolean isNew();
 

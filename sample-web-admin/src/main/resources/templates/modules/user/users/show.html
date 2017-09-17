@@ -1,0 +1,59 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{layouts/sidebarLayout}">
+    <head>
+        <title>顧客マスタ</title>
+    </head>
+    <body>
+        <div layout:fragment="sidebar">
+            <div th:replace="~{layouts/sidebar :: sidebar ('user', 'user')}"></div>
+        </div>
+        <section layout:fragment="content-header">
+            <h1>顧客詳細</h1>
+            <ol class="breadcrumb">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/user/users/find(page=1)}">顧客検索</a></li>
+                <li>顧客詳細</li>
+            </ol>
+        </section>
+        <section layout:fragment="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <table class="table table-striped" th:object="${user}">
+                        <tr>
+                            <th>ID</th>
+                            <td th:text="*{id.value}"></td>
+                        </tr>
+                        <tr>
+                            <th>氏名</th>
+                            <td><b th:text="*{firstName + ' ' + lastName}"></b></td>
+                        </tr>
+                        <tr>
+                            <th>メールアドレス</th>
+                            <td th:text="*{email}"></td>
+                        </tr>
+                        <tr>
+                            <th>住所</th>
+                            <td th:text="*{address}"></td>
+                        </tr>
+                        <tr>
+                            <th>電話番号</th>
+                            <td th:text="*{tel}"></td>
+                        </tr>
+                        <tr>
+                            <th>添付画像</th>
+                            <td><img th:src="${image}"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    <form th:action="@{'/user/users/remove/' + ${user.id.value}}" method="post">
+                        <a th:href="@{/user/users/edit/{id}(id=${user.id.value})}" class="btn btn-default bg-purple">編集</a>
+                        <button type="submit" class="btn btn-danger">削除</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

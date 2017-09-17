@@ -10,7 +10,7 @@ import org.springframework.batch.item.database.AbstractPagingItemReader;
 
 import com.sample.batch.context.BatchContextHolder;
 import com.sample.common.util.MDCUtils;
-import com.sample.domain.dao.listener.AuditInfoHolder;
+import com.sample.domain.dao.AuditInfoHolder;
 
 import lombok.val;
 

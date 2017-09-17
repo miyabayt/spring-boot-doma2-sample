@@ -1,0 +1,23 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <form>
+            <th:block th:fragment="select (label, name, items, k, v)">
+                <div th:with="valid=${!#fields.hasErrors(name)}" th:class="${'form-group' + (valid ? '' : ' has-error')}" class="form-group">
+                    <label class="col-sm-2 control-label" th:text="${label}">Label</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" th:field="*{__${name}__}">
+                            <option value=""
+                                    th:text="${Const['PulldownOption']}">pick one
+                            </option>
+                            <option th:each="item : ${items}"
+                                    th:with="val=${(item['__${k}__'] instanceof T(com.sample.domain.dto.common.ID)) ? item['__${k}__'].value : item['__${k}__']}"
+                                    th:value="${val}"
+                                    th:text="${item['__${v}__']}">dog
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </th:block>
+        </form>
+    </body>
+</html>

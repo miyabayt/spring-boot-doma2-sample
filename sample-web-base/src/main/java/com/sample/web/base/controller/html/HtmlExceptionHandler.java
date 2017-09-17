@@ -7,8 +7,6 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.sample.common.util.MessageUtils;
 import com.sample.domain.exception.DoubleSubmitErrorException;
 import com.sample.domain.exception.FileNotFoundException;
 import com.sample.domain.exception.NoDataFoundException;
@@ -31,9 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @ControllerAdvice(assignableTypes = { AbstractHtmlController.class }) // RestControllerでは動作させない
 @Slf4j
 public class HtmlExceptionHandler {
-
-    @Autowired
-    MessageSource messageSource;
 
     /**
      * ファイル、データ不存在時の例外をハンドリングする
@@ -140,7 +136,7 @@ public class HtmlExceptionHandler {
     protected RedirectView getRedirectView(HttpServletRequest request, HttpServletResponse response, Locale locale,
             String messageCode) {
         // メッセージを遷移先に表示する
-        val message = messageSource.getMessage(messageCode, null, locale);
+        val message = MessageUtils.getMessage(messageCode, locale);
         val flashMap = RequestContextUtils.getOutputFlashMap(request);
         flashMap.put(GLOBAL_MESSAGE, message);
 

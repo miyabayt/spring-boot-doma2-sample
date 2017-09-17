@@ -1,0 +1,55 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{layouts/layout}">
+    <head>
+        <title>管理側ログイン</title>
+    </head>
+    <body class="login-page">
+        <div layout:fragment="content">
+            <div class="login-box">
+                <div class="login-logo">
+                    管理側ログイン
+                </div>
+                <div class="login-box-body">
+                    <form class="form-horizontal" th:object="${loginForm}" th:action="@{'/login'}" method="post">
+                        <div class="box-body">
+                            <div class="form-group" th:with="invalid=${#fields.hasErrors('loginId')}"
+                                 th:class="${'form-group' + (invalid ? ' has-error' : '')}">
+                                <input type="text" class="form-control" name="loginId" autofocus="" placeholder="メールアドレス"
+                                       th:value="*{loginId}" />
+                                <span th:if="${invalid}" class="help-block" th:errors="*{loginId}">Error</span>
+                            </div>
+                            <div class="form-group" th:with="invalid=${#fields.hasErrors('password')}"
+                                 th:class="${'form-group' + (invalid ? ' has-error' : '')}">
+                                <input type="password" class="form-control" name="password" placeholder="パスワード" />
+                                <span th:if="${invalid}" class="help-block" th:errors="*{password}">Error</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-8 align-middle">
+                                    <input type="checkbox" name="rememberMe" value="true" />
+                                    ログイン状態を保持する
+                                </div>
+                                <div class="col-xs-4">
+                                    <button type="submit" class="btn bg-purple btn-block btn-flat">ログイン</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <a href="#">パスワードを忘れた場合</a>
+                </div>
+            </div>
+        </div>
+        <div layout:fragment="scripts">
+            <script type="text/javascript" th:inline="javascript">
+                $(document).ready(function(){
+                    $("input").iCheck({
+                        checkboxClass: "icheckbox_square-purple",
+                        radioClass: "iradio_square-purple",
+                        increaseArea: "20%"
+                    });
+                });
+            </script>
+        </div>
+    </body>
+</html>

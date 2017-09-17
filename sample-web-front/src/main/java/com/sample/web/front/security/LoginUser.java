@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import com.sample.domain.dto.User;
+import com.sample.domain.dto.user.User;
 
 import lombok.Getter;
 import lombok.Setter;
