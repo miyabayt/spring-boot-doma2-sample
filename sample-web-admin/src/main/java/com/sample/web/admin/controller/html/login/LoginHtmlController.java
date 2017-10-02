@@ -16,7 +16,7 @@ import com.sample.web.base.controller.html.AbstractHtmlController;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * ログイン
+ * 管理側ログイン
  */
 @Controller
 @Slf4j
@@ -93,6 +93,7 @@ public class LoginHtmlController extends AbstractHtmlController {
 
     @Override
     public boolean authorityRequired() {
+        // 権限チェックを求めない
         return false;
     }
 }

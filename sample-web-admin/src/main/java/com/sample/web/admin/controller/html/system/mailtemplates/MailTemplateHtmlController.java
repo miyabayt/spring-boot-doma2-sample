@@ -59,7 +59,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
 
     @Override
     public String getFunctionName() {
-        return "A_AREA";
+        return "A_MAIL_TEMPLATE";
     }
 
     /**

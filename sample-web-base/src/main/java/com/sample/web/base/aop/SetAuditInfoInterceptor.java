@@ -28,11 +28,15 @@ public class SetAuditInfoInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         // コントローラーの動作前
+        val now = LocalDateTime.now();
+
+        // 未ログインの場合は、ゲスト扱いにする
+        AuditInfoHolder.set("GUEST", now);
 
         // ログインユーザーが存在する場合
         getLoginUser().ifPresent(loginUser -> {
             // 監査情報を設定する
-            AuditInfoHolder.set(loginUser.getUsername(), LocalDateTime.now());
+            AuditInfoHolder.set(loginUser.getUsername(), now);
         });
 
         return true;
