@@ -1,0 +1,51 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{layouts/sidebarLayout}">
+    <head>
+        <title>メールテンプレートマスタ</title>
+    </head>
+    <body>
+        <div layout:fragment="sidebar">
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'mailTemplate')}"></div>
+        </div>
+        <section layout:fragment="content-header">
+            <h1>メールテンプレート詳細</h1>
+            <ol class="breadcrumb">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/system/mailtemplates/find(page=1)}">メールテンプレート検索</a></li>
+                <li>メールテンプレート詳細</li>
+            </ol>
+        </section>
+        <section layout:fragment="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <table class="table table-hover" th:object="${mailTemplate}">
+                        <tr>
+                            <th>ID</th>
+                            <td th:text="*{id.value}"></td>
+                        </tr>
+                        <tr>
+                            <th>テンプレートキー</th>
+                            <td><b th:text="*{templateKey}"></b></td>
+                        </tr>
+                        <tr>
+                            <th>タイトル</th>
+                            <td th:text="*{subject}" />
+                        </tr>
+                        <tr>
+                            <th>本文</th>
+                            <td th:text="*{#strings.abbreviate(templateBody,20)}" th:title="*{templateBody}" />
+                        </tr>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    <form th:action="@{'/system/mailtemplates/remove/' + ${mailTemplate.id.value}}" method="post">
+                        <a th:href="@{/system/mailtemplates/edit/{id}(id=${mailTemplate.id.value})}" class="btn btn-default bg-purple">編集</a>
+                        <button type="submit" class="btn btn-danger">削除</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

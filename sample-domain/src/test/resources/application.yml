@@ -27,4 +27,3 @@ doma:
 # アプリケーションの設定
 application:
     fileUploadLocation: /tmp/sample
-    mailTemplateLocation: mail/

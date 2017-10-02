@@ -50,4 +50,3 @@ logging:
 # アプリケーションの設定
 application:
     processFileLocation: ${java.io.tmpdir}
-    mailTemplateLocation: mail/
