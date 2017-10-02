@@ -1,5 +1,7 @@
 package com.sample.domain.dto.system;
 
+import java.time.LocalDateTime;
+
 import javax.validation.constraints.Digits;
 
 import org.hibernate.validator.constraints.Email;
@@ -42,4 +44,10 @@ public class Staff extends DomaDtoImpl {
     // 電話番号
     @Digits(fraction = 0, integer = 10)
     String tel;
+
+    // パスワードリセットトークン
+    String passwordResetToken;
+
+    // トークン失効日
+    LocalDateTime tokenExpiresAt;
 }

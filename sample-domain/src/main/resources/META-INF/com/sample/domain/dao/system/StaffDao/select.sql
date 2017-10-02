@@ -10,4 +10,8 @@ WHERE
 /*%if staff.email != null */
   AND email = /* staff.email */'aaaa@bbbb.com'
 /*%end*/
+/*%if staff.passwordResetToken != null */
+  AND password_reset_token = /* staff.passwordResetToken */'xxxx'
+  AND token_expires_at > NOW()
+/*%end*/
 LIMIT 1

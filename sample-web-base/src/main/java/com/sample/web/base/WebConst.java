@@ -59,6 +59,10 @@ public interface WebConst {
 
     String LOGIN_FAILURE_URL = "/loginFailure";
 
+    String RESET_PASSWORD_URL = "/resetPassword";
+
+    String CHANGE_PASSWORD_URL = "/changePassword";
+
     String LOGOUT_URL = "/logout";
 
     String WEBJARS_URL = "/webjars/**";

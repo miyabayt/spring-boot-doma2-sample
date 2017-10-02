@@ -118,6 +118,8 @@ CREATE TABLE IF NOT EXISTS staffs(
   , email VARCHAR(100) DEFAULT NULL COMMENT 'メールアドレス'
   , password VARCHAR(100) DEFAULT NULL COMMENT 'パスワード'
   , tel VARCHAR(20) DEFAULT NULL COMMENT '電話番号'
+  , password_reset_token VARCHAR(50) DEFAULT NULL COMMENT 'パスワードリセットトークン'
+  , token_expires_at DATETIME DEFAULT NULL COMMENT 'トークン失効日'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
   , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
