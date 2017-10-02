@@ -8,17 +8,16 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.web.base.controller.html.AbstractHtmlController;
-import com.sample.web.base.service.FileDownloadService;
-import com.sample.web.base.service.FileUploadService;
+import com.sample.web.base.helper.FileUploadHelper;
+import com.sample.web.base.view.FileDownloadView;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +31,7 @@ public class UploadFilesHtmlController extends AbstractHtmlController {
     String fileUploadLocation;
 
     @Autowired
-    FileUploadService fileUploadService;
-
-    @Autowired
-    FileDownloadService fileDownloadService;
+    FileUploadHelper fileUploadHelper;
 
     @Override
     public String getFunctionName() {
@@ -53,12 +49,12 @@ public class UploadFilesHtmlController extends AbstractHtmlController {
     public String listFiles(Model model) throws IOException {
         // ファイル名のリストを作成する
         val location = Paths.get(fileUploadLocation);
-        val stream = fileUploadService.listAllFiles(location);
+        val stream = fileUploadHelper.listAllFiles(location);
         val filenames = stream.map(path -> path.getFileName().toString()).collect(Collectors.toList());
 
         model.addAttribute("filenames", filenames);
 
-        return "uploadfiles/list";
+        return "modules/system/uploadfiles/list";
     }
 
     /**
@@ -69,14 +65,16 @@ public class UploadFilesHtmlController extends AbstractHtmlController {
      */
     @GetMapping("/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+    public ModelAndView serveFile(@PathVariable String filename) {
         // ファイルを読み込む
-        val resource = fileUploadService.loadFile(Paths.get(fileUploadLocation), filename);
+        val resource = fileUploadHelper.loadFile(Paths.get(fileUploadLocation), filename);
 
-        // レスポンスを作成する
-        val response = fileDownloadService.createResponseEntity(resource, false);
+        // レスポンスを設定する
+        val view = new FileDownloadView(resource);
+        view.setAttachment(false);
+        view.setFilename(filename);
 
-        return response;
+        return new ModelAndView(view);
     }
 
     /**
@@ -87,14 +85,15 @@ public class UploadFilesHtmlController extends AbstractHtmlController {
      */
     @GetMapping("/download/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> downloadFile(@PathVariable String filename) {
+    public ModelAndView downloadFile(@PathVariable String filename) {
         // ファイルを読み込む
-        val resource = fileUploadService.loadFile(Paths.get(fileUploadLocation), filename);
+        val resource = fileUploadHelper.loadFile(Paths.get(fileUploadLocation), filename);
 
-        // レスポンスを作成する
-        val response = fileDownloadService.createResponseEntity(resource, true);
+        // レスポンスを設定する
+        val view = new FileDownloadView(resource);
+        view.setFilename(filename);
 
-        return response;
+        return new ModelAndView(view);
     }
 
     /**
@@ -107,11 +106,11 @@ public class UploadFilesHtmlController extends AbstractHtmlController {
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         // ファイルを保存する
-        fileUploadService.saveFile(Paths.get(fileUploadLocation), file);
+        fileUploadHelper.saveFile(Paths.get(fileUploadLocation), file);
 
         // リダイレクト先で完了メッセージを表示する
         redirectAttributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage("uploadfiles.upload.success"));
 
-        return "redirect:/uploadfiles/list";
+        return "redirect:/system/uploadfiles/list";
     }
 }
