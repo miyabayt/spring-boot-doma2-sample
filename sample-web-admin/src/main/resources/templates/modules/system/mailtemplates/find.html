@@ -1,0 +1,93 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{layouts/sidebarLayout}">
+    <head>
+        <title>メールテンプレートマスタ</title>
+    </head>
+    <body>
+        <div layout:fragment="sidebar">
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'mailTemplate')}"></div>
+        </div>
+        <section layout:fragment="content-header">
+            <h1>メールテンプレート検索</h1>
+            <ol class="breadcrumb">
+                <li><a th:href="@{/}">Home</a></li>
+                <li>メールテンプレート検索</li>
+            </ol>
+        </section>
+        <section layout:fragment="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">検索条件</h3>
+                    <form th:object="${searchMailTemplateForm}" th:action="@{/system/mailtemplates/find(page=1)}" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="control-group" id="name">
+                                <label class="col-sm-2 control-label">テンプレート名</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" th:field="*{templateKey}" size="10" maxlength="80" />
+                                    <span class="help-inline">
+                                        <div th:if="${#fields.hasAnyErrors()}">
+                                            <p th:each="err : ${#fields.allErrors()}" th:text="${err}">Error</p>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" name="find" class="btn btn-default bg-purple">検索</button>
+                                <div class="dropdown pull-right">
+                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        操作
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <li><a th:href="@{/system/mailtemplates/new}">メールテンプレート登録</a></li>
+                                        <li><a th:href="@{/system/mailtemplates/download/メールテンプレート.csv}">CSVダウンロード</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">検索結果</h3>
+                </div>
+                <div class="box-body table-responsive">
+                    <table id="mailTemplates" class="table table-hover" th:if="${pages} != null and ${pages.data} != null">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>テンプレート名</th>
+                                <th>タイトル</th>
+                                <th>本文</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="mailTemplate : ${pages.data}">
+                                <td>
+                                    <a th:href="@{/system/mailtemplates/show/__${mailTemplate.id.value}__}" th:text="${mailTemplate.id.value}" />
+                                </td>
+                                <td th:text="${mailTemplate.templateKey}" />
+                                <td th:text="${mailTemplate.subject}" />
+                                <td th:text="${#strings.abbreviate(mailTemplate.templateBody,20)}" />
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    <div th:replace="~{fragments/paginator :: paginator (${pages}, '/system/mailtemplates/find')}" />
+                </div>
+            </div>
+        </section>
+    </body>
+    <div layout:fragment="scripts">
+        <script type="text/javascript" th:inline="javascript">
+            $(document).ready(function() {
+            });
+        </script>
+    </div>
+</html>

@@ -1,15 +1,17 @@
 package com.sample.domain.helper;
 
+import java.util.Map;
+
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
+import org.thymeleaf.templateresolver.StringTemplateResolver;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class SendMailHelper {
-
-    @Value("${application.mailTemplateLocation}")
-    String mailTemplateLocation;
 
     @Autowired
     JavaMailSender javaMailSender;
@@ -54,29 +53,24 @@ public class SendMailHelper {
      * 指定したテンプレートのメール本文を返します。
      *
      * @param template
-     * @param objectName
-     * @param object
+     * @param objects
      * @return
      */
-    public String getMailBody(String template, String objectName, Object object) {
+    public String getMailBody(String template, Map<String, Object> objects) {
         val templateEngine = new SpringTemplateEngine();
-        templateEngine.setTemplateResolver(emailTemplateResolver());
+        templateEngine.setTemplateResolver(templateResolver());
 
         val context = new Context();
-        context.setVariable(objectName, object);
+        if (MapUtils.isNotEmpty(objects)) {
+            objects.entrySet().forEach(e -> context.setVariable(e.getKey(), e.getValue()));
+        }
 
-        String result = templateEngine.process(template, context);
-        return result;
+        return templateEngine.process(template, context);
     }
 
-    protected ClassLoaderTemplateResolver emailTemplateResolver() {
-        Assert.notNull(mailTemplateLocation, "mailTemplateLocation must not be null");
-
-        val resolver = new ClassLoaderTemplateResolver();
-        resolver.setTemplateMode("HTML");
-        resolver.setPrefix(mailTemplateLocation);
-        resolver.setSuffix(".html");
-        resolver.setCharacterEncoding("UTF-8");
+    protected ITemplateResolver templateResolver() {
+        val resolver = new StringTemplateResolver();
+        resolver.setTemplateMode("TEXT");
         resolver.setCacheable(false); // 安全をとってキャッシュしない
         return resolver;
     }

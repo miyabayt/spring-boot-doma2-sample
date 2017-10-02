@@ -30,4 +30,3 @@ logging:
 # アプリケーションの設定
 application:
     fileUploadLocation: build/sample
-    mailTemplateLocation: mail/

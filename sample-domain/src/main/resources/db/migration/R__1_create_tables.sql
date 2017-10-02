@@ -167,6 +167,23 @@ CREATE TABLE IF NOT EXISTS upload_files(
   , KEY idx_upload_files (file_name, deleted_at)
 ) COMMENT='アップロードファイル';
 
+CREATE TABLE IF NOT EXISTS mail_templates(
+  mail_template_id INT(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'メールテンプレートID'
+  , category_key VARCHAR(50) DEFAULT NULL COMMENT 'テンプレート分類キー'
+  , template_key VARCHAR(100) NOT NULL COMMENT 'テンプレートキー'
+  , subject VARCHAR(100) NOT NULL COMMENT 'メールタイトル'
+  , template_body TEXT NOT NULL COMMENT 'メール本文'
+  , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
+  , created_at DATETIME NOT NULL COMMENT '登録日時'
+  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
+  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
+  , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
+  , PRIMARY KEY (mail_template_id)
+  , KEY idx_mail_templates (template_key, deleted_at)
+) COMMENT='メールテンプレート';
+
 CREATE TABLE IF NOT EXISTS send_mail_queue(
   send_mail_queue_id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'メール送信キューID'
   , from_address varchar(255) NOT NULL COMMENT 'fromアドレス'
