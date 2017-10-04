@@ -35,6 +35,7 @@ public class UserRestController extends AbstractRestController {
     /**
      * ユーザーを一括取得します。
      *
+     * @param page
      * @return
      */
     @GetMapping

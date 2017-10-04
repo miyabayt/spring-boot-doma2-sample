@@ -37,7 +37,7 @@ public abstract class AbstractHtmlController extends BaseController implements F
         if (errors != null && errors instanceof BeanPropertyBindingResult) {
             val br = ((BeanPropertyBindingResult) errors);
 
-            if (br != null && br.hasErrors()) {
+            if (br.hasErrors()) {
                 return true;
             }
         }

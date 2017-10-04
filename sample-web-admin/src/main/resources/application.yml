@@ -71,8 +71,6 @@ doma:
     dialect: mysql
     # 小文字のスネークケースに変換する（firstName → first_name）
     naming: SNAKE_LOWER_CASE
-    # SQLファイルをキャッシュする
-    sql-file-repository: greedy_cache
     # バルクインサート・アップデートのサイズ
     batch-size: 1000
 jmx:

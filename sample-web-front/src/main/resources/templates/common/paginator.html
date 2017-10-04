@@ -1,24 +1,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
-	<body>
-		<th:block th:fragment="paginator (p, url)">
-			<div th:if="${p} != null">
-				<ul class="pagination">
-					<li th:class="${first} ? 'disabled':''" style="display:inline" th:with="first=${p.page} == 1">
-						<span th:if="${first}">«</span>
-						<a th:if="${not first}" th:href="@{${url}(page=1)}">«</a>
-					</li>
-					<li th:each="i : ${#numbers.sequence(1, p.totalPages)}" th:class="(${i} == ${p.page}) ? 'active' : ''" style="display:inline">
-						<span th:if="${i} == ${p.page}" th:text="${i}">1</span>
-						<a th:if="${i} != ${p.page}" th:href="@{${url}(page=${i})}">
-							<span th:text="${i}">1</span>
-						</a>
-					</li>
-					<li th:class="${last} ? 'disabled':''" style="display:inline" th:with="last=(${p.page} == ${p.totalPages})">
-						<span th:if="${last}">»</span>
-						<a th:if="${not last}" th:href="@{${url}(page=(${p.totalPages}))}">»</a>
-					</li>
-				</ul>
-			</div>
-		</th:block>
-	</body>
+    <body>
+        <th:block th:fragment="paginator (p, url)">
+            <div th:if="${p} != null">
+                <ul class="pagination pagination-sm no-margin pull-right">
+                    <li th:class="${first} ? 'disabled':''" style="display:inline" th:with="first=${p.page} == 1">
+                        <span th:if="${first}"><i class="fa fa-angle-double-left"></i></span>
+                        <a th:if="${not first}" th:href="@{${url}(page=1)}"><i class="fa fa-angle-double-left"></i></a>
+                    </li>
+                    <li th:class="${first} ? 'disabled':''" style="display:inline" th:with="first=${p.page} == 1">
+                        <span th:if="${first}"><i class="fa fa-angle-left"></i></span>
+                        <a th:if="${not first}" th:href="@{${url}(page=${p.page} - 1)}"><i class="fa fa-angle-left"></i></a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(1, p.totalPages)}" th:class="(${i} == ${p.page}) ? 'active' : ''" style="display:inline">
+                        <span th:if="${i} == ${p.page}" th:text="${i}">1</span>
+                        <a th:if="${i} != ${p.page} and (${p.page} - 5) < ${i} and ${i} < (${p.page} + 5)" th:href="@{${url}(page=${i})}">
+                            <span th:text="${i}">1</span>
+                        </a>
+                    </li>
+                    <li th:class="${last} ? 'disabled':''" style="display:inline" th:with="last=(${p.page} == ${p.totalPages})">
+                        <span th:if="${last}"><i class="fa fa-angle-right"></i></span>
+                        <a th:if="${not last}" th:href="@{${url}(page=(${p.page} + 1))}"><i class="fa fa-angle-right"></i></a>
+                    </li>
+                    <li th:class="${last} ? 'disabled':''" style="display:inline" th:with="last=(${p.page} == ${p.totalPages})">
+                        <span th:if="${last}"><i class="fa fa-angle-double-right"></i></span>
+                        <a th:if="${not last}" th:href="@{${url}(page=(${p.totalPages}))}"><i class="fa fa-angle-double-right"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </th:block>
+    </body>
 </html>

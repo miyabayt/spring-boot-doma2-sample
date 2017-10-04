@@ -77,6 +77,11 @@ subprojects {
     // v3.2.1 -> 4.2.0
     ext["flyway.version"] = "4.2.0"
 
+    bootRun {
+        addResources = true
+        jvmArgs "-XX:TieredStopAtLevel=1", "-Xverify:none"
+    }
+
     dependencies {
         optional "org.projectlombok:lombok"
 
@@ -161,6 +166,10 @@ project(":sample-domain") {
 }
 
 project(":sample-web-base") {
+    bootRepackage {
+        enabled = false
+    }
+
     dependencies {
         compile project(":sample-domain")
 
@@ -221,11 +230,15 @@ project(":sample-web-admin") {
         addResources = true
         jvmArgs "-XX:TieredStopAtLevel=1", "-Xverify:none"
     }
+    bootRepackage {
+        executable = true
+    }
 
     dependencies {
         compile project(":sample-web-base")
         optional "org.springframework.boot:spring-boot-devtools"
 
+        testCompile "org.springframework.security:spring-security-test"
         testCompile "org.springframework.boot:spring-boot-starter-test"
         testCompile "org.spockframework:spock-spring"
     }
@@ -235,6 +248,9 @@ project(":sample-web-front") {
     bootRun {
         addResources = true
         jvmArgs "-XX:TieredStopAtLevel=1", "-Xverify:none"
+    }
+    bootRepackage {
+        executable = true
     }
 
     dependencies {

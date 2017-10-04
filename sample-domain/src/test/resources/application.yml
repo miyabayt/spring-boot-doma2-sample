@@ -12,6 +12,16 @@ spring:
         username: root
         password: passw0rd
         autoCommit: false
+    mail:
+        default-encoding: ISO-2022-JP
+        protocol: smtp
+        host: 127.0.0.1
+        port: 25
+        username: test
+        password: test
+        properties:
+            mail:
+                from: from@sample.com
 # Doma2
 doma:
     dialect: mysql
