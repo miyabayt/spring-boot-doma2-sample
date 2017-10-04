@@ -114,7 +114,7 @@ public class CodeHtmlController extends AbstractHtmlController {
         val where = modelMapper.map(form, Code.class);
 
         // 10件区切りで取得する
-        val pages = codeService.findAll(where, Pageable.DEFAULT_PAGEABLE);
+        val pages = codeService.findAll(where, form);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);

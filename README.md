@@ -81,22 +81,22 @@ $ ./gradlew startFakeSmtpServer
 #### 管理側
 ```bash
 $ # admin application
-$ cd /path/to/spring-boot-doma2-sample/sample-web-admin
-$ ../gradlew bootRun
+$ cd /path/to/spring-boot-doma2-sample
+$ ./gradlew :sample-web-admin:bootRun
 ```
 
 #### フロント側
 ```
 $ # front application
-$ cd /path/to/spring-boot-doma2-sample/sample-web-front
-$ ../gradlew bootRun
+$ cd /path/to/spring-boot-doma2-sample
+$ ./gradlew :sample-web-front:bootRun
 ```
 
 #### バッチ
 ```
 $ # 担当者情報取り込みバッチを起動する
-$ cd /path/to/spring-boot-doma2-sample/sample-batch
-$ ../gradlew bootRun -Pargs="--job=importStaffJob"
+$ cd /path/to/spring-boot-doma2-sample
+$ ./gradlew :sample-batch:bootRun -Pargs="--job=importStaffJob"
 ```
 
 ### 接続先情報

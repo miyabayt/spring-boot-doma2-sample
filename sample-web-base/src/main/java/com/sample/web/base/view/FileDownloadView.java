@@ -61,7 +61,7 @@ public class FileDownloadView extends AbstractView {
             val detectedContentType = TIKA.detect(file);
             val mediaType = MediaType.parseMediaType(detectedContentType);
             val inlineOrAttachment = (isAttachment) ? "attachment" : "inline";
-            val contentDisposition = String.format("%s; filename=\"%s\"", inlineOrAttachment, resource.getFilename());
+            val contentDisposition = String.format("%s; filename=\"%s\"", inlineOrAttachment, filename);
 
             response.setHeader(CONTENT_TYPE, mediaType.toString());
             response.setHeader(CONTENT_DISPOSITION, contentDisposition);

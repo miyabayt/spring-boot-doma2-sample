@@ -1,5 +1,7 @@
 package com.sample.domain.service
 
+import com.sample.domain.dto.common.Pageable
+import com.sample.domain.dto.system.Code
 import com.sample.domain.service.system.CodeService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -15,9 +17,10 @@ class CodeServiceTest extends Specification {
 
     def "getCodeの結果がnullではないこと"() {
         when:
-        def codeList = codeService.getCode()
+        def where = new Code()
+        def pages = codeService.findAll(where, Pageable.NO_LIMIT_PAGEABLE)
 
         then:
-        codeList.size() >= 1
+        pages.getCount() >= 1
     }
 }

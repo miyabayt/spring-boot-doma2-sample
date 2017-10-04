@@ -42,6 +42,10 @@ public class SetModelAndViewInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
             ModelAndView modelAndView) throws Exception {
         // コントローラーの動作後
+        if (modelAndView == null) {
+            return;
+        }
+
         val locale = LocaleContextHolder.getLocale();
         val pulldownOption = MessageUtils.getMessage(MAV_PULLDOWN_OPTION, locale);
 
@@ -99,7 +103,7 @@ public class SetModelAndViewInterceptor extends HandlerInterceptorAdapter {
             if (errors != null && errors instanceof BeanPropertyBindingResult) {
                 val br = ((BeanPropertyBindingResult) errors);
 
-                if (br != null && br.hasErrors()) {
+                if (br.hasErrors()) {
                     val formName = br.getObjectName();
                     val key = BindingResult.MODEL_KEY_PREFIX + formName;
                     model.addAttribute(key, errors);

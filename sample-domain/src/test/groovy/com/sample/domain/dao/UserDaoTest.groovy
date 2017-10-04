@@ -1,8 +1,8 @@
 package com.sample.domain.dao
 
 import com.sample.domain.dao.user.UserDao
-import com.sample.domain.dto.user.User
 import com.sample.domain.dto.common.ID
+import com.sample.domain.dto.user.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.OptimisticLockingFailureException
