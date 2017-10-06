@@ -1,0 +1,26 @@
+sudo: required
+
+language: java
+
+jdk: oraclejdk8
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.m2/
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+services:
+  - docker
+
+before_script:
+  - sudo /etc/init.d/mysql stop
+  - docker build -t sample ./docker
+  - docker run -t -d -p 3306:3306 sample /usr/bin/supervisord
+
+script:
+  - ./gradlew clean build --info
