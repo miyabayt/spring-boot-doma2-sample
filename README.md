@@ -1,5 +1,7 @@
 # Spring Boot Sample Application
 
+[![Build Status](https://travis-ci.org/miyabayt/spring-boot-doma2-sample.svg?branch=master)](https://travis-ci.org/miyabayt/spring-boot-doma2-sample)
+
 ## ローカル環境
 
 ソースのダウンロード
