@@ -174,7 +174,6 @@ project(":sample-web-base") {
         compile project(":sample-domain")
 
         // springframework
-        compile "org.springframework.boot:spring-boot-starter-actuator"
         compile "org.springframework.boot:spring-boot-starter-cache"
         compile("org.springframework.boot:spring-boot-starter-web") {
             // exclude embedded tomcat to use Jetty
