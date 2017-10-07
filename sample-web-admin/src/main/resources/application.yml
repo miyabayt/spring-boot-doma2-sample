@@ -75,9 +75,6 @@ doma:
     batch-size: 1000
 jmx:
     enabled: false
-management:
-    security:
-        enabled: false
 server:
     port: 18081
     session:

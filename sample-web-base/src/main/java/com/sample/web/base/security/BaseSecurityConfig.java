@@ -99,8 +99,7 @@ public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 // エラー画面は認証をかけない
-                .antMatchers(FORBIDDEN_URL, ERROR_URL, RESET_PASSWORD_URL, CHANGE_PASSWORD_URL, "/management/health")
-                .permitAll()
+                .antMatchers(FORBIDDEN_URL, ERROR_URL, RESET_PASSWORD_URL, CHANGE_PASSWORD_URL).permitAll()
                 // エラー画面以外は、認証をかける
                 .anyRequest().authenticated();
 
