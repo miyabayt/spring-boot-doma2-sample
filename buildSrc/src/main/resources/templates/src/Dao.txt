@@ -1,0 +1,81 @@
+package [[${daoPackageName}]].[[${subSystem}]];
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collector;
+
+import org.seasar.doma.*;
+import org.seasar.doma.boot.ConfigAutowireable;
+import org.seasar.doma.jdbc.SelectOptions;
+
+import [[${commonDtoPackageName}]].ID;
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
+
+@ConfigAutowireable
+@Dao
+public interface [[${upperFuncName}]]Dao { // TODO
+
+    /**
+     * [[${funcStr}]]を取得します。
+     *
+     * @param [[${lowerFuncName}]]
+     * @param options
+     * @return
+     */
+    @Select(strategy = SelectType.COLLECT)
+    <R> R selectAll(final [[${upperFuncName}]] [[${lowerFuncName}]], final SelectOptions options, final Collector<[[${upperFuncName}]], ?, R> collector);
+
+    /**
+     * [[${funcStr}]]を1件取得します。
+     *
+     * @param id
+     * @return
+     */
+    @Select
+    Optional<[[${upperFuncName}]]> selectById(ID<[[${upperFuncName}]]> id);
+
+    /**
+     * [[${funcStr}]]を1件取得します。
+     *
+     * @param [[${lowerFuncName}]]
+     * @return
+     */
+    @Select
+    Optional<[[${upperFuncName}]]> select([[${upperFuncName}]] [[${lowerFuncName}]]);
+
+    /**
+     * [[${funcStr}]]を登録します。
+     *
+     * @param [[${lowerFuncName}]]
+     * @return
+     */
+    @Insert
+    int insert([[${upperFuncName}]] [[${lowerFuncName}]]);
+
+    /**
+     * [[${funcStr}]]を更新します。
+     *
+     * @param [[${lowerFuncName}]]
+     * @return
+     */
+    @Update
+    int update([[${upperFuncName}]] [[${lowerFuncName}]]);
+
+    /**
+     * [[${funcStr}]]を論理削除します。
+     *
+     * @param [[${lowerFuncName}]]
+     * @return
+     */
+    @Update(excludeNull = true) // NULLの項目は更新対象にしない
+    int delete([[${upperFuncName}]] [[${lowerFuncName}]]);
+
+    /**
+     * [[${funcStr}]]を一括登録します。
+     *
+     * @param [[${lowerFuncName}]]s
+     * @return
+     */
+    @BatchInsert
+    int[] insert(List<[[${upperFuncName}]]> [[${lowerFuncName}]]s);
+}

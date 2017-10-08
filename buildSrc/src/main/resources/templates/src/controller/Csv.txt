@@ -1,0 +1,25 @@
+package [[${controllerPackageName}]].[[${subSystem}]].[[${lowerFuncName}]]s;
+
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@JsonIgnoreProperties(ignoreUnknown = true) // 定義されていないプロパティを無視してマッピングする
+@JsonPropertyOrder({ "[[${funcStr}]]ID", "[[${funcStr}]]名" }) // CSVのヘッダ順
+@Getter
+@Setter
+public class [[${upperFuncName}]]Csv implements Serializable { // TODO
+
+    private static final long serialVersionUID = -1L;
+
+    @JsonProperty("[[${funcStr}]]ID")
+    Integer id;
+
+    @JsonProperty("[[${funcStr}]]名")
+    String [[${lowerFuncName}]]Name;
+}

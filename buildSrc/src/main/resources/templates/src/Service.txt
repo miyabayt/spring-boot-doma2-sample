@@ -1,0 +1,110 @@
+package [[${servicePackageName}]].[[${subSystem}]];
+
+import static java.util.stream.Collectors.toList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import [[${daoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Dao;
+import [[${commonDtoPackageName}]].ID;
+import [[${commonDtoPackageName}]].Page;
+import [[${commonDtoPackageName}]].PageFactory;
+import [[${commonDtoPackageName}]].Pageable;
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
+import [[${exceptionPackageName}]].NoDataFoundException;
+import [[${commonServicePackageName}]].BaseTransactionalService;
+
+import lombok.val;
+
+/**
+ * [[${funcStr}]]サービス
+ */
+@Service
+public class [[${upperFuncName}]]Service extends BaseTransactionalService { // TODO
+
+    @Autowired
+    [[${upperFuncName}]]Dao [[${lowerFuncName}]]Dao;
+
+    /**
+     * [[${funcStr}]]を一括取得します。
+     *
+     * @return
+     */
+    @Transactional(readOnly = true) // 読み取りのみの場合は指定する
+    public Page<[[${upperFuncName}]]> findAll([[${upperFuncName}]] where, Pageable pageable) {
+        Assert.notNull(where, "where must not be null");
+
+        // ページングを指定する
+        val options = createSearchOptions(pageable).count();
+        val [[${lowerFuncName}]]s = [[${lowerFuncName}]]Dao.selectAll(where, options, toList());
+
+        return PageFactory.create([[${lowerFuncName}]]s, pageable, options.getCount());
+    }
+
+    /**
+     * [[${funcStr}]]を取得します。
+     *
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public [[${upperFuncName}]] findById(final ID<[[${upperFuncName}]]> id) {
+        // 1件取得
+        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Dao.selectById(id)
+                .orElseThrow(() -> new NoDataFoundException("[[${lowerFuncName}]]_id=" + id + " のデータが見つかりません。"));
+        return [[${lowerFuncName}]];
+    }
+
+    /**
+     * [[${funcStr}]]を追加します。
+     *
+     * @param input[[${upperFuncName}]]
+     * @return
+     */
+    public [[${upperFuncName}]] create(final [[${upperFuncName}]] input[[${upperFuncName}]]) {
+        Assert.notNull(input[[${upperFuncName}]], "input[[${upperFuncName}]] must not be null");
+
+        // 1件登録
+        [[${lowerFuncName}]]Dao.insert(input[[${upperFuncName}]]);
+
+        return input[[${upperFuncName}]];
+    }
+
+    /**
+     * [[${funcStr}]]を更新します。
+     *
+     * @param input[[${upperFuncName}]]
+     * @return
+     */
+    public [[${upperFuncName}]] update(final [[${upperFuncName}]] input[[${upperFuncName}]]) {
+        Assert.notNull(input[[${upperFuncName}]], "input[[${upperFuncName}]] must not be null");
+
+        // 1件更新
+        int updated = [[${lowerFuncName}]]Dao.update(input[[${upperFuncName}]]);
+
+        if (updated < 1) {
+            throw new NoDataFoundException("[[${lowerFuncName}]]_id=" + input[[${upperFuncName}]].getId() + " のデータが見つかりません。");
+        }
+
+        return input[[${upperFuncName}]];
+    }
+
+    /**
+     * [[${funcStr}]]を論理削除します。
+     *
+     * @return
+     */
+    public [[${upperFuncName}]] delete(final ID<[[${upperFuncName}]]> id) {
+        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Dao.selectById(id)
+                .orElseThrow(() -> new NoDataFoundException("[[${lowerFuncName}]]_id=" + id + " のデータが見つかりません。"));
+
+        int updated = [[${lowerFuncName}]]Dao.delete([[${lowerFuncName}]]);
+
+        if (updated < 1) {
+            throw new NoDataFoundException("[[${lowerFuncName}]]_id=" + id + " は更新できませんでした。");
+        }
+
+        return [[${lowerFuncName}]];
+    }
+}

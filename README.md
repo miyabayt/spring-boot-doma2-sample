@@ -88,14 +88,14 @@ $ ./gradlew :sample-web-admin:bootRun
 ```
 
 #### フロント側
-```
+```bash
 $ # front application
 $ cd /path/to/spring-boot-doma2-sample
 $ ./gradlew :sample-web-front:bootRun
 ```
 
 #### バッチ
-```
+```bash
 $ # 担当者情報取り込みバッチを起動する
 $ cd /path/to/spring-boot-doma2-sample
 $ ./gradlew :sample-batch:bootRun -Pargs="--job=importStaffJob"
@@ -120,7 +120,11 @@ mysql -h 127.0.0.1 -P 3306 -uroot -ppassw0rd sample
 mysql -h 192.168.99.100 -P 3306 -uroot -ppassw0rd sample
 ```
 
-
+### コード自動生成
+```bash
+$ cd /path/to/spring-boot-doma2-sample
+$ ./gradlew codegen -PsubSystem=system -Pfunc=client -PfuncStr=取引先
+```
 
 ## 参考
 
@@ -140,4 +144,3 @@ mysql -h 192.168.99.100 -P 3306 -uroot -ppassw0rd sample
 | [Ehcache](http://www.ehcache.org/)       | キャッシュライブラリ                       |
 | [Spock](http://spockframework.org/)      | テストフレームワーク                       |
 | [Mockito](http://site.mockito.org/)      | モッキングフレームワーク                     |
-
