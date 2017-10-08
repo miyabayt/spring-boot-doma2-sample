@@ -1,0 +1,27 @@
+package [[${dtoPackageName}]].[[${subSystem}]];
+
+import org.seasar.doma.*;
+
+import [[${commonDtoPackageName}]].DomaDtoImpl;
+import [[${commonDtoPackageName}]].ID;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Table(name = "[[${lowerFuncName}]]s")
+@Entity
+@Getter
+@Setter
+public class [[${upperFuncName}]] extends DomaDtoImpl { // TODO
+
+    private static final long serialVersionUID = -1L;
+
+    // [[${funcStr}]]ID
+    @Id
+    @Column(name = "[[${lowerFuncName}]]_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    ID<[[${upperFuncName}]]> id;
+
+    // [[${funcStr}]]名
+    String [[${lowerFuncName}]]Name;
+}

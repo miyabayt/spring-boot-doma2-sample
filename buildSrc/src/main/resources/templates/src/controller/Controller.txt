@@ -1,0 +1,261 @@
+package [[${controllerPackageName}]].[[${subSystem}]].[[${lowerFuncName}]]s;
+
+import static [[${webBasePackageName}]].WebConst.DELETED;
+import static [[${webBasePackageName}]].WebConst.GLOBAL_MESSAGE;
+
+import java.util.List;
+
+import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import [[${commonDtoPackageName}]].ID;
+import [[${commonDtoPackageName}]].Pageable;
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
+import [[${servicePackageName}]].[[${subSystem}]].[[${upperFuncName}]]Service;
+import [[${baseControllerPackageName}]].AbstractHtmlController;
+import [[${webBasePackageName}]].view.CsvView;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * [[${funcStr}]]管理
+ */
+@Controller
+@RequestMapping("/[[${subSystem}]]/[[${lowerFuncName}]]s")
+@SessionAttributes(types = { Search[[${upperFuncName}]]Form.class, [[${upperFuncName}]]Form.class })
+@Slf4j
+public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
+
+    @Autowired
+    [[${upperFuncName}]]FormValidator [[${lowerFuncName}]]FormValidator;
+
+    @Autowired
+    [[${upperFuncName}]]Service [[${lowerFuncName}]]Service;
+
+    @ModelAttribute("[[${lowerFuncName}]]Form")
+    public [[${upperFuncName}]]Form [[${lowerFuncName}]]Form() {
+        return new [[${upperFuncName}]]Form();
+    }
+
+    @ModelAttribute("search[[${upperFuncName}]]Form")
+    public Search[[${upperFuncName}]]Form search[[${upperFuncName}]]Form() {
+        return new Search[[${upperFuncName}]]Form();
+    }
+
+    @InitBinder("[[${lowerFuncName}]]Form")
+    public void validatorBinder(WebDataBinder binder) {
+        binder.addValidators([[${lowerFuncName}]]FormValidator);
+    }
+
+    @Override
+    public String getFunctionName() {
+        return "A_[[${upperFuncName}]]";
+    }
+
+    /**
+     * 登録画面 初期表示
+     *
+     * @param form
+     * @param model
+     * @return
+     */
+    @GetMapping("/new")
+    public String new[[${upperFuncName}]](@ModelAttribute("[[${lowerFuncName}]]Form") [[${upperFuncName}]]Form form, Model model) {
+        if (!form.isNew()) {
+            // SessionAttributeに残っている場合は再生成する
+            model.addAttribute("[[${lowerFuncName}]]Form", new [[${upperFuncName}]]Form());
+        }
+
+        return "modules/[[${subSystem}]]/[[${lowerFuncName}]]s/new";
+    }
+
+    /**
+     * 登録処理
+     *
+     * @param form
+     * @param result
+     * @param attributes
+     * @return
+     */
+    @PostMapping("/new")
+    public String new[[${upperFuncName}]](@Validated @ModelAttribute("[[${lowerFuncName}]]Form") [[${upperFuncName}]]Form form, BindingResult result,
+            RedirectAttributes attributes) {
+        // 入力チェックエラーがある場合は、元の画面にもどる
+        if (result.hasErrors()) {
+            setFlashAttributeErrors(attributes, result);
+            return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/new";
+        }
+
+        // 入力値からDTOを作成する
+        val input[[${upperFuncName}]] = modelMapper.map(form, [[${upperFuncName}]].class);
+
+        // 登録する
+        val created[[${upperFuncName}]] = [[${lowerFuncName}]]Service.create(input[[${upperFuncName}]]);
+
+        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/show/" + created[[${upperFuncName}]].getId().getValue();
+    }
+
+    /**
+     * 一覧画面 初期表示
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping("/find")
+    public String find[[${upperFuncName}]](@ModelAttribute("search[[${upperFuncName}]]Form") Search[[${upperFuncName}]]Form form, Model model) {
+        // 入力値から検索条件を作成する
+        val where = modelMapper.map(form, [[${upperFuncName}]].class);
+
+        // 10件区切りで取得する
+        val pages = [[${lowerFuncName}]]Service.findAll(where, form);
+
+        // 画面に検索結果を渡す
+        model.addAttribute("pages", pages);
+
+        return "modules/[[${subSystem}]]/[[${lowerFuncName}]]s/find";
+    }
+
+    /**
+     * 検索結果
+     *
+     * @param form
+     * @param result
+     * @param attributes
+     * @return
+     */
+    @PostMapping("/find")
+    public String find[[${upperFuncName}]](@Validated @ModelAttribute("search[[${upperFuncName}]]Form") Search[[${upperFuncName}]]Form form, BindingResult result,
+            RedirectAttributes attributes) {
+        // 入力チェックエラーがある場合は、元の画面にもどる
+        if (result.hasErrors()) {
+            setFlashAttributeErrors(attributes, result);
+            return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/find";
+        }
+
+        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/find";
+    }
+
+    /**
+     * 詳細画面
+     *
+     * @param [[${lowerFuncName}]]Id
+     * @param model
+     * @return
+     */
+    @GetMapping("/show/{[[${lowerFuncName}]]Id}")
+    public String show[[${upperFuncName}]](@PathVariable Integer [[${lowerFuncName}]]Id, Model model) {
+        // 1件取得する
+        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(ID.of([[${lowerFuncName}]]Id));
+        model.addAttribute("[[${lowerFuncName}]]", [[${lowerFuncName}]]);
+        return "modules/[[${subSystem}]]/[[${lowerFuncName}]]s/show";
+    }
+
+    /**
+     * 編集画面 初期表示
+     *
+     * @param [[${lowerFuncName}]]Id
+     * @param form
+     * @param model
+     * @return
+     */
+    @GetMapping("/edit/{[[${lowerFuncName}]]Id}")
+    public String edit[[${upperFuncName}]](@PathVariable Integer [[${lowerFuncName}]]Id, @ModelAttribute("[[${lowerFuncName}]]Form") [[${upperFuncName}]]Form form, Model model) {
+        // セッションから取得できる場合は、読み込み直さない
+        if (!hasErrors(model)) {
+            // 1件取得する
+            val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(ID.of([[${lowerFuncName}]]Id));
+
+            // 取得したDtoをFromに詰め替える
+            modelMapper.map([[${lowerFuncName}]], form);
+        }
+
+        return "modules/[[${subSystem}]]/[[${lowerFuncName}]]s/new";
+    }
+
+    /**
+     * 編集画面 更新処理
+     *
+     * @param form
+     * @param result
+     * @param [[${lowerFuncName}]]Id
+     * @param sessionStatus
+     * @param attributes
+     * @return
+     */
+    @PostMapping("/edit/{[[${lowerFuncName}]]Id}")
+    public String edit[[${upperFuncName}]](@Validated @ModelAttribute("[[${lowerFuncName}]]Form") [[${upperFuncName}]]Form form, BindingResult result,
+            @PathVariable Integer [[${lowerFuncName}]]Id, SessionStatus sessionStatus, RedirectAttributes attributes) {
+        // 入力チェックエラーがある場合は、元の画面にもどる
+        if (result.hasErrors()) {
+            setFlashAttributeErrors(attributes, result);
+            return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/edit/" + [[${lowerFuncName}]]Id;
+        }
+
+        // 更新対象を取得する
+        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(ID.of([[${lowerFuncName}]]Id));
+
+        // 入力値を詰め替える
+        modelMapper.map(form, [[${lowerFuncName}]]);
+
+        // 更新する
+        val updated[[${upperFuncName}]] = [[${lowerFuncName}]]Service.update([[${lowerFuncName}]]);
+
+        // セッションの[[${lowerFuncName}]]Formをクリアする
+        sessionStatus.setComplete();
+
+        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/show/" + updated[[${upperFuncName}]].getId().getValue();
+    }
+
+    /**
+     * 削除処理
+     *
+     * @param [[${lowerFuncName}]]Id
+     * @param attributes
+     * @return
+     */
+    @PostMapping("/remove/{[[${lowerFuncName}]]Id}")
+    public String remove[[${upperFuncName}]](@PathVariable Integer [[${lowerFuncName}]]Id, RedirectAttributes attributes) {
+        // 削除対象を取得する
+        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(ID.of([[${lowerFuncName}]]Id));
+
+        // 論理削除する
+        [[${lowerFuncName}]]Service.delete([[${lowerFuncName}]].getId());
+
+        // 削除成功メッセージ
+        attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(DELETED));
+
+        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/find";
+    }
+
+    /**
+     * CSVダウンロード
+     *
+     * @param filename
+     * @return
+     */
+    @GetMapping("/download/{filename:.+\\.csv}")
+    public ModelAndView downloadCsv(@PathVariable String filename) {
+        // 全件取得する
+        val [[${lowerFuncName}]]s = [[${lowerFuncName}]]Service.findAll(new [[${upperFuncName}]](), Pageable.NO_LIMIT_PAGEABLE);
+
+        val listType = new TypeToken<List<[[${upperFuncName}]]Csv>>() {
+        }.getType();
+        List<[[${upperFuncName}]]Csv> csvList = modelMapper.map([[${lowerFuncName}]]s.getData(), listType);
+
+        // レスポンスを設定する
+        val view = new CsvView([[${upperFuncName}]]Csv.class, csvList);
+        view.setFilename(filename);
+
+        return new ModelAndView(view);
+    }
+}

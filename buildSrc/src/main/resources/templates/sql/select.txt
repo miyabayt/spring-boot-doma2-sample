@@ -1,0 +1,10 @@
+SELECT
+  /*%expand*/*
+FROM
+  [[${lowerFuncName}]]s
+WHERE
+  deleted_at IS NULL
+/*%if [[${lowerFuncName}]].id != null */
+  AND [[${lowerFuncName}]]_id = /* [[${lowerFuncName}]].id */1
+/*%end*/
+LIMIT 1

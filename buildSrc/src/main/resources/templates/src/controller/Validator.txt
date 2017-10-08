@@ -1,0 +1,18 @@
+package [[${controllerPackageName}]].[[${subSystem}]].[[${lowerFuncName}]]s;
+
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+
+import [[${baseValidatorPackageName}]].AbstractValidator;
+
+/**
+ * [[${funcStr}]]登録 入力チェック
+ */
+@Component
+public class [[${upperFuncName}]]FormValidator extends AbstractValidator<[[${upperFuncName}]]Form> {
+
+    @Override
+    protected void doValidate([[${upperFuncName}]]Form form, Errors errors) {
+
+    }
+}

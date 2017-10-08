@@ -1,0 +1,38 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{layouts/sidebarLayout}">
+    <head>
+        <title>[[${funcStr}]]管理</title>
+    </head>
+    <body>
+        <div layout:fragment="sidebar">
+            <div th:replace="~{layouts/sidebar :: sidebar ('[[${subSystem}]]', '[[${lowerFuncName}]]')}"></div>
+        </div>
+        <section layout:fragment="content-header">
+            <h1 th:with="text=${[[${lowerFuncName}]]Form.isNew()} ? '[[${funcStr}]]登録' : '[[${funcStr}]]編集'" th:text="${text}">[[${funcStr}]]登録</h1>
+            <ol class="breadcrumb">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/[[${subSystem}]]/[[${lowerFuncName}]]s/find(page=1)}">[[${funcStr}]]検索</a></li>
+                <li th:with="text=${[[${lowerFuncName}]]Form.isNew()} ? '[[${funcStr}]]登録' : '[[${funcStr}]]編集'" th:text="${text}">[[${funcStr}]]登録</li>
+            </ol>
+        </section>
+        <section layout:fragment="content">
+            <div class="box">
+                <form th:object="${[[${lowerFuncName}]]Form}" th:action="${action}"
+                      th:with="action=${[[${lowerFuncName}]]Form.isNew()} ? @{/[[${subSystem}]]/[[${lowerFuncName}]]s/new} : @{/[[${subSystem}]]/[[${lowerFuncName}]]s/edit/{id}(id=*{id})}"
+                      class="form-horizontal" enctype="multipart/form-data" method="post">
+                    <div class="box-body">
+                        <input th:replace="~{fragments/inputField :: input ('text', '[[${funcStr}]]名', '[[${lowerFuncName}]]Name')}" />
+                    </div>
+                    <div class="box-footer">
+                        <button class="btn btn-default bg-purple" type="submit"
+                                th:with="text=${[[${lowerFuncName}]]Form.isNew()} ? '登録' : '保存'" th:text="${text}">
+                            Add [[${upperFuncName}]]
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </body>
+</html>
