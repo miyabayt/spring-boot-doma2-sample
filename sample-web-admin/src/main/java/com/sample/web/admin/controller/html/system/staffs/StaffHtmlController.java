@@ -241,7 +241,7 @@ public class StaffHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{staffId}")
-    public String removeArea(@PathVariable Integer staffId, RedirectAttributes attributes) {
+    public String removeStaff(@PathVariable Integer staffId, RedirectAttributes attributes) {
         // 削除対象を取得する
         val staff = staffService.findById(ID.of(staffId));
 
