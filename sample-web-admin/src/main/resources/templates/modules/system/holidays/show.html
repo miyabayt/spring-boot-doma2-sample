@@ -1,0 +1,48 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{layouts/sidebarLayout}">
+    <head>
+        <title>祝日管理</title>
+    </head>
+    <body>
+        <div layout:fragment="sidebar">
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'holiday')}"></div>
+        </div>
+        <section layout:fragment="content-header">
+            <h1>祝日詳細</h1>
+            <ol class="breadcrumb">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/system/holidays/find(page=1)}">祝日検索</a></li>
+                <li>祝日詳細</li>
+            </ol>
+        </section>
+        <section layout:fragment="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <table class="table table-hover" th:object="${holiday}">
+                        <tr>
+                            <th>ID</th>
+                            <td th:text="*{id.value}"></td>
+                        </tr>
+                        <tr>
+                            <th>祝日名</th>
+                            <td th:text="*{holidayName}"></td>
+                        </tr>
+                        <tr>
+                            <th>日付</th>
+                            <td th:text="${(v != null) ? #temporals.format(v, 'yyyy/MM/dd') : ''}"
+                                th:with="v=*{holidayDate}"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    <form th:action="@{'/system/holidays/remove/' + ${holiday.id.value}}" method="post">
+                        <a th:href="@{/system/holidays/edit/{id}(id=${holiday.id.value})}" class="btn btn-default bg-purple">編集</a>
+                        <button type="submit" class="btn btn-danger">削除</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
