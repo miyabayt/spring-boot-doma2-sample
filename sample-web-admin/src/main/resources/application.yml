@@ -77,6 +77,8 @@ jmx:
     enabled: false
 server:
     port: 18081
+    compression:
+        enabled: true
     session:
         timeout: 7200
         # URLにセッションIDを出力しないようにする
