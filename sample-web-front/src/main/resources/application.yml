@@ -81,6 +81,8 @@ management:
         enabled: false
 server:
     port: 18080
+    compression:
+        enabled: true
     session:
         timeout: 7200
         # URLにセッションIDを出力しないようにする
