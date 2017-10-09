@@ -216,12 +216,12 @@ public class CodeHtmlController extends AbstractHtmlController {
     /**
      * 削除処理
      *
-     * @param userId
+     * @param codeId
      * @param attributes
      * @return
      */
-    @PostMapping("/remove/{userId}")
-    public String removeArea(@PathVariable Integer userId, RedirectAttributes attributes) {
+    @PostMapping("/remove/{codeId}")
+    public String removeCode(@PathVariable Integer codeId, RedirectAttributes attributes) {
         throw new UnsupportedOperationException();
     }
 

@@ -243,7 +243,7 @@ public class RoleHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{roleId}")
-    public String removeArea(@PathVariable Integer roleId, RedirectAttributes attributes) {
+    public String removeRole(@PathVariable Integer roleId, RedirectAttributes attributes) {
         // 削除対象を取得する
         val role = roleService.findById(ID.of(roleId));
 

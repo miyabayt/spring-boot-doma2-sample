@@ -260,7 +260,7 @@ public class UserHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{userId}")
-    public String removeArea(@PathVariable Integer userId, RedirectAttributes attributes) {
+    public String removeUser(@PathVariable Integer userId, RedirectAttributes attributes) {
         // 削除対象を取得する
         val user = userService.findById(ID.of(userId));
 
