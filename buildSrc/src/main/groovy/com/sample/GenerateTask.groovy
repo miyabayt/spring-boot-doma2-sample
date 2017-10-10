@@ -29,6 +29,11 @@ class GenerateTask extends DefaultTask {
             return
         }
 
+        def target = null
+        if (project.hasProperty("target")) {
+            target = project.target
+        }
+
         def ext = getProject().getExtensions().findByType(CodeGenPluginExtension)
         def subSystem = StringUtils.lowerCase(project.subSystem.toString())
         def func = StringUtils.capitalize(project.func.toString())
@@ -42,26 +47,38 @@ class GenerateTask extends DefaultTask {
         objects.put("funcStr", funcStr)
 
         def domainTarget = "${ext.domainProjectName}/${ext.srcDirName}"
-        generate("templates/src/Dto.txt", getTargetPath(domainTarget, "/${ext.dtoPackageName}/${subSystem}/${func}", ".java"), objects)
-        generate("templates/src/Dao.txt", getTargetPath(domainTarget, "/${ext.daoPackageName}/${subSystem}/${func}Dao", ".java"), objects)
-        generate("templates/src/Service.txt", getTargetPath(domainTarget, "/${ext.servicePackageName}/${subSystem}/${func}Service", ".java"), objects)
+        if (target == null || target.equals("dto")) {
+            generate("templates/src/Dto.txt", getTargetPath(domainTarget, "/${ext.dtoPackageName}/${subSystem}/${func}", ".java"), objects)
+        }
+        if (target == null || target.equals("dao")) {
+            generate("templates/src/Dao.txt", getTargetPath(domainTarget, "/${ext.daoPackageName}/${subSystem}/${func}Dao", ".java"), objects)
+        }
+        if (target == null || target.equals("service")) {
+            generate("templates/src/Service.txt", getTargetPath(domainTarget, "/${ext.servicePackageName}/${subSystem}/${func}Service", ".java"), objects)
+        }
 
-        def sqlTarget = "${ext.domainProjectName}/${ext.sqlDirName}"
-        generate("templates/sql/select.txt", getTargetPath(sqlTarget, "/${ext.daoPackageName}/${subSystem}/${func}Dao/select", ".sql"), objects)
-        generate("templates/sql/selectAll.txt", getTargetPath(sqlTarget, "/${ext.daoPackageName}/${subSystem}/${func}Dao/selectAll", ".sql"), objects)
-        generate("templates/sql/selectById.txt", getTargetPath(sqlTarget, "/${ext.daoPackageName}/${subSystem}/${func}Dao/selectById", ".sql"), objects)
+        if (target == null || target.equals("dao")) {
+            def sqlTarget = "${ext.domainProjectName}/${ext.sqlDirName}"
+            generate("templates/sql/select.txt", getTargetPath(sqlTarget, "/${ext.daoPackageName}/${subSystem}/${func}Dao/select", ".sql"), objects)
+            generate("templates/sql/selectAll.txt", getTargetPath(sqlTarget, "/${ext.daoPackageName}/${subSystem}/${func}Dao/selectAll", ".sql"), objects)
+            generate("templates/sql/selectById.txt", getTargetPath(sqlTarget, "/${ext.daoPackageName}/${subSystem}/${func}Dao/selectById", ".sql"), objects)
+        }
 
-        def controllerTarget = "${ext.webProjectName}/${ext.srcDirName}/${ext.controllerPackageName}"
-        generate("templates/src/controller/Csv.txt", getTargetPath(controllerTarget, "/${subSystem}/${lowerFunc}s/${func}Csv", ".java"), objects)
-        generate("templates/src/controller/Form.txt", getTargetPath(controllerTarget, "/${subSystem}/${lowerFunc}s/${func}Form", ".java"), objects)
-        generate("templates/src/controller/SearchForm.txt", getTargetPath(controllerTarget, "/${subSystem}/${lowerFunc}s/Search${func}Form", ".java"), objects)
-        generate("templates/src/controller/Validator.txt", getTargetPath(controllerTarget, "/${subSystem}/${lowerFunc}s/${func}FormValidator", ".java"), objects)
-        generate("templates/src/controller/Controller.txt", getTargetPath(controllerTarget, "/${subSystem}/${lowerFunc}s/${func}HtmlController", ".java"), objects)
+        if (target == null || target.equals("controller")) {
+            def controllerTarget = "${ext.webProjectName}/${ext.srcDirName}/${ext.controllerPackageName}"
+            generate("templates/src/controller/Csv.txt", getTargetPath(controllerTarget, "/${subSystem}/${lowerFunc}s/${func}Csv", ".java"), objects)
+            generate("templates/src/controller/Form.txt", getTargetPath(controllerTarget, "/${subSystem}/${lowerFunc}s/${func}Form", ".java"), objects)
+            generate("templates/src/controller/SearchForm.txt", getTargetPath(controllerTarget, "/${subSystem}/${lowerFunc}s/Search${func}Form", ".java"), objects)
+            generate("templates/src/controller/Validator.txt", getTargetPath(controllerTarget, "/${subSystem}/${lowerFunc}s/${func}FormValidator", ".java"), objects)
+            generate("templates/src/controller/Controller.txt", getTargetPath(controllerTarget, "/${subSystem}/${lowerFunc}s/${func}HtmlController", ".java"), objects)
+        }
 
-        def htmlTarget = "${ext.webProjectName}/${ext.htmlDirName}"
-        generate("templates/html/find.txt", getTargetPath(htmlTarget, "/${subSystem}/${lowerFunc}s/find", ".html"), objects)
-        generate("templates/html/new.txt", getTargetPath(htmlTarget, "/${subSystem}/${lowerFunc}s/new", ".html"), objects)
-        generate("templates/html/show.txt", getTargetPath(htmlTarget, "/${subSystem}/${lowerFunc}s/show", ".html"), objects)
+        if (target == null || target.equals("html")) {
+            def htmlTarget = "${ext.webProjectName}/${ext.htmlDirName}"
+            generate("templates/html/find.txt", getTargetPath(htmlTarget, "/${subSystem}/${lowerFunc}s/find", ".html"), objects)
+            generate("templates/html/new.txt", getTargetPath(htmlTarget, "/${subSystem}/${lowerFunc}s/new", ".html"), objects)
+            generate("templates/html/show.txt", getTargetPath(htmlTarget, "/${subSystem}/${lowerFunc}s/show", ".html"), objects)
+        }
     }
 
     Path getTargetPath(String _target, String _fileName, String suffix) {
@@ -76,12 +93,13 @@ class GenerateTask extends DefaultTask {
         def f = path.toFile()
         f.parentFile.mkdirs()
         f.createNewFile()
-        f.write(body)
+        f.write(body, "UTF-8")
     }
 
     String processTemplate(String template, Map<String, Object> objects) {
         def resolver = new ClassLoaderTemplateResolver()
         resolver.setTemplateMode("TEXT")
+        resolver.setCharacterEncoding("UTF-8")
 
         def templateEngine = new TemplateEngine()
         templateEngine.setTemplateResolver(resolver)
