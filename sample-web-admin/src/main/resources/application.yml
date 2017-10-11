@@ -28,6 +28,8 @@ spring:
         # 静的コンテンツをキャッシュする
         cache-period: 604800
         chain:
+            # GZipされているリソースがあれば使う
+            gzipped: true
             strategy:
                 content:
                     # コンテンツのMD5ハッシュ値によるバージョニング
