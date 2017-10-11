@@ -1,6 +1,8 @@
 # Spring Boot Sample Application
 
 [![Build Status](https://travis-ci.org/miyabayt/spring-boot-doma2-sample.svg?branch=master)](https://travis-ci.org/miyabayt/spring-boot-doma2-sample)
+[![Documentation Status](https://readthedocs.org/projects/spring-boot-doma2-sample/badge/?version=latest)](http://spring-boot-doma2-sample.readthedocs.io/ja/latest/?badge=latest)
+[![Job Status](https://inspecode.rocro.com/badges/github.com/miyabayt/spring-boot-doma2-sample/status?token=5RLoJBnCJQuFjszsv4tmRqgI8obDhl6BmLfh4fgtgaQ)](https://inspecode.rocro.com/jobs/github.com/miyabayt/spring-boot-doma2-sample/latest?completed=true)
 
 ## ローカル環境
 
