@@ -105,3 +105,4 @@ gradle-app.setting
 ### modified ###
 node_modules/
 .springBeans
+docs/_build/
