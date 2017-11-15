@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * ページファクトリ
  */
-public class PageFactory {
+public interface PageFactory {
 
     /**
      * インスタンスを生成して返します。
@@ -16,7 +16,5 @@ public class PageFactory {
      * @param <T>
      * @return
      */
-    public static <T> Page<T> create(List<T> data, Pageable pageable, long count) {
-        return new PageImpl<>(data, pageable, count);
-    }
+    <T> Page<T> create(List<T> data, Pageable pageable, long count);
 }

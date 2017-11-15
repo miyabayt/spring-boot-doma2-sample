@@ -10,7 +10,6 @@ import org.springframework.util.Assert;
 import com.sample.domain.dao.system.CodeCategoryDao;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.PageFactory;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.CodeCategory;
 import com.sample.domain.exception.NoDataFoundException;
@@ -40,7 +39,7 @@ public class CodeCategoryService extends BaseTransactionalService {
         val options = createSearchOptions(pageable).count();
         val codeCategories = codeCategoryDao.selectAll(where, options, toList());
 
-        return PageFactory.create(codeCategories, pageable, options.getCount());
+        return pageFactory.create(codeCategories, pageable, options.getCount());
     }
 
     /**

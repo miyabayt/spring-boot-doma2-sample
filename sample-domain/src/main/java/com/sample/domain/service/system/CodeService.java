@@ -10,7 +10,6 @@ import org.springframework.util.Assert;
 import com.sample.domain.dao.system.CodeDao;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.PageFactory;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Code;
 import com.sample.domain.exception.NoDataFoundException;
@@ -40,7 +39,7 @@ public class CodeService extends BaseTransactionalService {
         val options = createSearchOptions(pageable).count();
         val codes = codeDao.selectAll(where, options, toList());
 
-        return PageFactory.create(codes, pageable, options.getCount());
+        return pageFactory.create(codes, pageable, options.getCount());
     }
 
     /**

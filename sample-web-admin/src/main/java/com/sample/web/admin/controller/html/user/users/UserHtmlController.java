@@ -1,7 +1,7 @@
 package com.sample.web.admin.controller.html.user.users;
 
-import static com.sample.web.base.WebConst.DELETED;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
+import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
 import java.util.HashMap;
 import java.util.List;
@@ -268,7 +268,7 @@ public class UserHtmlController extends AbstractHtmlController {
         userService.delete(user.getId());
 
         // 削除成功メッセージ
-        attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(DELETED));
+        attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));
 
         return "redirect:/user/users/find";
     }

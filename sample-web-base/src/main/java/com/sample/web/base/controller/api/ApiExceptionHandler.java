@@ -1,6 +1,6 @@
 package com.sample.web.base.controller.api;
 
-import static com.sample.web.base.WebConst.VALIDATION_ERROR;
+import static com.sample.web.base.WebConst.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -86,7 +86,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String parameterDump = this.dumpParameterMap(request.getParameterMap());
         log.info("no data found. dump: {}", parameterDump);
 
-        val message = MessageUtils.getMessage("NoDataFound.message", null, "no data found", request.getLocale());
+        val message = MessageUtils.getMessage(NO_DATA_FOUND_ERROR, null, "no data found", request.getLocale());
         val errorResource = new ErrorResourceImpl();
         errorResource.setRequestId(String.valueOf(MDC.get("X-Track-Id")));
         errorResource.setMessage(message);
@@ -114,7 +114,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(String.format("unexpected error has occurred. dump: %s", parameterDump), ex);
 
         val locale = request.getLocale();
-        val message = MessageUtils.getMessage("UnexpectedError.message", null, "unexpected error", locale);
+        val message = MessageUtils.getMessage(UNEXPECTED_ERROR, null, "unexpected error", locale);
         val errorResource = new ErrorResourceImpl();
         errorResource.setRequestId(String.valueOf(MDC.get("X-Track-Id")));
         errorResource.setMessage(message);

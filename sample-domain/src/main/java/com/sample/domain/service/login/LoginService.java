@@ -100,7 +100,8 @@ public class LoginService extends BaseTransactionalService {
     }
 
     /**
-     *
+     * パスワードを更新します。
+     * 
      * @param token
      * @param password
      * @return

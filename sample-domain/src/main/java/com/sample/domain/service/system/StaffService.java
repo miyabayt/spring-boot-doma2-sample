@@ -11,7 +11,6 @@ import com.sample.domain.dao.system.StaffDao;
 import com.sample.domain.dao.system.StaffRoleDao;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.PageFactory;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Staff;
 import com.sample.domain.dto.system.StaffRole;
@@ -45,7 +44,7 @@ public class StaffService extends BaseTransactionalService {
         val options = createSearchOptions(pageable).count();
         val staffs = staffDao.selectAll(where, options, toList());
 
-        return PageFactory.create(staffs, pageable, options.getCount());
+        return pageFactory.create(staffs, pageable, options.getCount());
     }
 
     /**

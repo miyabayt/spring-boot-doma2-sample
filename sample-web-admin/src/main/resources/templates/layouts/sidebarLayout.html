@@ -91,6 +91,10 @@
                         <li>現在地</li>
                     </ol>
                 </section>
+                <!--/* グローバルメッセージ */-->
+                <section class="content-header" th:remove="${#strings.isEmpty(str)}? body : none" th:with="str=${GlobalMessage}">
+                    <p th:text="${str}" class="alert alert-danger"></p>
+                </section>
                 <!--/* コンテンツ */-->
                 <section layout:fragment="content" class="content">
                     <!--/* コンテンツ1 */-->

@@ -22,7 +22,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -31,15 +30,22 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import com.sample.domain.dto.common.DefaultPageFactoryImpl;
 import com.sample.domain.dto.common.DomaDto;
 import com.sample.domain.dto.common.ID;
+import com.sample.domain.dto.common.PageFactory;
 import com.sample.web.base.aop.*;
 import com.sample.web.base.controller.LocalDateConverter;
 import com.sample.web.base.controller.LocalDateTimeConverter;
+import com.sample.web.base.controller.api.resource.DefaultResourceFactoryImpl;
+import com.sample.web.base.controller.api.resource.ResourceFactory;
 import com.sample.web.base.filter.ClearMDCFilter;
 import com.sample.web.base.filter.CustomCharacterEncodingFilter;
 import com.sample.web.base.filter.LoginUserTrackingFilter;
@@ -54,14 +60,6 @@ import lombok.val;
  */
 public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         implements EmbeddedServletContainerCustomizer {
-
-    @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        // 'Accept'リクエストヘッダを無視する
-        configurer.ignoreAcceptHeader(true)
-                // デフォルトはHTML形式でレスポンスする
-                .defaultContentType(MediaType.TEXT_HTML);
-    }
 
     @Override
     public void customize(ConfigurableEmbeddedServletContainer container) {
@@ -286,5 +284,15 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         registry.addInterceptor(setDoubleSubmitCheckTokenInterceptor());
         registry.addInterceptor(setModelAndViewInterceptor());
         registry.addInterceptor(authorizationInterceptor());
+    }
+
+    @Bean
+    public PageFactory pageFactory() {
+        return new DefaultPageFactoryImpl();
+    }
+
+    @Bean
+    public ResourceFactory resourceFactory() {
+        return new DefaultResourceFactoryImpl();
     }
 }

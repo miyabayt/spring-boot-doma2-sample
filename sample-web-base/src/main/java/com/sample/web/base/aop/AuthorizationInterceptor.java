@@ -5,8 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.sample.web.base.security.authorization.PermissionKeyResolver;
 import com.sample.web.base.util.WebSecurityUtils;
@@ -15,7 +13,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
+public class AuthorizationInterceptor extends BaseHandlerInterceptor {
 
     @Autowired
     PermissionKeyResolver permissionKeyResolver;
@@ -24,6 +22,11 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         // コントローラーの動作前
+        if (isRestController(handler)) {
+            // APIの場合はスキップする
+            return true;
+        }
+
         val permissionKey = permissionKeyResolver.resolve(handler);
 
         if (permissionKey != null && !WebSecurityUtils.hasRole(permissionKey)) {
@@ -33,18 +36,5 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         }
 
         return true;
-    }
-
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-            ModelAndView modelAndView) throws Exception {
-        // コントローラーの動作後
-
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-            throws Exception {
-        // 処理完了後
     }
 }

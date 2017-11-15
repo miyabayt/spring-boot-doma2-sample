@@ -17,7 +17,7 @@ public class [[${upperFuncName}]]Form extends BaseForm { // TODO
 
     Integer id;
 
-    // [[${funcStr}]]キー
+    // [[${funcStr}]]名
     @NotEmpty
     String [[${lowerFuncName}]]Name;
 }

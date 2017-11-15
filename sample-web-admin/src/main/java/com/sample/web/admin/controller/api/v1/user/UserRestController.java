@@ -1,5 +1,7 @@
 package com.sample.web.admin.controller.api.v1.user;
 
+import static com.sample.web.base.WebConst.MESSAGE_SUCCESS;
+
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,6 @@ import com.sample.web.base.controller.api.AbstractRestController;
 import com.sample.web.base.controller.api.resource.PageableResource;
 import com.sample.web.base.controller.api.resource.PageableResourceImpl;
 import com.sample.web.base.controller.api.resource.Resource;
-import com.sample.web.base.controller.api.resource.ResourceFactory;
 import com.sample.web.base.exception.ValidationErrorException;
 
 @RestController
@@ -44,7 +45,7 @@ public class UserRestController extends AbstractRestController {
         Page<User> users = userService.findAll(new User(), Pageable.DEFAULT_PAGEABLE);
 
         PageableResource resource = modelMapper.map(users, PageableResourceImpl.class);
-        resource.setMessage(getMessage("Success"));
+        resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
         return resource;
     }
@@ -60,9 +61,9 @@ public class UserRestController extends AbstractRestController {
         // 1件取得する
         User user = userService.findById(ID.of(userId));
 
-        Resource resource = ResourceFactory.create();
+        Resource resource = resourceFactory.create();
         resource.setData(Arrays.asList(user));
-        resource.setMessage(getMessage("Success"));
+        resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
         return resource;
     }
@@ -82,9 +83,9 @@ public class UserRestController extends AbstractRestController {
         // 1件追加する
         User user = userService.create(inputUser);
 
-        Resource resource = ResourceFactory.create();
+        Resource resource = resourceFactory.create();
         resource.setData(Arrays.asList(user));
-        resource.setMessage(getMessage("Success"));
+        resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
         return resource;
     }
@@ -105,9 +106,9 @@ public class UserRestController extends AbstractRestController {
         inputUser.setId(ID.of(userId));
         User user = userService.update(inputUser);
 
-        Resource resource = ResourceFactory.create();
+        Resource resource = resourceFactory.create();
         resource.setData(Arrays.asList(user));
-        resource.setMessage(getMessage("Success"));
+        resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
         return resource;
     }
@@ -122,9 +123,9 @@ public class UserRestController extends AbstractRestController {
         // 1件取得する
         User user = userService.delete(ID.of(userId));
 
-        Resource resource = ResourceFactory.create();
+        Resource resource = resourceFactory.create();
         resource.setData(Arrays.asList(user));
-        resource.setMessage(getMessage("Success"));
+        resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
         return resource;
     }
