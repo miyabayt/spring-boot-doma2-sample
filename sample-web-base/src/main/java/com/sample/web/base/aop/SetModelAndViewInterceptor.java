@@ -15,10 +15,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.sample.common.util.MessageUtils;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.CodeCategory;
 import com.sample.domain.service.system.CodeCategoryService;
 
@@ -26,22 +24,20 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SetModelAndViewInterceptor extends HandlerInterceptorAdapter {
+public class SetModelAndViewInterceptor extends BaseHandlerInterceptor {
 
     @Autowired
     CodeCategoryService codeCategoryService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
-        // コントローラーの動作前
-        return true;
-    }
-
-    @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
             ModelAndView modelAndView) throws Exception {
         // コントローラーの動作後
+        if (isRestController(handler)) {
+            // APIの場合はスキップする
+            return;
+        }
+
         if (modelAndView == null) {
             return;
         }
@@ -62,12 +58,6 @@ public class SetModelAndViewInterceptor extends HandlerInterceptorAdapter {
         retainValidateErrors(modelAndView);
     }
 
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-            throws Exception {
-        // 処理完了後
-    }
-
     /**
      * コード分類一覧を画面に設定する
      * 
@@ -76,11 +66,8 @@ public class SetModelAndViewInterceptor extends HandlerInterceptorAdapter {
     protected List<CodeCategory> getCodeCategories() {
         List<CodeCategory> data = Collections.emptyList();
 
-        // 検索条件を作成する
-        val where = new CodeCategory();
-
         // コード分類をすべて取得する
-        val codeCategories = codeCategoryService.findAll(where, Pageable.NO_LIMIT_PAGEABLE);
+        val codeCategories = codeCategoryService.fetchAll();
 
         if (codeCategories != null) {
             data = codeCategories.getData();
@@ -107,6 +94,7 @@ public class SetModelAndViewInterceptor extends HandlerInterceptorAdapter {
                     val formName = br.getObjectName();
                     val key = BindingResult.MODEL_KEY_PREFIX + formName;
                     model.addAttribute(key, errors);
+                    model.addAttribute(GLOBAL_MESSAGE, MessageUtils.getMessage(VALIDATION_ERROR));
                 }
             }
         }

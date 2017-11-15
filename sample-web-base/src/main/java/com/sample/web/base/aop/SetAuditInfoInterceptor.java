@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.sample.domain.dao.AuditInfoHolder;
 
@@ -22,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
  * ログインユーザーを監査情報ホルダーに設定する
  */
 @Slf4j
-public class SetAuditInfoInterceptor extends HandlerInterceptorAdapter {
+public class SetAuditInfoInterceptor extends BaseHandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -49,12 +48,6 @@ public class SetAuditInfoInterceptor extends HandlerInterceptorAdapter {
 
         // 監査情報をクリアする
         AuditInfoHolder.clear();
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-            throws Exception {
-        // 処理完了後
     }
 
     /**

@@ -10,7 +10,6 @@ import org.springframework.util.Assert;
 import com.sample.domain.dao.system.MailTemplateDao;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.PageFactory;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.MailTemplate;
 import com.sample.domain.exception.NoDataFoundException;
@@ -40,7 +39,7 @@ public class MailTemplateService extends BaseTransactionalService {
         val options = createSearchOptions(pageable).count();
         val mailTemplates = mailTemplateDao.selectAll(where, options, toList());
 
-        return PageFactory.create(mailTemplates, pageable, options.getCount());
+        return pageFactory.create(mailTemplates, pageable, options.getCount());
     }
 
     /**

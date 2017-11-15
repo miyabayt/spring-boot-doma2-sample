@@ -10,7 +10,6 @@ import org.springframework.util.Assert;
 import com.sample.domain.dao.system.HolidayDao;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.PageFactory;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Holiday;
 import com.sample.domain.exception.NoDataFoundException;
@@ -40,7 +39,7 @@ public class HolidayService extends BaseTransactionalService { // TODO
         val options = createSearchOptions(pageable).count();
         val holidays = holidayDao.selectAll(where, options, toList());
 
-        return PageFactory.create(holidays, pageable, options.getCount());
+        return pageFactory.create(holidays, pageable, options.getCount());
     }
 
     /**

@@ -10,7 +10,6 @@ import org.springframework.util.Assert;
 import com.sample.domain.dao.system.PermissionDao;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.PageFactory;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Permission;
 import com.sample.domain.exception.NoDataFoundException;
@@ -42,7 +41,7 @@ public class PermissionService extends BaseTransactionalService {
         val options = createSearchOptions(pageable).count();
         val permissions = permissionDao.selectAll(where, options, toList());
 
-        return PageFactory.create(permissions, pageable, options.getCount());
+        return pageFactory.create(permissions, pageable, options.getCount());
     }
 
     /**

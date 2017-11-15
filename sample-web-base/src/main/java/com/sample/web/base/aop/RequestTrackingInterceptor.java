@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.MDC;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.sample.common.XORShiftRandom;
 
@@ -18,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  * 処理時間をDEBUGログに出力する
  */
 @Slf4j
-public class RequestTrackingInterceptor extends HandlerInterceptorAdapter {
+public class RequestTrackingInterceptor extends BaseHandlerInterceptor {
 
     private static final ThreadLocal<Long> startTimeHolder = new ThreadLocal<>();
 
@@ -56,12 +55,6 @@ public class RequestTrackingInterceptor extends HandlerInterceptorAdapter {
 
         // 破棄する
         startTimeHolder.remove();
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-            throws Exception {
-        // 処理完了後
     }
 
     /**

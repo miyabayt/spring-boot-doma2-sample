@@ -1,7 +1,6 @@
 package com.sample.domain.dto.system;
 
 import org.seasar.doma.*;
-import org.springframework.cache.annotation.Cacheable;
 
 import com.sample.domain.dto.common.DomaDtoImpl;
 import com.sample.domain.dto.common.ID;
@@ -13,7 +12,6 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Cacheable
 public class Code extends DomaDtoImpl {
 
     private static final long serialVersionUID = 8207242972390517957L;

@@ -19,7 +19,6 @@ import com.sample.domain.dao.system.RoleDao;
 import com.sample.domain.dao.system.RolePermissionDao;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.PageFactory;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Role;
 import com.sample.domain.dto.system.RolePermission;
@@ -53,7 +52,7 @@ public class RoleService extends BaseTransactionalService {
         val options = createSearchOptions(pageable).count();
         val roles = roleDao.selectAll(where, options, toList());
 
-        return PageFactory.create(roles, pageable, options.getCount());
+        return pageFactory.create(roles, pageable, options.getCount());
     }
 
     /**

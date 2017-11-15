@@ -13,7 +13,6 @@ import com.sample.domain.dao.user.UserDao;
 import com.sample.domain.dao.user.UserRoleDao;
 import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.PageFactory;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.user.User;
 import com.sample.domain.dto.user.UserRole;
@@ -50,7 +49,7 @@ public class UserService extends BaseTransactionalService {
         val options = createSearchOptions(pageable).count();
         val users = userDao.selectAll(where, options, toList());
 
-        return PageFactory.create(users, pageable, options.getCount());
+        return pageFactory.create(users, pageable, options.getCount());
     }
 
     /**

@@ -64,11 +64,6 @@ spring:
         properties:
             mail:
                 from: from@sample.com
-security:
-    basic:
-        # spring-securityのベーシック認証を無効化する
-        enabled: false
-    enable-csrf: true
 doma:
     dialect: mysql
     # 小文字のスネークケースに変換する（firstName → first_name）

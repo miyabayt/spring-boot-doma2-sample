@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.sample.domain.dao.DoubleSubmitCheckTokenHolder;
 import com.sample.web.base.security.DoubleSubmitCheckToken;
@@ -19,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  * 二重送信防止チェックのトークンをセッションに設定する
  */
 @Slf4j
-public class SetDoubleSubmitCheckTokenInterceptor extends HandlerInterceptorAdapter {
+public class SetDoubleSubmitCheckTokenInterceptor extends BaseHandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

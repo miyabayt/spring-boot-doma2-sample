@@ -19,7 +19,13 @@ public interface WebConst {
 
     String DOUBLE_SUBMIT_ERROR = "DoubleSubmitError";
 
-    String DELETED = "Deleted";
+    String NO_DATA_FOUND_ERROR = "NoDataFoundError";
+
+    String UNEXPECTED_ERROR = "UnexpectedError";
+
+    String MESSAGE_DELETED = "Deleted";
+
+    String MESSAGE_SUCCESS = "Success";
 
     /** ---- View ---- **/
     String ERROR_VIEW = "error";
@@ -68,4 +74,6 @@ public interface WebConst {
     String WEBJARS_URL = "/webjars/**";
 
     String STATIC_RESOURCES_URL = "/static/**";
+
+    String API_BASE_URL = "/api/**";
 }

@@ -1,7 +1,7 @@
 package com.sample.web.admin.controller.html.system.staffs;
 
-import static com.sample.web.base.WebConst.DELETED;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
+import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
 import java.util.List;
 
@@ -249,7 +249,7 @@ public class StaffHtmlController extends AbstractHtmlController {
         staffService.delete(staff.getId());
 
         // 削除成功メッセージ
-        attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(DELETED));
+        attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));
 
         return "redirect:/system/staffs/find";
     }

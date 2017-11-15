@@ -25,6 +25,9 @@ import com.sample.web.base.util.RequestUtils;
 
 import lombok.val;
 
+/**
+ * 基底セキュリティコンフィグ
+ */
 public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${application.security.secureCookie:false}")
