@@ -17,6 +17,8 @@ import com.sample.domain.service.BaseTransactionalService;
 
 import lombok.val;
 
+import java.util.List;
+
 /**
  * コード分類サービス
  */
@@ -40,6 +42,17 @@ public class CodeCategoryService extends BaseTransactionalService {
         val codeCategories = codeCategoryDao.selectAll(where, options, toList());
 
         return pageFactory.create(codeCategories, pageable, options.getCount());
+    }
+
+    /**
+     * コード分類を全件取得します。
+     *
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<CodeCategory> fetchAll() {
+        val codeCategories = codeCategoryDao.fetchAll();
+        return codeCategories;
     }
 
     /**
