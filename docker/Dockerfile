@@ -3,9 +3,13 @@ FROM centos:centos6
 RUN yum clean all
 RUN yum -y update
 
+# epel install
+RUN rpm -ivh http://downloads.naulinux.ru/pub/SLCE/6x/x86_64/CyrEd/RPMS/epel-release-6-8.1.noarch.rpm
+
 RUN yum -y install xz zip unzip wget
 RUN yum -y install openssh-server openssh-clients passwd
 RUN yum -y install mysql mysql-server
+RUN yum -y install supervisor --enablerepo=epel
 
 RUN sed -ri 's/^#PermitEmptyPasswords no/PermitEmptyPasswords yes/' /etc/ssh/sshd_config
 RUN sed -ri 's/^#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
@@ -32,11 +36,7 @@ RUN chown mysql.mysql /var/lib/mysql/tmp
 RUN mkdir -p /var/log/mysql
 RUN chown mysql.mysql /var/log/mysql
 
-RUN yum install -y python-setuptools
-RUN easy_install supervisor
-
 # supervisordの設定
-RUN echo_supervisord_conf > /etc/supervisord.conf
 RUN echo '[include]' >> /etc/supervisord.conf
 RUN echo 'files = supervisord/conf/*.conf' >> /etc/supervisord.conf
 RUN mkdir -p  /etc/supervisord/conf/
