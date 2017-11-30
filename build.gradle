@@ -12,7 +12,6 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "io.spring.gradle:propdeps-plugin:0.0.9.RELEASE" // optionalとprovidedが使えるようにする
-        classpath "com.bmuschko:gradle-docker-plugin:3.0.12" // Dockerイメージをビルドできるようにする
         classpath "com.github.tntim96:fakesmtp:2.0" // ローカルでダミーのSMTPサーバーを立てる
         classpath "com.avast.gradle:gradle-docker-compose-plugin:${dockerComposePluginVersion}"
     }
