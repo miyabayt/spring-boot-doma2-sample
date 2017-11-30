@@ -27,6 +27,14 @@ public interface CodeCategoryDao {
             final Collector<CodeCategory, ?, R> collector);
 
     /**
+     * コード分類定義を全件取得します。
+     *
+     * @return
+     */
+    @Select
+    List<CodeCategory> fetchAll();
+
+    /**
      * コード分類を1件取得します。
      *
      * @param id
