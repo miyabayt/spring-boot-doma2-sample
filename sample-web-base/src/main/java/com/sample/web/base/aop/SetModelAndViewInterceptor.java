@@ -64,16 +64,9 @@ public class SetModelAndViewInterceptor extends BaseHandlerInterceptor {
      * @return
      */
     protected List<CodeCategory> getCodeCategories() {
-        List<CodeCategory> data = Collections.emptyList();
-
         // コード分類をすべて取得する
         val codeCategories = codeCategoryService.fetchAll();
-
-        if (codeCategories != null) {
-            data = codeCategories.getData();
-        }
-
-        return data;
+        return codeCategories;
     }
 
     /**
