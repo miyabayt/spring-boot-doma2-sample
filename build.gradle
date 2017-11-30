@@ -1,6 +1,7 @@
 buildscript {
     ext {
         springBootVersion = "1.5.6.RELEASE"
+        dockerComposePluginVersion = "0.6.6"
     }
     repositories {
         mavenLocal()
@@ -12,7 +13,8 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "io.spring.gradle:propdeps-plugin:0.0.9.RELEASE" // optionalとprovidedが使えるようにする
         classpath "com.bmuschko:gradle-docker-plugin:3.0.12" // Dockerイメージをビルドできるようにする
-        classpath "com.github.tntim96:fakesmtp:2.0" // ローカルでダミーのSMTPサーバを立てる
+        classpath "com.github.tntim96:fakesmtp:2.0" // ローカルでダミーのSMTPサーバーを立てる
+        classpath "com.avast.gradle:gradle-docker-compose-plugin:${dockerComposePluginVersion}"
     }
 }
 
@@ -290,34 +292,10 @@ task startFakeSmtpServer(type: JavaExec) {
     main = "com.nilhcem.fakesmtp.FakeSMTP"
 }
 
-apply plugin: "com.bmuschko.docker-remote-api"
+apply plugin: "docker-compose"
 
-import com.bmuschko.gradle.docker.tasks.container.*
-import com.bmuschko.gradle.docker.tasks.image.*
-
-task buildDockerImage(type: DockerBuildImage) {
-    inputDir = file("$projectDir/docker")
-    tag = "sample"
-}
-
-task createDockerContainer(type: DockerCreateContainer) {
-    dependsOn buildDockerImage
-    targetImageId { buildDockerImage.getImageId() }
-    portBindings = ["22:22", "3306:3306"]
-}
-
-task startDockerContainer(type: DockerStartContainer) {
-    dependsOn createDockerContainer
-    targetContainerId { createDockerContainer.getContainerId() }
-}
-
-task stopDockerContainer(type: DockerStopContainer) {
-    targetContainerId { createDockerContainer.getContainerId() }
-}
-
-task startDockerBeforeTest(type: Test) {
-    dependsOn startDockerContainer
-    finalizedBy stopDockerContainer
+dockerCompose {
+    useComposeFiles = ["docker/docker-compose.yml"]
 }
 
 apply plugin: com.sample.CodeGenPlugin
