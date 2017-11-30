@@ -17,10 +17,9 @@ cache:
 services:
   - docker
 
-before_script:
+before_install:
   - sudo /etc/init.d/mysql stop
-  - docker build -t sample ./docker
-  - docker run -t -d -p 3306:3306 sample /usr/bin/supervisord
+  - docker-compose -f docker/docker-compose.yml up -d
 
 script:
   - ./gradlew clean build --info
