@@ -2,9 +2,7 @@ package com.sample.web.base.aop;
 
 import static com.sample.web.base.WebConst.*;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sample.common.util.MessageUtils;
+import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.system.CodeCategory;
 import com.sample.domain.service.system.CodeCategoryService;
 
@@ -63,10 +62,9 @@ public class SetModelAndViewInterceptor extends BaseHandlerInterceptor {
      * 
      * @return
      */
-    protected List<CodeCategory> getCodeCategories() {
+    protected Page<CodeCategory> getCodeCategories() {
         // コード分類をすべて取得する
-        val codeCategories = codeCategoryService.fetchAll();
-        return codeCategories;
+        return codeCategoryService.fetchAll();
     }
 
     /**
