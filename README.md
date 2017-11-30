@@ -50,26 +50,16 @@ MySQLなどのサーバーを立ち上げる。
 #### Windows10、MacOSXの場合
 ```bash
 $ cd /path/to/spring-boot-doma2-sample
-$ ./gradlew startDockerContainer
+$ ./gradlew composeUp
 ```
 
 #### Docker Toolboxの場合
-* `Docker CLI`でbuildとrunを実行する。
-```bash
-$ cd /path/to/spring-boot-doma2-sample/docker
-$ docker build --no-cache --rm -t sample:latest .
-```
-
 * `application-development.yml`を編集する。
   * `spring.datasource.url`の`127.0.0.1:3306`を`192.168.99.100:3306`に変更する。
+* `Docker CLI`でdocker-composeを実行する。
 ```bash
-$ # 初回の場合
-$ docker run -it -p 22:22 -p 3306:3306 --name sample sample:latest /usr/bin/supervisord
-# dockerから抜ける
-ctrl + pしてからctrl押しっぱなしでqを押す
-
-$ # コンテナが存在する場合
-$ docker start sample
+$ cd /path/to/spring-boot-doma2-sample/docker
+$ docker-compose up
 ```
 
 ### FakeSMTPの起動
@@ -122,7 +112,7 @@ mysql -h 127.0.0.1 -P 3306 -uroot -ppassw0rd sample
 mysql -h 192.168.99.100 -P 3306 -uroot -ppassw0rd sample
 ```
 
-### コード自動生成
+### コード自動生成（おまけ）
 ```bash
 $ cd /path/to/spring-boot-doma2-sample
 $ ./gradlew codegen -PsubSystem=system -Pfunc=client -PfuncStr=取引先 [-Ptarget=dao|dto|service|controller|html]
