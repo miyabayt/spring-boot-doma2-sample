@@ -1,10 +1,13 @@
 package com.sample.domain.dto.common;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
  * ページファクトリのデフォルト実装
  */
+@Component
 public class DefaultPageFactoryImpl implements PageFactory {
 
     /**
