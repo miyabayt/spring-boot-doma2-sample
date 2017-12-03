@@ -7,7 +7,7 @@ spring:
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/sample?characterEncoding=UTF-8
         username: root
-        password: passw0rd
+        password: ENC(RoJB/D+AnvFr9kKGpzYgoiMzW83OiI4V) #passw0rd
     session:
         jdbc:
             # spring-session-jdbcに必要なテーブルを作成する
@@ -15,6 +15,9 @@ spring:
     resources:
         # キャッシュの無効化
         cache-period: 0
+jasypt:
+    encryptor:
+        password: masterkey
 flyway:
     enable: true
     baseline-on-migrate: true

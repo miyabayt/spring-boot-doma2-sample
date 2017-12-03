@@ -5,7 +5,7 @@ spring:
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/sample?characterEncoding=UTF-8
         username: root
-        password: passw0rd
+        password: ENC(RoJB/D+AnvFr9kKGpzYgoiMzW83OiI4V) #passw0rd
     mail:
         default-encoding: ISO-2022-JP
         protocol: smtp
@@ -16,6 +16,9 @@ spring:
         properties:
             mail:
                 from: from@test.com
+jasypt:
+    encryptor:
+        password: masterkey
 logging:
     # ログ出力先を指定する
     file: /var/log/sample/app.log

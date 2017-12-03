@@ -205,6 +205,9 @@ project(":sample-web-base") {
         // EhCache
         compile "net.sf.ehcache:ehcache"
 
+        // jasypt
+        compile 'com.github.ulisesbocchio:jasypt-spring-boot-starter:1.16'
+
         // webjars
         compile "org.webjars:webjars-locator"
         compile "org.webjars:bootstrap:3.3.7"
