@@ -36,6 +36,14 @@ subprojects {
     [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.encoding = "UTF-8"
     [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.compilerArgs = ["-Xlint:all"]
 
+    sourceSets {
+        test.resources {
+            // テスト時にsrc/main/resourcesにある設定ファイルを使用する
+            srcDirs "src/main/resources"
+            srcDirs "src/test/resources"
+        }
+    }
+
     repositories {
         mavenCentral()
         jcenter()
