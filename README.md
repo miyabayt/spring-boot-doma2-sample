@@ -43,7 +43,6 @@ $ socat -4 TCP-LISTEN:2375,fork UNIX-CONNECT:/var/run/docker.sock &
 #### Docker Toolboxの場合
 * 後述の`Dockerの起動`の手順を実施する。
 
-
 ### Dockerの起動
 MySQLなどのサーバーを立ち上げる。
 
