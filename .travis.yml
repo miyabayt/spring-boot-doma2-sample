@@ -4,6 +4,10 @@ language: java
 
 jdk: oraclejdk8
 
+env:
+  global:
+    - LANG="ja_JP.utf8" _JAVA_OPTIONS="-Duser.language=ja -Duser.country=JP"
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -18,8 +22,10 @@ services:
   - docker
 
 before_install:
+  - sudo apt-get update
+  - sudo apt-get install language-pack-ja
   - sudo /etc/init.d/mysql stop
   - docker-compose -f docker/docker-compose.yml up -d
 
 script:
-  - ./gradlew clean build --info
+  - ./gradlew clean test --info
