@@ -23,5 +23,6 @@ User Documents
    double-submit-check
    business
    mail
+   jasypt
    migration
    codegen
