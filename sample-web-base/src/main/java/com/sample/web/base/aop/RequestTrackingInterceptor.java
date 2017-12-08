@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.MDC;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.sample.common.XORShiftRandom;
 
@@ -44,9 +43,9 @@ public class RequestTrackingInterceptor extends BaseHandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-            ModelAndView modelAndView) throws Exception {
-        // コントローラーの動作後
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+            throws Exception {
+        // 処理完了後
 
         val beforeNanoSec = startTimeHolder.get();
         val elapsedNanoSec = System.nanoTime() - beforeNanoSec;

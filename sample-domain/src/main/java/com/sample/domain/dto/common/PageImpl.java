@@ -1,6 +1,7 @@
 package com.sample.domain.dto.common;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.Getter;
@@ -29,7 +30,7 @@ public class PageImpl<T> implements Page<T>, Serializable {
      * @param pageable
      */
     public PageImpl(List<T> data, Pageable pageable, long count) {
-        this.data = data;
+        this.data = (data == null) ? Collections.emptyList() : data;
         this.count = count;
         this.page = pageable.getPage();
         this.perpage = pageable.getPerpage();
