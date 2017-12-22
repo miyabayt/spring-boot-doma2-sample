@@ -32,3 +32,7 @@ logging:
 # アプリケーションの設定
 application:
     fileUploadLocation: build/sample
+    cors:
+        allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, X-XSRF-TOKEN"
+        allowedMethods: "POST, GET, PUT, OPTIONS, DELETE"
+        allowedOrigins: "*" # CORSを許可するドメイン名を指定する
