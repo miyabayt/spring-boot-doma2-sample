@@ -9,6 +9,7 @@ import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.PropertyInfo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.web.servlet.ErrorPage;
@@ -60,6 +61,21 @@ import lombok.val;
  */
 public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         implements EmbeddedServletContainerCustomizer {
+
+    @Value("${application.cors.allowCredentials:true}")
+    Boolean allowCredentials;
+
+    @Value("#{'${application.cors.allowedHeaders:*}'.split(',')}")
+    List<String> allowedHeaders;
+
+    @Value("#{'${application.cors.allowedMethods:*}'.split(',')}")
+    List<String> allowedMethods;
+
+    @Value("#{'${application.cors.allowedOrigins:*}'.split(',')}")
+    List<String> corsAllowedOrigins;
+
+    @Value("${application.cors.maxAge:86400}")
+    Long maxAge;
 
     @Override
     public void customize(ConfigurableEmbeddedServletContainer container) {
@@ -121,15 +137,11 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
     @Bean
     public FilterRegistrationBean corsFilter() {
         val config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(getCorsAllowedOrigins());
-        config.setMaxAge(86400L);
-
-        val allowedHeaders = Arrays.asList("Origin", "X-Requested-With", "Content-Type", "Accept", "X-XSRF-TOKEN");
+        config.setAllowCredentials(allowCredentials);
         config.setAllowedHeaders(allowedHeaders);
-
-        val allowedMethods = Arrays.asList("POST", "GET", "PUT", "OPTIONS", "DELETE");
+        config.setAllowedOrigins(corsAllowedOrigins);
         config.setAllowedMethods(allowedMethods);
+        config.setMaxAge(maxAge);
 
         val source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
@@ -139,9 +151,6 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         return bean;
     }
 
-    protected abstract List<String> getCorsAllowedOrigins();
-
-    @Bean
     public FilterRegistrationBean loginUserTrackingFilterBean() {
         val filter = new LoginUserTrackingFilter();
         filter.setExcludeUrlPatterns(Arrays.asList(WEBJARS_URL, STATIC_RESOURCES_URL));
