@@ -217,6 +217,7 @@ project(":sample-web-base") {
         compile "org.webjars:webjars-locator"
         compile "org.webjars:bootstrap:3.3.7"
         compile "org.webjars:jquery:2.2.4"
+        compile "org.webjars:jquery-validation:1.17.0"
         compile "org.webjars:bootstrap-datepicker:1.7.1"
         compile("org.webjars.bower:iCheck:1.0.2") {
             exclude module: "jquery"
