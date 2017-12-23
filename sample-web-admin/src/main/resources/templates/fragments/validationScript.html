@@ -1,0 +1,10 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <th:block th:fragment="script">
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"
+                    th:src="@{/webjars/jquery-validation/jquery.validate.min.js}"></script>
+            <script type="text/javascript" src="../public/static/js/common/validation.js"
+                    th:src="@{/static/js/common/validation.js}"></script>
+        </th:block>
+    </body>
+</html>
