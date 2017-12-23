@@ -19,7 +19,7 @@
         </section>
         <section layout:fragment="content">
             <div class="box">
-                <form th:object="${holidayForm}" th:action="${action}"
+                <form th:object="${holidayForm}" th:action="${action}" id="form1"
                       th:with="action=${holidayForm.isNew()} ? @{/system/holidays/new} : @{/system/holidays/edit/{id}(id=*{id})}"
                       class="form-horizontal" enctype="multipart/form-data" method="post">
                     <div class="box-body">
@@ -40,8 +40,11 @@
                     th:src="@{/webjars/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
             <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/locales/bootstrap-datepicker.ja.js"
                     th:src="@{/webjars/bootstrap-datepicker/locales/bootstrap-datepicker.ja.min.js}"></script>
+            <script th:replace="~{fragments/validationScript :: script}" />
+            <script type="text/javascript" src="../public/static/js/system/holidays.js"
+                    th:src="@{/static/js/system/holidays.js}"></script>
             <script type="text/javascript" th:inline="javascript">
-                $(document).ready(function() {
+                $(function() {
                     $('#holidayDate').datepicker({
                         language: "ja",
                         format: "yyyy/mm/dd",

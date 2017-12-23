@@ -16,10 +16,10 @@
                 <li><a th:href="@{/user/users/find(page=1)}">顧客検索</a></li>
                 <li th:with="text=${userForm.isNew()} ? '顧客登録' : '顧客編集'" th:text="${text}">顧客登録</li>
             </ol>
-        </section>        
+        </section>
         <section layout:fragment="content">
             <div class="box">
-                <form th:object="${userForm}" th:action="${action}"
+                <form th:object="${userForm}" th:action="${action}" id="form1"
                       th:with="action=${userForm.isNew()} ? @{/user/users/new} : @{/user/users/edit/{id}(id=*{id})}"
                       class="form-horizontal" enctype="multipart/form-data" method="post">
                     <div class="box-body">
@@ -43,4 +43,9 @@
             </div>
         </section>
     </body>
+    <div layout:fragment="scripts">
+        <script th:replace="~{fragments/validationScript :: script}" />
+        <script type="text/javascript" src="../public/static/js/system/users.js"
+                th:src="@{/static/js/system/users.js}"></script>
+    </div>
 </html>
