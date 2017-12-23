@@ -1,6 +1,62 @@
 # バリデーション
 
-## Bean Validation（単一項目チェック）
+## クライアントサイド
+
+jQuery Validation Pluginを使って、
+FormのSubmitをフックして入力エラーがある場合は、動的にエラーメッセージを表示する。
+エラーがない場合は、Submitが行われる。
+
+```javascript
+$(function() {
+    // メッセージを上書きする
+    $.extend($.validator.messages, {
+        minlength: $.validator.format("{0}文字以上の文字を入力してください"),
+        ...
+    });
+
+    $.validator.setDefaults({
+        errorPlacement: function(error, element) {
+            // エラーが発生した項目の色を変える
+        },
+        success: function(error, element) {
+            // エラーがない状態に変わった時、色を戻す
+        },
+        onkeyup: function(element, event ) {
+            // キーを離した時にバリデーションする
+        },
+        onfocusout: function(element) {
+            // フォーカスが外れた時にバリデーションする
+        },
+        submitHandler: function(form){
+            form.submit();
+        }
+    });
+
+    // 入力チェックの種類を独自に増やす、または動作を上書きする
+    $.validator.methods.email = function(value, element) {
+        // 入力チェックして、エラーがある場合はfalseを返す
+    };
+
+    var options = {
+        rules: {
+            firstName: {
+                required: true,
+                maxlength: 50
+            }
+        }
+    };
+
+    // 初期化
+    $("#form1").submit(function(e) {
+        // validation pluginでsubmitするため潰しておく
+        e.preventDefault();
+    }).validate(options);
+});
+```
+
+## サーバーサイド
+
+### Bean Validation（単一項目チェック）
 
 入力フォームのフィールドにアノテーションを指定する。
 
@@ -44,7 +100,7 @@ public class UserController {
 </form>
 ```
 
-## Spring Validator（相関チェック）
+### Spring Validator（相関チェック）
 
 サンプルの実装では、`org.springframework.validation.Validator`を実装した基底クラスを用意しているので、
 下記のようなバリデーターを実装すれば相関チェックができる。
@@ -88,7 +144,7 @@ public class UserController {
 }
 ```
 
-## アノテーションの自作
+### アノテーションの自作
 
 共通化したい場合は下記のようなアノテーションクラスを作成して利用できる。
 
