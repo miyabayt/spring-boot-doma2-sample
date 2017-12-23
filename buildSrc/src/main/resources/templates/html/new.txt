@@ -35,4 +35,9 @@
             </div>
         </section>
     </body>
+    <div layout:fragment="scripts">
+        <script th:replace="~{fragments/validationScript :: script}" />
+        <script type="text/javascript" src="../public/static/js/[[${subSystem}]]/[[${lowerFuncName}]]s.js"
+                th:src="@{/static/js/[[${subSystem}]]/[[${lowerFuncName}]]s.js}"></script>
+    </div>
 </html>
