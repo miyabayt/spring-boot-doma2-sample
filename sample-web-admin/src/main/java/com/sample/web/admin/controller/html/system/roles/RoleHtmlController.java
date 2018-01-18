@@ -1,11 +1,11 @@
 package com.sample.web.admin.controller.html.system.roles;
 
+import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
 import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
 import java.util.List;
 
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -267,9 +267,8 @@ public class RoleHtmlController extends AbstractHtmlController {
         // 全件取得する
         val roles = roleService.findAll(new Role(), Pageable.NO_LIMIT_PAGEABLE);
 
-        val listType = new TypeToken<List<RoleCsv>>() {
-        }.getType();
-        List<RoleCsv> csvList = modelMapper.map(roles.getData(), listType);
+        // 詰め替える
+        List<RoleCsv> csvList = modelMapper.map(roles.getData(), toListType(RoleCsv.class));
 
         // レスポンスを設定する
         val view = new CsvView(RoleCsv.class, csvList);
