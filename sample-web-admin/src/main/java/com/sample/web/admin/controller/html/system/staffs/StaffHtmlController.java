@@ -1,12 +1,12 @@
 package com.sample.web.admin.controller.html.system.staffs;
 
+import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
 import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -265,9 +265,8 @@ public class StaffHtmlController extends AbstractHtmlController {
         // 全件取得する
         val staffs = staffService.findAll(new Staff(), Pageable.NO_LIMIT_PAGEABLE);
 
-        val listType = new TypeToken<List<StaffCsv>>() {
-        }.getType();
-        List<StaffCsv> csvList = modelMapper.map(staffs.getData(), listType);
+        // 詰め替える
+        List<StaffCsv> csvList = modelMapper.map(staffs.getData(), toListType(StaffCsv.class));
 
         // レスポンスを設定する
         val view = new CsvView(StaffCsv.class, csvList);

@@ -1,11 +1,11 @@
 package com.sample.web.admin.controller.html.system.mailtemplates;
 
+import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
 import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
 import java.util.List;
 
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -250,9 +250,8 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
         // 全件取得する
         val mailTemplates = mailTemplateService.findAll(new MailTemplate(), Pageable.NO_LIMIT_PAGEABLE);
 
-        val listType = new TypeToken<List<MailTemplateCsv>>() {
-        }.getType();
-        List<MailTemplateCsv> csvList = modelMapper.map(mailTemplates.getData(), listType);
+        // 詰め替える
+        List<MailTemplateCsv> csvList = modelMapper.map(mailTemplates.getData(), toListType(MailTemplateCsv.class));
 
         // レスポンスを設定する
         val view = new CsvView(MailTemplateCsv.class, csvList);
