@@ -1,5 +1,6 @@
 package com.sample.web.admin.controller.html.user.users;
 
+import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
 import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
@@ -7,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -284,9 +284,8 @@ public class UserHtmlController extends AbstractHtmlController {
         // 全件取得する
         val users = userService.findAll(new User(), Pageable.NO_LIMIT_PAGEABLE);
 
-        val listType = new TypeToken<List<UserCsv>>() {
-        }.getType();
-        List<UserCsv> csvList = modelMapper.map(users.getData(), listType);
+        // 詰め替える
+        List<UserCsv> csvList = modelMapper.map(users.getData(), toListType(UserCsv.class));
 
         // レスポンスを設定する
         val view = new CsvView(UserCsv.class, csvList);
