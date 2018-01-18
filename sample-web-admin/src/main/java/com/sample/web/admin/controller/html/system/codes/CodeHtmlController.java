@@ -1,8 +1,9 @@
 package com.sample.web.admin.controller.html.system.codes;
 
+import static com.sample.domain.util.TypeUtils.toListType;
+
 import java.util.List;
 
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -236,9 +237,8 @@ public class CodeHtmlController extends AbstractHtmlController {
         // 全件取得する
         val codes = codeService.findAll(new Code(), Pageable.NO_LIMIT_PAGEABLE);
 
-        val listType = new TypeToken<List<CodeCsv>>() {
-        }.getType();
-        List<CodeCsv> csvList = modelMapper.map(codes.getData(), listType);
+        // 詰め替える
+        List<CodeCsv> csvList = modelMapper.map(codes.getData(), toListType(CodeCsv.class));
 
         // レスポンスを設定する
         val view = new CsvView(CodeCsv.class, csvList);
