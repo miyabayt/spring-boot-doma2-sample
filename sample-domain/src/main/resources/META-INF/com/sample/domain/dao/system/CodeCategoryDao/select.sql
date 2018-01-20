@@ -10,4 +10,4 @@ WHERE
 /*%if codeCategory.categoryKey != null */
   AND category_key = /* codeCategory.categoryKey */'01'
 /*%end*/
-LIMIT 1
+  AND rownum <= 1

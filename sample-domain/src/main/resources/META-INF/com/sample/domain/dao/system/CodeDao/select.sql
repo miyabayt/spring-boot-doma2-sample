@@ -10,5 +10,4 @@ WHERE
 /*%if code.codeKey != null */
   AND code_key = /* code.codeKey */'01'
 /*%end*/
-LIMIT
-  1
+  AND rownum <= 1

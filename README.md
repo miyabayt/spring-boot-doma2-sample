@@ -135,3 +135,115 @@ $ ./gradlew codegen -PsubSystem=system -Pfunc=client -PfuncStr=取引先 [-Ptarg
 | [Ehcache](http://www.ehcache.org/)       | キャッシュライブラリ                       |
 | [Spock](http://spockframework.org/)      | テストフレームワーク                       |
 | [Mockito](http://site.mockito.org/)      | モッキングフレームワーク                     |
+
+
+ ### Use Oracle 
+ 
+ #### start oracle db
+ 
+ + base image
+ 
+ https://hub.docker.com/r/sath89/oracle-12c/
+ 
+ + docker run 
+ 
+```:bash
+$ docker run --name=oracle12 -d -p 8080:8080 -p 1521:1521 sath89/oracle-12c
+096efe3943a3bd9ab30c3262c903670e8f0cb4c17c4b435678c1e8ed0bf9bc5f
+```
+
++ wait
+
+```:bash
+$ docker logs -f oracle12
+Database not initialized. Initializing database.
+Starting tnslsnr
+Copying database files
+1% complete
+3% complete
+11% complete
+18% complete
+37% complete
+Creating and starting Oracle instance
+40% complete
+45% complete
+50% complete
+55% complete
+56% complete
+60% complete
+62% complete
+Completing Database Creation
+66% complete
+70% complete
+73% complete
+85% complete
+96% complete
+100% complete
+Look at the log file "/u01/app/oracle/cfgtoollogs/dbca/xe/xe.log" for further details.
+Configuring Apex console
+Database initialized. Please visit http://#containeer:8080/em http://#containeer:8080/apex for extra configuration if needed
+Starting web management console
+
+PL/SQL procedure successfully completed.
+
+Starting import from '/docker-entrypoint-initdb.d':
+found file /docker-entrypoint-initdb.d//docker-entrypoint-initdb.d/*
+[IMPORT] /entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+
+Import finished
+
+Database ready to use. Enjoy! ;)
+```
+
+#### ToDo use Oracle
+
++ get ojdbc driver
+
+```build.gradle
+-        // mysql database
+-        compile "mysql:mysql-connector-java"
++        // database
++        //compile "mysql:mysql-connector-java"
+         compile "org.flywaydb:flyway-core"
+         compile "com.zaxxer:HikariCP"
++        // for oracle
++        compile files ('../lib/ojdbc7.jar')
+```
+
++ change db migration file
+
++ change jdbc setting
+
+```bash
+     datasource:
+-        platform: mysql
+-        driver-class-name: com.mysql.jdbc.Driver
+-        url: jdbc:mysql://127.0.0.1:3306/sample?useSSL=false&characterEncoding=UTF-8
+-        username: root
+-        password: passw0rd
++        platform: oracle
++        driver-class-name: oracle.jdbc.driver.OracleDriver
++        url: jdbc:oracle:thin:@127.0.0.1:1521:xe
++        username: system
++        password: oracle
+     session:
+         jdbc:
+             # spring-session-jdbcに必要なテーブルを作成する
+-            schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
++            schema: classpath:org/springframework/session/jdbc/schema-oracle.sql
+```
+
++ change doma setting
+
+```bash
+-    dialect: mysql
++    dialect: oracle
+```
+
+#### start 
+
+```bash
+$ # admin application
+$ cd /path/to/spring-boot-doma2-sample
+$ ./gradlew :sample-web-admin:bootRun
+```

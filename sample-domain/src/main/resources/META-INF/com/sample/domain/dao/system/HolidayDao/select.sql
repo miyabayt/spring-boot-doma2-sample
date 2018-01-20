@@ -7,4 +7,4 @@ WHERE
 /*%if holiday.id != null */
   AND holiday_id = /* holiday.id */1
 /*%end*/
-LIMIT 1
+  AND rownum <= 1

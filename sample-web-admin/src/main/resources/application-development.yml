@@ -3,15 +3,15 @@ spring:
     messages:
         cache-seconds: -1
     datasource:
-        platform: mysql
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/sample?useSSL=false&characterEncoding=UTF-8
-        username: root
-        password: passw0rd
+        platform: oracle
+        driver-class-name: oracle.jdbc.driver.OracleDriver
+        url: jdbc:oracle:thin:@127.0.0.1:1521:xe
+        username: system
+        password: oracle
     session:
         jdbc:
             # spring-session-jdbcに必要なテーブルを作成する
-            schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
+            schema: classpath:org/springframework/session/jdbc/schema-oracle.sql
     resources:
         # キャッシュの無効化
         cache-period: 0

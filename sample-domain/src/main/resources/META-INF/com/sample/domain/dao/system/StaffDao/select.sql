@@ -14,4 +14,4 @@ WHERE
   AND password_reset_token = /* staff.passwordResetToken */'xxxx'
   AND token_expires_at > NOW()
 /*%end*/
-LIMIT 1
+  AND rownum <= 1

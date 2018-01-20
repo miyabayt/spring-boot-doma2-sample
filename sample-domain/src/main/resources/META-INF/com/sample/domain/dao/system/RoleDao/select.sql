@@ -10,5 +10,4 @@ WHERE
 /*%if role.roleKey != null */
   AND role_key = /* role.roleKey */'user.editUser'
 /*%end*/
-LIMIT
-  1
+  AND rownum <= 1

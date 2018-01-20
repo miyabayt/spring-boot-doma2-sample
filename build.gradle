@@ -164,10 +164,12 @@ project(":sample-domain") {
         compile "org.thymeleaf.extras:thymeleaf-extras-java8time"
         compile "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments"
 
-        // mysql database
-        compile "mysql:mysql-connector-java"
+        // database
+        //compile "mysql:mysql-connector-java"
         compile "org.flywaydb:flyway-core"
         compile "com.zaxxer:HikariCP"
+        // for oracle
+        compile files ('../lib/ojdbc7.jar')
 
         testCompile "org.springframework.boot:spring-boot-starter-test"
         testCompile "org.spockframework:spock-spring"

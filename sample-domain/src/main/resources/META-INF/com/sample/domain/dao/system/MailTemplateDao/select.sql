@@ -10,4 +10,4 @@ WHERE
 /*%if mailTemplate.templateKey != null */
   AND template_key = /* mailTemplate.templateKey */'thanks'
 /*%end*/
-LIMIT 1
+  AND rownum <= 1

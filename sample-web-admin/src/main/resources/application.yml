@@ -41,13 +41,13 @@ spring:
             max-file-size: 5MB
             max-request-size: 5MB
     datasource:
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: oracle.jdbc.driver.OracleDriver
         hikari:
           autoCommit: false
           connectionTimeout: 30000
           idleTimeout: 30000
           maxLifetime: 1800000
-          connectionTestQuery: SELECT 1
+          connectionTestQuery: SELECT 1 FROM DUAL
           minimumIdle: 10
           maximumPoolSize: 30
     batch:
@@ -65,7 +65,7 @@ spring:
             mail:
                 from: from@sample.com
 doma:
-    dialect: mysql
+    dialect: oracle
     # 小文字のスネークケースに変換する（firstName → first_name）
     naming: SNAKE_LOWER_CASE
     # バルクインサート・アップデートのサイズ
