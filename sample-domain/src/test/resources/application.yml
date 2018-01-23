@@ -6,11 +6,11 @@ spring:
         default: development
         active: development
     datasource:
-        platform: mysql
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/sample?useSSL=false&characterEncoding=UTF-8
-        username: root
-        password: passw0rd
+        platform: oracle
+        driver-class-name: oracle.jdbc.driver.OracleDriver
+        url: jdbc:oracle:thin:@127.0.0.1:1521:xe
+        username: system
+        password: oracle
         autoCommit: false
     mail:
         default-encoding: ISO-2022-JP
@@ -24,7 +24,7 @@ spring:
                 from: from@sample.com
 # Doma2
 doma:
-    dialect: mysql
+    dialect: oracle
     # 小文字のスネークケースに変換する（firstName → first_name）
     naming: SNAKE_LOWER_CASE
     # SQLファイルをキャッシュする
