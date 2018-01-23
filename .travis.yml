@@ -25,7 +25,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install language-pack-ja
   - sudo /etc/init.d/mysql stop
-  - docker-compose -f docker/docker-compose.yml up -d
+  - docker run --name=oracle12 -d -p 8080:8080 -p 1521:1521 sath89/oracle-12c
 
 script:
   - ./gradlew clean test --info
