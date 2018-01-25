@@ -22,6 +22,9 @@ spring:
         properties:
             mail:
                 from: from@sample.com
+flyway:
+    enable: true
+    baseline-on-migrate: true
 # Doma2
 doma:
     dialect: oracle
