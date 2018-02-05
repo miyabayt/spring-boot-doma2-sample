@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.modelmapper.AbstractConverter;
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.PropertyInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
@@ -172,8 +172,9 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
     public ModelMapper modelMapper() {
         // ObjectMappingのためのマッパー
         val modelMapper = new ModelMapper();
+        val configuration = modelMapper.getConfiguration();
 
-        modelMapper.getConfiguration().setPropertyCondition(
+        configuration.setPropertyCondition(
                 // IDフィールド以外をマッピングする
                 context -> {
                     // DomaDtoのIDカラムは上書きしないようにする
@@ -182,8 +183,11 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
                             && propertyInfo.getName().equals("id"));
                 });
 
+        // 厳格にマッピングする
+        configuration.setMatchingStrategy(MatchingStrategies.STRICT);
+
         // コンバーター
-        Converter<ID<?>, Integer> idToInt = new AbstractConverter<ID<?>, Integer>() {
+        val idToInt = new AbstractConverter<ID<?>, Integer>() {
             @Override
             protected Integer convert(ID<?> source) {
                 return source == null ? null : source.getValue();
