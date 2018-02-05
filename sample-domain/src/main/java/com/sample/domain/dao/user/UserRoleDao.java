@@ -64,7 +64,7 @@ public interface UserRoleDao {
      * @param userRole
      * @return
      */
-    @Insert
+    @Insert(exclude = { "roleName", "permissionKey", "permissionName" })
     int insert(UserRole userRole);
 
     /**
