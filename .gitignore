@@ -91,6 +91,8 @@ local.properties
 # TeXlipse plugin
 .texlipse
 
+# Automated Document
+*.adoc
 
 ### Gradle ###
 .gradle

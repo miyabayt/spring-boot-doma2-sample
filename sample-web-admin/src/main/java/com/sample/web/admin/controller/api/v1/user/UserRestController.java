@@ -4,6 +4,9 @@ import static com.sample.web.base.WebConst.MESSAGE_SUCCESS;
 
 import java.util.Arrays;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.Errors;
@@ -39,6 +42,9 @@ public class UserRestController extends AbstractRestController {
      * @param page
      * @return
      */
+    @ApiOperation(value = "ユーザ情報一括取得", notes = "ユーザーを一括取得します。", response = PageableResource.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "ユーザ情報リスト", response = PageableResource.class)})
     @GetMapping
     public PageableResource index(@RequestParam(required = false, defaultValue = "1") int page) {
         // 10件で区切って取得する
@@ -56,6 +62,9 @@ public class UserRestController extends AbstractRestController {
      * @param userId
      * @return
      */
+    @ApiOperation(value = "ユーザ情報取得", notes = "ユーザーを取得します。", httpMethod = "GET", consumes = "application/json", response = Resource.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "指定されたユーザ情報", response = Resource.class)})
     @GetMapping(value = "/{userId}")
     public Resource show(@PathVariable Integer userId) {
         // 1件取得する

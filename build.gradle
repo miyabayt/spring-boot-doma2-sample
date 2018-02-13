@@ -169,6 +169,9 @@ project(":sample-domain") {
         compile "org.flywaydb:flyway-core"
         compile "com.zaxxer:HikariCP"
 
+        //swagger
+        compile "io.springfox:springfox-swagger2:2.6.0"
+
         testCompile "org.springframework.boot:spring-boot-starter-test"
         testCompile "org.spockframework:spock-spring"
     }
@@ -228,6 +231,10 @@ project(":sample-web-base") {
         compile "org.webjars:font-awesome:4.7.0"
         compile "org.webjars:ionicons:2.0.1"
 
+        //swagger
+        compile "io.springfox:springfox-swagger2:2.6.0"
+        compile "io.springfox:springfox-swagger-ui:2.6.0"
+
         testCompile "org.springframework.security:spring-security-test"
         testCompile "org.springframework.boot:spring-boot-starter-test"
         testCompile "org.spockframework:spock-spring"
@@ -247,6 +254,7 @@ project(":sample-web-admin") {
         compile project(":sample-web-base")
         optional "org.springframework.boot:spring-boot-devtools"
 
+        testCompile "io.springfox:springfox-staticdocs:2.6.0"
         testCompile "org.springframework.security:spring-security-test"
         testCompile "org.springframework.boot:spring-boot-starter-test"
         testCompile "org.spockframework:spock-spring"

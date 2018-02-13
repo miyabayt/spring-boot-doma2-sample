@@ -29,3 +29,4 @@ before_install:
 
 script:
   - ./gradlew clean test --info
+  - ./scripts/convert_apidoc.sh
