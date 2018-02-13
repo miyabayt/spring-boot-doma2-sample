@@ -2,7 +2,6 @@ package com.sample.domain.dto.common;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.seasar.doma.Column;
 import org.seasar.doma.Entity;
@@ -60,42 +59,4 @@ public abstract class DomaDtoImpl implements DomaDto, Serializable {
     @Transient
     @JsonIgnore
     LocalDateTime auditDateTime;
-
-    // 更新されたプロパティ名
-    @Transient
-    @JsonIgnore
-    List<String> changedProperties;
-
-    // 更新項目名
-    @Transient
-    @JsonIgnore
-    String changedPropertyNames;
-
-    // 更新者ID
-    @Transient
-    @JsonIgnore
-    Integer changedBy;
-
-    // 更新日時
-    @Transient
-    @JsonIgnore
-    LocalDateTime changedAt;
-
-    /**
-     * 既存レコードがないデータであるか
-     * 
-     * @return
-     */
-    @JsonIgnore
-    public boolean isNew() {
-        return getId().equals(ID.notAssigned());
-    }
-
-    /**
-     * IdカラムのGetter
-     * 
-     * @return
-     */
-    @JsonIgnore
-    public abstract ID<? extends DomaDto> getId();
 }
