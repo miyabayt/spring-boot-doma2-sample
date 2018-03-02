@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.sample.batch.jobs.SingleJobCommandLineRunner;
+import com.sample.domain.dto.common.DefaultPageFactoryImpl;
+import com.sample.domain.dto.common.PageFactory;
 
 import lombok.val;
 
@@ -41,5 +43,10 @@ public class BatchConfiguration {
         executor.setMaxPoolSize(maxPoolSize);
         executor.setWaitForTasksToCompleteOnShutdown(true);
         return executor;
+    }
+
+    @Bean
+    public PageFactory pageFactory() {
+        return new DefaultPageFactoryImpl();
     }
 }
