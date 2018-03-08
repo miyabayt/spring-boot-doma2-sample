@@ -1,0 +1,35 @@
+== API Guide
+
+User API
+
+=== About API
+
+API概要
+
+.リクエストサンプル(curl)
+
+include::{snippets}/user/curl-request.adoc[]
+
+.リクエストサンプル(httpie)
+
+include::{snippets}/user/httpie-request.adoc[]
+
+.リクエストヘッダー例
+
+include::{snippets}/user/request-headers.adoc[]
+
+.レスポンスヘッダー例
+
+include::{snippets}/user/response-headers.adoc[]
+
+.リクエストパラメータ例
+
+include::{snippets}/user/path-parameters.adoc[]
+
+.リクエスト例
+
+include::{snippets}/user/http-request.adoc[]
+
+.レスポンス例
+
+include::{snippets}/user/http-response.adoc[]
