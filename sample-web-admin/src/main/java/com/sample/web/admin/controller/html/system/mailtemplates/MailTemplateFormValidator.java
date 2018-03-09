@@ -3,7 +3,7 @@ package com.sample.web.admin.controller.html.system.mailtemplates;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import com.sample.web.base.validator.AbstractValidator;
+import com.sample.domain.validator.AbstractValidator;
 
 /**
  * メールテンプレート登録 入力チェック

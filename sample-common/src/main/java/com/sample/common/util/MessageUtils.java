@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -42,5 +43,16 @@ public class MessageUtils {
      */
     public static String getMessage(String key, Locale locale, Object... args) {
         return MessageUtils.messageSource.getMessage(key, args, locale);
+    }
+
+    /**
+     * メッセージを取得します。
+     * 
+     * @param resolvable
+     * @return
+     */
+    public static String getMessage(MessageSourceResolvable resolvable) {
+        Locale locale = LocaleContextHolder.getLocale();
+        return MessageUtils.messageSource.getMessage(resolvable, locale);
     }
 }
