@@ -1,4 +1,4 @@
-package com.sample.web.base.validator.annotation;
+package com.sample.domain.validator.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -12,15 +12,17 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * 入力チェック（全角カナ）
+ * 入力チェック（電話番号）
  */
 @Documented
-@Constraint(validatedBy = { ZenKanaValidator.class })
+@Constraint(validatedBy = { PhoneNumberValidator.class })
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RUNTIME)
-public @interface ZenKana {
+public @interface PhoneNumber {
 
-    String message() default "{validator.annotation.ZenKana.message}";
+    String regexp() default "^[0-9]{1,4}-[0-9]{1,4}-[0-9]{4}$";
+
+    String message() default "{validator.annotation.PhoneNumber.message}";
 
     Class<?>[] groups() default {};
 
@@ -30,6 +32,6 @@ public @interface ZenKana {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        ZenKana[] value();
+        PhoneNumber[] value();
     }
 }

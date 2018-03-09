@@ -1,4 +1,4 @@
-package com.sample.web.base.exception;
+package com.sample.domain.exception;
 
 import static java.util.Optional.ofNullable;
 
