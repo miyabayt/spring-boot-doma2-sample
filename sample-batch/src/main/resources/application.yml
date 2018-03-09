@@ -7,7 +7,7 @@ spring:
         active: development
     messages:
         # メッセージ定義ファイルのパスを含めて設定する
-        basename: messages,ValidationMessages
+        basename: messages,ValidationMessages,PropertyNames
         cache-seconds: -1
         encoding: UTF-8
     jackson:
@@ -25,8 +25,8 @@ spring:
           maximumPoolSize: 30
     batch:
         initializer:
-            # ジョブ管理テーブルを自動的に作成する
-            enabled: true
+            # ジョブ管理テーブルを自動的に作成しないようにする
+            enabled: false
         job:
             # 自動的にバッチジョブが起動しないようにする
             enabled: false
@@ -49,4 +49,4 @@ logging:
 ####
 # アプリケーションの設定
 application:
-    processFileLocation: ${java.io.tmpdir}
+    processFileLocation: build
