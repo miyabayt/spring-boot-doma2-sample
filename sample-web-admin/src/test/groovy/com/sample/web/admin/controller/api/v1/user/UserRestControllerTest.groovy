@@ -1,14 +1,22 @@
 package com.sample.web.admin.controller.api.v1.user
 
-import org.junit.Rule;
+import com.sample.domain.dto.common.ID
+import com.sample.domain.service.user.UserService
+import org.junit.Rule
+import org.spockframework.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.restdocs.JUnitRestDocumentation
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
 import spock.lang.Shared;
 import spock.lang.Specification
+import com.sample.domain.dto.user.User
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane
+import java.time.LocalDateTime;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
@@ -34,6 +42,9 @@ class UserRestControllerTest extends Specification {
     @Autowired
     WebApplicationContext wac
 
+    @Autowired
+    UserService userService;
+
     @Shared
     MockMvc mvc
 
@@ -55,9 +66,16 @@ class UserRestControllerTest extends Specification {
                 .build()
     }
 
-    def "リクエストしたユーザが存在する"() {
-        expect:
-            mvc.perform(get("/api/v1/users/{userId}","1").with(httpBasic("test@sample.com","passw0rd")))
+    def "リクエストしたユーザが存在する場合、ユーザが取得できて正常終了する"() {
+        given:
+            Assert.notNull(userService.findById(new ID(1)))
+
+        when:
+            ResultActions actions =
+                    mvc.perform(get("/api/v1/users/{userId}","1").with(httpBasic("test@sample.com","passw0rd")))
+
+        then:
+            actions
                     .andExpect(status().is(200))
                     .andExpect(jsonPath("\$.data[0].email").value("test@sample.com"))
                     .andExpect(jsonPath("\$.message").value("正常終了"))
