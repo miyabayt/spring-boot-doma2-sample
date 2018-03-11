@@ -5,10 +5,7 @@ import static com.sample.web.base.WebConst.*;
 import java.util.Arrays;
 import java.util.List;
 
-import org.modelmapper.AbstractConverter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.PropertyInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -38,9 +35,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import com.sample.domain.DefaultModelMapperFactory;
 import com.sample.domain.dto.common.DefaultPageFactoryImpl;
-import com.sample.domain.dto.common.DomaDto;
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.PageFactory;
 import com.sample.web.base.aop.*;
 import com.sample.web.base.controller.LocalDateConverter;
@@ -171,32 +167,7 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
     @Bean
     public ModelMapper modelMapper() {
         // ObjectMappingのためのマッパー
-        val modelMapper = new ModelMapper();
-        val configuration = modelMapper.getConfiguration();
-
-        configuration.setPropertyCondition(
-                // IDフィールド以外をマッピングする
-                context -> {
-                    // DomaDtoのIDカラムは上書きしないようにする
-                    PropertyInfo propertyInfo = context.getMapping().getLastDestinationProperty();
-                    return !(context.getParent().getDestination() instanceof DomaDto
-                            && propertyInfo.getName().equals("id"));
-                });
-
-        // 厳格にマッピングする
-        configuration.setMatchingStrategy(MatchingStrategies.STRICT);
-
-        // コンバーター
-        val idToInt = new AbstractConverter<ID<?>, Integer>() {
-            @Override
-            protected Integer convert(ID<?> source) {
-                return source == null ? null : source.getValue();
-            }
-        };
-
-        modelMapper.addConverter(idToInt);
-
-        return modelMapper;
+        return DefaultModelMapperFactory.create();
     }
 
     @Bean

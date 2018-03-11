@@ -3,7 +3,7 @@ package com.sample.web.admin.controller.html.user.users;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import com.sample.web.base.validator.AbstractValidator;
+import com.sample.domain.validator.AbstractValidator;
 
 /**
  * ユーザー登録 入力チェック
