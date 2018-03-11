@@ -2,6 +2,8 @@ package com.sample.web.base.controller.html;
 
 import static com.sample.web.base.WebConst.*;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,36 +33,48 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HtmlExceptionHandler {
 
+    private static final String VIEW_ATTR_STACKTRACE = "trace";
+
     /**
      * ファイル、データ不存在時の例外をハンドリングする
      *
      * @param e
+     * @param request
+     * @param response
      * @return
      */
     @ExceptionHandler({ FileNotFoundException.class, NoDataFoundException.class })
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleNotFoundException(Exception e) {
+    public String handleNotFoundException(Exception e, HttpServletRequest request, HttpServletResponse response) {
         if (log.isDebugEnabled()) {
             log.debug("not found.", e);
         }
 
-        return "forward:" + NOTFOUND_URL;
+        val stackTrace = getStackTraceAsString(e);
+        outputFlashMap(request, response, VIEW_ATTR_STACKTRACE, stackTrace);
+
+        return "redirect:" + NOTFOUND_URL;
     }
 
     /**
      * 権限不足エラーの例外をハンドリングする
      *
      * @param e
+     * @param request
+     * @param response
      * @return
      */
     @ExceptionHandler({ AccessDeniedException.class })
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String handleAccessDeniedException(Exception e) {
+    public String handleAccessDeniedException(Exception e, HttpServletRequest request, HttpServletResponse response) {
         if (log.isDebugEnabled()) {
             log.debug("forbidden.", e);
         }
 
-        return "forward:" + FORBIDDEN_URL;
+        val stackTrace = getStackTraceAsString(e);
+        outputFlashMap(request, response, VIEW_ATTR_STACKTRACE, stackTrace);
+
+        return "redirect:" + FORBIDDEN_URL;
     }
 
     /**
@@ -111,15 +125,20 @@ public class HtmlExceptionHandler {
 
     /**
      * 予期せぬ例外をハンドリングする
-     *
+     * 
      * @param e
+     * @param request
+     * @param response
      * @return
      */
     @ExceptionHandler({ Exception.class })
-    public String handleException(Exception e) {
+    public String handleException(Exception e, HttpServletRequest request, HttpServletResponse response) {
         // TODO
         // ハンドルする例外がある場合は、条件分岐する
         log.error("unhandled runtime exception.", e);
+
+        val stackTrace = getStackTraceAsString(e);
+        outputFlashMap(request, response, VIEW_ATTR_STACKTRACE, stackTrace);
 
         return "redirect:" + ERROR_URL;
     }
@@ -137,16 +156,41 @@ public class HtmlExceptionHandler {
             String messageCode) {
         // メッセージを遷移先に表示する
         val message = MessageUtils.getMessage(messageCode, locale);
-        val flashMap = RequestContextUtils.getOutputFlashMap(request);
-        flashMap.put(GLOBAL_MESSAGE, message);
-
-        // flashMapを書き込む
-        val flashManager = RequestContextUtils.getFlashMapManager(request);
-        flashManager.saveOutputFlashMap(flashMap, request, response);
+        outputFlashMap(request, response, GLOBAL_MESSAGE, message);
 
         val requestURI = request.getRequestURI();
         val view = new RedirectView(requestURI);
 
         return view;
+    }
+
+    /**
+     * スタックトレースを文字列で返します。
+     * 
+     * @param e
+     * @return
+     */
+    protected String getStackTraceAsString(Exception e) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        e.printStackTrace(printWriter);
+        return stringWriter.toString();
+    }
+
+    /**
+     * FlashMapに値を書き出します。
+     * 
+     * @param request
+     * @param response
+     * @param attr
+     * @param value
+     */
+    protected void outputFlashMap(HttpServletRequest request, HttpServletResponse response, String attr, String value) {
+        val flashMap = RequestContextUtils.getOutputFlashMap(request);
+        flashMap.put(attr, value);
+
+        // flashMapを書き込む
+        val flashManager = RequestContextUtils.getFlashMapManager(request);
+        flashManager.saveOutputFlashMap(flashMap, request, response);
     }
 }
