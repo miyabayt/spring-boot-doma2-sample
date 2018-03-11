@@ -7,6 +7,10 @@
 	<body>
 		<div layout:fragment="content">
 			<h2>内部エラーが発生しました。</h2>
+
+			<div th:if="${exception != null and @environment.acceptsProfiles('development')}">
+				<pre th:text="${trace}"></pre>
+			</div>
 		</div>
 	</body>
 </html>
