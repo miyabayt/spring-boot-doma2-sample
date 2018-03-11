@@ -1,4 +1,4 @@
-package com.sample.web.base.validator.annotation;
+package com.sample.domain.validator.annotation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
