@@ -19,7 +19,7 @@ import com.sample.web.base.controller.api.AbstractRestController;
 import com.sample.web.base.controller.api.resource.PageableResource;
 import com.sample.web.base.controller.api.resource.PageableResourceImpl;
 import com.sample.web.base.controller.api.resource.Resource;
-import com.sample.web.base.exception.ValidationErrorException;
+import com.sample.domain.exception.ValidationErrorException;
 
 @RestController
 @RequestMapping(path = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
