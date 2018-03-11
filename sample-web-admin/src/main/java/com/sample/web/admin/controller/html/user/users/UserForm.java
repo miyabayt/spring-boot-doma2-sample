@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sample.web.base.controller.html.BaseForm;
-import com.sample.web.base.validator.annotation.ContentType;
+import com.sample.domain.validator.annotation.ContentType;
 
 import lombok.Getter;
 import lombok.Setter;

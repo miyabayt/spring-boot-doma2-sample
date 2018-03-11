@@ -1,4 +1,4 @@
-package com.sample.web.base.validator.annotation;
+package com.sample.domain.validator.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -12,28 +12,24 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * 入力チェック（コンテンツタイプ）
+ * 入力チェック（全角カナ）
  */
 @Documented
-@Constraint(validatedBy = { ContentTypeValidator.class })
+@Constraint(validatedBy = { ZenKanaValidator.class })
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RUNTIME)
-public @interface ContentType {
+public @interface ZenKana {
 
-    String message() default "{validator.annotation.ContentType.message}";
+    String message() default "{validator.annotation.ZenKana.message}";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    String[] allowed() default {};
-
-    String[] rejected() default {};
-
     @Target({ FIELD })
     @Retention(RUNTIME)
     @Documented
-    public @interface List {
-        ContentType[] value();
+    @interface List {
+        ZenKana[] value();
     }
 }

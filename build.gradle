@@ -159,6 +159,9 @@ project(":sample-domain") {
         compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
         compile "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
 
+        // modelmapper
+        compile "org.modelmapper:modelmapper:0.7.5"
+
         // thymeleaf for text template engine
         compile "org.thymeleaf:thymeleaf"
         compile "org.thymeleaf.extras:thymeleaf-extras-java8time"
@@ -198,9 +201,6 @@ project(":sample-web-base") {
         compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4"
         compile "org.thymeleaf.extras:thymeleaf-extras-java8time"
         compile "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments"
-
-        // modelmapper
-        compile "org.modelmapper:modelmapper:0.7.5"
 
         // jasperreports
         compile "net.sf.jasperreports:jasperreports:6.4.0"
@@ -319,7 +319,7 @@ codegen {
     commonServicePackageName = "com.sample.domain.service"
     exceptionPackageName = "com.sample.domain.exception"
     webBasePackageName = "com.sample.web.base"
-    baseValidatorPackageName = "com.sample.web.base.validator"
+    baseValidatorPackageName = "com.sample.domain.validator"
     baseControllerPackageName = "com.sample.web.base.controller.html"
     controllerPackageName = "com.sample.web.admin.controller.html"
 }
