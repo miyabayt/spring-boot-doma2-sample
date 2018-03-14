@@ -23,6 +23,6 @@ public class LoginStaff extends User {
      * @param authorities
      */
     public LoginStaff(Staff staff, Collection<? extends GrantedAuthority> authorities) {
-        super(String.valueOf(staff.getId().getValue()), staff.getPassword(), authorities);
+        super(String.valueOf(staff.getEmail()), staff.getPassword(), authorities);
     }
 }

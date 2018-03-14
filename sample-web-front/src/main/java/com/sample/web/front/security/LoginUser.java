@@ -22,6 +22,6 @@ public class LoginUser extends org.springframework.security.core.userdetails.Use
      * @param authorities
      */
     public LoginUser(User user, Collection<? extends GrantedAuthority> authorities) {
-        super(String.valueOf(user.getId().getValue()), user.getPassword(), authorities);
+        super(String.valueOf(user.getEmail()), user.getPassword(), authorities);
     }
 }

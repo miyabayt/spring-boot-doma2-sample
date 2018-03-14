@@ -69,7 +69,7 @@ public class BatchContext {
      * エラー件数を加算します。
      */
     public void increaseErrorCount() {
-        processCount.incrementAndGet();
+        errorCount.incrementAndGet();
     }
 
     /**

@@ -14,6 +14,7 @@ buildscript {
         classpath "io.spring.gradle:propdeps-plugin:0.0.9.RELEASE" // optionalとprovidedが使えるようにする
         classpath "com.github.tntim96:fakesmtp:2.0" // ローカルでダミーのSMTPサーバーを立てる
         classpath "com.avast.gradle:gradle-docker-compose-plugin:${dockerComposePluginVersion}"
+        classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.7" // for API Document
     }
 }
 
@@ -30,6 +31,7 @@ subprojects {
     apply plugin: "idea"
     apply plugin: "eclipse"
     apply plugin: "org.springframework.boot" // for Maven BOM
+    apply plugin: "org.asciidoctor.convert" // for API Document
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -85,6 +87,10 @@ subprojects {
 
     // v3.2.1 -> 4.2.0
     ext["flyway.version"] = "4.2.0"
+
+    // for API Document
+    ext['snippetsOutputDir'] = file("${buildDir}/asciidoc/snippets")
+    ext['asciiDocOutputDir'] = file("${buildDir}/asciidoc/generated")
 
     bootRun {
         addResources = true
@@ -159,6 +165,9 @@ project(":sample-domain") {
         compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
         compile "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
 
+        // modelmapper
+        compile "org.modelmapper:modelmapper:0.7.5"
+
         // thymeleaf for text template engine
         compile "org.thymeleaf:thymeleaf"
         compile "org.thymeleaf.extras:thymeleaf-extras-java8time"
@@ -201,9 +210,6 @@ project(":sample-web-base") {
         compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4"
         compile "org.thymeleaf.extras:thymeleaf-extras-java8time"
         compile "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments"
-
-        // modelmapper
-        compile "org.modelmapper:modelmapper:0.7.5"
 
         // jasperreports
         compile "net.sf.jasperreports:jasperreports:6.4.0"
@@ -258,6 +264,24 @@ project(":sample-web-admin") {
         testCompile "org.springframework.security:spring-security-test"
         testCompile "org.springframework.boot:spring-boot-starter-test"
         testCompile "org.spockframework:spock-spring"
+    }
+
+    asciidoctor {
+        dependsOn test
+        sources {
+            include 'index.adoc'
+        }
+        attributes = [
+                doctype: 'book',
+                toc: 'left',
+                toclevels: '3',
+                numbered: '',
+                sectlinks: '',
+                sectanchors: '',
+                hardbreaks: '',
+                generated: asciiDocOutputDir,
+                snippets: snippetsOutputDir
+        ]
     }
 }
 
@@ -327,7 +351,7 @@ codegen {
     commonServicePackageName = "com.sample.domain.service"
     exceptionPackageName = "com.sample.domain.exception"
     webBasePackageName = "com.sample.web.base"
-    baseValidatorPackageName = "com.sample.web.base.validator"
+    baseValidatorPackageName = "com.sample.domain.validator"
     baseControllerPackageName = "com.sample.web.base.controller.html"
     controllerPackageName = "com.sample.web.admin.controller.html"
 }

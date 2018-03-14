@@ -19,7 +19,7 @@ import com.sample.common.util.MessageUtils;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.web.base.controller.api.resource.ErrorResourceImpl;
 import com.sample.web.base.controller.api.resource.FieldErrorResource;
-import com.sample.web.base.exception.ValidationErrorException;
+import com.sample.domain.exception.ValidationErrorException;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;

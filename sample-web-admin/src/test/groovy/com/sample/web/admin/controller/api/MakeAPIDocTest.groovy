@@ -34,7 +34,7 @@ class MakeAPIDocTest extends Specification {
         expect:
         mvc.perform(get("/v2/api-docs?group=api")
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(Swagger2MarkupResultHandler.outputDirectory("target/snippets").build())
+                .andDo(Swagger2MarkupResultHandler.outputDirectory("build/asciidoc/snippets").build())
                 .andExpect(status().isOk())
     }
 }

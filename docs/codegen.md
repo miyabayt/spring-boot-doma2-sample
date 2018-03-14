@@ -20,7 +20,7 @@ codegen {
     commonServicePackageName = "com.sample.domain.service"            // サービスの基底クラスを配置するパッケージ名
     exceptionPackageName = "com.sample.domain.exception"              // 例外クラスを配置するパッケージ名
     webBasePackageName = "com.sample.web.base"                        // コントローラー関連の基底クラスを配置するパッケージ名
-    baseValidatorPackageName = "com.sample.web.base.validator"        // バリデーターを配置するパッケージ名
+    baseValidatorPackageName = com.sample.domain.validator            // バリデーターを配置するパッケージ名
     baseControllerPackageName = "com.sample.web.base.controller.html" // コントローラーの基底クラスを配置するパッケージ名
     controllerPackageName = "com.sample.web.admin.controller.html"    // 生成するコントローラのパッケージ名
 }
