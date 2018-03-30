@@ -9,7 +9,6 @@ import org.springframework.util.Assert;
 
 import com.sample.domain.dao.system.StaffDao;
 import com.sample.domain.dao.system.StaffRoleDao;
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Staff;
@@ -53,7 +52,7 @@ public class StaffService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Staff findById(final ID<Staff> id) {
+    public Staff findById(final Integer id) {
         // 1件取得
         val staff = staffDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("staff_id=" + id + " のデータが見つかりません。"));
@@ -105,7 +104,7 @@ public class StaffService extends BaseTransactionalService {
      *
      * @return
      */
-    public Staff delete(final ID<Staff> id) {
+    public Staff delete(final Integer id) {
         val staff = staffDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("staff_id=" + id + " のデータが見つかりません。"));
 

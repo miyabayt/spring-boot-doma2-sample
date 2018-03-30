@@ -8,7 +8,6 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.system.MailTemplate;
 
 @ConfigAutowireable
@@ -33,7 +32,7 @@ public interface MailTemplateDao {
      * @return
      */
     @Select
-    Optional<MailTemplate> selectById(ID<MailTemplate> id);
+    Optional<MailTemplate> selectById(Integer id);
 
     /**
      * メールテンプレートを1件取得します。

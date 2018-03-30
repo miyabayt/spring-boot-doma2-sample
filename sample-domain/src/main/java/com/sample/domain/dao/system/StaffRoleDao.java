@@ -8,7 +8,6 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.system.Permission;
 import com.sample.domain.dto.system.Staff;
 import com.sample.domain.dto.system.StaffRole;
@@ -38,7 +37,7 @@ public interface StaffRoleDao {
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectByStaffId(ID<Staff> id, final Collector<StaffRole, ?, R> collector);
+    <R> R selectByStaffId(Integer id, final Collector<StaffRole, ?, R> collector);
 
     /**
      * 担当者権限を1件取得します。
@@ -47,7 +46,7 @@ public interface StaffRoleDao {
      * @return
      */
     @Select
-    Optional<Permission> selectById(ID<Permission> id);
+    Optional<Permission> selectById(Integer id);
 
     /**
      * 担当者権限を1件取得します。

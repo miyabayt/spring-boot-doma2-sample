@@ -20,7 +20,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.UploadFile;
 import com.sample.domain.dto.user.User;
@@ -116,7 +115,7 @@ public class UserHtmlController extends AbstractHtmlController {
         // 登録する
         val createdUser = userService.create(inputUser);
 
-        return "redirect:/user/users/show/" + createdUser.getId().getValue();
+        return "redirect:/user/users/show/" + createdUser.getId();
     }
 
     /**
@@ -169,7 +168,7 @@ public class UserHtmlController extends AbstractHtmlController {
     @GetMapping("/show/{userId}")
     public String showUser(@PathVariable Integer userId, Model model) {
         // 1件取得する
-        val user = userService.findById(ID.of(userId));
+        val user = userService.findById(userId);
         model.addAttribute("user", user);
 
         if (user.getUploadFile() != null) {
@@ -199,7 +198,7 @@ public class UserHtmlController extends AbstractHtmlController {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val user = userService.findById(ID.of(userId));
+            val user = userService.findById(userId);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map(user, form);
@@ -228,7 +227,7 @@ public class UserHtmlController extends AbstractHtmlController {
         }
 
         // 更新対象を取得する
-        val user = userService.findById(ID.of(userId));
+        val user = userService.findById(userId);
 
         // 入力値を詰め替える
         modelMapper.map(form, user);
@@ -249,7 +248,7 @@ public class UserHtmlController extends AbstractHtmlController {
         // セッションのuserFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/user/users/show/" + updatedUser.getId().getValue();
+        return "redirect:/user/users/show/" + updatedUser.getId();
     }
 
     /**
@@ -262,7 +261,7 @@ public class UserHtmlController extends AbstractHtmlController {
     @PostMapping("/remove/{userId}")
     public String removeUser(@PathVariable Integer userId, RedirectAttributes attributes) {
         // 削除対象を取得する
-        val user = userService.findById(ID.of(userId));
+        val user = userService.findById(userId);
 
         // 論理削除する
         userService.delete(user.getId());

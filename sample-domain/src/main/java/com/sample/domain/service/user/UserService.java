@@ -11,7 +11,6 @@ import org.springframework.util.Assert;
 import com.sample.domain.dao.system.UploadFileDao;
 import com.sample.domain.dao.user.UserDao;
 import com.sample.domain.dao.user.UserRoleDao;
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.user.User;
@@ -58,7 +57,7 @@ public class UserService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public User findById(final ID<User> id) {
+    public User findById(final Integer id) {
         // 1件取得
         val user = userDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("user_id=" + id + " のデータが見つかりません。"));
@@ -129,7 +128,7 @@ public class UserService extends BaseTransactionalService {
      *
      * @return
      */
-    public User delete(final ID<User> id) {
+    public User delete(final Integer id) {
         val user = userDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("user_id=" + id + " のデータが見つかりません。"));
 

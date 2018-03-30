@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.sample.domain.dao.system.HolidayDao;
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Holiday;
@@ -48,7 +47,7 @@ public class HolidayService extends BaseTransactionalService { // TODO
      * @return
      */
     @Transactional(readOnly = true)
-    public Holiday findById(final ID<Holiday> id) {
+    public Holiday findById(final Integer id) {
         // 1件取得
         val holiday = holidayDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("holiday_id=" + id + " のデータが見つかりません。"));
@@ -94,7 +93,7 @@ public class HolidayService extends BaseTransactionalService { // TODO
      *
      * @return
      */
-    public Holiday delete(final ID<Holiday> id) {
+    public Holiday delete(final Integer id) {
         val holiday = holidayDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("holiday_id=" + id + " のデータが見つかりません。"));
 

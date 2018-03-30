@@ -71,7 +71,7 @@
                         <tbody>
                             <tr th:each="user : ${pages.data}">
                                 <td>
-                                    <a th:href="@{/user/users/show/__${user.id.value}__}" th:text="${user.id.value}" />
+                                    <a th:href="@{/user/users/show/__${user.id}__}" th:text="${user.id}" />
                                 </td>
                                 <td th:text="${user.firstName + ' ' + user.lastName}" />
                                 <td th:text="${user.email}" />

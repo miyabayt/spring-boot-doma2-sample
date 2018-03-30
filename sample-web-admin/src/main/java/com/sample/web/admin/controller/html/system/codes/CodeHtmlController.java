@@ -15,7 +15,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Code;
 import com.sample.domain.service.system.CodeService;
@@ -100,7 +99,7 @@ public class CodeHtmlController extends AbstractHtmlController {
         // 登録する
         val createdCode = codeService.create(inputCode);
 
-        return "redirect:/system/codes/show/" + createdCode.getId().getValue();
+        return "redirect:/system/codes/show/" + createdCode.getId();
     }
 
     /**
@@ -153,7 +152,7 @@ public class CodeHtmlController extends AbstractHtmlController {
     @GetMapping("/show/{codeId}")
     public String showCode(@PathVariable Integer codeId, Model model) {
         // 1件取得する
-        val code = codeService.findById(ID.of(codeId));
+        val code = codeService.findById(codeId);
         model.addAttribute("code", code);
         return "modules/system/codes/show";
     }
@@ -171,7 +170,7 @@ public class CodeHtmlController extends AbstractHtmlController {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val code = codeService.findById(ID.of(codeId));
+            val code = codeService.findById(codeId);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map(code, form);
@@ -200,7 +199,7 @@ public class CodeHtmlController extends AbstractHtmlController {
         }
 
         // 更新対象を取得する
-        val code = codeService.findById(ID.of(codeId));
+        val code = codeService.findById(codeId);
 
         // 入力値を詰め替える
         modelMapper.map(form, code);
@@ -211,7 +210,7 @@ public class CodeHtmlController extends AbstractHtmlController {
         // セッションのcodeFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/system/codes/show/" + updatedCode.getId().getValue();
+        return "redirect:/system/codes/show/" + updatedCode.getId();
     }
 
     /**

@@ -8,7 +8,6 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.system.CodeCategory;
 
 @ConfigAutowireable
@@ -41,7 +40,7 @@ public interface CodeCategoryDao {
      * @return
      */
     @Select
-    Optional<CodeCategory> selectById(ID<CodeCategory> id);
+    Optional<CodeCategory> selectById(Integer id);
 
     /**
      * コード分類を1件取得します。

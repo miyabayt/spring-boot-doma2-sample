@@ -69,7 +69,7 @@
                         <tbody>
                             <tr th:each="mailTemplate : ${pages.data}">
                                 <td>
-                                    <a th:href="@{/system/mailtemplates/show/__${mailTemplate.id.value}__}" th:text="${mailTemplate.id.value}" />
+                                    <a th:href="@{/system/mailtemplates/show/__${mailTemplate.id}__}" th:text="${mailTemplate.id}" />
                                 </td>
                                 <td th:text="${mailTemplate.templateKey}" />
                                 <td th:text="${mailTemplate.subject}" />

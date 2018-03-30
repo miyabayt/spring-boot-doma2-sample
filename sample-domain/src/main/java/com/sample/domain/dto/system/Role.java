@@ -5,7 +5,6 @@ import java.util.Map;
 import org.seasar.doma.*;
 
 import com.sample.domain.dto.common.DomaDtoImpl;
-import com.sample.domain.dto.common.ID;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +23,7 @@ public class Role extends DomaDtoImpl {
     @Id
     @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    ID<Role> id;
+    Integer id;
 
     // 役割キー
     String roleKey;

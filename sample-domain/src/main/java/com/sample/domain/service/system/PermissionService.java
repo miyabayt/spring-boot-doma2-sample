@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.sample.domain.dao.system.PermissionDao;
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Permission;
@@ -50,7 +49,7 @@ public class PermissionService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Permission findById(final ID<Permission> id) {
+    public Permission findById(final Integer id) {
         // 1件取得
         val permission = permissionDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("permission_id=" + id + " のデータが見つかりません。"));
@@ -96,7 +95,7 @@ public class PermissionService extends BaseTransactionalService {
      *
      * @return
      */
-    public Permission delete(final ID<Permission> id) {
+    public Permission delete(final Integer id) {
         val permission = permissionDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("permission_id=" + id + " のデータが見つかりません。"));
 
