@@ -8,7 +8,6 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.system.Permission;
 
 @ConfigAutowireable
@@ -33,7 +32,7 @@ public interface PermissionDao {
      * @return
      */
     @Select
-    Optional<Permission> selectById(ID<Permission> id);
+    Optional<Permission> selectById(Integer id);
 
     /**
      * 権限を1件取得します。

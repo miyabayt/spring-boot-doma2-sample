@@ -24,7 +24,7 @@
                     <table class="table table-striped" th:object="${role}">
                         <tr>
                             <th>ID</th>
-                            <td th:text="*{id.value}"></td>
+                            <td th:text="*{id}"></td>
                         </tr>
                         <tr>
                             <th>ロールキー</th>
@@ -52,17 +52,17 @@
                         </thead>
                         <tbody>
                         <tr th:each="permission : ${permissions.data}">
-                            <td th:text="${permission.id.value}" />
+                            <td th:text="${permission.id}" />
                             <td th:text="${permission.categoryKey}" />
                             <td th:text="${permission.permissionKey}" />
                             <td th:text="${permission.permissionName}" />
-                            <td th:text="${enabled}" th:with="enabled=${role.permissions} != null and ${role.permissions[__${permission.id.value}__]}" />
+                            <td th:text="${enabled}" th:with="enabled=${role.permissions} != null and ${role.permissions[__${permission.id}__]}" />
                         </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="box-footer clearfix">
-                    <a th:href="@{/system/roles/edit/{id}(id=${role.id.value})}" class="btn btn-default bg-purple">編集</a>
+                    <a th:href="@{/system/roles/edit/{id}(id=${role.id})}" class="btn btn-default bg-purple">編集</a>
                     <a href="#" class="btn btn-danger">削除</a>
                 </div>
             </div>

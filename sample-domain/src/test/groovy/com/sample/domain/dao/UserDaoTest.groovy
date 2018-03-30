@@ -42,7 +42,7 @@ class UserDaoTest extends Specification {
 
     def "存在するメールアドレスを指定して更新した場合、更新件数が1件になること"() {
         when:
-        def user = userDao.selectById(ID.of(1))
+        def user = userDao.selectById(1)
 
         def updated = user.map({ u ->
             u.setAddress("test")

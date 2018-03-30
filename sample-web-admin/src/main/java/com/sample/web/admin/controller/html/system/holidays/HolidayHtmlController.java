@@ -17,7 +17,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Holiday;
 import com.sample.domain.service.system.HolidayService;
@@ -102,7 +101,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
         // 登録する
         val createdHoliday = holidayService.create(inputHoliday);
 
-        return "redirect:/system/holidays/show/" + createdHoliday.getId().getValue();
+        return "redirect:/system/holidays/show/" + createdHoliday.getId();
     }
 
     /**
@@ -155,7 +154,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
     @GetMapping("/show/{holidayId}")
     public String showHoliday(@PathVariable Integer holidayId, Model model) {
         // 1件取得する
-        val holiday = holidayService.findById(ID.of(holidayId));
+        val holiday = holidayService.findById(holidayId);
         model.addAttribute("holiday", holiday);
         return "modules/system/holidays/show";
     }
@@ -174,7 +173,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val holiday = holidayService.findById(ID.of(holidayId));
+            val holiday = holidayService.findById(holidayId);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map(holiday, form);
@@ -203,7 +202,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
         }
 
         // 更新対象を取得する
-        val holiday = holidayService.findById(ID.of(holidayId));
+        val holiday = holidayService.findById(holidayId);
 
         // 入力値を詰め替える
         modelMapper.map(form, holiday);
@@ -214,7 +213,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
         // セッションのholidayFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/system/holidays/show/" + updatedHoliday.getId().getValue();
+        return "redirect:/system/holidays/show/" + updatedHoliday.getId();
     }
 
     /**
@@ -227,7 +226,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
     @PostMapping("/remove/{holidayId}")
     public String removeHoliday(@PathVariable Integer holidayId, RedirectAttributes attributes) {
         // 削除対象を取得する
-        val holiday = holidayService.findById(ID.of(holidayId));
+        val holiday = holidayService.findById(holidayId);
 
         // 論理削除する
         holidayService.delete(holiday.getId());

@@ -59,7 +59,7 @@ public class UserRestController extends AbstractRestController {
     @GetMapping(value = "/{userId}")
     public Resource show(@PathVariable Integer userId) {
         // 1件取得する
-        User user = userService.findById(ID.of(userId));
+        User user = userService.findById(userId);
 
         Resource resource = resourceFactory.create();
         resource.setData(Arrays.asList(user));
@@ -103,7 +103,7 @@ public class UserRestController extends AbstractRestController {
         }
 
         // 1件更新する
-        inputUser.setId(ID.of(userId));
+        inputUser.setId(userId);
         User user = userService.update(inputUser);
 
         Resource resource = resourceFactory.create();
@@ -121,7 +121,7 @@ public class UserRestController extends AbstractRestController {
     @DeleteMapping(value = "/{userId}")
     public Resource delete(@PathVariable("userId") Integer userId) {
         // 1件取得する
-        User user = userService.delete(ID.of(userId));
+        User user = userService.delete(userId);
 
         Resource resource = resourceFactory.create();
         resource.setData(Arrays.asList(user));

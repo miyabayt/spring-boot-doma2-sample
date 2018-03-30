@@ -68,7 +68,7 @@
                         <tbody>
                             <tr th:each="role : ${pages.data}">
                                 <td>
-                                    <a th:href="@{/system/roles/show/__${role.id.value}__}" th:text="${role.id.value}" />
+                                    <a th:href="@{/system/roles/show/__${role.id}__}" th:text="${role.id}" />
                                 </td>
                                 <td th:text="${role.roleKey}" />
                                 <td th:text="${role.roleName}" />
