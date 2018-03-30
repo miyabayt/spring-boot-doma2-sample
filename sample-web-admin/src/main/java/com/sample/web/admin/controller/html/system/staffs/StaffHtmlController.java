@@ -19,7 +19,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Staff;
 import com.sample.domain.service.system.StaffService;
@@ -111,7 +110,7 @@ public class StaffHtmlController extends AbstractHtmlController {
         // 登録する
         val createdStaff = staffService.create(inputStaff);
 
-        return "redirect:/system/staffs/show/" + createdStaff.getId().getValue();
+        return "redirect:/system/staffs/show/" + createdStaff.getId();
     }
 
     /**
@@ -166,7 +165,7 @@ public class StaffHtmlController extends AbstractHtmlController {
     @GetMapping("/show/{staffId}")
     public String showStaff(@PathVariable Integer staffId, Model model) {
         // 1件取得する
-        val staff = staffService.findById(ID.of(staffId));
+        val staff = staffService.findById(staffId);
         model.addAttribute("staff", staff);
         return "modules/system/staffs/show";
     }
@@ -184,7 +183,7 @@ public class StaffHtmlController extends AbstractHtmlController {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val staff = staffService.findById(ID.of(staffId));
+            val staff = staffService.findById(staffId);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map(staff, form);
@@ -213,7 +212,7 @@ public class StaffHtmlController extends AbstractHtmlController {
         }
 
         // 更新対象を取得する
-        val staff = staffService.findById(ID.of(staffId));
+        val staff = staffService.findById(staffId);
 
         // 入力値を詰め替える
         modelMapper.map(form, staff);
@@ -230,7 +229,7 @@ public class StaffHtmlController extends AbstractHtmlController {
         // セッションのstaffFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/system/staffs/show/" + updatedStaff.getId().getValue();
+        return "redirect:/system/staffs/show/" + updatedStaff.getId();
     }
 
     /**
@@ -243,7 +242,7 @@ public class StaffHtmlController extends AbstractHtmlController {
     @PostMapping("/remove/{staffId}")
     public String removeStaff(@PathVariable Integer staffId, RedirectAttributes attributes) {
         // 削除対象を取得する
-        val staff = staffService.findById(ID.of(staffId));
+        val staff = staffService.findById(staffId);
 
         // 論理削除する
         staffService.delete(staff.getId());

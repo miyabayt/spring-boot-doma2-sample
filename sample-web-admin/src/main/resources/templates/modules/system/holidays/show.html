@@ -23,7 +23,7 @@
                     <table class="table table-hover" th:object="${holiday}">
                         <tr>
                             <th>ID</th>
-                            <td th:text="*{id.value}"></td>
+                            <td th:text="*{id}"></td>
                         </tr>
                         <tr>
                             <th>祝日名</th>
@@ -37,8 +37,8 @@
                     </table>
                 </div>
                 <div class="box-footer clearfix">
-                    <form th:action="@{'/system/holidays/remove/' + ${holiday.id.value}}" method="post">
-                        <a th:href="@{/system/holidays/edit/{id}(id=${holiday.id.value})}" class="btn btn-default bg-purple">編集</a>
+                    <form th:action="@{'/system/holidays/remove/' + ${holiday.id}}" method="post">
+                        <a th:href="@{/system/holidays/edit/{id}(id=${holiday.id})}" class="btn btn-default bg-purple">編集</a>
                         <button type="submit" class="btn btn-danger">削除</button>
                     </form>
                 </div>

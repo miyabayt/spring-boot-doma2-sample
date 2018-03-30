@@ -4,7 +4,6 @@ import org.seasar.doma.*;
 
 import com.sample.domain.dto.common.BZip2Data;
 import com.sample.domain.dto.common.DomaDtoImpl;
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.MultipartFileConvertible;
 
 import lombok.Getter;
@@ -24,7 +23,7 @@ public class UploadFile extends DomaDtoImpl implements MultipartFileConvertible 
     @Id
     @Column(name = "upload_file_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    ID<UploadFile> id;
+    Integer id;
 
     // ファイル名
     @Column(name = "file_name")

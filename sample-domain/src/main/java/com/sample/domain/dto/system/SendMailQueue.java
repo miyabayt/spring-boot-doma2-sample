@@ -6,7 +6,6 @@ import org.seasar.doma.*;
 
 import com.sample.domain.dto.common.CommaSeparatedString;
 import com.sample.domain.dto.common.DomaDtoImpl;
-import com.sample.domain.dto.common.ID;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +24,7 @@ public class SendMailQueue extends DomaDtoImpl {
     @Id
     @Column(name = "send_mail_queue_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    ID<SendMailQueue> id;
+    Integer id;
 
     @Column(name = "from_address")
     String from;

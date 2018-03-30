@@ -8,7 +8,6 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.system.Staff;
 
 @ConfigAutowireable
@@ -32,7 +31,7 @@ public interface StaffDao {
      * @return
      */
     @Select
-    Optional<Staff> selectById(ID<Staff> id);
+    Optional<Staff> selectById(Integer id);
 
     /**
      * 担当者を1件取得します。

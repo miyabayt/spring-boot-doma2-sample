@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.sample.domain.dao.system.CodeCategoryDao;
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.CodeCategory;
@@ -63,7 +62,7 @@ public class CodeCategoryService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public CodeCategory findById(final ID<CodeCategory> id) {
+    public CodeCategory findById(final Integer id) {
         // 1件取得
         val codeCategory = codeCategoryDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("code_category_id=" + id + " のデータが見つかりません。"));
@@ -123,7 +122,7 @@ public class CodeCategoryService extends BaseTransactionalService {
      *
      * @return
      */
-    public CodeCategory delete(final ID<CodeCategory> id) {
+    public CodeCategory delete(final Integer id) {
         val codeCategory = codeCategoryDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("code_category_id=" + id + " のデータが見つかりません。"));
 

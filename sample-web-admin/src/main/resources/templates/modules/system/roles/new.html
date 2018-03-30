@@ -47,16 +47,16 @@
                             </thead>
                             <tbody>
                                 <tr th:each="permission : ${permissions.data}">
-                                    <td th:text="${permission.id.value}" />
+                                    <td th:text="${permission.id}" />
                                     <td th:text="${permission.categoryKey}" />
                                     <td th:text="${permission.permissionKey}" />
                                     <td th:text="${permission.permissionName}" />
                                     <td>
                                         <!--/* 複数行の値をマップ変数にバインドする */-->
                                         <input type="checkbox" class="form-check-input" th:name="${inputName}"
-                                               th:field="${roleForm.permissions[__${permission.id.value}__]}"
+                                               th:field="${roleForm.permissions[__${permission.id}__]}"
                                                th:value="true"
-                                               th:with="inputName=${'permissions[' + permission.id.value + ']'}" />
+                                               th:with="inputName=${'permissions[' + permission.id + ']'}" />
                                     </td>
                                 </tr>
                             </tbody>

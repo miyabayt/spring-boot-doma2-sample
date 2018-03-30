@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.sample.domain.dao.system.MailTemplateDao;
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.MailTemplate;
@@ -48,7 +47,7 @@ public class MailTemplateService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public MailTemplate findById(final ID<MailTemplate> id) {
+    public MailTemplate findById(final Integer id) {
         // 1件取得
         val mailTemplate = mailTemplateDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("mailTemplate_id=" + id + " のデータが見つかりません。"));
@@ -94,7 +93,7 @@ public class MailTemplateService extends BaseTransactionalService {
      *
      * @return
      */
-    public MailTemplate delete(final ID<MailTemplate> id) {
+    public MailTemplate delete(final Integer id) {
         val mailTemplate = mailTemplateDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("mailTemplate_id=" + id + " のデータが見つかりません。"));
 

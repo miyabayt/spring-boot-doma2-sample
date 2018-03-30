@@ -17,7 +17,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Permission;
@@ -112,7 +111,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         // 登録する
         val createdRole = roleService.create(inputRole);
 
-        return "redirect:/system/roles/show/" + createdRole.getId().getValue();
+        return "redirect:/system/roles/show/" + createdRole.getId();
     }
 
     /**
@@ -165,7 +164,7 @@ public class RoleHtmlController extends AbstractHtmlController {
     @GetMapping("/show/{roleId}")
     public String showRole(@PathVariable Integer roleId, Model model) {
         // 1件取得する
-        val role = roleService.findById(ID.of(roleId));
+        val role = roleService.findById(roleId);
         model.addAttribute("role", role);
 
         // 権限一覧を取得する
@@ -188,7 +187,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val role = roleService.findById(ID.of(roleId));
+            val role = roleService.findById(roleId);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map(role, form);
@@ -221,7 +220,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         }
 
         // 更新対象を取得する
-        val role = roleService.findById(ID.of(roleId));
+        val role = roleService.findById(roleId);
 
         // 入力値を詰め替える
         modelMapper.map(form, role);
@@ -232,7 +231,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         // セッションのroleFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/system/roles/show/" + updatedRole.getId().getValue();
+        return "redirect:/system/roles/show/" + updatedRole.getId();
     }
 
     /**
@@ -245,7 +244,7 @@ public class RoleHtmlController extends AbstractHtmlController {
     @PostMapping("/remove/{roleId}")
     public String removeRole(@PathVariable Integer roleId, RedirectAttributes attributes) {
         // 削除対象を取得する
-        val role = roleService.findById(ID.of(roleId));
+        val role = roleService.findById(roleId);
 
         // 論理削除する
         roleService.delete(role.getId());
