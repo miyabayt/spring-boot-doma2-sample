@@ -72,7 +72,7 @@
                         <tbody>
                             <tr th:each="code : ${pages.data}">
                                 <td>
-                                    <a th:href="@{/system/codes/show/__${code.id.value}__}" th:text="${code.id.value}" />
+                                    <a th:href="@{/system/codes/show/__${code.id}__}" th:text="${code.id}" />
                                 </td>
                                 <td th:text="${code.categoryKey}" />
                                 <td th:text="${code.categoryName}" />

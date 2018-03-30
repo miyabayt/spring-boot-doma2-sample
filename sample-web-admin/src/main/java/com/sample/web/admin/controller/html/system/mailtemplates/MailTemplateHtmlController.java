@@ -17,7 +17,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.MailTemplate;
 import com.sample.domain.service.system.MailTemplateService;
@@ -102,7 +101,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
         // 登録する
         val createdMailtemplate = mailTemplateService.create(inputMailtemplate);
 
-        return "redirect:/system/mailtemplates/show/" + createdMailtemplate.getId().getValue();
+        return "redirect:/system/mailtemplates/show/" + createdMailtemplate.getId();
     }
 
     /**
@@ -155,7 +154,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
     @GetMapping("/show/{mailTemplateId}")
     public String showMailtemplate(@PathVariable Integer mailTemplateId, Model model) {
         // 1件取得する
-        val mailTemplate = mailTemplateService.findById(ID.of(mailTemplateId));
+        val mailTemplate = mailTemplateService.findById(mailTemplateId);
         model.addAttribute("mailTemplate", mailTemplate);
         return "modules/system/mailtemplates/show";
     }
@@ -174,7 +173,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val mailTemplate = mailTemplateService.findById(ID.of(mailTemplateId));
+            val mailTemplate = mailTemplateService.findById(mailTemplateId);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map(mailTemplate, form);
@@ -204,7 +203,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
         }
 
         // 更新対象を取得する
-        val mailTemplate = mailTemplateService.findById(ID.of(mailTemplateId));
+        val mailTemplate = mailTemplateService.findById(mailTemplateId);
 
         // 入力値を詰め替える
         modelMapper.map(form, mailTemplate);
@@ -215,7 +214,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
         // セッションのmailTemplateFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/system/mailtemplates/show/" + updatedMailtemplate.getId().getValue();
+        return "redirect:/system/mailtemplates/show/" + updatedMailtemplate.getId();
     }
 
     /**
@@ -228,7 +227,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
     @PostMapping("/remove/{mailTemplateId}")
     public String removeMailtemplate(@PathVariable Integer mailTemplateId, RedirectAttributes attributes) {
         // 削除対象を取得する
-        val mailTemplate = mailTemplateService.findById(ID.of(mailTemplateId));
+        val mailTemplate = mailTemplateService.findById(mailTemplateId);
 
         // 論理削除する
         mailTemplateService.delete(mailTemplate.getId());

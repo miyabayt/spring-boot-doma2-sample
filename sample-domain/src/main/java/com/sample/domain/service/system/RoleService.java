@@ -17,7 +17,6 @@ import org.springframework.util.Assert;
 
 import com.sample.domain.dao.system.RoleDao;
 import com.sample.domain.dao.system.RolePermissionDao;
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Role;
@@ -61,7 +60,7 @@ public class RoleService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Role findById(final ID<Role> id) {
+    public Role findById(final Integer id) {
         // 1件取得
         val role = roleDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("role_id=" + id + " のデータが見つかりません。"));
@@ -124,7 +123,7 @@ public class RoleService extends BaseTransactionalService {
      *
      * @return
      */
-    public Role delete(final ID<Role> id) {
+    public Role delete(final Integer id) {
         val role = roleDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("role_id=" + id + " のデータが見つかりません。"));
 

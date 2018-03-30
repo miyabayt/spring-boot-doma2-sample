@@ -66,7 +66,7 @@
                         <tbody>
                             <tr th:each="holiday : ${pages.data}">
                                 <td>
-                                    <a th:href="@{/system/holidays/show/__${holiday.id.value}__}" th:text="${holiday.id.value}" />
+                                    <a th:href="@{/system/holidays/show/__${holiday.id}__}" th:text="${holiday.id}" />
                                 </td>
                                 <td th:text="${holiday.holidayName}" />
                                 <td th:text="${(v != null) ? #temporals.format(v, 'yyyy/MM/dd') : ''}"

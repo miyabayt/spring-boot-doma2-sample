@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Email;
 import org.seasar.doma.*;
 
 import com.sample.domain.dto.common.DomaDtoImpl;
-import com.sample.domain.dto.common.ID;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +26,7 @@ public class Staff extends DomaDtoImpl {
     @Id
     @Column(name = "staff_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    ID<Staff> id;
+    Integer id;
 
     String password;
 

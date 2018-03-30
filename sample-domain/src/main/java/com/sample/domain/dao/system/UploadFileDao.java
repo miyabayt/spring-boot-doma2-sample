@@ -6,7 +6,6 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.system.UploadFile;
 
 @ConfigAutowireable
@@ -30,7 +29,7 @@ public interface UploadFileDao {
      * @return
      */
     @Select
-    UploadFile selectById(ID<UploadFile> id);
+    UploadFile selectById(Integer id);
 
     /**
      * アップロードファイルを1件取得します。

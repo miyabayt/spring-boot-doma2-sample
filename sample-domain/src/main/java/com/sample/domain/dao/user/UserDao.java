@@ -8,7 +8,6 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.user.User;
 
 @ConfigAutowireable
@@ -32,7 +31,7 @@ public interface UserDao {
      * @return
      */
     @Select
-    Optional<User> selectById(ID<User> id);
+    Optional<User> selectById(Integer id);
 
     /**
      * ユーザーを1件取得します。
