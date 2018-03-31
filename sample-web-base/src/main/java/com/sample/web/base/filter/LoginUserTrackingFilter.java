@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.MDC;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -54,8 +53,8 @@ public class LoginUserTrackingFilter extends OncePerRequestFilter {
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
 
-            if (principal instanceof UserDetails) {
-                val loginId = ((UserDetails) principal).getUsername();
+            if (principal instanceof UserIdAware) {
+                val loginId = ((UserIdAware) principal).getUserId();
                 return Optional.of(loginId);
             }
         }
