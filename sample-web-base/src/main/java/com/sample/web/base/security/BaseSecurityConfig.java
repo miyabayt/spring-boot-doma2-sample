@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -100,11 +102,18 @@ public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()//
                 .csrfTokenRepository(new CookieCsrfTokenRepository());
 
+        String[] permittedUrls = { LOGIN_TIMEOUT_URL, FORBIDDEN_URL, ERROR_URL, RESET_PASSWORD_URL,
+                CHANGE_PASSWORD_URL };
+
         http.authorizeRequests()
                 // エラー画面は認証をかけない
-                .antMatchers(FORBIDDEN_URL, ERROR_URL, RESET_PASSWORD_URL, CHANGE_PASSWORD_URL).permitAll()
+                .antMatchers(permittedUrls).permitAll()
                 // エラー画面以外は、認証をかける
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()//
+                .and()//
+                .exceptionHandling()//
+                .authenticationEntryPoint(authenticationEntryPoint())//
+                .accessDeniedHandler(accessDeniedHandler());
 
         http.formLogin()
                 // ログイン画面のURL
@@ -128,15 +137,25 @@ public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
                 // ログアウト画面のURL
                 .logoutUrl(LOGOUT_URL)
                 // ログアウト後の遷移先
-                .logoutSuccessUrl(LOGIN_URL)
+                .logoutSuccessUrl(LOGOUT_SUCCESS_URL)
                 // ajaxの場合は、HTTPステータスを返す
                 .defaultLogoutSuccessHandlerFor(new HttpStatusReturningLogoutSuccessHandler(),
-                        request -> RequestUtils.isAjaxRequest(request))
+                        RequestUtils::isAjaxRequest)
                 // セッションを破棄する
                 .invalidateHttpSession(true).permitAll();
 
         // RememberMe
         http.rememberMe().key(REMEMBER_ME_KEY)//
                 .rememberMeServices(multiDeviceRememberMeServices());
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new DefaultAccessDeniedHandler();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new DefaultAuthenticationEntryPoint(LOGIN_URL, LOGIN_TIMEOUT_URL);
     }
 }
