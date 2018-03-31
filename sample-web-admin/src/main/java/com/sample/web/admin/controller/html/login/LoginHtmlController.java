@@ -29,11 +29,13 @@ public class LoginHtmlController extends AbstractHtmlController {
 
     /**
      * 初期表示
-     * 
+     *
+     * @param form
+     * @param model
      * @return
      */
     @GetMapping(LOGIN_URL)
-    public String index(@ModelAttribute LoginForm form) {
+    public String index(@ModelAttribute LoginForm form, Model model) {
         return "modules/login/login";
     }
 
@@ -41,13 +43,13 @@ public class LoginHtmlController extends AbstractHtmlController {
      * 入力チェック
      * 
      * @param form
-     * @param result
+     * @param br
      * @return
      */
     @PostMapping(LOGIN_URL)
-    public String index(@Validated @ModelAttribute LoginForm form, BindingResult result) {
+    public String index(@Validated @ModelAttribute LoginForm form, BindingResult br) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
+        if (br.hasErrors()) {
             return "modules/login/login";
         }
 
@@ -81,11 +83,24 @@ public class LoginHtmlController extends AbstractHtmlController {
     }
 
     /**
+     * タイムアウトした時
+     * 
+     * @param form
+     * @param model
+     * @return
+     */
+    @GetMapping(LOGIN_TIMEOUT_URL)
+    public String loginTimeout(@ModelAttribute LoginForm form, Model model) {
+        model.addAttribute(GLOBAL_MESSAGE, getMessage("login.timeout"));
+        return "modules/login/login";
+    }
+
+    /**
      * ログアウト
      *
      * @return
      */
-    @PostMapping(LOGOUT_URL)
+    @GetMapping(LOGOUT_SUCCESS_URL)
     public String logout(@ModelAttribute LoginForm form, RedirectAttributes attributes) {
         attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage("logout.success"));
         return "redirect:/login";

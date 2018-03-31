@@ -19,5 +19,6 @@ public class LoginForm implements Serializable {
     @NotEmpty
     String password;
 
+    // ログインしたままにするか
     boolean rememberMe;
 }
