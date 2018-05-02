@@ -1,0 +1,38 @@
+spring:
+    profiles: production
+    messages:
+        cache-seconds: -1
+    datasource:
+        platform: mysql
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://${MYSQL_DB_HOST}:3306/sample?useSSL=false&characterEncoding=UTF-8
+        username: root
+        password: passw0rd
+    session:
+        jdbc:
+            # spring-session-jdbcに必要なテーブルを作成する
+            schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
+    resources:
+        # キャッシュの無効化
+        cache-period: 0
+flyway:
+    enable: true
+    baseline-on-migrate: true
+doma:
+    # SQLファイルをキャッシュしない
+    sql-file-repository: no_cache
+logging:
+    level:
+        org.springframework: INFO
+        org.springframework.jdbc: INFO
+        org.thymeleaf: DEBUG
+        com.sample: DEBUG
+
+####
+# アプリケーションの設定
+application:
+    fileUploadLocation: build/sample
+    cors:
+        allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, X-XSRF-TOKEN"
+        allowedMethods: "POST, GET, PUT, OPTIONS, DELETE"
+        allowedOrigins: "*" # CORSを許可するドメイン名を指定する

@@ -1,0 +1,27 @@
+[
+  {
+    "name": "springboot",
+    "image": "mirrored1976/springboot-farget-sample",
+    "cpu": 512,
+    "memory": 1024,
+    "essential": true,
+    "network_mode": "awsvpc",
+    "portMappings": [
+      {
+        "containerPort": 18081
+      }
+    ],
+    "environment" : [
+      { "name" : "SPRING_PROFILES_ACTIVE", "value" : "production" },
+      { "name" : "MYSQL_DB_HOST", "value" : "springboot-fargate-sample-aurora-cluster.cluster-ccqbozkgxyaj.us-east-1.rds.amazonaws.com" }
+    ],
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-group": "awslogs-${app_name}-log",
+            "awslogs-region": "${aws_region}",
+            "awslogs-stream-prefix": "awslogs-${app_name}-springboot"
+        }
+    }
+  }
+]
