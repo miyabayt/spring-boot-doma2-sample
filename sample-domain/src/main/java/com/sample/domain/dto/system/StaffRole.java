@@ -19,10 +19,10 @@ public class StaffRole extends DomaDtoImpl {
     @Id
     @Column(name = "staff_role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     // 担当者ID
-    Integer staffId;
+    Long staffId;
 
     // 役割キー
     String roleKey;

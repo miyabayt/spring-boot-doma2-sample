@@ -29,7 +29,7 @@ public interface UploadFileDao {
      * @return
      */
     @Select
-    UploadFile selectById(Integer id);
+    UploadFile selectById(Long id);
 
     /**
      * アップロードファイルを1件取得します。

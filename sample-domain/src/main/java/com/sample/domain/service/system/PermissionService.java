@@ -49,7 +49,7 @@ public class PermissionService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Permission findById(final Integer id) {
+    public Permission findById(final Long id) {
         // 1件取得
         val permission = permissionDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("permission_id=" + id + " のデータが見つかりません。"));
@@ -95,7 +95,7 @@ public class PermissionService extends BaseTransactionalService {
      *
      * @return
      */
-    public Permission delete(final Integer id) {
+    public Permission delete(final Long id) {
         val permission = permissionDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("permission_id=" + id + " のデータが見つかりません。"));
 

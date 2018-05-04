@@ -12,7 +12,7 @@ public class Search[[${upperFuncName}]]Form extends BaseSearchForm implements Pa
 
     private static final long serialVersionUID = -1L;
 
-    Integer id;
+    Long id;
 
     String [[${lowerFuncName}]]Name;
 }

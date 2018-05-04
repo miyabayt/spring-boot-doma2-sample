@@ -37,7 +37,7 @@ public interface StaffRoleDao {
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectByStaffId(Integer id, final Collector<StaffRole, ?, R> collector);
+    <R> R selectByStaffId(Long id, final Collector<StaffRole, ?, R> collector);
 
     /**
      * 担当者権限を1件取得します。
@@ -46,7 +46,7 @@ public interface StaffRoleDao {
      * @return
      */
     @Select
-    Optional<Permission> selectById(Integer id);
+    Optional<Permission> selectById(Long id);
 
     /**
      * 担当者権限を1件取得します。

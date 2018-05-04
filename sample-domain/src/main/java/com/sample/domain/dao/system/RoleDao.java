@@ -31,7 +31,7 @@ public interface RoleDao {
      * @return
      */
     @Select
-    Optional<Role> selectById(Integer id);
+    Optional<Role> selectById(Long id);
 
     /**
      * 役割を1件取得します。

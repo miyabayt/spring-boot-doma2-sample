@@ -19,7 +19,7 @@ public class Permission extends DomaDtoImpl {
     @Id
     @Column(name = "permission_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     // 権限カテゴリキー
     String categoryKey;

@@ -32,7 +32,7 @@ public interface PermissionDao {
      * @return
      */
     @Select
-    Optional<Permission> selectById(Integer id);
+    Optional<Permission> selectById(Long id);
 
     /**
      * 権限を1件取得します。

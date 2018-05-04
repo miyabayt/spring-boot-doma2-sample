@@ -47,7 +47,7 @@ public class MailTemplateService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public MailTemplate findById(final Integer id) {
+    public MailTemplate findById(final Long id) {
         // 1件取得
         val mailTemplate = mailTemplateDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("mailTemplate_id=" + id + " のデータが見つかりません。"));
@@ -93,7 +93,7 @@ public class MailTemplateService extends BaseTransactionalService {
      *
      * @return
      */
-    public MailTemplate delete(final Integer id) {
+    public MailTemplate delete(final Long id) {
         val mailTemplate = mailTemplateDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("mailTemplate_id=" + id + " のデータが見つかりません。"));
 
