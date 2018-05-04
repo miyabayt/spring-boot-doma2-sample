@@ -139,7 +139,18 @@ public class ValidateUtils {
      * @param obj2
      * @return
      */
-    public static boolean equals(Object obj1, Object obj2) {
+    public static boolean isEquals(Object obj1, Object obj2) {
         return Objects.equals(obj1, obj2);
+    }
+
+    /**
+     * 引数同士が等しいかチェックします。
+     *
+     * @param obj1
+     * @param obj2
+     * @return
+     */
+    public static boolean isNotEquals(Object obj1, Object obj2) {
+        return !isEquals(obj1, obj2);
     }
 }

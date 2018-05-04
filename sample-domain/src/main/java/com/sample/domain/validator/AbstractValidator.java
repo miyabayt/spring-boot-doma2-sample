@@ -3,8 +3,6 @@ package com.sample.domain.validator;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.sample.common.util.ValidateUtils;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -50,36 +48,5 @@ public abstract class AbstractValidator<T> implements Validator {
      */
     protected boolean passThruBeanValidation(boolean hasErrors) {
         return false;
-    }
-
-    /**
-     * 空であるかどうかを示す値を返します。
-     *
-     * @param value
-     * @return
-     */
-    protected boolean isEmpty(String value) {
-        return ValidateUtils.isEmpty(value);
-    }
-
-    /**
-     * NULL値であるかどうかを示す値を返します。
-     *
-     * @param value
-     * @return
-     */
-    protected boolean isNull(Object value) {
-        return value == null;
-    }
-
-    /**
-     * 同一の値であるかどうかを示す値を返します。
-     *
-     * @param obj1
-     * @param obj2
-     * @return
-     */
-    protected boolean equals(Object obj1, Object obj2) {
-        return ValidateUtils.equals(obj1, obj2);
     }
 }
