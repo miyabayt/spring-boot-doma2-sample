@@ -47,7 +47,7 @@ public class CodeService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Code findById(final Integer id) {
+    public Code findById(final Long id) {
         // 1件取得
         val code = codeDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("code_id=" + id + " のデータが見つかりません。"));
@@ -107,7 +107,7 @@ public class CodeService extends BaseTransactionalService {
      *
      * @return
      */
-    public Code delete(final Integer id) {
+    public Code delete(final Long id) {
         val code = codeDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("code_id=" + id + " のデータが見つかりません。"));
 

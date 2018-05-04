@@ -23,7 +23,7 @@ public class Role extends DomaDtoImpl {
     @Id
     @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     // 役割キー
     String roleKey;

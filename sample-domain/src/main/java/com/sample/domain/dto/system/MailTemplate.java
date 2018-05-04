@@ -21,7 +21,7 @@ public class MailTemplate extends DomaDtoImpl {
     @Id
     @Column(name = "mail_template_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     // カテゴリキー
     String categoryKey;

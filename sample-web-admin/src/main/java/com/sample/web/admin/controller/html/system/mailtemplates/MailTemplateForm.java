@@ -13,7 +13,7 @@ public class MailTemplateForm extends BaseForm {
 
     private static final long serialVersionUID = -5860252006532570164L;
 
-    Integer id;
+    Long id;
 
     // メールテンプレートキー
     @NotEmpty

@@ -31,7 +31,7 @@ public interface HolidayDao { // TODO
      * @return
      */
     @Select
-    Optional<Holiday> selectById(Integer id);
+    Optional<Holiday> selectById(Long id);
 
     /**
      * 祝日を1件取得します。

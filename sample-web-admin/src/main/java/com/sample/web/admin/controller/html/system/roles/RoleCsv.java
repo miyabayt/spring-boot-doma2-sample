@@ -18,7 +18,7 @@ public class RoleCsv implements Serializable {
     private static final long serialVersionUID = -3895412714445561940L;
 
     @JsonProperty("役割ID")
-    Integer id;
+    Long id;
 
     @JsonProperty("役割キー")
     String roleKey;

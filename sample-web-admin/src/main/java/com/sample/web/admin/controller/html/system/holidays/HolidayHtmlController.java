@@ -152,7 +152,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/show/{holidayId}")
-    public String showHoliday(@PathVariable Integer holidayId, Model model) {
+    public String showHoliday(@PathVariable Long holidayId, Model model) {
         // 1件取得する
         val holiday = holidayService.findById(holidayId);
         model.addAttribute("holiday", holiday);
@@ -168,7 +168,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/edit/{holidayId}")
-    public String editHoliday(@PathVariable Integer holidayId, @ModelAttribute("holidayForm") HolidayForm form,
+    public String editHoliday(@PathVariable Long holidayId, @ModelAttribute("holidayForm") HolidayForm form,
             Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
@@ -194,7 +194,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/edit/{holidayId}")
     public String editHoliday(@Validated @ModelAttribute("holidayForm") HolidayForm form, BindingResult result,
-            @PathVariable Integer holidayId, SessionStatus sessionStatus, RedirectAttributes attributes) {
+            @PathVariable Long holidayId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
             setFlashAttributeErrors(attributes, result);
@@ -224,7 +224,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{holidayId}")
-    public String removeHoliday(@PathVariable Integer holidayId, RedirectAttributes attributes) {
+    public String removeHoliday(@PathVariable Long holidayId, RedirectAttributes attributes) {
         // 削除対象を取得する
         val holiday = holidayService.findById(holidayId);
 

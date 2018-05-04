@@ -12,7 +12,7 @@ public class SearchMailTemplateForm extends BaseSearchForm implements Pageable {
 
     private static final long serialVersionUID = -6365336122351427141L;
 
-    Integer id;
+    Long id;
 
     // メールテンプレートキー
     String templateKey;

@@ -21,7 +21,7 @@ public class Holiday extends DomaDtoImpl {
     @Id
     @Column(name = "holiday_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     // 祝日名
     String holidayName;

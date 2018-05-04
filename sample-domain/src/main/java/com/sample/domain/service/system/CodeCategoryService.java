@@ -62,7 +62,7 @@ public class CodeCategoryService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public CodeCategory findById(final Integer id) {
+    public CodeCategory findById(final Long id) {
         // 1件取得
         val codeCategory = codeCategoryDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("code_category_id=" + id + " のデータが見つかりません。"));
@@ -122,7 +122,7 @@ public class CodeCategoryService extends BaseTransactionalService {
      *
      * @return
      */
-    public CodeCategory delete(final Integer id) {
+    public CodeCategory delete(final Long id) {
         val codeCategory = codeCategoryDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("code_category_id=" + id + " のデータが見つかりません。"));
 

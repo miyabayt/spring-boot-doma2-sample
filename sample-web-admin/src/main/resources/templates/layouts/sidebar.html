@@ -16,7 +16,7 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li th:class="${item=='user' ? 'active' : ''}"><a href="#" th:href="@{/user/users/find(page=1)}"><i class="fa fa-user-o"></i>顧客マスタ</a></li>
+                            <li th:class="${item=='user' ? 'active' : ''}"><a href="#" th:href="@{/users/users/find(page=1)}"><i class="fa fa-user-o"></i>顧客マスタ</a></li>
                         </ul>
                     </li>
                     <li class="treeview" th:class="|treeview ${category=='system' ? 'active' : ''}|">

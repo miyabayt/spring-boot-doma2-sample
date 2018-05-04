@@ -28,7 +28,7 @@ public class User extends DomaDtoImpl {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     // ハッシュ化されたパスワード
     @JsonIgnore
@@ -58,7 +58,7 @@ public class User extends DomaDtoImpl {
 
     // 添付ファイルID
     @JsonIgnore
-    Integer uploadFileId;
+    Long uploadFileId;
 
     // 添付ファイル
     @Transient // Domaで永続化しない

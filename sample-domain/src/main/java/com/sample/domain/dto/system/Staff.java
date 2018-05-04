@@ -26,7 +26,7 @@ public class Staff extends DomaDtoImpl {
     @Id
     @Column(name = "staff_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     String password;
 

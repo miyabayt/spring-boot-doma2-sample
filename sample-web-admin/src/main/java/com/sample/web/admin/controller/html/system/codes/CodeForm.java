@@ -15,7 +15,7 @@ public class CodeForm extends BaseForm {
 
     private static final long serialVersionUID = 7555305356779221873L;
 
-    Integer id;
+    Long id;
 
     // コードキー
     @NotEmpty

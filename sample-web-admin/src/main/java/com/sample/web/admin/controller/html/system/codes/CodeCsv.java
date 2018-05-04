@@ -18,7 +18,7 @@ public class CodeCsv implements Serializable {
     private static final long serialVersionUID = -3895412714445561940L;
 
     @JsonProperty("コードID")
-    Integer id;
+    Long id;
 
     @JsonProperty("コード分類キー")
     String categoryKey;
