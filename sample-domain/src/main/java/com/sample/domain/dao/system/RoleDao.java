@@ -8,7 +8,6 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.system.Role;
 
 @ConfigAutowireable
@@ -32,7 +31,7 @@ public interface RoleDao {
      * @return
      */
     @Select
-    Optional<Role> selectById(ID<Role> id);
+    Optional<Role> selectById(Long id);
 
     /**
      * 役割を1件取得します。

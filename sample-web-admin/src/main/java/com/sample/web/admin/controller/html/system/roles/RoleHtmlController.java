@@ -17,7 +17,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Permission;
@@ -112,7 +111,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         // 登録する
         val createdRole = roleService.create(inputRole);
 
-        return "redirect:/system/roles/show/" + createdRole.getId().getValue();
+        return "redirect:/system/roles/show/" + createdRole.getId();
     }
 
     /**
@@ -163,9 +162,9 @@ public class RoleHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/show/{roleId}")
-    public String showRole(@PathVariable Integer roleId, Model model) {
+    public String showRole(@PathVariable Long roleId, Model model) {
         // 1件取得する
-        val role = roleService.findById(ID.of(roleId));
+        val role = roleService.findById(roleId);
         model.addAttribute("role", role);
 
         // 権限一覧を取得する
@@ -184,11 +183,11 @@ public class RoleHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/edit/{roleId}")
-    public String editRole(@PathVariable Integer roleId, @ModelAttribute("roleForm") RoleForm form, Model model) {
+    public String editRole(@PathVariable Long roleId, @ModelAttribute("roleForm") RoleForm form, Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val role = roleService.findById(ID.of(roleId));
+            val role = roleService.findById(roleId);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map(role, form);
@@ -213,7 +212,7 @@ public class RoleHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/edit/{roleId}")
     public String editRole(@Validated @ModelAttribute("roleForm") RoleForm form, BindingResult result,
-            @PathVariable Integer roleId, SessionStatus sessionStatus, RedirectAttributes attributes) {
+            @PathVariable Long roleId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
             setFlashAttributeErrors(attributes, result);
@@ -221,7 +220,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         }
 
         // 更新対象を取得する
-        val role = roleService.findById(ID.of(roleId));
+        val role = roleService.findById(roleId);
 
         // 入力値を詰め替える
         modelMapper.map(form, role);
@@ -232,7 +231,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         // セッションのroleFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/system/roles/show/" + updatedRole.getId().getValue();
+        return "redirect:/system/roles/show/" + updatedRole.getId();
     }
 
     /**
@@ -243,9 +242,9 @@ public class RoleHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{roleId}")
-    public String removeRole(@PathVariable Integer roleId, RedirectAttributes attributes) {
+    public String removeRole(@PathVariable Long roleId, RedirectAttributes attributes) {
         // 削除対象を取得する
-        val role = roleService.findById(ID.of(roleId));
+        val role = roleService.findById(roleId);
 
         // 論理削除する
         roleService.delete(role.getId());

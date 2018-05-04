@@ -48,6 +48,11 @@ public class RequestTrackingInterceptor extends BaseHandlerInterceptor {
         // 処理完了後
 
         val beforeNanoSec = startTimeHolder.get();
+
+        if (beforeNanoSec == null) {
+            return;
+        }
+
         val elapsedNanoSec = System.nanoTime() - beforeNanoSec;
         val elapsedMilliSec = NANOSECONDS.toMillis(elapsedNanoSec);
         log.info("path={}, method={}, Elapsed {}ms.", request.getRequestURI(), request.getMethod(), elapsedMilliSec);

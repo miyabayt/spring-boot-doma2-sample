@@ -8,7 +8,6 @@ import org.seasar.doma.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sample.domain.dto.common.DomaDtoImpl;
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.system.UploadFile;
 
 import lombok.Getter;
@@ -29,7 +28,7 @@ public class User extends DomaDtoImpl {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    ID<User> id;
+    Long id;
 
     // ハッシュ化されたパスワード
     @JsonIgnore
@@ -59,7 +58,7 @@ public class User extends DomaDtoImpl {
 
     // 添付ファイルID
     @JsonIgnore
-    ID<UploadFile> uploadFileId;
+    Long uploadFileId;
 
     // 添付ファイル
     @Transient // Domaで永続化しない

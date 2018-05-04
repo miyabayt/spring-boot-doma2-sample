@@ -19,7 +19,7 @@ public class StaffCsv implements Serializable {
     private static final long serialVersionUID = -1883999589975469540L;
 
     @JsonProperty("担当者ID")
-    Integer id;
+    Long id;
 
     // ハッシュ化されたパスワード
     @JsonIgnore // CSVに出力しない

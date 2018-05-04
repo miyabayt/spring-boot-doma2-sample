@@ -147,6 +147,7 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         return bean;
     }
 
+    @Bean
     public FilterRegistrationBean loginUserTrackingFilterBean() {
         val filter = new LoginUserTrackingFilter();
         filter.setExcludeUrlPatterns(Arrays.asList(WEBJARS_URL, STATIC_RESOURCES_URL));

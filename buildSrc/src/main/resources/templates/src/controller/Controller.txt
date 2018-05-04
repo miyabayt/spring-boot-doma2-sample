@@ -155,7 +155,7 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
     @GetMapping("/show/{[[${lowerFuncName}]]Id}")
     public String show[[${upperFuncName}]](@PathVariable Integer [[${lowerFuncName}]]Id, Model model) {
         // 1件取得する
-        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(ID.of([[${lowerFuncName}]]Id));
+        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById([[${lowerFuncName}]]Id);
         model.addAttribute("[[${lowerFuncName}]]", [[${lowerFuncName}]]);
         return "modules/[[${subSystem}]]/[[${lowerFuncName}]]s/show";
     }
@@ -173,7 +173,7 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(ID.of([[${lowerFuncName}]]Id));
+            val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(${lowerFuncName}]]Id);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map([[${lowerFuncName}]], form);
@@ -202,7 +202,7 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
         }
 
         // 更新対象を取得する
-        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(ID.of([[${lowerFuncName}]]Id));
+        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById([[${lowerFuncName}]]Id);
 
         // 入力値を詰め替える
         modelMapper.map(form, [[${lowerFuncName}]]);
@@ -226,7 +226,7 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
     @PostMapping("/remove/{[[${lowerFuncName}]]Id}")
     public String remove[[${upperFuncName}]](@PathVariable Integer [[${lowerFuncName}]]Id, RedirectAttributes attributes) {
         // 削除対象を取得する
-        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(ID.of([[${lowerFuncName}]]Id));
+        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(${lowerFuncName}]]Id);
 
         // 論理削除する
         [[${lowerFuncName}]]Service.delete([[${lowerFuncName}]].getId());

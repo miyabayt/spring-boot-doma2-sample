@@ -12,7 +12,7 @@ public class SearchRoleForm extends BaseSearchForm implements Pageable {
 
     private static final long serialVersionUID = 7979636448439604680L;
 
-    Integer id;
+    Long id;
 
     // 役割キー
     String roleKey;

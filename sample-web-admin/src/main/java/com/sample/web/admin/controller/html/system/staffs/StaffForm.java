@@ -16,7 +16,7 @@ public class StaffForm extends BaseForm {
 
     private static final long serialVersionUID = -6807767990335584883L;
 
-    Integer id;
+    Long id;
 
     // 名前
     @NotEmpty

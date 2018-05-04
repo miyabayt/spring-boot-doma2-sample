@@ -1,4 +1,4 @@
-package com.sample.web.admin.controller.html.user.users;
+package com.sample.web.admin.controller.html.users.users;
 
 import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
@@ -20,11 +20,11 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.UploadFile;
 import com.sample.domain.dto.user.User;
-import com.sample.domain.service.user.UserService;
+import com.sample.domain.service.users.UserService;
+import com.sample.web.admin.controller.html.user.users.UserFormValidator;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.util.MultipartFileUtils;
 import com.sample.web.base.view.CsvView;
@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
  * ユーザー管理
  */
 @Controller
-@RequestMapping("/user/users")
+@RequestMapping("/users/users")
 @SessionAttributes(types = { SearchUserForm.class, UserForm.class })
 @Slf4j
 public class UserHtmlController extends AbstractHtmlController {
@@ -86,24 +86,25 @@ public class UserHtmlController extends AbstractHtmlController {
             model.addAttribute("userForm", new UserForm());
         }
 
-        return "modules/user/users/new";
+        return "modules/users/users/new";
     }
 
     /**
      * 登録処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/new")
-    public String newUser(@Validated @ModelAttribute("userForm") UserForm form, BindingResult result,
+    public String newUser(@Validated @ModelAttribute("userForm") UserForm form, BindingResult br,
             RedirectAttributes attributes) {
+
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
-            return "redirect:/user/users/new";
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
+            return "redirect:/users/users/new";
         }
 
         // 入力値からDTOを作成する
@@ -116,7 +117,7 @@ public class UserHtmlController extends AbstractHtmlController {
         // 登録する
         val createdUser = userService.create(inputUser);
 
-        return "redirect:/user/users/show/" + createdUser.getId().getValue();
+        return "redirect:/users/users/show/" + createdUser.getId();
     }
 
     /**
@@ -136,27 +137,28 @@ public class UserHtmlController extends AbstractHtmlController {
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
 
-        return "modules/user/users/find";
+        return "modules/users/users/find";
     }
 
     /**
      * 検索結果
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/find")
-    public String findUser(@Validated @ModelAttribute("searchUserForm") SearchUserForm form, BindingResult result,
+    public String findUser(@Validated @ModelAttribute("searchUserForm") SearchUserForm form, BindingResult br,
             RedirectAttributes attributes) {
+
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
-            return "redirect:/user/users/find";
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
+            return "redirect:/users/users/find";
         }
 
-        return "redirect:/user/users/find";
+        return "redirect:/users/users/find";
     }
 
     /**
@@ -167,9 +169,9 @@ public class UserHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/show/{userId}")
-    public String showUser(@PathVariable Integer userId, Model model) {
+    public String showUser(@PathVariable Long userId, Model model) {
         // 1件取得する
-        val user = userService.findById(ID.of(userId));
+        val user = userService.findById(userId);
         model.addAttribute("user", user);
 
         if (user.getUploadFile() != null) {
@@ -183,7 +185,7 @@ public class UserHtmlController extends AbstractHtmlController {
             model.addAttribute("image", sb.toString());
         }
 
-        return "modules/user/users/show";
+        return "modules/users/users/show";
     }
 
     /**
@@ -195,40 +197,42 @@ public class UserHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/edit/{userId}")
-    public String editUser(@PathVariable Integer userId, @ModelAttribute("userForm") UserForm form, Model model) {
+    public String editUser(@PathVariable Long userId, @ModelAttribute("userForm") UserForm form, Model model) {
+
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val user = userService.findById(ID.of(userId));
+            val user = userService.findById(userId);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map(user, form);
         }
 
-        return "modules/user/users/new";
+        return "modules/users/users/new";
     }
 
     /**
      * 編集画面 更新処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param userId
      * @param sessionStatus
      * @param attributes
      * @return
      */
     @PostMapping("/edit/{userId}")
-    public String editUser(@Validated @ModelAttribute("userForm") UserForm form, BindingResult result,
-            @PathVariable Integer userId, SessionStatus sessionStatus, RedirectAttributes attributes) {
+    public String editUser(@Validated @ModelAttribute("userForm") UserForm form, BindingResult br,
+            @PathVariable Long userId, SessionStatus sessionStatus, RedirectAttributes attributes) {
+
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
-            return "redirect:/user/users/edit/" + userId;
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
+            return "redirect:/users/users/edit/" + userId;
         }
 
         // 更新対象を取得する
-        val user = userService.findById(ID.of(userId));
+        val user = userService.findById(userId);
 
         // 入力値を詰め替える
         modelMapper.map(form, user);
@@ -249,7 +253,7 @@ public class UserHtmlController extends AbstractHtmlController {
         // セッションのuserFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/user/users/show/" + updatedUser.getId().getValue();
+        return "redirect:/users/users/show/" + updatedUser.getId();
     }
 
     /**
@@ -260,17 +264,14 @@ public class UserHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{userId}")
-    public String removeUser(@PathVariable Integer userId, RedirectAttributes attributes) {
-        // 削除対象を取得する
-        val user = userService.findById(ID.of(userId));
-
+    public String removeUser(@PathVariable Long userId, RedirectAttributes attributes) {
         // 論理削除する
-        userService.delete(user.getId());
+        userService.delete(userId);
 
         // 削除成功メッセージ
         attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));
 
-        return "redirect:/user/users/find";
+        return "redirect:/users/users/find";
     }
 
     /**

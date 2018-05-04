@@ -8,7 +8,6 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.system.Code;
 
 @ConfigAutowireable
@@ -32,7 +31,7 @@ public interface CodeDao {
      * @return
      */
     @Select
-    Optional<Code> selectById(ID<Code> id);
+    Optional<Code> selectById(Long id);
 
     /**
      * コードを1件取得します。

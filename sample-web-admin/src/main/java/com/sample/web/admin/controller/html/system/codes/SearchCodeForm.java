@@ -12,7 +12,7 @@ public class SearchCodeForm extends BaseSearchForm implements Pageable {
 
     private static final long serialVersionUID = 223278986587249949L;
 
-    Integer id;
+    Long id;
 
     String categoryKey;
 

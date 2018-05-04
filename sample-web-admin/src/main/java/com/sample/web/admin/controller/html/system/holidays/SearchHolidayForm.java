@@ -14,7 +14,7 @@ public class SearchHolidayForm extends BaseSearchForm implements Pageable {
 
     private static final long serialVersionUID = 7228669911978606034L;
 
-    Integer id;
+    Long id;
 
     // 祝日名
     String holidayName;

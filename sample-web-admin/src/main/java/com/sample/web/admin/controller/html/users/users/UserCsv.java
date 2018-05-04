@@ -1,4 +1,4 @@
-package com.sample.web.admin.controller.html.user.users;
+package com.sample.web.admin.controller.html.users.users;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ public class UserCsv implements Serializable {
     private static final long serialVersionUID = -1883999589975469540L;
 
     @JsonProperty("ユーザーID")
-    Integer id;
+    Long id;
 
     // ハッシュ化されたパスワード
     @JsonIgnore // CSVに出力しない

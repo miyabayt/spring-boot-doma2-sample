@@ -15,8 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.sample.domain.dao.user.UserDao;
-import com.sample.domain.dao.user.UserRoleDao;
+import com.sample.domain.dao.users.UserDao;
+import com.sample.domain.dao.users.UserRoleDao;
 import com.sample.domain.dto.user.User;
 import com.sample.domain.dto.user.UserRole;
 import com.sample.web.base.security.BaseRealm;

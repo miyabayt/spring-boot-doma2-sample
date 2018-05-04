@@ -18,7 +18,7 @@ public class MailTemplateCsv implements Serializable {
     private static final long serialVersionUID = 3277131881879633731L;
 
     @JsonProperty("メールテンプレートID")
-    Integer id;
+    Long id;
 
     @JsonProperty("メールテンプレートキー")
     String templateKey;

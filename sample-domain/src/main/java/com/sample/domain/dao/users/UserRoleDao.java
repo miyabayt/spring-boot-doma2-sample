@@ -1,4 +1,4 @@
-package com.sample.domain.dao.user;
+package com.sample.domain.dao.users;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +8,6 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.system.Permission;
 import com.sample.domain.dto.user.User;
 import com.sample.domain.dto.user.UserRole;
@@ -38,7 +37,7 @@ public interface UserRoleDao {
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectByUserId(ID<User> id, final Collector<UserRole, ?, R> collector);
+    <R> R selectByUserId(Long id, final Collector<UserRole, ?, R> collector);
 
     /**
      * 権限を1件取得します。
@@ -47,7 +46,7 @@ public interface UserRoleDao {
      * @return
      */
     @Select
-    Optional<Permission> selectById(ID<Permission> id);
+    Optional<Permission> selectById(Long id);
 
     /**
      * 権限を1件取得します。
