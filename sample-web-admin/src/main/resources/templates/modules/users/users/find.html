@@ -20,7 +20,7 @@
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">検索条件</h3>
-                    <form th:object="${searchUserForm}" th:action="@{/user/users/find(page=1)}" method="post" class="form-horizontal">
+                    <form th:object="${searchUserForm}" th:action="@{/users/users/find(page=1)}" method="post" class="form-horizontal">
                         <div class="form-group">
                             <div class="control-group" id="lastName">
                                 <label class="col-sm-2 control-label">名前</label>
@@ -43,10 +43,10 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a th:href="@{/user/users/new}">ユーザー登録</a></li>
-                                        <li><a th:href="@{/user/users/download/ユーザー.csv}">CSVダウンロード</a></li>
-                                        <li><a th:href="@{/user/users/download/ユーザー.xlsx}">Excelダウンロード</a></li>
-                                        <li><a th:href="@{/user/users/download/ユーザー.pdf}">PDFダウンロード</a></li>
+                                        <li><a th:href="@{/users/users/new}">ユーザー登録</a></li>
+                                        <li><a th:href="@{/users/users/download/ユーザー.csv}">CSVダウンロード</a></li>
+                                        <li><a th:href="@{/users/users/download/ユーザー.xlsx}">Excelダウンロード</a></li>
+                                        <li><a th:href="@{/users/users/download/ユーザー.pdf}">PDFダウンロード</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                         <tbody>
                             <tr th:each="user : ${pages.data}">
                                 <td>
-                                    <a th:href="@{/user/users/show/__${user.id}__}" th:text="${user.id}" />
+                                    <a th:href="@{/users/users/show/__${user.id}__}" th:text="${user.id}" />
                                 </td>
                                 <td th:text="${user.firstName + ' ' + user.lastName}" />
                                 <td th:text="${user.email}" />
@@ -81,7 +81,7 @@
                     </table>
                 </div>
                 <div class="box-footer clearfix">
-                    <div th:replace="~{fragments/paginator :: paginator (${pages}, '/user/users/find')}" />
+                    <div th:replace="~{fragments/paginator :: paginator (${pages}, '/users/users/find')}" />
                 </div>
             </div>
         </section>

@@ -163,7 +163,7 @@ public class StaffHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/show/{staffId}")
-    public String showStaff(@PathVariable Integer staffId, Model model) {
+    public String showStaff(@PathVariable Long staffId, Model model) {
         // 1件取得する
         val staff = staffService.findById(staffId);
         model.addAttribute("staff", staff);
@@ -179,7 +179,7 @@ public class StaffHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/edit/{staffId}")
-    public String editStaff(@PathVariable Integer staffId, @ModelAttribute("staffForm") StaffForm form, Model model) {
+    public String editStaff(@PathVariable Long staffId, @ModelAttribute("staffForm") StaffForm form, Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
@@ -204,7 +204,7 @@ public class StaffHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/edit/{staffId}")
     public String editStaff(@Validated @ModelAttribute("staffForm") StaffForm form, BindingResult result,
-            @PathVariable Integer staffId, SessionStatus sessionStatus, RedirectAttributes attributes) {
+            @PathVariable Long staffId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
             setFlashAttributeErrors(attributes, result);
@@ -240,7 +240,7 @@ public class StaffHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{staffId}")
-    public String removeStaff(@PathVariable Integer staffId, RedirectAttributes attributes) {
+    public String removeStaff(@PathVariable Long staffId, RedirectAttributes attributes) {
         // 削除対象を取得する
         val staff = staffService.findById(staffId);
 

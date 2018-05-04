@@ -24,7 +24,7 @@ public class SendMailQueue extends DomaDtoImpl {
     @Id
     @Column(name = "send_mail_queue_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     @Column(name = "from_address")
     String from;

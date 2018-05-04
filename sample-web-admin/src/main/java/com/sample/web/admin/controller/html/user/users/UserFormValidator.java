@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import com.sample.domain.validator.AbstractValidator;
+import com.sample.web.admin.controller.html.users.users.UserForm;
 
 /**
  * ユーザー登録 入力チェック

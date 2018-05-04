@@ -19,10 +19,10 @@ public class UserRole extends DomaDtoImpl {
     @Id
     @Column(name = "user_role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     // ユーザーID
-    Integer userId;
+    Long userId;
 
     // 役割キー
     String roleKey;

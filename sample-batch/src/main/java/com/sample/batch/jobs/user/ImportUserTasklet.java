@@ -26,7 +26,7 @@ import com.sample.batch.context.BatchContextHolder;
 import com.sample.batch.item.ItemError;
 import com.sample.batch.jobs.BaseTasklet;
 import com.sample.common.util.MessageUtils;
-import com.sample.domain.dao.user.UserDao;
+import com.sample.domain.dao.users.UserDao;
 import com.sample.domain.dto.user.User;
 
 import lombok.val;

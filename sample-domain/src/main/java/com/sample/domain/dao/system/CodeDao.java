@@ -31,7 +31,7 @@ public interface CodeDao {
      * @return
      */
     @Select
-    Optional<Code> selectById(Integer id);
+    Optional<Code> selectById(Long id);
 
     /**
      * コードを1件取得します。

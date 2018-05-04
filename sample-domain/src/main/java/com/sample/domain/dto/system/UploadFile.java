@@ -23,7 +23,7 @@ public class UploadFile extends DomaDtoImpl implements MultipartFileConvertible 
     @Id
     @Column(name = "upload_file_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     // ファイル名
     @Column(name = "file_name")

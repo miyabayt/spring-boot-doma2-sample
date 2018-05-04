@@ -47,7 +47,7 @@ public class HolidayService extends BaseTransactionalService { // TODO
      * @return
      */
     @Transactional(readOnly = true)
-    public Holiday findById(final Integer id) {
+    public Holiday findById(final Long id) {
         // 1件取得
         val holiday = holidayDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("holiday_id=" + id + " のデータが見つかりません。"));
@@ -93,7 +93,7 @@ public class HolidayService extends BaseTransactionalService { // TODO
      *
      * @return
      */
-    public Holiday delete(final Integer id) {
+    public Holiday delete(final Long id) {
         val holiday = holidayDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("holiday_id=" + id + " のデータが見つかりません。"));
 

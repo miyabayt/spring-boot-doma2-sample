@@ -31,7 +31,7 @@ public interface StaffDao {
      * @return
      */
     @Select
-    Optional<Staff> selectById(Integer id);
+    Optional<Staff> selectById(Long id);
 
     /**
      * 担当者を1件取得します。

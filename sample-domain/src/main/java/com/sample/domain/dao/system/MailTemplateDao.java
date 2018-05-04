@@ -32,7 +32,7 @@ public interface MailTemplateDao {
      * @return
      */
     @Select
-    Optional<MailTemplate> selectById(Integer id);
+    Optional<MailTemplate> selectById(Long id);
 
     /**
      * メールテンプレートを1件取得します。

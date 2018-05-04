@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sample.batch.jobs.BasePageableItemReader;
-import com.sample.domain.dao.user.UserDao;
+import com.sample.domain.dao.users.UserDao;
 import com.sample.domain.dto.user.User;
 
 import lombok.val;

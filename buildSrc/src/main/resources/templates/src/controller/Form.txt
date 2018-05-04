@@ -15,7 +15,7 @@ public class [[${upperFuncName}]]Form extends BaseForm { // TODO
 
     private static final long serialVersionUID = -1L;
 
-    Integer id;
+    Long id;
 
     // [[${funcStr}]]名
     @NotEmpty
