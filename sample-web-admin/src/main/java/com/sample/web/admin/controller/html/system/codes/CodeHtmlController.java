@@ -15,7 +15,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Code;
 import com.sample.domain.service.system.CodeService;
@@ -100,7 +99,7 @@ public class CodeHtmlController extends AbstractHtmlController {
         // 登録する
         val createdCode = codeService.create(inputCode);
 
-        return "redirect:/system/codes/show/" + createdCode.getId().getValue();
+        return "redirect:/system/codes/show/" + createdCode.getId();
     }
 
     /**
@@ -151,9 +150,9 @@ public class CodeHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/show/{codeId}")
-    public String showCode(@PathVariable Integer codeId, Model model) {
+    public String showCode(@PathVariable Long codeId, Model model) {
         // 1件取得する
-        val code = codeService.findById(ID.of(codeId));
+        val code = codeService.findById(codeId);
         model.addAttribute("code", code);
         return "modules/system/codes/show";
     }
@@ -167,11 +166,11 @@ public class CodeHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/edit/{codeId}")
-    public String editCode(@PathVariable Integer codeId, @ModelAttribute("codeForm") CodeForm form, Model model) {
+    public String editCode(@PathVariable Long codeId, @ModelAttribute("codeForm") CodeForm form, Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val code = codeService.findById(ID.of(codeId));
+            val code = codeService.findById(codeId);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map(code, form);
@@ -192,7 +191,7 @@ public class CodeHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/edit/{codeId}")
     public String editCode(@Validated @ModelAttribute("codeForm") CodeForm form, BindingResult result,
-            @PathVariable Integer codeId, SessionStatus sessionStatus, RedirectAttributes attributes) {
+            @PathVariable Long codeId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
             setFlashAttributeErrors(attributes, result);
@@ -200,7 +199,7 @@ public class CodeHtmlController extends AbstractHtmlController {
         }
 
         // 更新対象を取得する
-        val code = codeService.findById(ID.of(codeId));
+        val code = codeService.findById(codeId);
 
         // 入力値を詰め替える
         modelMapper.map(form, code);
@@ -211,7 +210,7 @@ public class CodeHtmlController extends AbstractHtmlController {
         // セッションのcodeFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/system/codes/show/" + updatedCode.getId().getValue();
+        return "redirect:/system/codes/show/" + updatedCode.getId();
     }
 
     /**
@@ -222,7 +221,7 @@ public class CodeHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{codeId}")
-    public String removeCode(@PathVariable Integer codeId, RedirectAttributes attributes) {
+    public String removeCode(@PathVariable Long codeId, RedirectAttributes attributes) {
         throw new UnsupportedOperationException();
     }
 

@@ -17,7 +17,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Holiday;
 import com.sample.domain.service.system.HolidayService;
@@ -102,7 +101,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
         // 登録する
         val createdHoliday = holidayService.create(inputHoliday);
 
-        return "redirect:/system/holidays/show/" + createdHoliday.getId().getValue();
+        return "redirect:/system/holidays/show/" + createdHoliday.getId();
     }
 
     /**
@@ -153,9 +152,9 @@ public class HolidayHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/show/{holidayId}")
-    public String showHoliday(@PathVariable Integer holidayId, Model model) {
+    public String showHoliday(@PathVariable Long holidayId, Model model) {
         // 1件取得する
-        val holiday = holidayService.findById(ID.of(holidayId));
+        val holiday = holidayService.findById(holidayId);
         model.addAttribute("holiday", holiday);
         return "modules/system/holidays/show";
     }
@@ -169,12 +168,12 @@ public class HolidayHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/edit/{holidayId}")
-    public String editHoliday(@PathVariable Integer holidayId, @ModelAttribute("holidayForm") HolidayForm form,
+    public String editHoliday(@PathVariable Long holidayId, @ModelAttribute("holidayForm") HolidayForm form,
             Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val holiday = holidayService.findById(ID.of(holidayId));
+            val holiday = holidayService.findById(holidayId);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map(holiday, form);
@@ -195,7 +194,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/edit/{holidayId}")
     public String editHoliday(@Validated @ModelAttribute("holidayForm") HolidayForm form, BindingResult result,
-            @PathVariable Integer holidayId, SessionStatus sessionStatus, RedirectAttributes attributes) {
+            @PathVariable Long holidayId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
             setFlashAttributeErrors(attributes, result);
@@ -203,7 +202,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
         }
 
         // 更新対象を取得する
-        val holiday = holidayService.findById(ID.of(holidayId));
+        val holiday = holidayService.findById(holidayId);
 
         // 入力値を詰め替える
         modelMapper.map(form, holiday);
@@ -214,7 +213,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
         // セッションのholidayFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/system/holidays/show/" + updatedHoliday.getId().getValue();
+        return "redirect:/system/holidays/show/" + updatedHoliday.getId();
     }
 
     /**
@@ -225,9 +224,9 @@ public class HolidayHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{holidayId}")
-    public String removeHoliday(@PathVariable Integer holidayId, RedirectAttributes attributes) {
+    public String removeHoliday(@PathVariable Long holidayId, RedirectAttributes attributes) {
         // 削除対象を取得する
-        val holiday = holidayService.findById(ID.of(holidayId));
+        val holiday = holidayService.findById(holidayId);
 
         // 論理削除する
         holidayService.delete(holiday.getId());

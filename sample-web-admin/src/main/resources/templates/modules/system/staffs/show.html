@@ -23,7 +23,7 @@
                     <table class="table table-hover" th:object="${staff}">
                         <tr>
                             <th>ID</th>
-                            <td th:text="*{id.value}"></td>
+                            <td th:text="*{id}"></td>
                         </tr>
                         <tr>
                             <th>氏名</th>
@@ -40,7 +40,7 @@
                     </table>
                 </div>
                 <div class="box-footer clearfix">
-                    <a th:href="@{/system/staffs/edit/{id}(id=${staff.id.value})}" class="btn btn-default bg-purple">編集</a>
+                    <a th:href="@{/system/staffs/edit/{id}(id=${staff.id})}" class="btn btn-default bg-purple">編集</a>
                     <a href="#" class="btn btn-danger">削除</a>
                 </div>
             </div>

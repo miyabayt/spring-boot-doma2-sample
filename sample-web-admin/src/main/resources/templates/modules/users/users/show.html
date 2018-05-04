@@ -13,7 +13,7 @@
             <h1>顧客詳細</h1>
             <ol class="breadcrumb">
                 <li><a th:href="@{/}">Home</a></li>
-                <li><a th:href="@{/user/users/find(page=1)}">顧客検索</a></li>
+                <li><a th:href="@{/users/users/find(page=1)}">顧客検索</a></li>
                 <li>顧客詳細</li>
             </ol>
         </section>
@@ -23,7 +23,7 @@
                     <table class="table table-striped" th:object="${user}">
                         <tr>
                             <th>ID</th>
-                            <td th:text="*{id.value}"></td>
+                            <td th:text="*{id}"></td>
                         </tr>
                         <tr>
                             <th>氏名</th>
@@ -48,8 +48,8 @@
                     </table>
                 </div>
                 <div class="box-footer clearfix">
-                    <form th:action="@{'/user/users/remove/' + ${user.id.value}}" method="post">
-                        <a th:href="@{/user/users/edit/{id}(id=${user.id.value})}" class="btn btn-default bg-purple">編集</a>
+                    <form th:action="@{'/users/users/remove/' + ${user.id}}" method="post">
+                        <a th:href="@{/users/users/edit/{id}(id=${user.id})}" class="btn btn-default bg-purple">編集</a>
                         <button type="submit" class="btn btn-danger">削除</button>
                     </form>
                 </div>

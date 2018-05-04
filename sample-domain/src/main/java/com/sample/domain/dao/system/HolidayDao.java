@@ -8,7 +8,6 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.system.Holiday;
 
 @ConfigAutowireable
@@ -32,7 +31,7 @@ public interface HolidayDao { // TODO
      * @return
      */
     @Select
-    Optional<Holiday> selectById(ID<Holiday> id);
+    Optional<Holiday> selectById(Long id);
 
     /**
      * 祝日を1件取得します。

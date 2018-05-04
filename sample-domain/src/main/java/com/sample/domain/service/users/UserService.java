@@ -1,4 +1,4 @@
-package com.sample.domain.service.user;
+package com.sample.domain.service.users;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -9,9 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.sample.domain.dao.system.UploadFileDao;
-import com.sample.domain.dao.user.UserDao;
-import com.sample.domain.dao.user.UserRoleDao;
-import com.sample.domain.dto.common.ID;
+import com.sample.domain.dao.users.UserDao;
+import com.sample.domain.dao.users.UserRoleDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.user.User;
@@ -58,7 +57,7 @@ public class UserService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public User findById(final ID<User> id) {
+    public User findById(final Long id) {
         // 1件取得
         val user = userDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("user_id=" + id + " のデータが見つかりません。"));
@@ -86,7 +85,7 @@ public class UserService extends BaseTransactionalService {
         // 役割権限紐付けを登録する
         val userRole = new UserRole();
         userRole.setUserId(inputUser.getId());
-        userRole.setRoleKey("user");
+        userRole.setRoleKey("users");
         userRoleDao.insert(userRole);
 
         return inputUser;
@@ -129,7 +128,7 @@ public class UserService extends BaseTransactionalService {
      *
      * @return
      */
-    public User delete(final ID<User> id) {
+    public User delete(final Long id) {
         val user = userDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("user_id=" + id + " のデータが見つかりません。"));
 

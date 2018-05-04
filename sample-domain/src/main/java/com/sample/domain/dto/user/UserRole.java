@@ -3,7 +3,6 @@ package com.sample.domain.dto.user;
 import org.seasar.doma.*;
 
 import com.sample.domain.dto.common.DomaDtoImpl;
-import com.sample.domain.dto.common.ID;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,10 +19,10 @@ public class UserRole extends DomaDtoImpl {
     @Id
     @Column(name = "user_role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    ID<UserRole> id;
+    Long id;
 
     // ユーザーID
-    ID<User> userId;
+    Long userId;
 
     // 役割キー
     String roleKey;

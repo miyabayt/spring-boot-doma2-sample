@@ -1,7 +1,6 @@
 package com.sample.domain.dao
 
-import com.sample.domain.dao.user.UserDao
-import com.sample.domain.dto.common.ID
+import com.sample.domain.dao.users.UserDao
 import com.sample.domain.dto.user.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -42,7 +41,7 @@ class UserDaoTest extends Specification {
 
     def "存在するメールアドレスを指定して更新した場合、更新件数が1件になること"() {
         when:
-        def user = userDao.selectById(ID.of(1))
+        def user = userDao.selectById(1)
 
         def updated = user.map({ u ->
             u.setAddress("test")

@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.sample.domain.dao.system.CodeDao;
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Code;
@@ -48,7 +47,7 @@ public class CodeService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Code findById(final ID<Code> id) {
+    public Code findById(final Long id) {
         // 1件取得
         val code = codeDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("code_id=" + id + " のデータが見つかりません。"));
@@ -108,7 +107,7 @@ public class CodeService extends BaseTransactionalService {
      *
      * @return
      */
-    public Code delete(final ID<Code> id) {
+    public Code delete(final Long id) {
         val code = codeDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("code_id=" + id + " のデータが見つかりません。"));
 

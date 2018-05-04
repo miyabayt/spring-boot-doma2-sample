@@ -3,7 +3,6 @@ package com.sample.domain.dto.system;
 import org.seasar.doma.*;
 
 import com.sample.domain.dto.common.DomaDtoImpl;
-import com.sample.domain.dto.common.ID;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +19,7 @@ public class CodeCategory extends DomaDtoImpl {
     @Id
     @Column(name = "code_category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    ID<CodeCategory> id;
+    Long id;
 
     // カテゴリキー
     String categoryKey;

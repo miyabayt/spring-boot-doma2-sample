@@ -23,7 +23,7 @@
                     <table class="table table-hover" th:object="${code}">
                         <tr>
                             <th>ID</th>
-                            <td th:text="*{id.value}"></td>
+                            <td th:text="*{id}"></td>
                         </tr>
                         <tr>
                             <th>コード分類</th>
@@ -52,7 +52,7 @@
                     </table>
                 </div>
                 <div class="box-footer clearfix">
-                    <a th:href="@{/system/codes/edit/{id}(id=${code.id.value})}" class="btn btn-default bg-purple">編集</a>
+                    <a th:href="@{/system/codes/edit/{id}(id=${code.id})}" class="btn btn-default bg-purple">編集</a>
                 </div>
             </div>
         </section>
