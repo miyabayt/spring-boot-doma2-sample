@@ -80,16 +80,16 @@ public class CodeHtmlController extends AbstractHtmlController {
      * 登録処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/new")
-    public String newCode(@Validated @ModelAttribute("codeForm") CodeForm form, BindingResult result,
+    public String newCode(@Validated @ModelAttribute("codeForm") CodeForm form, BindingResult br,
             RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/codes/new";
         }
 
@@ -126,16 +126,16 @@ public class CodeHtmlController extends AbstractHtmlController {
      * 検索結果
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/find")
-    public String findCode(@Validated @ModelAttribute("searchCodeForm") SearchCodeForm form, BindingResult result,
+    public String findCode(@Validated @ModelAttribute("searchCodeForm") SearchCodeForm form, BindingResult br,
             RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/codes/find";
         }
 
@@ -183,18 +183,18 @@ public class CodeHtmlController extends AbstractHtmlController {
      * 編集画面 更新処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param codeId
      * @param sessionStatus
      * @param attributes
      * @return
      */
     @PostMapping("/edit/{codeId}")
-    public String editCode(@Validated @ModelAttribute("codeForm") CodeForm form, BindingResult result,
+    public String editCode(@Validated @ModelAttribute("codeForm") CodeForm form, BindingResult br,
             @PathVariable Long codeId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/codes/edit/" + codeId;
         }
 

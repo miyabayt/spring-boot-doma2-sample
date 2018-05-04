@@ -92,16 +92,16 @@ public class RoleHtmlController extends AbstractHtmlController {
      * 登録処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/new")
-    public String newRole(@Validated @ModelAttribute("roleForm") RoleForm form, BindingResult result,
+    public String newRole(@Validated @ModelAttribute("roleForm") RoleForm form, BindingResult br,
             RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/roles/new";
         }
 
@@ -138,16 +138,16 @@ public class RoleHtmlController extends AbstractHtmlController {
      * 検索結果
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/find")
-    public String findRole(@Validated @ModelAttribute("searchRoleForm") SearchRoleForm form, BindingResult result,
+    public String findRole(@Validated @ModelAttribute("searchRoleForm") SearchRoleForm form, BindingResult br,
             RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/roles/find";
         }
 
@@ -204,18 +204,18 @@ public class RoleHtmlController extends AbstractHtmlController {
      * 編集画面 更新処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param roleId
      * @param sessionStatus
      * @param attributes
      * @return
      */
     @PostMapping("/edit/{roleId}")
-    public String editRole(@Validated @ModelAttribute("roleForm") RoleForm form, BindingResult result,
+    public String editRole(@Validated @ModelAttribute("roleForm") RoleForm form, BindingResult br,
             @PathVariable Long roleId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/roles/edit/" + roleId;
         }
 
@@ -243,11 +243,8 @@ public class RoleHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/remove/{roleId}")
     public String removeRole(@PathVariable Long roleId, RedirectAttributes attributes) {
-        // 削除対象を取得する
-        val role = roleService.findById(roleId);
-
         // 論理削除する
-        roleService.delete(role.getId());
+        roleService.delete(roleId);
 
         // 削除成功メッセージ
         attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));
