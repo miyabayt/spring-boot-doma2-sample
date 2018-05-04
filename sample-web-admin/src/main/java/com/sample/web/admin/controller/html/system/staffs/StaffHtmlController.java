@@ -87,16 +87,16 @@ public class StaffHtmlController extends AbstractHtmlController {
      * 登録処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/new")
-    public String newStaff(@Validated @ModelAttribute("staffForm") StaffForm form, BindingResult result,
+    public String newStaff(@Validated @ModelAttribute("staffForm") StaffForm form, BindingResult br,
             RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/staffs/new";
         }
 
@@ -139,16 +139,16 @@ public class StaffHtmlController extends AbstractHtmlController {
      * 検索結果
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/find")
-    public String findStaff(@Validated @ModelAttribute("searchStaffForm") SearchStaffForm form, BindingResult result,
+    public String findStaff(@Validated @ModelAttribute("searchStaffForm") SearchStaffForm form, BindingResult br,
             RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/staffs/find";
         }
 
@@ -196,18 +196,18 @@ public class StaffHtmlController extends AbstractHtmlController {
      * 編集画面 更新処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param staffId
      * @param sessionStatus
      * @param attributes
      * @return
      */
     @PostMapping("/edit/{staffId}")
-    public String editStaff(@Validated @ModelAttribute("staffForm") StaffForm form, BindingResult result,
+    public String editStaff(@Validated @ModelAttribute("staffForm") StaffForm form, BindingResult br,
             @PathVariable Long staffId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/staffs/edit/" + staffId;
         }
 
@@ -241,11 +241,8 @@ public class StaffHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/remove/{staffId}")
     public String removeStaff(@PathVariable Long staffId, RedirectAttributes attributes) {
-        // 削除対象を取得する
-        val staff = staffService.findById(staffId);
-
         // 論理削除する
-        staffService.delete(staff.getId());
+        staffService.delete(staffId);
 
         // 削除成功メッセージ
         attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));

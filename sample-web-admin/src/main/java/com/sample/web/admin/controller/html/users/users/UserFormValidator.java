@@ -1,10 +1,11 @@
-package com.sample.web.admin.controller.html.user.users;
+package com.sample.web.admin.controller.html.users.users;
+
+import static com.sample.common.util.ValidateUtils.isNotEquals;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import com.sample.domain.validator.AbstractValidator;
-import com.sample.web.admin.controller.html.users.users.UserForm;
 
 /**
  * ユーザー登録 入力チェック
@@ -16,7 +17,7 @@ public class UserFormValidator extends AbstractValidator<UserForm> {
     protected void doValidate(UserForm form, Errors errors) {
 
         // 確認用パスワードと突き合わせる
-        if (!equals(form.getPassword(), form.getPasswordConfirm())) {
+        if (isNotEquals(form.getPassword(), form.getPasswordConfirm())) {
             errors.rejectValue("password", "users.unmatchPassword");
             errors.rejectValue("passwordConfirm", "users.unmatchPassword");
         }

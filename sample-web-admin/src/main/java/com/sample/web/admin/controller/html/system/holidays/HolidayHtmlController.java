@@ -82,16 +82,16 @@ public class HolidayHtmlController extends AbstractHtmlController {
      * 登録処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/new")
-    public String newHoliday(@Validated @ModelAttribute("holidayForm") HolidayForm form, BindingResult result,
+    public String newHoliday(@Validated @ModelAttribute("holidayForm") HolidayForm form, BindingResult br,
             RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/holidays/new";
         }
 
@@ -128,16 +128,16 @@ public class HolidayHtmlController extends AbstractHtmlController {
      * 検索結果
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/find")
-    public String findHoliday(@Validated @ModelAttribute("searchHolidayForm") SearchHolidayForm form,
-            BindingResult result, RedirectAttributes attributes) {
+    public String findHoliday(@Validated @ModelAttribute("searchHolidayForm") SearchHolidayForm form, BindingResult br,
+            RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/holidays/find";
         }
 
@@ -186,18 +186,18 @@ public class HolidayHtmlController extends AbstractHtmlController {
      * 編集画面 更新処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param holidayId
      * @param sessionStatus
      * @param attributes
      * @return
      */
     @PostMapping("/edit/{holidayId}")
-    public String editHoliday(@Validated @ModelAttribute("holidayForm") HolidayForm form, BindingResult result,
+    public String editHoliday(@Validated @ModelAttribute("holidayForm") HolidayForm form, BindingResult br,
             @PathVariable Long holidayId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/holidays/edit/" + holidayId;
         }
 
@@ -225,11 +225,8 @@ public class HolidayHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/remove/{holidayId}")
     public String removeHoliday(@PathVariable Long holidayId, RedirectAttributes attributes) {
-        // 削除対象を取得する
-        val holiday = holidayService.findById(holidayId);
-
         // 論理削除する
-        holidayService.delete(holiday.getId());
+        holidayService.delete(holidayId);
 
         // 削除成功メッセージ
         attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));
