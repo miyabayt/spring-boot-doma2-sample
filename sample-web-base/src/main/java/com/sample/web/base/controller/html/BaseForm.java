@@ -40,5 +40,5 @@ public abstract class BaseForm implements Serializable {
      *
      * @return
      */
-    public abstract Integer getId();
+    public abstract Long getId();
 }

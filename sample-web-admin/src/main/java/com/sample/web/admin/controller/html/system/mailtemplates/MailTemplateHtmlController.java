@@ -152,7 +152,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/show/{mailTemplateId}")
-    public String showMailtemplate(@PathVariable Integer mailTemplateId, Model model) {
+    public String showMailtemplate(@PathVariable Long mailTemplateId, Model model) {
         // 1件取得する
         val mailTemplate = mailTemplateService.findById(mailTemplateId);
         model.addAttribute("mailTemplate", mailTemplate);
@@ -168,7 +168,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/edit/{mailTemplateId}")
-    public String editMailtemplate(@PathVariable Integer mailTemplateId,
+    public String editMailtemplate(@PathVariable Long mailTemplateId,
             @ModelAttribute("mailTemplateForm") MailTemplateForm form, Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
@@ -194,7 +194,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/edit/{mailTemplateId}")
     public String editMailtemplate(@Validated @ModelAttribute("mailTemplateForm") MailTemplateForm form,
-            BindingResult result, @PathVariable Integer mailTemplateId, SessionStatus sessionStatus,
+            BindingResult result, @PathVariable Long mailTemplateId, SessionStatus sessionStatus,
             RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
@@ -225,7 +225,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{mailTemplateId}")
-    public String removeMailtemplate(@PathVariable Integer mailTemplateId, RedirectAttributes attributes) {
+    public String removeMailtemplate(@PathVariable Long mailTemplateId, RedirectAttributes attributes) {
         // 削除対象を取得する
         val mailTemplate = mailTemplateService.findById(mailTemplateId);
 

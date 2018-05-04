@@ -21,7 +21,7 @@ public class RolePermission extends DomaDtoImpl {
     @Id
     @Column(name = "role_permission_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     // 役割キー
     String roleKey;

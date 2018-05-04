@@ -20,7 +20,7 @@ public class HolidayCsv implements Serializable {
     private static final long serialVersionUID = 6658799113183356993L;
 
     @JsonProperty("祝日ID")
-    Integer id;
+    Long id;
 
     @JsonProperty("祝日名")
     String holidayName;

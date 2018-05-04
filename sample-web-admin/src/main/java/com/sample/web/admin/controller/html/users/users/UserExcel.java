@@ -1,4 +1,4 @@
-package com.sample.web.admin.controller.html.user.users;
+package com.sample.web.admin.controller.html.users.users;
 
 import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.DARK_GREEN;
 import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.WHITE;

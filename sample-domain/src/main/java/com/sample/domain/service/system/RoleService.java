@@ -60,7 +60,7 @@ public class RoleService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Role findById(final Integer id) {
+    public Role findById(final Long id) {
         // 1件取得
         val role = roleDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("role_id=" + id + " のデータが見つかりません。"));
@@ -123,7 +123,7 @@ public class RoleService extends BaseTransactionalService {
      *
      * @return
      */
-    public Role delete(final Integer id) {
+    public Role delete(final Long id) {
         val role = roleDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("role_id=" + id + " のデータが見つかりません。"));
 

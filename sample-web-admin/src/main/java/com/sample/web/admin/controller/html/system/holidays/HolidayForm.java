@@ -15,7 +15,7 @@ public class HolidayForm extends BaseForm {
 
     private static final long serialVersionUID = 6646321876052100374L;
 
-    Integer id;
+    Long id;
 
     // 祝日キー
     @NotEmpty

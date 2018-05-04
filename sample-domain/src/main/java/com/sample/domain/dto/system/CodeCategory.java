@@ -19,7 +19,7 @@ public class CodeCategory extends DomaDtoImpl {
     @Id
     @Column(name = "code_category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     // カテゴリキー
     String categoryKey;

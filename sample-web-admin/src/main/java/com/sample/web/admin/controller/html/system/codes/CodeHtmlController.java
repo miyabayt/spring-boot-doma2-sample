@@ -150,7 +150,7 @@ public class CodeHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/show/{codeId}")
-    public String showCode(@PathVariable Integer codeId, Model model) {
+    public String showCode(@PathVariable Long codeId, Model model) {
         // 1件取得する
         val code = codeService.findById(codeId);
         model.addAttribute("code", code);
@@ -166,7 +166,7 @@ public class CodeHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/edit/{codeId}")
-    public String editCode(@PathVariable Integer codeId, @ModelAttribute("codeForm") CodeForm form, Model model) {
+    public String editCode(@PathVariable Long codeId, @ModelAttribute("codeForm") CodeForm form, Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
@@ -191,7 +191,7 @@ public class CodeHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/edit/{codeId}")
     public String editCode(@Validated @ModelAttribute("codeForm") CodeForm form, BindingResult result,
-            @PathVariable Integer codeId, SessionStatus sessionStatus, RedirectAttributes attributes) {
+            @PathVariable Long codeId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
             setFlashAttributeErrors(attributes, result);
@@ -221,7 +221,7 @@ public class CodeHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{codeId}")
-    public String removeCode(@PathVariable Integer codeId, RedirectAttributes attributes) {
+    public String removeCode(@PathVariable Long codeId, RedirectAttributes attributes) {
         throw new UnsupportedOperationException();
     }
 

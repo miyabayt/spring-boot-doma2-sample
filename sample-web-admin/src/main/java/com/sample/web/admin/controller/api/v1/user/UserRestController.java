@@ -10,16 +10,15 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.sample.domain.dto.common.ID;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.user.User;
-import com.sample.domain.service.user.UserService;
+import com.sample.domain.exception.ValidationErrorException;
+import com.sample.domain.service.users.UserService;
 import com.sample.web.base.controller.api.AbstractRestController;
 import com.sample.web.base.controller.api.resource.PageableResource;
 import com.sample.web.base.controller.api.resource.PageableResourceImpl;
 import com.sample.web.base.controller.api.resource.Resource;
-import com.sample.domain.exception.ValidationErrorException;
 
 @RestController
 @RequestMapping(path = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -57,7 +56,7 @@ public class UserRestController extends AbstractRestController {
      * @return
      */
     @GetMapping(value = "/{userId}")
-    public Resource show(@PathVariable Integer userId) {
+    public Resource show(@PathVariable Long userId) {
         // 1件取得する
         User user = userService.findById(userId);
 
@@ -96,7 +95,7 @@ public class UserRestController extends AbstractRestController {
      * @param
      */
     @PutMapping(value = "/{userId}")
-    public Resource update(@PathVariable("userId") Integer userId, @Validated User inputUser, Errors errors) {
+    public Resource update(@PathVariable("userId") Long userId, @Validated User inputUser, Errors errors) {
         // 入力エラーがある場合
         if (errors.hasErrors()) {
             throw new ValidationErrorException(errors);
@@ -119,7 +118,7 @@ public class UserRestController extends AbstractRestController {
      * @param
      */
     @DeleteMapping(value = "/{userId}")
-    public Resource delete(@PathVariable("userId") Integer userId) {
+    public Resource delete(@PathVariable("userId") Long userId) {
         // 1件取得する
         User user = userService.delete(userId);
 

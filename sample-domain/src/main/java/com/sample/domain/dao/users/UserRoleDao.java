@@ -1,4 +1,4 @@
-package com.sample.domain.dao.user;
+package com.sample.domain.dao.users;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +37,7 @@ public interface UserRoleDao {
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectByUserId(Integer id, final Collector<UserRole, ?, R> collector);
+    <R> R selectByUserId(Long id, final Collector<UserRole, ?, R> collector);
 
     /**
      * 権限を1件取得します。
@@ -46,7 +46,7 @@ public interface UserRoleDao {
      * @return
      */
     @Select
-    Optional<Permission> selectById(Integer id);
+    Optional<Permission> selectById(Long id);
 
     /**
      * 権限を1件取得します。

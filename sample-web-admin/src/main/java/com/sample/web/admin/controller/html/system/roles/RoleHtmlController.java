@@ -162,7 +162,7 @@ public class RoleHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/show/{roleId}")
-    public String showRole(@PathVariable Integer roleId, Model model) {
+    public String showRole(@PathVariable Long roleId, Model model) {
         // 1件取得する
         val role = roleService.findById(roleId);
         model.addAttribute("role", role);
@@ -183,7 +183,7 @@ public class RoleHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/edit/{roleId}")
-    public String editRole(@PathVariable Integer roleId, @ModelAttribute("roleForm") RoleForm form, Model model) {
+    public String editRole(@PathVariable Long roleId, @ModelAttribute("roleForm") RoleForm form, Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
@@ -212,7 +212,7 @@ public class RoleHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/edit/{roleId}")
     public String editRole(@Validated @ModelAttribute("roleForm") RoleForm form, BindingResult result,
-            @PathVariable Integer roleId, SessionStatus sessionStatus, RedirectAttributes attributes) {
+            @PathVariable Long roleId, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
             setFlashAttributeErrors(attributes, result);
@@ -242,7 +242,7 @@ public class RoleHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{roleId}")
-    public String removeRole(@PathVariable Integer roleId, RedirectAttributes attributes) {
+    public String removeRole(@PathVariable Long roleId, RedirectAttributes attributes) {
         // 削除対象を取得する
         val role = roleService.findById(roleId);
 

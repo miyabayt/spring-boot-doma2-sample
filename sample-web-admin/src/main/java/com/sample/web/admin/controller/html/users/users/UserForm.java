@@ -1,4 +1,4 @@
-package com.sample.web.admin.controller.html.user.users;
+package com.sample.web.admin.controller.html.users.users;
 
 import javax.validation.constraints.Digits;
 
@@ -7,8 +7,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sample.web.base.controller.html.BaseForm;
 import com.sample.domain.validator.annotation.ContentType;
+import com.sample.web.base.controller.html.BaseForm;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ public class UserForm extends BaseForm {
 
     private static final long serialVersionUID = -6807767990335584883L;
 
-    Integer id;
+    Long id;
 
     // 名前
     @NotEmpty

@@ -40,7 +40,7 @@ public interface CodeCategoryDao {
      * @return
      */
     @Select
-    Optional<CodeCategory> selectById(Integer id);
+    Optional<CodeCategory> selectById(Long id);
 
     /**
      * コード分類を1件取得します。

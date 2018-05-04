@@ -52,7 +52,7 @@ public class StaffService extends BaseTransactionalService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Staff findById(final Integer id) {
+    public Staff findById(final Long id) {
         // 1件取得
         val staff = staffDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("staff_id=" + id + " のデータが見つかりません。"));
@@ -104,7 +104,7 @@ public class StaffService extends BaseTransactionalService {
      *
      * @return
      */
-    public Staff delete(final Integer id) {
+    public Staff delete(final Long id) {
         val staff = staffDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("staff_id=" + id + " のデータが見つかりません。"));
 
