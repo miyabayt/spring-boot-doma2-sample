@@ -24,7 +24,6 @@ import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.UploadFile;
 import com.sample.domain.dto.user.User;
 import com.sample.domain.service.users.UserService;
-import com.sample.web.admin.controller.html.user.users.UserFormValidator;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.util.MultipartFileUtils;
 import com.sample.web.base.view.CsvView;

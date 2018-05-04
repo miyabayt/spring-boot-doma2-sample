@@ -82,16 +82,16 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
      * 登録処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/new")
     public String newMailtemplate(@Validated @ModelAttribute("mailTemplateForm") MailTemplateForm form,
-            BindingResult result, RedirectAttributes attributes) {
+            BindingResult br, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/mailtemplates/new";
         }
 
@@ -128,16 +128,16 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
      * 検索結果
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
     @PostMapping("/find")
     public String findMailtemplate(@Validated @ModelAttribute("searchMailTemplateForm") SearchMailTemplateForm form,
-            BindingResult result, RedirectAttributes attributes) {
+            BindingResult br, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/mailtemplates/find";
         }
 
@@ -186,7 +186,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
      * 編集画面 更新処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param mailTemplateId
      * @param sessionStatus
      * @param attributes
@@ -194,11 +194,11 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
      */
     @PostMapping("/edit/{mailTemplateId}")
     public String editMailtemplate(@Validated @ModelAttribute("mailTemplateForm") MailTemplateForm form,
-            BindingResult result, @PathVariable Long mailTemplateId, SessionStatus sessionStatus,
+            BindingResult br, @PathVariable Long mailTemplateId, SessionStatus sessionStatus,
             RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
             return "redirect:/system/mailtemplates/edit/" + mailTemplateId;
         }
 
@@ -209,12 +209,12 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
         modelMapper.map(form, mailTemplate);
 
         // 更新する
-        val updatedMailtemplate = mailTemplateService.update(mailTemplate);
+        val updatedMailTemplate = mailTemplateService.update(mailTemplate);
 
         // セッションのmailTemplateFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/system/mailtemplates/show/" + updatedMailtemplate.getId();
+        return "redirect:/system/mailtemplates/show/" + updatedMailTemplate.getId();
     }
 
     /**
@@ -225,12 +225,9 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{mailTemplateId}")
-    public String removeMailtemplate(@PathVariable Long mailTemplateId, RedirectAttributes attributes) {
-        // 削除対象を取得する
-        val mailTemplate = mailTemplateService.findById(mailTemplateId);
-
+    public String removeMailTemplate(@PathVariable Long mailTemplateId, RedirectAttributes attributes) {
         // 論理削除する
-        mailTemplateService.delete(mailTemplate.getId());
+        mailTemplateService.delete(mailTemplateId);
 
         // 削除成功メッセージ
         attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));

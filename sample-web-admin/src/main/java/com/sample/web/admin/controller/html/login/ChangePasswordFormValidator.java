@@ -1,5 +1,7 @@
 package com.sample.web.admin.controller.html.login;
 
+import static com.sample.common.util.ValidateUtils.isNotEquals;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
@@ -14,7 +16,7 @@ public class ChangePasswordFormValidator extends AbstractValidator<ChangePasswor
     @Override
     protected void doValidate(ChangePasswordForm form, Errors errors) {
         // 確認用パスワードと突き合わせる
-        if (!equals(form.getPassword(), form.getPasswordConfirm())) {
+        if (isNotEquals(form.getPassword(), form.getPasswordConfirm())) {
             errors.rejectValue("password", "changePassword.unmatchPassword");
             errors.rejectValue("passwordConfirm", "changePassword.unmatchPassword");
         }
