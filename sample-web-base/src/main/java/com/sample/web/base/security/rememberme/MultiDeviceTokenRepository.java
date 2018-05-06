@@ -24,7 +24,7 @@ public class MultiDeviceTokenRepository extends JdbcDaoSupport {
 
     public static final String removeAllUserTokensSql = "DELETE FROM persistent_logins WHERE username = ?";
 
-    public static final String removeUserTokensSql = "DELETE FROM persistent_logins WHERE username = ? AND ip_address = ? AND user_agent = ?";
+    public static final String removeUserTokensSql = "DELETE FROM persistent_logins WHERE username = ? AND user_agent = ?";
 
     /**
      * コンストラクタ
@@ -110,10 +110,9 @@ public class MultiDeviceTokenRepository extends JdbcDaoSupport {
      * ログイン記録を削除します。
      *
      * @param username
-     * @param ipAddress
      * @param userAgent
      */
-    public void removeUserTokens(String username, String ipAddress, String userAgent) {
-        getJdbcTemplate().update(removeUserTokensSql, username, ipAddress, userAgent);
+    public void removeUserTokens(String username, String userAgent) {
+        getJdbcTemplate().update(removeUserTokensSql, username, userAgent);
     }
 }

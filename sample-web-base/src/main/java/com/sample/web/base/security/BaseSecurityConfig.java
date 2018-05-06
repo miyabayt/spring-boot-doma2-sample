@@ -133,7 +133,7 @@ public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout()//
                 .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL))
                 // Cookieを破棄する
-                .deleteCookies("SESSION", rememberMeCookieName)
+                .deleteCookies("SESSION", "JSESSIONID", rememberMeCookieName)
                 // ログアウト画面のURL
                 .logoutUrl(LOGOUT_URL)
                 // ログアウト後の遷移先
