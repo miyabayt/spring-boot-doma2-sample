@@ -154,9 +154,8 @@ public class MultiDeviceRememberMeServices extends AbstractRememberMeServices {
 
         if (authentication != null) {
             val username = authentication.getName();
-            val ipAddress = request.getRemoteAddr();
             val userAgent = getUserAgent(request);
-            tokenRepository.removeUserTokens(username, ipAddress, userAgent);
+            tokenRepository.removeUserTokens(username, userAgent);
         }
     }
 
