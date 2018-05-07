@@ -28,17 +28,17 @@ public class WebSecurityUtils {
     /**
      * 引数に指定した権限を持っているかどうかを示す値を返します。
      * 
-     * @param role
+     * @param a
      * @return
      */
-    public static boolean hasRole(final String role) {
+    public static boolean hasAuthority(final String a) {
         val auth = SecurityContextHolder.getContext().getAuthentication();
         val authorities = auth.getAuthorities();
 
         boolean isAllowed = false;
         for (GrantedAuthority ga : authorities) {
             val authority = ga.getAuthority();
-            val expressionString = String.format("'%s' matches '%s'", role, authority);
+            val expressionString = String.format("'%s' matches '%s'", a, authority);
             val expression = parser.parseExpression(expressionString);
 
             isAllowed = expression.getValue(Boolean.class);
