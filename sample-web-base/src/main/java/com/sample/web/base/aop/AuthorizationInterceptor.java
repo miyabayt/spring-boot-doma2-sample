@@ -29,7 +29,7 @@ public class AuthorizationInterceptor extends BaseHandlerInterceptor {
 
         val permissionKey = permissionKeyResolver.resolve(handler);
 
-        if (permissionKey != null && !WebSecurityUtils.hasRole(permissionKey)) {
+        if (permissionKey != null && !WebSecurityUtils.hasAuthority(permissionKey)) {
             String loginId = WebSecurityUtils.getLoginId();
             throw new AccessDeniedException(
                     "permission denied. [loginId=" + loginId + ", permissionKey=" + permissionKey + "]");
