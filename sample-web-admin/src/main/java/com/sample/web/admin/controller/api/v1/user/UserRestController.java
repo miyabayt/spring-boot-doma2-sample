@@ -2,8 +2,10 @@ package com.sample.web.admin.controller.api.v1.user;
 
 import static com.sample.web.base.WebConst.MESSAGE_SUCCESS;
 
+import java.io.IOException;
 import java.util.Arrays;
 
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.Errors;
@@ -35,13 +37,17 @@ public class UserRestController extends AbstractRestController {
     /**
      * ユーザーを一括取得します。
      *
+     * @param query
      * @param page
      * @return
      */
     @GetMapping
-    public PageableResource index(@RequestParam(required = false, defaultValue = "1") int page) {
+    public PageableResource index(UserQuery query, @RequestParam(required = false, defaultValue = "1") int page) throws IOException {
+        // 入力値からDTOを作成する
+        val where = modelMapper.map(query, User.class);
+
         // 10件で区切って取得する
-        Page<User> users = userService.findAll(new User(), Pageable.DEFAULT_PAGEABLE);
+        Page<User> users = userService.findAll(where, Pageable.DEFAULT_PAGEABLE);
 
         PageableResource resource = modelMapper.map(users, PageableResourceImpl.class);
         resource.setMessage(getMessage(MESSAGE_SUCCESS));
@@ -73,7 +79,7 @@ public class UserRestController extends AbstractRestController {
      * @param
      */
     @PostMapping
-    public Resource create(@Validated User inputUser, Errors errors) {
+    public Resource create(@Validated @RequestBody User inputUser, Errors errors) {
         // 入力エラーがある場合
         if (errors.hasErrors()) {
             throw new ValidationErrorException(errors);
@@ -95,7 +101,7 @@ public class UserRestController extends AbstractRestController {
      * @param
      */
     @PutMapping(value = "/{userId}")
-    public Resource update(@PathVariable("userId") Long userId, @Validated User inputUser, Errors errors) {
+    public Resource update(@PathVariable("userId") Long userId, @Validated @RequestBody User inputUser, Errors errors) {
         // 入力エラーがある場合
         if (errors.hasErrors()) {
             throw new ValidationErrorException(errors);

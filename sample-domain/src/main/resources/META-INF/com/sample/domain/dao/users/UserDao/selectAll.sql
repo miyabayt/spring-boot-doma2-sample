@@ -24,4 +24,19 @@ AND user_id = /* user.id */1
 /*%if user.email != null */
 AND email = /* user.email */'aaaa@bbbb.com'
 /*%end*/
+/*%if user.firstName != null */
+AND first_name LIKE /* @infix(user.firstName) */'john'
+/*%end*/
+/*%if user.lastName != null */
+AND last_name LIKE /* @infix(user.lastName) */'doe'
+/*%end*/
+/*%if user.tel != null */
+AND tel LIKE /* @prefix(user.tel) */'0901234'
+/*%end*/
+/*%if user.zip != null */
+AND zip LIKE /* @prefix(user.zip) */'10600'
+/*%end*/
+/*%if user.address != null */
+AND address LIKE /* @infix(user.address) */'東京都港区'
+/*%end*/
 ORDER BY user_id ASC
