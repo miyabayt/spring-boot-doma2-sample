@@ -1,5 +1,5 @@
 spring:
-  profiles: development
+  profiles: local
   messages:
     cache-seconds: -1
   datasource:
