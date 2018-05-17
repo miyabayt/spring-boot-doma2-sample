@@ -1,0 +1,33 @@
+spring:
+    profiles: local
+    datasource:
+        platform: mysql
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/sample?useSSL=false&characterEncoding=UTF-8
+        username: root
+        password: passw0rd
+    mail:
+        default-encoding: ISO-2022-JP
+        protocol: smtp
+        host: 127.0.0.1
+        port: 25
+        username: test
+        password: test
+        properties:
+            mail:
+                from: from@test.com
+flyway:
+    enabled: true
+    baseline-on-migrate: true
+logging:
+    level:
+        org.springframework: INFO
+        com.sample.batch: DEBUG
+        # SQL文を表示したいときはINFOにする
+        org.seasar.doma.jdbc: WARN
+
+
+####
+# アプリケーションの設定
+application:
+    fileUploadLocation: build/sample

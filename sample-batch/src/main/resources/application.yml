@@ -2,9 +2,9 @@
 spring:
     profiles:
         # デフォルトを明示的に指定する
-        # 開発環境以外は環境変数でプロファイルを切り替える
-        default: development
-        active: development
+        # ローカル環境以外は環境変数でプロファイルを切り替える
+        default: local
+        active: local
     messages:
         # メッセージ定義ファイルのパスを含めて設定する
         basename: messages,ValidationMessages,PropertyNames
