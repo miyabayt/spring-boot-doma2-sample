@@ -34,10 +34,12 @@ resource "aws_rds_cluster" "default" {
   database_name      = "sample"
   master_username    = "root"
   master_password    = "passw0rd"
+  final_snapshot_identifier = "${var.app_name}-aurora-cluster-final"
+  skip_final_snapshot       = true
 }
 
 resource "aws_rds_cluster_instance" "cluster_instances" {
-  count              = 2
+  count              = 1
   identifier         = "${var.app_name}-aurora-cluster-${count.index}"
   cluster_identifier = "${aws_rds_cluster.default.id}"
   db_subnet_group_name = "${aws_db_subnet_group.aurora_subnet_group.name}"
