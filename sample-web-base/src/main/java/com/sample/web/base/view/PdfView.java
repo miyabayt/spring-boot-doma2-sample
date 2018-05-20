@@ -40,11 +40,12 @@ public class PdfView extends JasperReportsPdfView {
     protected void renderReportUsingOutputStream(net.sf.jasperreports.engine.JRExporter exporter,
             JasperPrint populatedReport, HttpServletResponse response) throws Exception {
 
-        // IE workaround: write into byte array first.
+        // IEの場合はContent-Lengthヘッダが指定されていないとダウンロードが失敗するので、
+        // サイズを取得するための一時的なバイト配列ストリームにコンテンツを書き出すようにする
         ByteArrayOutputStream baos = createTemporaryOutputStream();
         JasperReportsUtils.render(exporter, populatedReport, baos);
 
-        // RFC 5987
+        // ファイル名に日本語を含めても文字化けしないようにUTF-8にエンコードする
         val encodedFilename = EncodeUtils.encodeUtf8(filename);
         val contentDisposition = String.format("attachment; filename*=UTF-8''\"%s\"", encodedFilename);
         response.setHeader(CONTENT_DISPOSITION, contentDisposition);
