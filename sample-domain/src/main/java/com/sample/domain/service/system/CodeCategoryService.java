@@ -1,17 +1,15 @@
 package com.sample.domain.service.system;
 
-import static java.util.stream.Collectors.toList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.sample.domain.dao.system.CodeCategoryDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.CodeCategory;
 import com.sample.domain.exception.NoDataFoundException;
+import com.sample.domain.repository.system.CodeCategoryRepository;
 import com.sample.domain.service.BaseTransactionalService;
 
 import lombok.val;
@@ -23,7 +21,7 @@ import lombok.val;
 public class CodeCategoryService extends BaseTransactionalService {
 
     @Autowired
-    CodeCategoryDao codeCategoryDao;
+    CodeCategoryRepository codeCategoryRepository;
 
     /**
      * コード分類を全件取得します。
@@ -34,10 +32,7 @@ public class CodeCategoryService extends BaseTransactionalService {
     public Page<CodeCategory> fetchAll() {
         // ページングを指定する
         val pageable = Pageable.NO_LIMIT_PAGEABLE;
-        val options = createSearchOptions(pageable);
-        val codeCategories = codeCategoryDao.selectAll(new CodeCategory(), options, toList());
-
-        return pageFactory.create(codeCategories, pageable, codeCategories.size());
+        return codeCategoryRepository.findAll(new CodeCategory(), pageable);
     }
 
     /**
@@ -48,12 +43,7 @@ public class CodeCategoryService extends BaseTransactionalService {
     @Transactional(readOnly = true) // 読み取りのみの場合は指定する
     public Page<CodeCategory> findAll(CodeCategory where, Pageable pageable) {
         Assert.notNull(where, "where must not be null");
-
-        // ページングを指定する
-        val options = createSearchOptions(pageable).count();
-        val codeCategories = codeCategoryDao.selectAll(where, options, toList());
-
-        return pageFactory.create(codeCategories, pageable, options.getCount());
+        return codeCategoryRepository.findAll(where, pageable);
     }
 
     /**
@@ -63,24 +53,26 @@ public class CodeCategoryService extends BaseTransactionalService {
      */
     @Transactional(readOnly = true)
     public CodeCategory findById(final Long id) {
-        // 1件取得
-        val codeCategory = codeCategoryDao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("code_category_id=" + id + " のデータが見つかりません。"));
-        return codeCategory;
+        Assert.notNull(id, "id must not be null");
+        return codeCategoryRepository.findById(id);
     }
 
     /**
      * コード分類を取得します。
-     * 
+     *
      * @param categoryKey
      * @return
      */
     @Transactional(readOnly = true)
     public CodeCategory findByKey(final String categoryKey) {
+        Assert.notNull(categoryKey, "categoryKey must not be null");
+
+        val where = new CodeCategory();
+        where.setCategoryKey(categoryKey);
+
         // 1件取得
-        val codeCategory = codeCategoryDao.selectByKey(categoryKey)
+        return codeCategoryRepository.findOne(where)
                 .orElseThrow(() -> new NoDataFoundException("category_key=" + categoryKey + " のデータが見つかりません。"));
-        return codeCategory;
     }
 
     /**
@@ -91,11 +83,7 @@ public class CodeCategoryService extends BaseTransactionalService {
      */
     public CodeCategory create(final CodeCategory inputCodeCategory) {
         Assert.notNull(inputCodeCategory, "inputCodeCategory must not be null");
-
-        // 1件登録
-        codeCategoryDao.insert(inputCodeCategory);
-
-        return inputCodeCategory;
+        return codeCategoryRepository.create(inputCodeCategory);
     }
 
     /**
@@ -106,15 +94,7 @@ public class CodeCategoryService extends BaseTransactionalService {
      */
     public CodeCategory update(final CodeCategory inputCodeCategory) {
         Assert.notNull(inputCodeCategory, "inputCodeCategory must not be null");
-
-        // 1件更新
-        int updated = codeCategoryDao.update(inputCodeCategory);
-
-        if (updated < 1) {
-            throw new NoDataFoundException("code_category_id=" + inputCodeCategory.getId() + " のデータが見つかりません。");
-        }
-
-        return inputCodeCategory;
+        return codeCategoryRepository.update(inputCodeCategory);
     }
 
     /**
@@ -123,15 +103,7 @@ public class CodeCategoryService extends BaseTransactionalService {
      * @return
      */
     public CodeCategory delete(final Long id) {
-        val codeCategory = codeCategoryDao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("code_category_id=" + id + " のデータが見つかりません。"));
-
-        int updated = codeCategoryDao.delete(codeCategory);
-
-        if (updated < 1) {
-            throw new NoDataFoundException("code_category_id=" + id + " は更新できませんでした。");
-        }
-
-        return codeCategory;
+        Assert.notNull(id, "id must not be null");
+        return codeCategoryRepository.delete(id);
     }
 }

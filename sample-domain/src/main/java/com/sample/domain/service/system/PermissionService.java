@@ -1,20 +1,15 @@
 package com.sample.domain.service.system;
 
-import static java.util.stream.Collectors.toList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.sample.domain.dao.system.PermissionDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Permission;
-import com.sample.domain.exception.NoDataFoundException;
+import com.sample.domain.repository.system.PermissionRepository;
 import com.sample.domain.service.BaseTransactionalService;
-
-import lombok.val;
 
 /**
  * 権限サービス
@@ -23,7 +18,7 @@ import lombok.val;
 public class PermissionService extends BaseTransactionalService {
 
     @Autowired
-    PermissionDao permissionDao;
+    PermissionRepository permissionRepository;
 
     /**
      * 権限を一括取得します。
@@ -35,12 +30,7 @@ public class PermissionService extends BaseTransactionalService {
     @Transactional(readOnly = true) // 読み取りのみの場合は指定する
     public Page<Permission> findAll(Permission where, Pageable pageable) {
         Assert.notNull(where, "where must not be null");
-
-        // ページングを指定する
-        val options = createSearchOptions(pageable).count();
-        val permissions = permissionDao.selectAll(where, options, toList());
-
-        return pageFactory.create(permissions, pageable, options.getCount());
+        return permissionRepository.findAll(where, pageable);
     }
 
     /**
@@ -50,10 +40,7 @@ public class PermissionService extends BaseTransactionalService {
      */
     @Transactional(readOnly = true)
     public Permission findById(final Long id) {
-        // 1件取得
-        val permission = permissionDao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("permission_id=" + id + " のデータが見つかりません。"));
-        return permission;
+        return permissionRepository.findById(id);
     }
 
     /**
@@ -64,11 +51,7 @@ public class PermissionService extends BaseTransactionalService {
      */
     public Permission create(final Permission inputPermission) {
         Assert.notNull(inputPermission, "inputPermission must not be null");
-
-        // 1件登録
-        permissionDao.insert(inputPermission);
-
-        return inputPermission;
+        return permissionRepository.create(inputPermission);
     }
 
     /**
@@ -79,15 +62,7 @@ public class PermissionService extends BaseTransactionalService {
      */
     public Permission update(final Permission inputPermission) {
         Assert.notNull(inputPermission, "inputPermission must not be null");
-
-        // 1件更新
-        int updated = permissionDao.update(inputPermission);
-
-        if (updated < 1) {
-            throw new NoDataFoundException("permission_id=" + inputPermission.getId() + " のデータが見つかりません。");
-        }
-
-        return inputPermission;
+        return permissionRepository.update(inputPermission);
     }
 
     /**
@@ -96,15 +71,7 @@ public class PermissionService extends BaseTransactionalService {
      * @return
      */
     public Permission delete(final Long id) {
-        val permission = permissionDao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("permission_id=" + id + " のデータが見つかりません。"));
-
-        int updated = permissionDao.delete(permission);
-
-        if (updated < 1) {
-            throw new NoDataFoundException("permission_id=" + id + " は更新できませんでした。");
-        }
-
-        return permission;
+        Assert.notNull(id, "id must not be null");
+        return permissionRepository.delete(id);
     }
 }

@@ -238,10 +238,7 @@ public class UserHtmlController extends AbstractHtmlController {
 
         val image = form.getUserImage();
         if (image != null && !image.isEmpty()) {
-            UploadFile uploadFile = user.getUploadFile();
-            if (uploadFile == null) {
-                uploadFile = new UploadFile();
-            }
+            val uploadFile = new UploadFile();
             MultipartFileUtils.convert(image, uploadFile);
             user.setUploadFile(uploadFile);
         }

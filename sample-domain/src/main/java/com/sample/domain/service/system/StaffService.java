@@ -1,22 +1,15 @@
 package com.sample.domain.service.system;
 
-import static java.util.stream.Collectors.toList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.sample.domain.dao.system.StaffDao;
-import com.sample.domain.dao.system.StaffRoleDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Staff;
-import com.sample.domain.dto.system.StaffRole;
-import com.sample.domain.exception.NoDataFoundException;
+import com.sample.domain.repository.system.StaffRepository;
 import com.sample.domain.service.BaseTransactionalService;
-
-import lombok.val;
 
 /**
  * 担当者サービス
@@ -25,10 +18,7 @@ import lombok.val;
 public class StaffService extends BaseTransactionalService {
 
     @Autowired
-    StaffDao staffDao;
-
-    @Autowired
-    StaffRoleDao staffRoleDao;
+    StaffRepository staffRepository;
 
     /**
      * 担当者を一括取得します。
@@ -38,12 +28,7 @@ public class StaffService extends BaseTransactionalService {
     @Transactional(readOnly = true) // 読み取りのみの場合は指定する
     public Page<Staff> findAll(Staff where, Pageable pageable) {
         Assert.notNull(where, "where must not be null");
-
-        // ページングを指定する
-        val options = createSearchOptions(pageable).count();
-        val staffs = staffDao.selectAll(where, options, toList());
-
-        return pageFactory.create(staffs, pageable, options.getCount());
+        return staffRepository.findAll(where, pageable);
     }
 
     /**
@@ -53,10 +38,8 @@ public class StaffService extends BaseTransactionalService {
      */
     @Transactional(readOnly = true)
     public Staff findById(final Long id) {
-        // 1件取得
-        val staff = staffDao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("staff_id=" + id + " のデータが見つかりません。"));
-        return staff;
+        Assert.notNull(id, "id must not be null");
+        return staffRepository.findById(id);
     }
 
     /**
@@ -67,17 +50,7 @@ public class StaffService extends BaseTransactionalService {
      */
     public Staff create(final Staff inputStaff) {
         Assert.notNull(inputStaff, "inputStaff must not be null");
-
-        // 1件登録
-        staffDao.insert(inputStaff);
-
-        // 役割権限紐付けを登録する
-        val staffRole = new StaffRole();
-        staffRole.setStaffId(inputStaff.getId());
-        staffRole.setRoleKey("admin");
-        staffRoleDao.insert(staffRole);
-
-        return inputStaff;
+        return staffRepository.create(inputStaff);
     }
 
     /**
@@ -88,15 +61,7 @@ public class StaffService extends BaseTransactionalService {
      */
     public Staff update(final Staff inputStaff) {
         Assert.notNull(inputStaff, "inputStaff must not be null");
-
-        // 1件更新
-        int updated = staffDao.update(inputStaff);
-
-        if (updated < 1) {
-            throw new NoDataFoundException("staff_id=" + inputStaff.getId() + " のデータが見つかりません。");
-        }
-
-        return inputStaff;
+        return staffRepository.update(inputStaff);
     }
 
     /**
@@ -105,15 +70,7 @@ public class StaffService extends BaseTransactionalService {
      * @return
      */
     public Staff delete(final Long id) {
-        val staff = staffDao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("staff_id=" + id + " のデータが見つかりません。"));
-
-        int updated = staffDao.delete(staff);
-
-        if (updated < 1) {
-            throw new NoDataFoundException("staff_id=" + id + " は更新できませんでした。");
-        }
-
-        return staff;
+        Assert.notNull(id, "id must not be null");
+        return staffRepository.delete(id);
     }
 }
