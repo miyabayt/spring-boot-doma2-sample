@@ -11,12 +11,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.sample.domain.dao.system.MailTemplateDao;
-import com.sample.domain.dao.system.StaffDao;
 import com.sample.domain.dto.system.MailTemplate;
 import com.sample.domain.dto.system.Staff;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.helper.SendMailHelper;
+import com.sample.domain.repository.system.MailTemplateRepository;
+import com.sample.domain.repository.system.StaffRepository;
 import com.sample.domain.service.BaseTransactionalService;
 
 import lombok.val;
@@ -31,10 +31,10 @@ public class LoginService extends BaseTransactionalService {
     String fromAddress;
 
     @Autowired
-    StaffDao staffDao;
+    StaffRepository staffRepository;
 
     @Autowired
-    MailTemplateDao mailTemplateDao;
+    MailTemplateRepository mailTemplateRepository;
 
     @Autowired
     SendMailHelper sendMailHelper;
@@ -50,14 +50,14 @@ public class LoginService extends BaseTransactionalService {
 
         val where = new Staff();
         where.setEmail(email);
-        val staff = staffDao.select(where);
+        val staff = staffRepository.findOne(where);
 
         staff.ifPresent(s -> {
             // トークンを発行する
             val token = UUID.randomUUID().toString();
             s.setPasswordResetToken(token);
             s.setTokenExpiresAt(LocalDateTime.now().plusHours(2)); // 2時間後に失効させる
-            staffDao.update(s);
+            staffRepository.update(s);
 
             // メールを作成する
             val mailTemplate = getMailTemplate("passwordReset");
@@ -90,7 +90,7 @@ public class LoginService extends BaseTransactionalService {
         // トークンの一致と有効期限をチェックする
         val where = new Staff();
         where.setPasswordResetToken(token);
-        val staff = staffDao.select(where);
+        val staff = staffRepository.findOne(where);
 
         if (!staff.isPresent()) {
             return false;
@@ -110,7 +110,7 @@ public class LoginService extends BaseTransactionalService {
         // トークンの一致と有効期限をチェックする
         val where = new Staff();
         where.setPasswordResetToken(token);
-        val staff = staffDao.select(where);
+        val staff = staffRepository.findOne(where);
 
         if (!staff.isPresent()) {
             return false;
@@ -121,7 +121,7 @@ public class LoginService extends BaseTransactionalService {
             s.setPasswordResetToken(null);
             s.setTokenExpiresAt(null);
             s.setPassword(password);
-            staffDao.update(s);
+            staffRepository.update(s);
         });
 
         return true;
@@ -135,9 +135,7 @@ public class LoginService extends BaseTransactionalService {
     protected MailTemplate getMailTemplate(String templateKey) {
         val where = new MailTemplate();
         where.setTemplateKey(templateKey);
-        val mailTemplate = mailTemplateDao.select(where).orElseThrow(
+        return mailTemplateRepository.findOne(where).orElseThrow(
                 () -> new NoDataFoundException("templateKey=" + where.getTemplateKey() + " のデータが見つかりません。"));
-
-        return mailTemplate;
     }
 }

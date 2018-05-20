@@ -1,6 +1,7 @@
 package com.sample.domain.dao.system;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collector;
 
 import org.seasar.doma.*;
@@ -25,6 +26,24 @@ public interface RolePermissionDao {
             final Collector<RolePermission, ?, R> collector);
 
     /**
+     * 役割権限紐付けを1件取得します。
+     *
+     * @param id
+     * @return
+     */
+    @Select
+    Optional<RolePermission> selectById(Long id);
+
+    /**
+     * 役割権限紐付けを1件取得します。
+     *
+     * @param rolePermission
+     * @return
+     */
+    @Select
+    Optional<RolePermission> select(RolePermission rolePermission);
+
+    /**
      * 役割権限紐付けを登録します。
      *
      * @param rolePermission
@@ -41,6 +60,15 @@ public interface RolePermissionDao {
      */
     @Update
     int update(RolePermission rolePermission);
+
+    /**
+     * 役割権限紐付けを論理削除します。
+     *
+     * @param rolePermission
+     * @return
+     */
+    @Update(excludeNull = true) // NULLの項目は更新対象にしない
+    int delete(RolePermission rolePermission);
 
     /**
      * 役割権限紐付けを一括論理削除します。

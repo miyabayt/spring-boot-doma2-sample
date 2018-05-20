@@ -18,7 +18,7 @@ public class ValidateUtils {
      * @return
      */
     public static boolean isTrue(Boolean value) {
-        return value != null && value.booleanValue();
+        return value != null && value;
     }
 
     /**
@@ -99,6 +99,16 @@ public class ValidateUtils {
      */
     public static boolean isNotEmpty(Object[] array) {
         return !isEmpty(array);
+    }
+
+    /**
+     * 存在可否をチェックします。
+     *
+     * @param map
+     * @return
+     */
+    public static boolean isNotEmpty(Map<?, ?> map) {
+        return !isEmpty(map);
     }
 
     /**

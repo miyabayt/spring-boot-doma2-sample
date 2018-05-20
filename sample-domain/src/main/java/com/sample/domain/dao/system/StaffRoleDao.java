@@ -60,36 +60,36 @@ public interface StaffRoleDao {
     /**
      * 担当者権限を登録します。
      *
-     * @param Permission
+     * @param staffRole
      * @return
      */
     @Insert(exclude = { "roleName", "permissionKey", "permissionName" })
-    int insert(StaffRole Permission);
+    int insert(StaffRole staffRole);
 
     /**
      * 担当者権限を更新します。
      *
-     * @param permission
+     * @param staffRole
      * @return
      */
     @Update(exclude = { "roleName", "permissionKey", "permissionName" })
-    int update(StaffRole permission);
+    int update(StaffRole staffRole);
 
     /**
      * 担当者権限を論理削除します。
      *
-     * @param permission
+     * @param staffRole
      * @return
      */
     @Update(excludeNull = true) // NULLの項目は更新対象にしない
-    int delete(StaffRole permission);
+    int delete(StaffRole staffRole);
 
     /**
      * 担当者権限を一括登録します。
      *
-     * @param permissions
+     * @param staffRoles
      * @return
      */
     @BatchInsert(exclude = { "roleName", "permissionKey", "permissionName" })
-    int[] insert(List<StaffRole> permissions);
+    int[] insert(List<StaffRole> staffRoles);
 }

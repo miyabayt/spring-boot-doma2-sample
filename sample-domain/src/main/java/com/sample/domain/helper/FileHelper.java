@@ -1,4 +1,4 @@
-package com.sample.web.base.helper;
+package com.sample.domain.helper;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,7 +19,7 @@ import com.sample.domain.exception.FileNotFoundException;
  * ファイルアップロード
  */
 @Component
-public class FileUploadHelper {
+public class FileHelper {
 
     /**
      * ファイルの一覧を取得します。
@@ -29,10 +29,7 @@ public class FileUploadHelper {
      */
     public Stream<Path> listAllFiles(Path location) {
         try {
-            FileUtils.createDirectory(location);
-
-            return Files.walk(location, 1).filter(path -> !path.equals(location))
-                    .map(path -> location.relativize(path));
+            return Files.walk(location, 1).filter(path -> !path.equals(location)).map(location::relativize);
         } catch (IOException e) {
             throw new IllegalArgumentException("failed to list uploadfiles. ", e);
         }
@@ -78,8 +75,10 @@ public class FileUploadHelper {
                 throw new IllegalArgumentException("cloud not save empty file. " + filename);
             }
 
-            FileUtils.createDirectory(location);
+            // ディレクトリがない場合は作成する
+            FileUtils.createDirectories(location);
 
+            // インプットストリームをファイルに書き出す
             Files.copy(file.getInputStream(), location.resolve(filename));
 
         } catch (IOException e) {
