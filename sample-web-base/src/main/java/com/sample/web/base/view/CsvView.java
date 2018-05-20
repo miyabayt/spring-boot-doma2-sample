@@ -71,7 +71,7 @@ public class CsvView extends AbstractView {
     protected final void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-        // RFC 5987
+        // ファイル名に日本語を含めても文字化けしないようにUTF-8にエンコードする
         val encodedFilename = EncodeUtils.encodeUtf8(filename);
         val contentDisposition = String.format("attachment; filename*=UTF-8''\"%s\"", encodedFilename);
 
