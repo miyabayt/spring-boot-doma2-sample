@@ -324,7 +324,6 @@ public class UserHtmlController extends AbstractHtmlController {
         params.put("data", users.getData());
 
         val view = new PdfView("reports/users.jrxml", filename);
-        view.setApplicationContext(getApplicationContext());
 
         return new ModelAndView(view, params);
     }
