@@ -53,7 +53,7 @@ public class PdfView extends JasperReportsPdfView {
 
         // ファイル名に日本語を含めても文字化けしないようにUTF-8にエンコードする
         val encodedFilename = EncodeUtils.encodeUtf8(filename);
-        val contentDisposition = String.format("attachment; filename*=UTF-8''\"%s\"", encodedFilename);
+        val contentDisposition = String.format("attachment; filename*=UTF-8''%s", encodedFilename);
         response.setHeader(CONTENT_DISPOSITION, contentDisposition);
 
         writeToResponse(response, baos);
