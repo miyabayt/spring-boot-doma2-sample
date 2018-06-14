@@ -27,6 +27,7 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.filter.ForwardedHeaderFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -269,6 +270,17 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         registry.addInterceptor(setDoubleSubmitCheckTokenInterceptor());
         registry.addInterceptor(setModelAndViewInterceptor());
         registry.addInterceptor(authorizationInterceptor());
+    }
+
+    @Bean
+    public SnakeToLowerCamelCaseModelAttributeMethodProcessor attributeMethodProcessor() {
+        // login_id パラメータを loginId にマッピングする
+        return new SnakeToLowerCamelCaseModelAttributeMethodProcessor(true);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(attributeMethodProcessor());
     }
 
     @Bean
