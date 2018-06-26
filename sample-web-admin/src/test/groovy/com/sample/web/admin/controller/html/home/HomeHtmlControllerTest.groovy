@@ -40,6 +40,6 @@ class HomeHtmlControllerTest extends Specification {
     def "権限を持たない担当者でホームが開けないこと"() {
         expect:
         mvc.perform(get("/home"))
-                .andExpect(status().is(403))
+                .andExpect(redirectedUrl("/forbidden"))
     }
 }
