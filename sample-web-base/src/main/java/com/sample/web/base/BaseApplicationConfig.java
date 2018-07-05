@@ -5,6 +5,7 @@ import static com.sample.web.base.WebConst.*;
 import java.util.Arrays;
 import java.util.List;
 
+import com.sample.web.base.filter.CheckOverflowFilter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
@@ -163,6 +164,14 @@ public abstract class BaseApplicationConfig extends WebMvcConfigurerAdapter
         val filter = new ClearMDCFilter();
         val bean = new FilterRegistrationBean(filter);
         bean.setOrder(Ordered.LOWEST_PRECEDENCE);
+        return bean;
+    }
+
+    @Bean
+    public FilterRegistrationBean checkOverflowFilterBean() {
+        val filter = new CheckOverflowFilter();
+        val bean = new FilterRegistrationBean(filter);
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
     }
 
