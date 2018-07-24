@@ -243,7 +243,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val holidays = holidayService.findAll(new Holiday(), Pageable.NO_LIMIT_PAGEABLE);
+        val holidays = holidayService.findAll(new Holiday(), Pageable.NO_LIMIT);
 
         // 詰め替える
         List<HolidayCsv> csvList = modelMapper.map(holidays.getData(), toListType(HolidayCsv.class));

@@ -259,7 +259,7 @@ public class StaffHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val staffs = staffService.findAll(new Staff(), Pageable.NO_LIMIT_PAGEABLE);
+        val staffs = staffService.findAll(new Staff(), Pageable.NO_LIMIT);
 
         // 詰め替える
         List<StaffCsv> csvList = modelMapper.map(staffs.getData(), toListType(StaffCsv.class));

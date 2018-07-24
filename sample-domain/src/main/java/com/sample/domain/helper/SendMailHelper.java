@@ -62,7 +62,7 @@ public class SendMailHelper {
 
         val context = new Context();
         if (MapUtils.isNotEmpty(objects)) {
-            objects.entrySet().forEach(e -> context.setVariable(e.getKey(), e.getValue()));
+            objects.forEach(context::setVariable);
         }
 
         return templateEngine.process(template, context);

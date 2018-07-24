@@ -47,7 +47,7 @@ public class UserRestController extends AbstractRestController {
         val where = modelMapper.map(query, User.class);
 
         // 10件で区切って取得する
-        Page<User> users = userService.findAll(where, Pageable.DEFAULT_PAGEABLE);
+        Page<User> users = userService.findAll(where, Pageable.DEFAULT);
 
         PageableResource resource = modelMapper.map(users, PageableResourceImpl.class);
         resource.setMessage(getMessage(MESSAGE_SUCCESS));
