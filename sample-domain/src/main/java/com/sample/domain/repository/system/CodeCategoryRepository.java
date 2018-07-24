@@ -3,9 +3,15 @@ package com.sample.domain.repository.system;
 import static com.sample.domain.util.DomaUtils.createSelectOptions;
 import static java.util.stream.Collectors.toList;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 
 import com.sample.domain.dao.system.CodeCategoryDao;
@@ -25,6 +31,31 @@ public class CodeCategoryRepository extends BaseRepository {
 
     @Autowired
     CodeCategoryDao codeCategoryDao;
+
+    @Autowired
+    CacheManager cacheManager;
+
+    /**
+     * コード分類を全件取得します。
+     *
+     * @return
+     */
+    @Cacheable(cacheNames = "code_category", key = "#root.method")
+    public List<CodeCategory> fetchAll() {
+        // ページングを指定する
+        val pageable = Pageable.NO_LIMIT;
+        val options = createSelectOptions(pageable).count();
+
+        // キャッシュする
+        val cache = cacheManager.getCache("code_category");
+        val list = codeCategoryDao.selectAll(new CodeCategory(), options, toList());
+        list.forEach(c -> {
+            cache.put(c.getCategoryKey(), c);
+            cache.put(c.getId(), c);
+        });
+
+        return list;
+    }
 
     /**
      * コード分類を一括取得します。
@@ -56,6 +87,7 @@ public class CodeCategoryRepository extends BaseRepository {
      *
      * @return
      */
+    @Cacheable(cacheNames = "code_category", key = "#id")
     public CodeCategory findById(final Long id) {
         // 1件取得
         return codeCategoryDao.selectById(id)
@@ -68,6 +100,10 @@ public class CodeCategoryRepository extends BaseRepository {
      * @param inputCodeCategory
      * @return
      */
+    @Caching(put = { //
+            @CachePut(cacheNames = "code_category", key = "#inputCodeCategory.id"),
+            @CachePut(cacheNames = "code_category", key = "#inputCodeCategory.categoryKey") //
+    })
     public CodeCategory create(final CodeCategory inputCodeCategory) {
         // 1件登録
         codeCategoryDao.insert(inputCodeCategory);
@@ -80,6 +116,10 @@ public class CodeCategoryRepository extends BaseRepository {
      * @param inputCodeCategory
      * @return
      */
+    @Caching(put = { //
+            @CachePut(cacheNames = "code_category", key = "#inputCodeCategory.id"),
+            @CachePut(cacheNames = "code_category", key = "#inputCodeCategory.categoryKey") //
+    })
     public CodeCategory update(final CodeCategory inputCodeCategory) {
         // 1件更新
         int updated = codeCategoryDao.update(inputCodeCategory);
@@ -96,6 +136,10 @@ public class CodeCategoryRepository extends BaseRepository {
      *
      * @return
      */
+    @Caching(evict = { //
+            @CacheEvict(cacheNames = "code_category", key = "#inputCodeCategory.id"),
+            @CacheEvict(cacheNames = "code_category", key = "#inputCodeCategory.categoryKey") //
+    })
     public CodeCategory delete(final Long id) {
         val codeCategory = codeCategoryDao.selectById(id)
                 .orElseThrow(() -> new NoDataFoundException("codeCategory_id=" + id + " のデータが見つかりません。"));

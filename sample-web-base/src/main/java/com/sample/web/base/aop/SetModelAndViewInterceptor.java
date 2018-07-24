@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sample.common.util.MessageUtils;
 import com.sample.domain.dto.system.CodeCategory;
-import com.sample.domain.service.system.CodeCategoryService;
+import com.sample.domain.repository.system.CodeCategoryRepository;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SetModelAndViewInterceptor extends BaseHandlerInterceptor {
 
     @Autowired
-    CodeCategoryService codeCategoryService;
+    CodeCategoryRepository codeCategoryRepository;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
@@ -64,8 +64,7 @@ public class SetModelAndViewInterceptor extends BaseHandlerInterceptor {
      */
     protected List<CodeCategory> getCodeCategories() {
         // コード分類をすべて取得する
-        val pages = codeCategoryService.fetchAll();
-        return pages.getData();
+        return codeCategoryRepository.fetchAll();
     }
 
     /**
