@@ -1,5 +1,7 @@
 package com.sample.domain.service.system;
 
+import static com.sample.common.util.ValidateUtils.isEquals;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,8 +13,6 @@ import com.sample.domain.dto.system.Code;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.repository.system.CodeRepository;
 import com.sample.domain.service.BaseTransactionalService;
-
-import lombok.val;
 
 /**
  * コードサービス
@@ -34,7 +34,7 @@ public class CodeService extends BaseTransactionalService {
         return codeRepository.findAll(where, pageable);
     }
 
-    /**
+    /** 
      * コードを取得します。
      *
      * @return
@@ -42,7 +42,8 @@ public class CodeService extends BaseTransactionalService {
     @Transactional(readOnly = true)
     public Code findById(final Long id) {
         Assert.notNull(id, "where must not be null");
-        return codeRepository.findById(id);
+        return codeRepository.fetchAll().stream().filter(c -> c.getId() == id.longValue()).findFirst()
+                .orElseThrow(() -> new NoDataFoundException("id=" + id + " のデータが見つかりません。"));
     }
 
     /**
@@ -54,12 +55,7 @@ public class CodeService extends BaseTransactionalService {
     @Transactional(readOnly = true)
     public Code findByKey(final String codeKey) {
         Assert.notNull(codeKey, "codeKey must not be null");
-
-        val where = new Code();
-        where.setCodeKey(codeKey);
-
-        // 1件取得
-        return codeRepository.findOne(where)
+        return codeRepository.fetchAll().stream().filter(c -> isEquals(codeKey, c.getCodeKey())).findFirst()
                 .orElseThrow(() -> new NoDataFoundException("code_key=" + codeKey + " のデータが見つかりません。"));
     }
 
