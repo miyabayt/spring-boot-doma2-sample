@@ -31,7 +31,7 @@ public class CodeCategoryService extends BaseTransactionalService {
     @Transactional(readOnly = true) // 読み取りのみの場合は指定する
     public Page<CodeCategory> fetchAll() {
         // ページングを指定する
-        val pageable = Pageable.NO_LIMIT_PAGEABLE;
+        val pageable = Pageable.NO_LIMIT;
         return codeCategoryRepository.findAll(new CodeCategory(), pageable);
     }
 

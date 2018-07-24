@@ -200,7 +200,7 @@ public class RoleRepository extends BaseRepository {
         val where = new RolePermission();
         where.setRoleKey(inputRole.getRoleKey());
 
-        val options = createSelectOptions(Pageable.NO_LIMIT_PAGEABLE);
+        val options = createSelectOptions(Pageable.NO_LIMIT);
         return rolePermissionDao.selectAll(where, options, toList());
     }
 }

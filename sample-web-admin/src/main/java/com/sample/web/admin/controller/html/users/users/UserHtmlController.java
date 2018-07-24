@@ -279,7 +279,7 @@ public class UserHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val users = userService.findAll(new User(), Pageable.NO_LIMIT_PAGEABLE);
+        val users = userService.findAll(new User(), Pageable.NO_LIMIT);
 
         // 詰め替える
         List<UserCsv> csvList = modelMapper.map(users.getData(), toListType(UserCsv.class));
@@ -300,7 +300,7 @@ public class UserHtmlController extends AbstractHtmlController {
     @GetMapping(path = "/download/{filename:.+\\.xlsx}")
     public ModelAndView downloadExcel(@PathVariable String filename) {
         // 全件取得する
-        val users = userService.findAll(new User(), Pageable.NO_LIMIT_PAGEABLE);
+        val users = userService.findAll(new User(), Pageable.NO_LIMIT);
         val view = new ExcelView(filename, new UserExcel());
 
         Map<String, Object> params = new HashMap<>();
@@ -318,7 +318,7 @@ public class UserHtmlController extends AbstractHtmlController {
     @GetMapping(path = "/download/{filename:.+\\.pdf}")
     public ModelAndView downloadPdf(@PathVariable String filename) {
         // 全件取得する
-        val users = userService.findAll(new User(), Pageable.NO_LIMIT_PAGEABLE);
+        val users = userService.findAll(new User(), Pageable.NO_LIMIT);
 
         Map<String, Object> params = new HashMap<>();
         params.put("data", users.getData());

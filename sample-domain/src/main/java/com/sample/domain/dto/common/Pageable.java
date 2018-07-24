@@ -5,9 +5,9 @@ package com.sample.domain.dto.common;
  */
 public interface Pageable {
 
-    Pageable DEFAULT_PAGEABLE = new DefaultPageable(1, 10);
+    Pageable DEFAULT = new DefaultPageable(1, 10);
 
-    Pageable NO_LIMIT_PAGEABLE = new DefaultPageable(1, Integer.MAX_VALUE);
+    Pageable NO_LIMIT = new DefaultPageable(1, Integer.MAX_VALUE);
 
     /**
      * 

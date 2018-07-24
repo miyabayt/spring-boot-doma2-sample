@@ -18,7 +18,7 @@ class CodeServiceTest extends Specification {
     def "getCodeの結果がnullではないこと"() {
         when:
         def where = new Code()
-        def pages = codeService.findAll(where, Pageable.NO_LIMIT_PAGEABLE)
+        def pages = codeService.findAll(where, Pageable.NO_LIMIT)
 
         then:
         pages.getCount() >= 1

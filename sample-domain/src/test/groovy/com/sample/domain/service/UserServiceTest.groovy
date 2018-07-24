@@ -23,7 +23,7 @@ class UserServiceTest extends Specification {
         def where = new User()
         where.setEmail("aaaa")
 
-        def pages = userService.findAll(where, Pageable.DEFAULT_PAGEABLE)
+        def pages = userService.findAll(where, Pageable.DEFAULT)
 
         then:
         pages.getCount() == 0
