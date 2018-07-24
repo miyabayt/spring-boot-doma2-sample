@@ -82,7 +82,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         }
 
         // 権限一覧を取得する
-        Page<Permission> permissions = permissionService.findAll(new Permission(), Pageable.NO_LIMIT_PAGEABLE);
+        Page<Permission> permissions = permissionService.findAll(new Permission(), Pageable.NO_LIMIT);
         model.addAttribute("permissions", permissions);
 
         return "modules/system/roles/new";
@@ -126,7 +126,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         val where = modelMapper.map(form, Role.class);
 
         // 10件区切りで取得する
-        val pages = roleService.findAll(where, Pageable.DEFAULT_PAGEABLE);
+        val pages = roleService.findAll(where, Pageable.DEFAULT);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
@@ -168,7 +168,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         model.addAttribute("role", role);
 
         // 権限一覧を取得する
-        Page<Permission> permissions = permissionService.findAll(new Permission(), Pageable.NO_LIMIT_PAGEABLE);
+        Page<Permission> permissions = permissionService.findAll(new Permission(), Pageable.NO_LIMIT);
         model.addAttribute("permissions", permissions);
 
         return "modules/system/roles/show";
@@ -194,7 +194,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         }
 
         // 権限一覧を取得する
-        Page<Permission> permissions = permissionService.findAll(new Permission(), Pageable.NO_LIMIT_PAGEABLE);
+        Page<Permission> permissions = permissionService.findAll(new Permission(), Pageable.NO_LIMIT);
         model.addAttribute("permissions", permissions);
 
         return "modules/system/roles/new";
@@ -261,7 +261,7 @@ public class RoleHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val roles = roleService.findAll(new Role(), Pageable.NO_LIMIT_PAGEABLE);
+        val roles = roleService.findAll(new Role(), Pageable.NO_LIMIT);
 
         // 詰め替える
         List<RoleCsv> csvList = modelMapper.map(roles.getData(), toListType(RoleCsv.class));

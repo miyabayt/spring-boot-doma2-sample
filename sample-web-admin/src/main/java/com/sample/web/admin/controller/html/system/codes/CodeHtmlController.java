@@ -234,7 +234,7 @@ public class CodeHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val codes = codeService.findAll(new Code(), Pageable.NO_LIMIT_PAGEABLE);
+        val codes = codeService.findAll(new Code(), Pageable.NO_LIMIT);
 
         // 詰め替える
         List<CodeCsv> csvList = modelMapper.map(codes.getData(), toListType(CodeCsv.class));
