@@ -26,7 +26,6 @@ public class CodeForm extends BaseForm {
     String codeValue;
 
     // コードエイリアス
-    @NotEmpty
     String codeAlias;
 
     // 表示順

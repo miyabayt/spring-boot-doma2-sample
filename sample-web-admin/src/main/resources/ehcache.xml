@@ -16,9 +16,16 @@
     />
 
     <!-- diskPersistent: ディスクキャッシュを永続化するかどうか -->
-    <cache name="sample"
+    <cache name="code"
            eternal="false"
            maxEntriesLocalHeap="10000"
            timeToLiveSeconds="60"
     />
+
+    <cache name="code_category"
+           eternal="false"
+           maxEntriesLocalHeap="10000"
+           timeToLiveSeconds="60"
+    />
+
 </ehcache>
