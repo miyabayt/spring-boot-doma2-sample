@@ -15,7 +15,7 @@ class CodeServiceTest extends Specification {
     @Autowired
     CodeService codeService
 
-    def "getCodeの結果がnullではないこと"() {
+    def "コード一覧が取得できること"() {
         when:
         def where = new Code()
         def pages = codeService.findAll(where, Pageable.NO_LIMIT)

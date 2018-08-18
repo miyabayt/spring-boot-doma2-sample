@@ -32,6 +32,7 @@
                             <li th:class="${item=='mailTemplate' ? 'active' : ''}"><a href="#" th:href="@{/system/mailtemplates/find(page=1)}"><i class="fa fa-envelope"></i>メールテンプレート</a></li>
                             <li th:class="${item=='uploadfile' ? 'active' : ''}"><a href="#" th:href="@{/system/uploadfiles/list}"><i class="fa fa-file"></i>ファイル管理</a></li>
                             <li th:class="${item=='role' ? 'active' : ''}"><a href="#" th:href="@{/system/roles/find(page=1)}"><i class="fa fa-circle-o"></i>ロール管理</a></li>
+                            <li th:class="${item=='codeCategory' ? 'active' : ''}"><a href="#" th:href="@{/system/code_categories/find(page=1)}"><i class="fa fa-th-list"></i>コード分類マスタ</a></li>
                             <li th:class="${item=='code' ? 'active' : ''}"><a href="#" th:href="@{/system/codes/find(page=1)}"><i class="fa fa-th-list"></i>コードマスタ</a></li>
                         </ul>
                     </li>

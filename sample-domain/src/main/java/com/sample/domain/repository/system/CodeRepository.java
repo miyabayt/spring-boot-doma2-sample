@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Repository;
 
 import com.sample.domain.dao.system.CodeDao;
@@ -40,21 +42,11 @@ public class CodeRepository extends BaseRepository {
      *
      * @return
      */
-    @Cacheable(cacheNames = "code", key = "#root.method")
     public List<Code> fetchAll() {
         // ページングを指定する
         val pageable = Pageable.NO_LIMIT;
         val options = createSelectOptions(pageable).count();
-
-        // キャッシュする
-        val cache = cacheManager.getCache("code");
-        val list = codeDao.selectAll(new Code(), options, toList());
-        list.forEach(c -> {
-            cache.put(c.getCategoryKey() + "_" + c.getCodeKey(), c);
-            cache.put(c.getId(), c);
-        });
-
-        return list;
+        return codeDao.selectAll(new Code(), options, toList());
     }
 
     /**
@@ -79,6 +71,22 @@ public class CodeRepository extends BaseRepository {
      */
     public Optional<Code> findOne(Code where) {
         // 1件取得
+        return codeDao.select(where);
+    }
+
+    /**
+     * コードを取得します。
+     *
+     * @param categoryKey
+     * @param codeKey
+     * @return
+     */
+    @Cacheable(cacheNames = "code", key = "#categoryKey + '_' + #codeKey")
+    public Optional<Code> findByCodeKey(String categoryKey, String codeKey) {
+        // 1件取得
+        val where = new Code();
+        where.setCategoryKey(categoryKey);
+        where.setCodeKey(codeKey);
         return codeDao.select(where);
     }
 
@@ -151,5 +159,18 @@ public class CodeRepository extends BaseRepository {
         }
 
         return code;
+    }
+
+    /**
+     * キャッシュにロードします。
+     */
+    @EventListener(ApplicationReadyEvent.class)
+    public void loadCache() {
+        // キャッシュする
+        val cache = cacheManager.getCache("code");
+        fetchAll().forEach(c -> {
+            cache.put(c.getCategoryKey() + "_" + c.getCodeKey(), c);
+            cache.put(c.getId(), c);
+        });
     }
 }
