@@ -1,0 +1,44 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{layouts/sidebarLayout}">
+    <head>
+        <title>コード分類管理</title>
+    </head>
+    <body>
+        <div layout:fragment="sidebar">
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'codeCategory')}"></div>
+        </div>
+        <section layout:fragment="content-header">
+            <h1>コード分類詳細</h1>
+            <ol class="breadcrumb">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/system/code_categories/find(page=1)}">コード分類検索</a></li>
+                <li>コード分類詳細</li>
+            </ol>
+        </section>
+        <section layout:fragment="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <table class="table table-hover" th:object="${codeCategory}">
+                        <tr>
+                            <th>ID</th>
+                            <td th:text="*{id}"></td>
+                        </tr>
+                        <tr>
+                            <th>コード分類キー</th>
+                            <td><b th:text="*{categoryKey}"></b></td>
+                        </tr>
+                        <tr>
+                            <th>コード分類</th>
+                            <td><b th:text="*{categoryName}"></b></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    <a th:href="@{/system/code_categories/edit/{id}(id=${codeCategory.id})}" class="btn btn-default bg-purple">編集</a>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

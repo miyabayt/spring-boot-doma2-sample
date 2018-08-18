@@ -1,4 +1,4 @@
-package com.sample.web.admin.controller.html.system.codes;
+package com.sample.web.admin.controller.html.system.codecategories;
 
 import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
@@ -18,9 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.domain.dto.common.Pageable;
-import com.sample.domain.dto.system.Code;
+import com.sample.domain.dto.system.CodeCategory;
 import com.sample.domain.helper.CodeHelper;
-import com.sample.domain.service.system.CodeService;
+import com.sample.domain.service.system.CodeCategoryService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.view.CsvView;
 
@@ -28,41 +28,41 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * コード管理
+ * コード分類管理
  */
 @Controller
-@RequestMapping("/system/codes")
-@SessionAttributes(types = { SearchCodeForm.class, CodeForm.class })
+@RequestMapping("/system/code_categories")
+@SessionAttributes(types = { SearchCodeCategoryForm.class, CodeCategoryForm.class })
 @Slf4j
-public class CodeHtmlController extends AbstractHtmlController {
+public class CodeCategoryHtmlController extends AbstractHtmlController {
 
     @Autowired
-    CodeFormValidator codeFormValidator;
+    CodeCategoryFormValidator codeCategoryFormValidator;
 
     @Autowired
-    CodeService codeService;
+    CodeCategoryService codeCategoryService;
 
     @Autowired
     CodeHelper codeHelper;
 
-    @ModelAttribute("codeForm")
-    public CodeForm codeForm() {
-        return new CodeForm();
+    @ModelAttribute("codeCategoryForm")
+    public CodeCategoryForm codeCategoryForm() {
+        return new CodeCategoryForm();
     }
 
-    @ModelAttribute("searchCodeForm")
-    public SearchCodeForm searchCodeForm() {
-        return new SearchCodeForm();
+    @ModelAttribute("searchCodeCategoryForm")
+    public SearchCodeCategoryForm searchcodeCategoryForm() {
+        return new SearchCodeCategoryForm();
     }
 
-    @InitBinder("codeForm")
+    @InitBinder("codeCategoryForm")
     public void validatorBinder(WebDataBinder binder) {
-        binder.addValidators(codeFormValidator);
+        binder.addValidators(codeCategoryFormValidator);
     }
 
     @Override
     public String getFunctionName() {
-        return "A_CODE";
+        return "A_CODE_CATEGORY";
     }
 
     /**
@@ -73,13 +73,13 @@ public class CodeHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/new")
-    public String newCode(@ModelAttribute("codeForm") CodeForm form, Model model) {
+    public String newCode(@ModelAttribute("codeCategoryForm") CodeCategoryForm form, Model model) {
         if (!form.isNew()) {
             // SessionAttributeに残っている場合は再生成する
-            model.addAttribute("codeForm", new CodeForm());
+            model.addAttribute("codeCategoryForm", new CodeCategoryForm());
         }
 
-        return "modules/system/codes/new";
+        return "modules/system/code_categories/new";
     }
 
     /**
@@ -91,21 +91,21 @@ public class CodeHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/new")
-    public String newCode(@Validated @ModelAttribute("codeForm") CodeForm form, BindingResult br,
+    public String newCode(@Validated @ModelAttribute("codeCategoryForm") CodeCategoryForm form, BindingResult br,
             RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (br.hasErrors()) {
             setFlashAttributeErrors(attributes, br);
-            return "redirect:/system/codes/new";
+            return "redirect:/system/code_categories/new";
         }
 
         // 入力値からDTOを作成する
-        val inputCode = modelMapper.map(form, Code.class);
+        val inputCodeCategory = modelMapper.map(form, CodeCategory.class);
 
         // 登録する
-        val createdCode = codeService.create(inputCode);
+        val createdCodeCategory = codeCategoryService.create(inputCodeCategory);
 
-        return "redirect:/system/codes/show/" + createdCode.getId();
+        return "redirect:/system/code_categories/show/" + createdCodeCategory.getId();
     }
 
     /**
@@ -115,12 +115,12 @@ public class CodeHtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/find")
-    public String findCode(@ModelAttribute("searchCodeForm") SearchCodeForm form, Model model) {
+    public String findCodeCategory(@ModelAttribute("searchCodeCategoryForm") SearchCodeCategoryForm form, Model model) {
         // 入力値から検索条件を作成する
-        val where = modelMapper.map(form, Code.class);
+        val where = modelMapper.map(form, CodeCategory.class);
 
         // 10件区切りで取得する
-        val pages = codeService.findAll(where, form);
+        val pages = codeCategoryService.findAll(where, form);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
@@ -129,7 +129,7 @@ public class CodeHtmlController extends AbstractHtmlController {
         val codeCategories = codeHelper.getCodeCategories();
         model.addAttribute("codeCategories", codeCategories);
 
-        return "modules/system/codes/find";
+        return "modules/system/code_categories/find";
     }
 
     /**
@@ -141,52 +141,53 @@ public class CodeHtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/find")
-    public String findCode(@Validated @ModelAttribute("searchCodeForm") SearchCodeForm form, BindingResult br,
-            RedirectAttributes attributes) {
+    public String findCodeCategory(@Validated @ModelAttribute("searchCodeCategoryForm") SearchCodeCategoryForm form,
+            BindingResult br, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (br.hasErrors()) {
             setFlashAttributeErrors(attributes, br);
-            return "redirect:/system/codes/find";
+            return "redirect:/system/code_categories/find";
         }
 
-        return "redirect:/system/codes/find";
+        return "redirect:/system/code_categories/find";
     }
 
     /**
      * 詳細画面
      *
-     * @param codeId
+     * @param codeCategoryId
      * @param model
      * @return
      */
-    @GetMapping("/show/{codeId}")
-    public String showCode(@PathVariable Long codeId, Model model) {
+    @GetMapping("/show/{codeCategoryId}")
+    public String showCodeCategory(@PathVariable Long codeCategoryId, Model model) {
         // 1件取得する
-        val code = codeService.findById(codeId);
-        model.addAttribute("code", code);
-        return "modules/system/codes/show";
+        val codeCategory = codeCategoryService.findById(codeCategoryId);
+        model.addAttribute("codeCategory", codeCategory);
+        return "modules/system/code_categories/show";
     }
 
     /**
      * 編集画面 初期表示
      *
-     * @param codeId
+     * @param codeCategoryId
      * @param form
      * @param model
      * @return
      */
-    @GetMapping("/edit/{codeId}")
-    public String editCode(@PathVariable Long codeId, @ModelAttribute("codeForm") CodeForm form, Model model) {
+    @GetMapping("/edit/{codeCategoryId}")
+    public String editCodeCategory(@PathVariable Long codeCategoryId,
+            @ModelAttribute("codeCategoryForm") CodeCategoryForm form, Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val code = codeService.findById(codeId);
+            val codeCategory = codeCategoryService.findById(codeCategoryId);
 
             // 取得したDtoをFromに詰め替える
-            modelMapper.map(code, form);
+            modelMapper.map(codeCategory, form);
         }
 
-        return "modules/system/codes/new";
+        return "modules/system/code_categories/new";
     }
 
     /**
@@ -194,51 +195,52 @@ public class CodeHtmlController extends AbstractHtmlController {
      *
      * @param form
      * @param br
-     * @param codeId
+     * @param codeCategoryId
      * @param sessionStatus
      * @param attributes
      * @return
      */
-    @PostMapping("/edit/{codeId}")
-    public String editCode(@Validated @ModelAttribute("codeForm") CodeForm form, BindingResult br,
-            @PathVariable Long codeId, SessionStatus sessionStatus, RedirectAttributes attributes) {
+    @PostMapping("/edit/{codeCategoryId}")
+    public String editCodeCategory(@Validated @ModelAttribute("codeCategoryForm") CodeCategoryForm form,
+            BindingResult br, @PathVariable Long codeCategoryId, SessionStatus sessionStatus,
+            RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (br.hasErrors()) {
             setFlashAttributeErrors(attributes, br);
-            return "redirect:/system/codes/edit/" + codeId;
+            return "redirect:/system/code_categories/edit/" + codeCategoryId;
         }
 
         // 更新対象を取得する
-        val code = codeService.findById(codeId);
+        val codeCategory = codeCategoryService.findById(codeCategoryId);
 
         // 入力値を詰め替える
-        modelMapper.map(form, code);
+        modelMapper.map(form, codeCategory);
 
         // 更新する
-        val updatedCode = codeService.update(code);
+        val updatedCode = codeCategoryService.update(codeCategory);
 
-        // セッションのcodeFormをクリアする
+        // セッションのcodeCategoryFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/system/codes/show/" + updatedCode.getId();
+        return "redirect:/system/code_categories/show/" + updatedCode.getId();
     }
 
     /**
      * 削除処理
      *
-     * @param codeId
+     * @param codeCategoryId
      * @param attributes
      * @return
      */
-    @PostMapping("/remove/{codeId}")
-    public String removeCode(@PathVariable Long codeId, RedirectAttributes attributes) {
+    @PostMapping("/remove/{codeCategoryId}")
+    public String removeCodeCategory(@PathVariable Long codeCategoryId, RedirectAttributes attributes) {
         // 論理削除する
-        codeService.delete(codeId);
+        codeCategoryService.delete(codeCategoryId);
 
         // 削除成功メッセージ
         attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));
 
-        return "redirect:/system/codes/find";
+        return "redirect:/system/code_categories/find";
     }
 
     /**
@@ -250,13 +252,13 @@ public class CodeHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val codes = codeService.findAll(new Code(), Pageable.NO_LIMIT);
+        val codes = codeCategoryService.findAll(new CodeCategory(), Pageable.NO_LIMIT);
 
         // 詰め替える
-        List<CodeCsv> csvList = modelMapper.map(codes.getData(), toListType(CodeCsv.class));
+        List<CodeCategoryCsv> csvList = modelMapper.map(codes.getData(), toListType(CodeCategoryCsv.class));
 
         // レスポンスを設定する
-        val view = new CsvView(CodeCsv.class, csvList);
+        val view = new CsvView(CodeCategoryCsv.class, csvList);
         view.setFilename(filename);
 
         return new ModelAndView(view);

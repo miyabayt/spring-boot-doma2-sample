@@ -1,0 +1,17 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <th:block th:fragment="input (type, label, name)">
+        <div class="form-group">
+            <div class="control-group" th:id="${name}">
+                <label class="col-sm-2 control-label" th:text="${label}">ラベル</label>
+                <div class="col-sm-10">
+                    <input class="form-control" th:type="${type}" th:field="*{__${name}__}" size="10" maxlength="80" />
+                    <span class="help-inline">
+                        <div th:if="${#fields.hasAnyErrors()}">
+                            <p th:each="err : ${#fields.allErrors()}" th:text="${err}">Error</p>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</html>

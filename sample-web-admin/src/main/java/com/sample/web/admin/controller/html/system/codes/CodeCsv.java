@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 public class CodeCsv implements Serializable {
 
-    private static final long serialVersionUID = -3895412714445561940L;
+    private static final long serialVersionUID = 1872497612721457509L;
 
     @JsonProperty("コードID")
     Long id;
