@@ -14,5 +14,9 @@ public class SearchStaffForm extends BaseSearchForm implements Pageable {
 
     Long id;
 
-    String name;
+    String firstName;
+
+    String lastName;
+
+    String email;
 }
