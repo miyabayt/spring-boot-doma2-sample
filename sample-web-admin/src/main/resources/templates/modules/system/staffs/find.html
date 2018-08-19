@@ -21,19 +21,9 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">検索条件</h3>
                     <form th:object="${searchStaffForm}" th:action="@{/system/staffs/find(page=1)}" method="post" class="form-horizontal">
-                        <div class="form-group">
-                            <div class="control-group" id="name">
-                                <label class="col-sm-2 control-label">名前</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" th:field="*{name}" size="10" maxlength="80" />
-                                    <span class="help-inline">
-                                        <div th:if="${#fields.hasAnyErrors()}">
-                                            <p th:each="err : ${#fields.allErrors()}" th:text="${err}">Error</p>
-                                        </div>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                        <input th:replace="~{fragments/searchInputField :: input ('text', '苗字', 'lastName')}" />
+                        <input th:replace="~{fragments/searchInputField :: input ('text', '名前', 'firstName')}" />
+                        <input th:replace="~{fragments/searchInputField :: input ('text', 'メールアドレス', 'email')}" />
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" name="find" class="btn btn-default bg-purple">検索</button>
