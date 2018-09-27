@@ -1,6 +1,7 @@
 package com.sample.web.base.view;
 
 import static com.fasterxml.jackson.dataformat.csv.CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS;
+import static com.sample.common.util.ValidateUtils.isNotEmpty;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
@@ -55,11 +56,16 @@ public class CsvView extends AbstractView {
 
     /**
      * コンストラクタ
+     *
+     * @param clazz
+     * @param data
+     * @param filename
      */
-    public CsvView(Class<?> clazz, Collection<?> data) {
+    public CsvView(Class<?> clazz, Collection<?> data, String filename) {
         setContentType("application/octet-stream; charset=Windows-31J;");
         this.clazz = clazz;
         this.data = data;
+        this.filename = filename;
     }
 
     @Override
@@ -81,7 +87,7 @@ public class CsvView extends AbstractView {
         // CSVヘッダをオブジェクトから作成する
         CsvSchema schema = csvMapper.schemaFor(clazz).withHeader();
 
-        if (CollectionUtils.isNotEmpty(columns)) {
+        if (isNotEmpty(columns)) {
             // カラムが指定された場合は、スキーマを再構築する
             val builder = schema.rebuild().clearColumns();
             for (String column : columns) {
@@ -91,7 +97,7 @@ public class CsvView extends AbstractView {
         }
 
         // 書き出し
-        OutputStream outputStream = response.getOutputStream();
+        val outputStream = createTemporaryOutputStream();
         try (Writer writer = new OutputStreamWriter(outputStream, "Windows-31J")) {
             csvMapper.writer(schema).writeValue(writer, data);
         }

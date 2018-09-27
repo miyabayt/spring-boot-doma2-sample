@@ -1,92 +1,91 @@
 # 共通の設定を定義する
 spring:
-    profiles:
-        # デフォルトを明示的に指定する
-        # 開発環境以外は環境変数でプロファイルを切り替える
-        default: development
-        active: development
-    messages:
-        # メッセージ定義ファイルのパスを含めて設定する
-        basename: messages,ValidationMessages
-        cache-seconds: -1
-        encoding: UTF-8
-    jackson:
-        # JSONのキーをアンダースコア区切りの文字列にする
-        property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
-    thymeleaf:
-        # HTML5モードが非推奨になったのでHTMLモードにする
-        mode: HTML
-    session:
-        jdbc:
-            # spring-session-jdbcに必要なテーブルを作成する
-            initializer:
-                enabled: true
-            schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
-            table-name: SPRING_SESSION
-        store-type: JDBC
-    http:
-        multipart:
-            # アップロードのサイズ制限を設定する
-            max-file-size: 5MB
-            max-request-size: 5MB
-    datasource:
-        driver-class-name: com.mysql.jdbc.Driver
-        autoCommit: false
-        connectionTimeout: 30000
-        maxLifetime: 1800000
-        idleTimeout: 5000
-        connectionTestQuery: select 1
-        minimumIdle: 20
-        maximumPoolSize: 30
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        jdbc4ConnectionTest: true
-    batch:
-        job:
-            # 自動的にバッチジョブが起動しないようにする
-            enabled: false
-    mail:
-        default-encoding: ISO-2022-JP
-        protocol: smtp
-        host: 127.0.0.1
-        port: 25
-        username: test
-        password: test
-        properties:
-            mail:
-                from: from@sample.com
+  profiles:
+    # デフォルトを明示的に指定する
+    # 開発環境以外は環境変数でプロファイルを切り替える
+    default: development
+    active: development
+  messages:
+    # メッセージ定義ファイルのパスを含めて設定する
+    basename: messages,ValidationMessages
+    cache-duration: -1
+    encoding: UTF-8
+  jackson:
+    # JSONのキーをアンダースコア区切りの文字列にする
+    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+  thymeleaf:
+    # HTML5モードが非推奨になったのでHTMLモードにする
+    mode: HTML
+  session:
+    jdbc:
+      # spring-session-jdbcに必要なテーブルを作成する
+      initialize-schema: always
+      schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
+      table-name: SPRING_SESSION
+    store-type: JDBC
+  servlet:
+    multipart:
+      # アップロードのサイズ制限を設定する
+      max-file-size: 5MB
+      max-request-size: 5MB
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    autoCommit: false
+    connectionTimeout: 30000
+    maxLifetime: 1800000
+    idleTimeout: 5000
+    connectionTestQuery: select 1
+    minimumIdle: 20
+    maximumPoolSize: 30
+    cachePrepStmts: true
+    prepStmtCacheSize: 250
+    prepStmtCacheSqlLimit: 2048
+    jdbc4ConnectionTest: true
+  batch:
+    job:
+      # 自動的にバッチジョブが起動しないようにする
+      enabled: false
+  mail:
+    default-encoding: ISO-2022-JP
+    protocol: smtp
+    host: 127.0.0.1
+    port: 25
+    username: test
+    password: test
+    properties:
+      mail:
+        from: from@sample.com
 doma:
-    dialect: mysql
-    # 小文字のスネークケースに変換する（firstName → first_name）
-    naming: SNAKE_LOWER_CASE
-    # SQLファイルをキャッシュする
-    sql-file-repository: greedy_cache
-    # バルクインサート・アップデートのサイズ
-    batch-size: 1000
+  dialect: mysql
+  # 小文字のスネークケースに変換する（firstName → first_name）
+  naming: SNAKE_LOWER_CASE
+  # SQLファイルをキャッシュする
+  sql-file-repository: greedy_cache
+  # バルクインサート・アップデートのサイズ
+  batch-size: 1000
 jmx:
-    enabled: false
+  enabled: false
 security:
-    basic:
-        # spring-securityのベーシック認証を無効化する
-        enabled: false
+  basic:
+    # spring-securityのベーシック認証を無効化する
+    enabled: false
 management:
-    security:
-        enabled: false
+  security:
+    enabled: false
 server:
-    port: 18081
-    session:
-        timeout: 7200
-        # URLにセッションIDを出力しないようにする
-        tracking-modes: cookie
-    contextPath: /admin
+  port: 18081
+  session:
+    timeout: 7200
+    # URLにセッションIDを出力しないようにする
+    tracking-modes: cookie
+  contextPath: /admin
 logging:
-    pattern:
-        # MDCで設定した値を出力する
-        level: "[%X{X-Track-Id}:%X{LOGIN_USER_ID}] %5p"
+  pattern:
+    # MDCで設定した値を出力する
+    level: "[%X{X-Track-Id}:%X{LOGIN_USER_ID}] %5p"
 
 
 ####
 # アプリケーションの設定
 application:
-    fileUploadLocation: build/sample
+  fileUploadLocation: build/sample

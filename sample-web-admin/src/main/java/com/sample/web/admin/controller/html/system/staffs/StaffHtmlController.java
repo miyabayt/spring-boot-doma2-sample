@@ -262,9 +262,8 @@ public class StaffHtmlController extends AbstractHtmlController {
         // 詰め替える
         List<StaffCsv> csvList = modelMapper.map(staffs.getData(), toListType(StaffCsv.class));
 
-        // レスポンスを設定する
-        val view = new CsvView(StaffCsv.class, csvList);
-        view.setFilename(filename);
+        // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
+        val view = new CsvView(StaffCsv.class, csvList, filename);
 
         return new ModelAndView(view);
     }

@@ -4,9 +4,7 @@ import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
 import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -284,9 +282,8 @@ public class UserHtmlController extends AbstractHtmlController {
         // 詰め替える
         List<UserCsv> csvList = modelMapper.map(users.getData(), toListType(UserCsv.class));
 
-        // レスポンスを設定する
-        val view = new CsvView(UserCsv.class, csvList);
-        view.setFilename(filename);
+        // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
+        val view = new CsvView(UserCsv.class, csvList, filename);
 
         return new ModelAndView(view);
     }
@@ -301,12 +298,11 @@ public class UserHtmlController extends AbstractHtmlController {
     public ModelAndView downloadExcel(@PathVariable String filename) {
         // 全件取得する
         val users = userService.findAll(new User(), Pageable.NO_LIMIT);
-        val view = new ExcelView(filename, new UserExcel());
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("data", users.getData());
+        // Excelプック生成コールバック、データ、ダウンロード時のファイル名を指定する
+        val view = new ExcelView(new UserExcel(), users.getData(), filename);
 
-        return new ModelAndView(view, params);
+        return new ModelAndView(view);
     }
 
     /**
@@ -320,11 +316,9 @@ public class UserHtmlController extends AbstractHtmlController {
         // 全件取得する
         val users = userService.findAll(new User(), Pageable.NO_LIMIT);
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("data", users.getData());
+        // 帳票レイアウト、データ、ダウンロード時のファイル名を指定する
+        val view = new PdfView("reports/users.jrxml", users.getData(), filename);
 
-        val view = new PdfView("reports/users.jrxml", filename);
-
-        return new ModelAndView(view, params);
+        return new ModelAndView(view);
     }
 }

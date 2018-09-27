@@ -249,9 +249,8 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
         // 詰め替える
         List<MailTemplateCsv> csvList = modelMapper.map(mailTemplates.getData(), toListType(MailTemplateCsv.class));
 
-        // レスポンスを設定する
-        val view = new CsvView(MailTemplateCsv.class, csvList);
-        view.setFilename(filename);
+        // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
+        val view = new CsvView(MailTemplateCsv.class, csvList, filename);
 
         return new ModelAndView(view);
     }

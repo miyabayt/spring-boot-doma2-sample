@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ReflectionUtils {
 
     /**
+     * 指定したアノテーションが付与されているフィールドを返します。
+     *
      * @param clazz
      * @param annotationType
      * @param <A>

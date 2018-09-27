@@ -251,9 +251,8 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
         }.getType();
         List<[[${upperFuncName}]]Csv> csvList = modelMapper.map([[${lowerFuncName}]]s.getData(), listType);
 
-        // レスポンスを設定する
-        val view = new CsvView([[${upperFuncName}]]Csv.class, csvList);
-        view.setFilename(filename);
+        // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
+        val view = new CsvView([[${upperFuncName}]]Csv.class, csvList, filename);
 
         return new ModelAndView(view);
     }

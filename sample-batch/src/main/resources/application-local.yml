@@ -16,9 +16,9 @@ spring:
         properties:
             mail:
                 from: from@test.com
-flyway:
-    enabled: true
-    baseline-on-migrate: true
+    flyway:
+        enabled: true
+        baseline-on-migrate: true
 logging:
     level:
         org.springframework: INFO

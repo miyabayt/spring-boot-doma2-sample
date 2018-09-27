@@ -1,9 +1,8 @@
 package com.sample.web.admin.controller.html.system.staffs;
 
 import javax.validation.constraints.Digits;
-
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 import com.sample.web.base.controller.html.BaseForm;
 

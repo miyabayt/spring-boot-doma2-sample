@@ -266,9 +266,8 @@ public class RoleHtmlController extends AbstractHtmlController {
         // 詰め替える
         List<RoleCsv> csvList = modelMapper.map(roles.getData(), toListType(RoleCsv.class));
 
-        // レスポンスを設定する
-        val view = new CsvView(RoleCsv.class, csvList);
-        view.setFilename(filename);
+        // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
+        val view = new CsvView(RoleCsv.class, csvList, filename);
 
         return new ModelAndView(view);
     }

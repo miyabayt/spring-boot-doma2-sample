@@ -6,7 +6,6 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.*;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -184,7 +183,7 @@ public class RoleRepository extends BaseRepository {
     protected void deleteRolePermissions(final Role inputRole) {
         List<RolePermission> rolePermissionsToDelete = findRolePermissions(inputRole);
 
-        if (CollectionUtils.isNotEmpty(rolePermissionsToDelete)) {
+        if (isNotEmpty(rolePermissionsToDelete)) {
             rolePermissionDao.delete(rolePermissionsToDelete);// 一括論理削除
         }
     }

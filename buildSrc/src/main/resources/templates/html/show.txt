@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/sidebarLayout}">
     <head>
         <title>[[${funcStr}]]管理</title>
@@ -23,7 +23,7 @@
                     <table class="table table-hover" th:object="${[[${lowerFuncName}]]}">
                         <tr>
                             <th>ID</th>
-                            <td th:text="*{id.value}"></td>
+                            <td th:text="*{id}"></td>
                         </tr>
                         <tr>
                             <th>[[${funcStr}]]名</th>
@@ -32,8 +32,8 @@
                     </table>
                 </div>
                 <div class="box-footer clearfix">
-                    <form th:action="@{'/[[${subSystem}]]/[[${lowerFuncName}]]s/remove/' + ${[[${lowerFuncName}]].id.value}}" method="post">
-                        <a th:href="@{/[[${subSystem}]]/[[${lowerFuncName}]]s/edit/{id}(id=${[[${lowerFuncName}]].id.value})}" class="btn btn-default bg-purple">編集</a>
+                    <form th:action="@{'/[[${subSystem}]]/[[${lowerFuncName}]]s/remove/' + ${[[${lowerFuncName}]].id}}" method="post">
+                        <a th:href="@{/[[${subSystem}]]/[[${lowerFuncName}]]s/edit/{id}(id=${[[${lowerFuncName}]].id})}" class="btn btn-default bg-purple">編集</a>
                         <button type="submit" class="btn btn-danger">削除</button>
                     </form>
                 </div>

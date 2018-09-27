@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.toList;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import com.sample.web.base.util.MultipartFileUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -108,7 +109,7 @@ public class UploadFilesHtmlController extends AbstractHtmlController implements
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         // ファイルを保存する
-        fileHelper.saveFile(Paths.get(fileUploadLocation), file);
+        MultipartFileUtils.saveFile(Paths.get(fileUploadLocation), file);
 
         // リダイレクト先で完了メッセージを表示する
         redirectAttributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage("uploadfiles.upload.success"));

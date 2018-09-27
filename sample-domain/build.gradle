@@ -1,0 +1,51 @@
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+// for Doma 2
+// JavaクラスとSQLファイルの出力先ディレクトリを同じにする
+processResources.destinationDir = compileJava.destinationDir
+// コンパイルより前にSQLファイルを出力先ディレクトリにコピーするために依存関係を逆転する
+compileJava.dependsOn processResources
+
+dependencies {
+    compile project(":sample-common")
+
+    // springframework
+    compile "org.springframework.boot:spring-boot-starter-aop"
+    compile "org.springframework.boot:spring-boot-starter-validation"
+    compile "org.springframework.boot:spring-boot-starter-mail"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.springframework.boot:spring-boot-starter-jdbc"
+    compile "org.springframework.boot:spring-boot-starter-json"
+
+    // doma exclude springframework
+    annotationProcessor "org.seasar.doma.boot:doma-spring-boot-starter:1.1.1"
+    compile("org.seasar.doma.boot:doma-spring-boot-starter:1.1.1") {
+        exclude group: "org.springframework.boot"
+    }
+
+    // thymeleaf
+    compile "org.codehaus.groovy:groovy:${groovyVersion}"
+    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.3.0") {
+        exclude group: "org.codehaus.groovy", module: "groovy"
+        exclude group: "org.thymeleaf", module: "thymeleaf"
+    }
+
+    // jackson
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
+
+    // modelmapper
+    compile "org.modelmapper:modelmapper:0.7.5"
+
+    // mysql database
+    compile "mysql:mysql-connector-java"
+    compile "org.flywaydb:flyway-core"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.spockframework:spock-spring:${spockVersion}"
+}

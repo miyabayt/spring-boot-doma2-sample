@@ -1,0 +1,55 @@
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+dependencies {
+    compile project(":sample-domain")
+
+    // springframework
+    compile "org.springframework.boot:spring-boot-starter-cache"
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        // exclude embedded tomcat to use Jetty
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile "org.springframework.boot:spring-boot-starter-security"
+    compile "org.springframework.boot:spring-boot-starter-jetty"
+    compile "org.springframework.session:spring-session-jdbc" // セッション格納先にDBを使う場合
+    //compile "org.springframework.boot:spring-boot-starter-data-redis" // セッション格納先にredisを使う場合
+
+    // thymeleaf
+    compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
+
+    // jasperreports
+    compile "net.sf.jasperreports:jasperreports:6.4.0"
+    compile "com.lowagie:itext:2.1.7.js5"
+
+    // apache POI
+    compile "org.apache.poi:poi:3.16"
+    compile "org.apache.poi:poi-ooxml:3.16"
+
+    // EhCache
+    compile "net.sf.ehcache:ehcache"
+
+    // webjars
+    compile "org.webjars:webjars-locator-core"
+    compile "org.webjars:bootstrap:3.3.7"
+    compile "org.webjars:jquery:2.2.4"
+    compile "org.webjars:jquery-validation:1.17.0"
+    compile "org.webjars:bootstrap-datepicker:1.7.1"
+    compile("org.webjars.bower:iCheck:1.0.2") {
+        exclude module: "jquery"
+    }
+    compile "org.webjars:html5shiv:3.7.3"
+    compile "org.webjars:respond:1.4.2"
+    compile "org.webjars:AdminLTE:2.3.8"
+    compile "org.webjars:font-awesome:4.7.0"
+    compile "org.webjars:ionicons:2.0.1"
+
+    testCompile "org.springframework.security:spring-security-test"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.spockframework:spock-spring:${spockVersion}"
+}

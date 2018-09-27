@@ -1,0 +1,23 @@
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+dependencies {
+    // springframework
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    compile "org.springframework.boot:spring-boot-starter"
+
+    compile "org.apache.commons:commons-lang3"
+    compile "org.apache.commons:commons-text:1.4"
+    compile "org.apache.commons:commons-compress:1.14"
+    compile "commons-codec:commons-codec"
+    compile "org.apache.commons:commons-digester3:3.2"
+    compile "commons-io:commons-io:2.5"
+    compile "org.apache.tika:tika-core:1.15"
+    compile "dom4j:dom4j"
+    compile "com.ibm.icu:icu4j:59.1"
+}

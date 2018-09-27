@@ -1,0 +1,19 @@
+bootJar {
+    launchScript()
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+dependencies {
+    compile project(":sample-web-base")
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+
+    testCompile "org.springframework.security:spring-security-test"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.spockframework:spock-spring:${spockVersion}"
+}
