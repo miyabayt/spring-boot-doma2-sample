@@ -1,8 +1,6 @@
 package [[${controllerPackageName}]].[[${subSystem}]].[[${lowerFuncName}]]s;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import [[${baseControllerPackageName}]].BaseForm;
 
@@ -11,9 +9,9 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class [[${upperFuncName}]]Form extends BaseForm { // TODO
+public class [[${upperFuncName}]]Form extends BaseForm {
 
-    private static final long serialVersionUID = -1L;
+    private static final long serialVersionUID = -1L; // TODO
 
     Long id;
 

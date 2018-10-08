@@ -1,0 +1,112 @@
+package [[${repositoryPackageName}]].[[${subSystem}]];
+
+import static com.sample.domain.util.DomaUtils.createSelectOptions;
+import static java.util.stream.Collectors.toList;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import [[${daoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Dao;
+import com.sample.domain.dto.common.Page;
+import com.sample.domain.dto.common.Pageable;
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
+import com.sample.domain.exception.NoDataFoundException;
+import com.sample.domain.service.BaseRepository;
+
+import lombok.val;
+
+/**
+ * [[${funcStr}]]リポジトリ
+ */
+@Repository
+public class [[${upperFuncName}]]Repository extends BaseRepository {
+
+    @Autowired
+    [[${upperFuncName}]]Dao [[${lowerFuncName}]]Dao;
+
+    /**
+     * [[${funcStr}]]を一括取得します。
+     *
+     * @param where
+     * @param pageable
+     * @return
+     */
+    public Page<[[${upperFuncName}]]> findAll([[${upperFuncName}]] where, Pageable pageable) {
+        // ページングを指定する
+        val options = createSelectOptions(pageable).count();
+        val data = [[${lowerFuncName}]]Dao.selectAll(where, options, toList());
+        return pageFactory.create(data, pageable, options.getCount());
+    }
+
+    /**
+     * [[${funcStr}]]を取得します。
+     *
+     * @param where
+     * @return
+     */
+    public Optional<[[${upperFuncName}]]> findOne([[${upperFuncName}]] where) {
+        // 1件取得
+        return [[${lowerFuncName}]]Dao.select(where);
+    }
+
+    /**
+     * [[${funcStr}]]を取得します。
+     *
+     * @return
+     */
+    public [[${upperFuncName}]] findById(final Long id) {
+        // 1件取得
+        return [[${lowerFuncName}]]Dao.selectById(id)
+                .orElseThrow(() -> new NoDataFoundException("[[${lowerFuncName}]]_id=" + id + " のデータが見つかりません。"));
+    }
+
+    /**
+     * [[${funcStr}]]を追加します。
+     *
+     * @param input[[${upperFuncName}]]
+     * @return
+     */
+    public [[${upperFuncName}]] create(final [[${upperFuncName}]] input[[${upperFuncName}]]) {
+        // 1件登録
+        [[${lowerFuncName}]]Dao.insert(input[[${upperFuncName}]]);
+
+        return input[[${upperFuncName}]];
+    }
+
+    /**
+     * [[${funcStr}]]を更新します。
+     *
+     * @param input[[${upperFuncName}]]
+     * @return
+     */
+    public [[${upperFuncName}]] update(final [[${upperFuncName}]] input[[${upperFuncName}]]) {
+        // 1件更新
+        int updated = [[${lowerFuncName}]]Dao.update(input[[${upperFuncName}]]);
+
+        if (updated < 1) {
+            throw new NoDataFoundException("[[${lowerFuncName}]]_id=" + input[[${upperFuncName}]].getId() + " のデータが見つかりません。");
+        }
+
+        return input[[${upperFuncName}]];
+    }
+
+    /**
+     * [[${funcStr}]]を論理削除します。
+     *
+     * @return
+     */
+    public [[${upperFuncName}]] delete(final Long id) {
+        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Dao.selectById(id)
+                .orElseThrow(() -> new NoDataFoundException("[[${lowerFuncName}]]_id=" + id + " のデータが見つかりません。"));
+
+        int updated = [[${lowerFuncName}]]Dao.delete([[${lowerFuncName}]]);
+
+        if (updated < 1) {
+            throw new NoDataFoundException("[[${lowerFuncName}]]_id=" + id + " は更新できませんでした。");
+        }
+
+        return [[${lowerFuncName}]];
+    }
+}
