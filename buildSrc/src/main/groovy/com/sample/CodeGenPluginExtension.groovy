@@ -10,6 +10,7 @@ class CodeGenPluginExtension {
     String daoPackageName
     String dtoPackageName
     String commonDtoPackageName
+    String repositoryPackageName
     String servicePackageName
     String commonServicePackageName
     String exceptionPackageName

@@ -3,7 +3,6 @@ package [[${dtoPackageName}]].[[${subSystem}]];
 import org.seasar.doma.*;
 
 import [[${commonDtoPackageName}]].DomaDtoImpl;
-import [[${commonDtoPackageName}]].ID;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,15 +11,15 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class [[${upperFuncName}]] extends DomaDtoImpl { // TODO
+public class [[${upperFuncName}]] extends DomaDtoImpl {
 
-    private static final long serialVersionUID = -1L;
+    private static final long serialVersionUID = -1L; // TODO
 
     // [[${funcStr}]]ID
     @Id
     @Column(name = "[[${lowerFuncName}]]_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    ID<[[${upperFuncName}]]> id;
+    Long id;
 
     // [[${funcStr}]]名
     String [[${lowerFuncName}]]Name;

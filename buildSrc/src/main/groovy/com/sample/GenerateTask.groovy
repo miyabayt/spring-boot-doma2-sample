@@ -53,6 +53,9 @@ class GenerateTask extends DefaultTask {
         if (target == null || target.equals("dao")) {
             generate("templates/src/Dao.txt", getTargetPath(domainTarget, "/${ext.daoPackageName}/${subSystem}/${func}Dao", ".java"), objects)
         }
+        if (target == null || target.equals("repository")) {
+            generate("templates/src/Repository.txt", getTargetPath(domainTarget, "/${ext.repositoryPackageName}/${subSystem}/${func}Repository", ".java"), objects)
+        }
         if (target == null || target.equals("service")) {
             generate("templates/src/Service.txt", getTargetPath(domainTarget, "/${ext.servicePackageName}/${subSystem}/${func}Service", ".java"), objects)
         }
@@ -121,6 +124,7 @@ class GenerateTask extends DefaultTask {
         objects.put("commonDtoPackageName", ext.commonDtoPackageName)
         objects.put("dtoPackageName", ext.dtoPackageName)
         objects.put("daoPackageName", ext.daoPackageName)
+        objects.put("repositoryPackageName", ext.repositoryPackageName)
         objects.put("servicePackageName", ext.servicePackageName)
         objects.put("commonServicePackageName", ext.commonServicePackageName)
         objects.put("exceptionPackageName", ext.exceptionPackageName)

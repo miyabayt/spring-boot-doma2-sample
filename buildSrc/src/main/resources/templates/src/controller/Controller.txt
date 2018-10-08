@@ -1,6 +1,6 @@
 package [[${controllerPackageName}]].[[${subSystem}]].[[${lowerFuncName}]]s;
 
-import static [[${webBasePackageName}]].WebConst.DELETED;
+import static [[${webBasePackageName}]].WebConst.MESSAGE_DELETED;
 import static [[${webBasePackageName}]].WebConst.GLOBAL_MESSAGE;
 
 import java.util.List;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import [[${commonDtoPackageName}]].ID;
 import [[${commonDtoPackageName}]].Pageable;
 import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
 import [[${servicePackageName}]].[[${subSystem}]].[[${upperFuncName}]]Service;
@@ -102,7 +101,7 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
         // 登録する
         val created[[${upperFuncName}]] = [[${lowerFuncName}]]Service.create(input[[${upperFuncName}]]);
 
-        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/show/" + created[[${upperFuncName}]].getId().getValue();
+        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/show/" + created[[${upperFuncName}]].getId();
     }
 
     /**
@@ -153,7 +152,7 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/show/{[[${lowerFuncName}]]Id}")
-    public String show[[${upperFuncName}]](@PathVariable Integer [[${lowerFuncName}]]Id, Model model) {
+    public String show[[${upperFuncName}]](@PathVariable Long [[${lowerFuncName}]]Id, Model model) {
         // 1件取得する
         val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById([[${lowerFuncName}]]Id);
         model.addAttribute("[[${lowerFuncName}]]", [[${lowerFuncName}]]);
@@ -169,11 +168,11 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/edit/{[[${lowerFuncName}]]Id}")
-    public String edit[[${upperFuncName}]](@PathVariable Integer [[${lowerFuncName}]]Id, @ModelAttribute("[[${lowerFuncName}]]Form") [[${upperFuncName}]]Form form, Model model) {
+    public String edit[[${upperFuncName}]](@PathVariable Long [[${lowerFuncName}]]Id, @ModelAttribute("[[${lowerFuncName}]]Form") [[${upperFuncName}]]Form form, Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(${lowerFuncName}]]Id);
+            val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById([[${lowerFuncName}]]Id);
 
             // 取得したDtoをFromに詰め替える
             modelMapper.map([[${lowerFuncName}]], form);
@@ -194,7 +193,7 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
      */
     @PostMapping("/edit/{[[${lowerFuncName}]]Id}")
     public String edit[[${upperFuncName}]](@Validated @ModelAttribute("[[${lowerFuncName}]]Form") [[${upperFuncName}]]Form form, BindingResult result,
-            @PathVariable Integer [[${lowerFuncName}]]Id, SessionStatus sessionStatus, RedirectAttributes attributes) {
+            @PathVariable Long [[${lowerFuncName}]]Id, SessionStatus sessionStatus, RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
         if (result.hasErrors()) {
             setFlashAttributeErrors(attributes, result);
@@ -213,7 +212,7 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
         // セッションの[[${lowerFuncName}]]Formをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/show/" + updated[[${upperFuncName}]].getId().getValue();
+        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/show/" + updated[[${upperFuncName}]].getId();
     }
 
     /**
@@ -224,15 +223,15 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
      * @return
      */
     @PostMapping("/remove/{[[${lowerFuncName}]]Id}")
-    public String remove[[${upperFuncName}]](@PathVariable Integer [[${lowerFuncName}]]Id, RedirectAttributes attributes) {
+    public String remove[[${upperFuncName}]](@PathVariable Long [[${lowerFuncName}]]Id, RedirectAttributes attributes) {
         // 削除対象を取得する
-        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById(${lowerFuncName}]]Id);
+        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById([[${lowerFuncName}]]Id);
 
         // 論理削除する
         [[${lowerFuncName}]]Service.delete([[${lowerFuncName}]].getId());
 
         // 削除成功メッセージ
-        attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(DELETED));
+        attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));
 
         return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/find";
     }
@@ -246,7 +245,7 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val [[${lowerFuncName}]]s = [[${lowerFuncName}]]Service.findAll(new [[${upperFuncName}]](), Pageable.NO_LIMIT_PAGEABLE);
+        val [[${lowerFuncName}]]s = [[${lowerFuncName}]]Service.findAll(new [[${upperFuncName}]](), Pageable.NO_LIMIT);
 
         val listType = new TypeToken<List<[[${upperFuncName}]]Csv>>() {
         }.getType();
