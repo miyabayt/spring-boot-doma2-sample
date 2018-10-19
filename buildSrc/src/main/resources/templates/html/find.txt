@@ -65,7 +65,7 @@
                         <tbody>
                             <tr th:each="[[${lowerFuncName}]] : ${pages.data}">
                                 <td>
-                                    <a th:href="@{/[[${subSystem}]]/[[${lowerFuncName}]]s/show/__${[[${lowerFuncName}]].id.value}__}" th:text="${[[${lowerFuncName}]].id.value}" />
+                                    <a th:href="@{/[[${subSystem}]]/[[${lowerFuncName}]]s/show/__${[[${lowerFuncName}]].id}__}" th:text="${[[${lowerFuncName}]].id}" />
                                 </td>
                                 <td th:text="${[[${lowerFuncName}]].[[${lowerFuncName}]]Name}" />
                             </tr>
