@@ -102,7 +102,7 @@ public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()//
                 .csrfTokenRepository(new CookieCsrfTokenRepository());
 
-        String[] permittedUrls = { LOGIN_TIMEOUT_URL, FORBIDDEN_URL, ERROR_URL, RESET_PASSWORD_URL,
+        String[] permittedUrls = { LOGIN_TIMEOUT_URL, FORBIDDEN_URL, ERROR_URL, NOTFOUND_URL, RESET_PASSWORD_URL,
                 CHANGE_PASSWORD_URL };
 
         http.authorizeRequests()
