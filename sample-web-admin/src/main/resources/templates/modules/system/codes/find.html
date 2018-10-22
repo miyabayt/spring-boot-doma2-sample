@@ -21,7 +21,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">検索条件</h3>
                     <form th:object="${searchCodeForm}" th:action="@{/system/codes/find(page=1)}" method="post" class="form-horizontal">
-                        <input th:replace="~{fragments/selectField :: select ('コード分類', 'categoryKey', ${CodeCategories}, 'categoryKey', 'categoryName')}" />
+                        <input th:replace="~{fragments/selectField :: select ('コード分類', 'categoryKey', ${codeCategories}, 'categoryKey', 'categoryName')}" />
                         <div class="form-group">
                             <label class="col-sm-2 control-label">コード値</label>
                             <div class="col-sm-10">

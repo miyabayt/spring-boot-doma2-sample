@@ -114,7 +114,7 @@ mysql -h 192.168.99.100 -P 3306 -uroot -ppassw0rd sample
 ### コード自動生成（おまけ）
 ```bash
 $ cd /path/to/spring-boot-doma2-sample
-$ ./gradlew codegen -PsubSystem=system -Pfunc=client -PfuncStr=取引先 [-Ptarget=dao|dto|service|controller|html]
+$ ./gradlew codegen -PsubSystem=system -Pfunc=client -PfuncStr=取引先 [-Ptarget=dao|dto|repository|service|controller|html]
 ```
 
 ## 参考

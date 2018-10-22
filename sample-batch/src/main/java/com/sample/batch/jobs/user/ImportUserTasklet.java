@@ -1,6 +1,6 @@
 package com.sample.batch.jobs.user;
 
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+import static com.sample.common.util.ValidateUtils.isNotEmpty;
 
 import java.io.IOException;
 import java.nio.file.Files;

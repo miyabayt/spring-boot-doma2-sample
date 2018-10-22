@@ -123,8 +123,6 @@ public class StaffHtmlController extends AbstractHtmlController {
     public String findStaff(@ModelAttribute SearchStaffForm form, Model model) {
         // 入力値を詰め替える
         val where = modelMapper.map(form, Staff.class);
-        where.setLastName(form.getName());
-        where.setFirstName(form.getName());
 
         // 10件区切りで取得する
         val pages = staffService.findAll(where, form);

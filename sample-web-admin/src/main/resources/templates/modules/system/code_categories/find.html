@@ -3,27 +3,25 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       layout:decorate="~{layouts/sidebarLayout}">
     <head>
-        <title>担当者管理</title>
+        <title>コード分類管理</title>
     </head>
     <body>
         <div layout:fragment="sidebar">
-            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'staff')}"></div>
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'codeCategory')}"></div>
         </div>
         <section layout:fragment="content-header">
-            <h1>担当者検索</h1>
+            <h1>コード分類検索</h1>
             <ol class="breadcrumb">
                 <li><a th:href="@{/}">Home</a></li>
-                <li>担当者検索</li>
+                <li>コード分類検索</li>
             </ol>
         </section>
         <section layout:fragment="content">
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">検索条件</h3>
-                    <form th:object="${searchStaffForm}" th:action="@{/system/staffs/find(page=1)}" method="post" class="form-horizontal">
-                        <input th:replace="~{fragments/searchInputField :: input ('text', '苗字', 'lastName')}" />
-                        <input th:replace="~{fragments/searchInputField :: input ('text', '名前', 'firstName')}" />
-                        <input th:replace="~{fragments/searchInputField :: input ('text', 'メールアドレス', 'email')}" />
+                    <form th:object="${searchCodeCategoryForm}" th:action="@{/system/code_categories/find(page=1)}" method="post" class="form-horizontal">
+                        <input th:replace="~{fragments/searchInputField :: input ('text', 'コード分類名', 'categoryName')}" />
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" name="find" class="btn btn-default bg-purple">検索</button>
@@ -33,8 +31,8 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a th:href="@{/system/staffs/new}">担当者登録</a></li>
-                                        <li><a th:href="@{/system/staffs/download/担当者.csv}">CSVダウンロード</a></li>
+                                        <li><a th:href="@{/system/code_categories/new}">コード分類登録</a></li>
+                                        <li><a th:href="@{/system/code_categories/download/コード分類.csv}">CSVダウンロード</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -47,29 +45,27 @@
                     <h3 class="box-title">検索結果</h3>
                 </div>
                 <div class="box-body table-responsive">
-                    <table id="staffs" class="table table-hover" th:if="${pages} != null and ${pages.data} != null">
+                    <table id="codes" class="table table-hover" th:if="${pages} != null and ${pages.data} != null">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>氏名</th>
-                                <th>メールアドレス</th>
-                                <th>電話番号</th>
+                                <th>コード分類キー</th>
+                                <th>コード分類名</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="staff : ${pages.data}">
+                            <tr th:each="codeCategory : ${pages.data}">
                                 <td>
-                                    <a th:href="@{/system/staffs/show/__${staff.id}__}" th:text="${staff.id}" />
+                                    <a th:href="@{/system/code_categories/show/__${codeCategory.id}__}" th:text="${codeCategory.id}" />
                                 </td>
-                                <td th:text="${staff.lastName + ' ' + staff.firstName}" />
-                                <td th:text="${staff.email}" />
-                                <td th:text="${staff.tel}" />
+                                <td th:text="${codeCategory.categoryKey}" />
+                                <td th:text="${codeCategory.categoryName}" />
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="box-footer clearfix">
-                    <div th:replace="~{fragments/paginator :: paginator (${pages}, '/system/staffs/find')}" />
+                    <div th:replace="~{fragments/paginator :: paginator (${pages}, '/system/code_categories/find')}" />
                 </div>
             </div>
         </section>

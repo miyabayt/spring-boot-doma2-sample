@@ -8,12 +8,11 @@ import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
-import [[${commonDtoPackageName}]].ID;
 import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
 
 @ConfigAutowireable
 @Dao
-public interface [[${upperFuncName}]]Dao { // TODO
+public interface [[${upperFuncName}]]Dao {
 
     /**
      * [[${funcStr}]]を取得します。
@@ -32,7 +31,7 @@ public interface [[${upperFuncName}]]Dao { // TODO
      * @return
      */
     @Select
-    Optional<[[${upperFuncName}]]> selectById(ID<[[${upperFuncName}]]> id);
+    Optional<[[${upperFuncName}]]> selectById(Long id);
 
     /**
      * [[${funcStr}]]を1件取得します。

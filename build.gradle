@@ -301,6 +301,7 @@ codegen {
     commonDtoPackageName = "com.sample.domain.dto.common"
     daoPackageName = "com.sample.domain.dao"
     dtoPackageName = "com.sample.domain.dto"
+    repositoryPackageName = "com.sample.domain.repository"
     servicePackageName = "com.sample.domain.service"
     commonServicePackageName = "com.sample.domain.service"
     exceptionPackageName = "com.sample.domain.exception"

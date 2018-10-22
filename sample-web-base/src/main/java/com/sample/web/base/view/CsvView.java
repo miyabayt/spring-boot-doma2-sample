@@ -91,7 +91,7 @@ public class CsvView extends AbstractView {
         }
 
         // 書き出し
-        OutputStream outputStream = response.getOutputStream();
+        OutputStream outputStream = createTemporaryOutputStream();
         try (Writer writer = new OutputStreamWriter(outputStream, "Windows-31J")) {
             csvMapper.writer(schema).writeValue(writer, data);
         }

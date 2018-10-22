@@ -13,9 +13,9 @@ import lombok.Setter;
 @JsonPropertyOrder({ "[[${funcStr}]]ID", "[[${funcStr}]]名" }) // CSVのヘッダ順
 @Getter
 @Setter
-public class [[${upperFuncName}]]Csv implements Serializable { // TODO
+public class [[${upperFuncName}]]Csv implements Serializable {
 
-    private static final long serialVersionUID = -1L;
+    private static final long serialVersionUID = -1L; // TODO
 
     @JsonProperty("[[${funcStr}]]ID")
     Long id;
