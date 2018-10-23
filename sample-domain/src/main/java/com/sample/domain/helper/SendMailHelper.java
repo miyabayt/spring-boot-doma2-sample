@@ -16,6 +16,8 @@ import org.thymeleaf.templateresolver.StringTemplateResolver;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.sample.common.util.ValidateUtils.isNotEmpty;
+
 /**
  * メール送信ヘルパー
  */
@@ -61,7 +63,7 @@ public class SendMailHelper {
         templateEngine.setTemplateResolver(templateResolver());
 
         val context = new Context();
-        if (MapUtils.isNotEmpty(objects)) {
+        if (isNotEmpty(objects)) {
             objects.forEach(context::setVariable);
         }
 

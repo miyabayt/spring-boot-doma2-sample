@@ -42,6 +42,7 @@ public class CodeRepository extends BaseRepository {
      *
      * @return
      */
+    @Cacheable(cacheNames = "code", key = "#root.method")
     public List<Code> fetchAll() {
         // ページングを指定する
         val pageable = Pageable.NO_LIMIT;

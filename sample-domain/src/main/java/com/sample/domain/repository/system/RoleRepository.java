@@ -1,13 +1,12 @@
 package com.sample.domain.repository.system;
 
 import static com.sample.common.util.ValidateUtils.isNotEmpty;
+import static com.sample.common.util.ValidateUtils.isTrue;
 import static com.sample.domain.util.DomaUtils.createSelectOptions;
 import static java.util.stream.Collectors.toList;
 
 import java.util.*;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -163,7 +162,7 @@ public class RoleRepository extends BaseRepository {
             // 権限のチェックがある場合
             inputRole.getPermissions().forEach((key, value) -> {
                 // チェックされている
-                if (BooleanUtils.isTrue(value)) {
+                if (isTrue(value)) {
                     val rolePermission = new RolePermission();
                     rolePermission.setRoleKey(inputRole.getRoleKey());
                     rolePermission.setPermissionId(key);
@@ -184,7 +183,7 @@ public class RoleRepository extends BaseRepository {
     protected void deleteRolePermissions(final Role inputRole) {
         List<RolePermission> rolePermissionsToDelete = findRolePermissions(inputRole);
 
-        if (CollectionUtils.isNotEmpty(rolePermissionsToDelete)) {
+        if (isNotEmpty(rolePermissionsToDelete)) {
             rolePermissionDao.delete(rolePermissionsToDelete);// 一括論理削除
         }
     }

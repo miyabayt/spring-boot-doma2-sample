@@ -5,7 +5,7 @@ import static com.sample.web.base.WebConst.*;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.apache.log4j.MDC;
+import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +17,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.sample.common.util.MessageUtils;
 import com.sample.domain.exception.NoDataFoundException;
+import com.sample.domain.exception.ValidationErrorException;
 import com.sample.web.base.controller.api.resource.ErrorResourceImpl;
 import com.sample.web.base.controller.api.resource.FieldErrorResource;
-import com.sample.domain.exception.ValidationErrorException;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
