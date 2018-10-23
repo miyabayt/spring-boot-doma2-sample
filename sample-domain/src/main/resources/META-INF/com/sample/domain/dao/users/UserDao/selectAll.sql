@@ -18,25 +18,28 @@ FROM
     users
 WHERE
     deleted_at IS NULL
-/*%if user.id != null */
-AND user_id = /* user.id */1
+/*%if criteria.id != null */
+AND user_id = /* criteria.id */1
 /*%end*/
-/*%if user.email != null */
-AND email = /* user.email */'aaaa@bbbb.com'
+/*%if criteria.email != null */
+AND email = /* criteria.email */'aaaa@bbbb.com'
 /*%end*/
-/*%if user.firstName != null */
-AND first_name LIKE /* @infix(user.firstName) */'john'
+/*%if criteria.firstName != null */
+AND first_name LIKE /* @infix(criteria.firstName) */'john'
 /*%end*/
-/*%if user.lastName != null */
-AND last_name LIKE /* @infix(user.lastName) */'doe'
+/*%if criteria.lastName != null */
+AND last_name LIKE /* @infix(criteria.lastName) */'doe'
 /*%end*/
-/*%if user.tel != null */
-AND tel LIKE /* @prefix(user.tel) */'0901234'
+/*%if criteria.tel != null */
+AND tel LIKE /* @prefix(criteria.tel) */'0901234'
 /*%end*/
-/*%if user.zip != null */
-AND zip LIKE /* @prefix(user.zip) */'10600'
+/*%if criteria.zip != null */
+AND zip LIKE /* @prefix(criteria.zip) */'10600'
 /*%end*/
-/*%if user.address != null */
-AND address LIKE /* @infix(user.address) */'東京都港区'
+/*%if criteria.address != null */
+AND address LIKE /* @infix(criteria.address) */'東京都港区'
+/*%end*/
+/*%if criteria.onlyNullAddress */
+AND address IS NULL
 /*%end*/
 ORDER BY user_id ASC

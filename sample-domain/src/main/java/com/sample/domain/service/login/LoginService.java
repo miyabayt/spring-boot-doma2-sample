@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import com.sample.domain.dto.system.MailTemplate;
-import com.sample.domain.dto.system.Staff;
+import com.sample.domain.dto.system.MailTemplateCriteria;
+import com.sample.domain.dto.system.StaffCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.helper.SendMailHelper;
 import com.sample.domain.repository.system.MailTemplateRepository;
@@ -48,9 +49,9 @@ public class LoginService extends BaseTransactionalService {
     public void sendResetPasswordMail(String email, String url) {
         Assert.notNull(fromAddress, "fromAddress must be set.");
 
-        val where = new Staff();
-        where.setEmail(email);
-        val staff = staffRepository.findOne(where);
+        val criteria = new StaffCriteria();
+        criteria.setEmail(email);
+        val staff = staffRepository.findOne(criteria);
 
         staff.ifPresent(s -> {
             // トークンを発行する
@@ -88,9 +89,9 @@ public class LoginService extends BaseTransactionalService {
         }
 
         // トークンの一致と有効期限をチェックする
-        val where = new Staff();
-        where.setPasswordResetToken(token);
-        val staff = staffRepository.findOne(where);
+        val criteria = new StaffCriteria();
+        criteria.setPasswordResetToken(token);
+        val staff = staffRepository.findOne(criteria);
 
         if (!staff.isPresent()) {
             return false;
@@ -108,9 +109,9 @@ public class LoginService extends BaseTransactionalService {
      */
     public boolean updatePassword(String token, String password) {
         // トークンの一致と有効期限をチェックする
-        val where = new Staff();
-        where.setPasswordResetToken(token);
-        val staff = staffRepository.findOne(where);
+        val criteria = new StaffCriteria();
+        criteria.setPasswordResetToken(token);
+        val staff = staffRepository.findOne(criteria);
 
         if (!staff.isPresent()) {
             return false;
@@ -133,9 +134,9 @@ public class LoginService extends BaseTransactionalService {
      * @return
      */
     protected MailTemplate getMailTemplate(String templateKey) {
-        val where = new MailTemplate();
-        where.setTemplateKey(templateKey);
-        return mailTemplateRepository.findOne(where).orElseThrow(
-                () -> new NoDataFoundException("templateKey=" + where.getTemplateKey() + " のデータが見つかりません。"));
+        val criteria = new MailTemplateCriteria();
+        criteria.setTemplateKey(templateKey);
+        return mailTemplateRepository.findOne(criteria).orElseThrow(
+                () -> new NoDataFoundException("templateKey=" + criteria.getTemplateKey() + " のデータが見つかりません。"));
     }
 }

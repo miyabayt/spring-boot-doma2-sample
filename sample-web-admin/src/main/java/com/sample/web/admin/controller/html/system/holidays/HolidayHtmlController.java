@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Holiday;
+import com.sample.domain.dto.system.HolidayCriteria;
 import com.sample.domain.service.system.HolidayService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.view.CsvView;
@@ -113,10 +114,10 @@ public class HolidayHtmlController extends AbstractHtmlController {
     @GetMapping("/find")
     public String findHoliday(@ModelAttribute("searchHolidayForm") SearchHolidayForm form, Model model) {
         // 入力値から検索条件を作成する
-        val where = modelMapper.map(form, Holiday.class);
+        val criteria = modelMapper.map(form, HolidayCriteria.class);
 
         // 10件区切りで取得する
-        val pages = holidayService.findAll(where, form);
+        val pages = holidayService.findAll(criteria, form);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
@@ -243,7 +244,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val holidays = holidayService.findAll(new Holiday(), Pageable.NO_LIMIT);
+        val holidays = holidayService.findAll(new HolidayCriteria(), Pageable.NO_LIMIT);
 
         // 詰め替える
         List<HolidayCsv> csvList = modelMapper.map(holidays.getData(), toListType(HolidayCsv.class));

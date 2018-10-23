@@ -1,7 +1,7 @@
 package com.sample.domain.service
 
 import com.sample.domain.dto.common.Pageable
-import com.sample.domain.dto.user.User
+import com.sample.domain.dto.user.UserCriteria
 import com.sample.domain.service.users.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -20,10 +20,21 @@ class UserServiceTest extends Specification {
 
     def "存在しないメールアドレスで絞り込んだ場合、0件が返ること"() {
         when:
-        def where = new User()
-        where.setEmail("aaaa")
+        def criteria = new UserCriteria()
+        criteria.setEmail("aaaa")
 
-        def pages = userService.findAll(where, Pageable.DEFAULT)
+        def pages = userService.findAll(criteria, Pageable.DEFAULT)
+
+        then:
+        pages.getCount() == 0
+    }
+
+    def "住所をIS NULLで絞り込んだ場合、0件が返ること"() {
+        when:
+        def criteria = new UserCriteria()
+        criteria.setOnlyNullAddress(true)
+
+        def pages = userService.findAll(criteria, Pageable.DEFAULT)
 
         then:
         pages.getCount() == 0

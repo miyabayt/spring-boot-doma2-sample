@@ -12,13 +12,14 @@ import com.sample.domain.dao.system.HolidayDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Holiday;
+import com.sample.domain.dto.system.HolidayCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseRepository;
 
 import lombok.val;
 
 /**
- * 定休日リポジトリ
+ * 祝日リポジトリ
  */
 @Repository
 public class HolidayRepository extends BaseRepository {
@@ -27,32 +28,32 @@ public class HolidayRepository extends BaseRepository {
     HolidayDao holidayDao;
 
     /**
-     * 定休日を一括取得します。
+     * 祝日を複数取得します。
      *
-     * @param where
+     * @param criteria
      * @param pageable
      * @return
      */
-    public Page<Holiday> findAll(Holiday where, Pageable pageable) {
+    public Page<Holiday> findAll(HolidayCriteria criteria, Pageable pageable) {
         // ページングを指定する
         val options = createSelectOptions(pageable).count();
-        val data = holidayDao.selectAll(where, options, toList());
+        val data = holidayDao.selectAll(criteria, options, toList());
         return pageFactory.create(data, pageable, options.getCount());
     }
 
     /**
-     * 定休日を取得します。
+     * 祝日を取得します。
      *
-     * @param where
+     * @param criteria
      * @return
      */
-    public Optional<Holiday> findOne(Holiday where) {
+    public Optional<Holiday> findOne(HolidayCriteria criteria) {
         // 1件取得
-        return holidayDao.select(where);
+        return holidayDao.select(criteria);
     }
 
     /**
-     * 定休日を取得します。
+     * 祝日を取得します。
      *
      * @return
      */
@@ -63,7 +64,7 @@ public class HolidayRepository extends BaseRepository {
     }
 
     /**
-     * 定休日を追加します。
+     * 祝日を追加します。
      *
      * @param inputHoliday
      * @return
@@ -76,7 +77,7 @@ public class HolidayRepository extends BaseRepository {
     }
 
     /**
-     * 定休日を更新します。
+     * 祝日を更新します。
      *
      * @param inputHoliday
      * @return
@@ -93,7 +94,7 @@ public class HolidayRepository extends BaseRepository {
     }
 
     /**
-     * 定休日を論理削除します。
+     * 祝日を論理削除します。
      *
      * @return
      */

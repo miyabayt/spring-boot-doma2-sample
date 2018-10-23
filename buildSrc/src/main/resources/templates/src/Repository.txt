@@ -12,6 +12,7 @@ import [[${daoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Dao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseRepository;
 
@@ -27,28 +28,28 @@ public class [[${upperFuncName}]]Repository extends BaseRepository {
     [[${upperFuncName}]]Dao [[${lowerFuncName}]]Dao;
 
     /**
-     * [[${funcStr}]]を一括取得します。
+     * [[${funcStr}]]を複数取得します。
      *
-     * @param where
+     * @param criteria
      * @param pageable
      * @return
      */
-    public Page<[[${upperFuncName}]]> findAll([[${upperFuncName}]] where, Pageable pageable) {
+    public Page<[[${upperFuncName}]]> findAll([[${upperFuncName}]]Criteria criteria, Pageable pageable) {
         // ページングを指定する
         val options = createSelectOptions(pageable).count();
-        val data = [[${lowerFuncName}]]Dao.selectAll(where, options, toList());
+        val data = [[${lowerFuncName}]]Dao.selectAll(criteria, options, toList());
         return pageFactory.create(data, pageable, options.getCount());
     }
 
     /**
      * [[${funcStr}]]を取得します。
      *
-     * @param where
+     * @param criteria
      * @return
      */
-    public Optional<[[${upperFuncName}]]> findOne([[${upperFuncName}]] where) {
+    public Optional<[[${upperFuncName}]]> findOne([[${upperFuncName}]]Criteria criteria) {
         // 1件取得
-        return [[${lowerFuncName}]]Dao.select(where);
+        return [[${lowerFuncName}]]Dao.select(criteria);
     }
 
     /**

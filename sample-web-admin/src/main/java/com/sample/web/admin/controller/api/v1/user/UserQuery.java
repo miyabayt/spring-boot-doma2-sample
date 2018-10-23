@@ -1,9 +1,9 @@
 package com.sample.web.admin.controller.api.v1.user;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
 
 @Setter
 @Getter

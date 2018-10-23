@@ -7,6 +7,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.*;
 
+import com.sample.domain.dto.system.RolePermissionCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,7 @@ import com.sample.domain.dao.system.RolePermissionDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Role;
+import com.sample.domain.dto.system.RoleCriteria;
 import com.sample.domain.dto.system.RolePermission;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseRepository;
@@ -34,28 +36,28 @@ public class RoleRepository extends BaseRepository {
     RolePermissionDao rolePermissionDao;
 
     /**
-     * 役割を一括取得します。
+     * 役割を複数取得します。
      *
-     * @param where
+     * @param criteria
      * @param pageable
      * @return
      */
-    public Page<Role> findAll(Role where, Pageable pageable) {
+    public Page<Role> findAll(RoleCriteria criteria, Pageable pageable) {
         // ページングを指定する
         val options = createSelectOptions(pageable).count();
-        val data = roleDao.selectAll(where, options, toList());
+        val data = roleDao.selectAll(criteria, options, toList());
         return pageFactory.create(data, pageable, options.getCount());
     }
 
     /**
      * 役割を取得します。
      *
-     * @param where
+     * @param criteria
      * @return
      */
-    public Optional<Role> findOne(Role where) {
+    public Optional<Role> findOne(RoleCriteria criteria) {
         // 1件取得
-        val role = roleDao.select(where);
+        val role = roleDao.select(criteria);
 
         role.ifPresent(r -> {
             val rolePermissions = findRolePermissions(r);
@@ -196,10 +198,10 @@ public class RoleRepository extends BaseRepository {
      */
     protected List<RolePermission> findRolePermissions(Role inputRole) {
         // 役割権限紐付けを役割キーで取得する
-        val where = new RolePermission();
-        where.setRoleKey(inputRole.getRoleKey());
+        val criteria = new RolePermissionCriteria();
+        criteria.setRoleKey(inputRole.getRoleKey());
 
         val options = createSelectOptions(Pageable.NO_LIMIT);
-        return rolePermissionDao.selectAll(where, options, toList());
+        return rolePermissionDao.selectAll(criteria, options, toList());
     }
 }

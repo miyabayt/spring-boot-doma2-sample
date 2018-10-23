@@ -47,11 +47,14 @@ class GenerateTask extends DefaultTask {
         objects.put("funcStr", funcStr)
 
         def domainTarget = "${ext.domainProjectName}/${ext.srcDirName}"
+        def testDomainTarget = "${ext.domainProjectName}/${ext.testDirName}"
         if (target == null || target.equals("dto")) {
             generate("templates/src/Dto.txt", getTargetPath(domainTarget, "/${ext.dtoPackageName}/${subSystem}/${func}", ".java"), objects)
+            generate("templates/src/Criteria.txt", getTargetPath(domainTarget, "/${ext.dtoPackageName}/${subSystem}/${func}Criteria", ".java"), objects)
         }
         if (target == null || target.equals("dao")) {
             generate("templates/src/Dao.txt", getTargetPath(domainTarget, "/${ext.daoPackageName}/${subSystem}/${func}Dao", ".java"), objects)
+            generate("templates/src/TestDao.txt", getTargetPath(testDomainTarget, "/${ext.daoPackageName}/${subSystem}/${func}DaoTest", ".groovy"), objects)
         }
         if (target == null || target.equals("repository")) {
             generate("templates/src/Repository.txt", getTargetPath(domainTarget, "/${ext.repositoryPackageName}/${subSystem}/${func}Repository", ".java"), objects)

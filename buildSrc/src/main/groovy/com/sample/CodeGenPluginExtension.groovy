@@ -2,6 +2,7 @@ package com.sample
 
 class CodeGenPluginExtension {
     String srcDirName = "src/main/java/"
+    String testDirName = "src/test/groovy/"
     String sqlDirName = "src/main/resources/META-INF/"
     String htmlDirName = "src/main/resources/templates/modules/"
     String domainProjectName

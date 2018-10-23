@@ -9,7 +9,8 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.system.Permission;
-import com.sample.domain.dto.user.User;
+import com.sample.domain.dto.system.PermissionCriteria;
+import com.sample.domain.dto.user.UserCriteria;
 import com.sample.domain.dto.user.UserRole;
 
 @ConfigAutowireable
@@ -19,14 +20,14 @@ public interface UserRoleDao {
     /**
      * 権限を取得します。
      *
-     * @param user
-     * @param permission
+     * @param userCriteria
+     * @param permissionCriteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final User user, final Permission permission, final SelectOptions options,
-            final Collector<UserRole, ?, R> collector);
+    <R> R selectAll(final UserCriteria userCriteria, final PermissionCriteria permissionCriteria,
+            final SelectOptions options, final Collector<UserRole, ?, R> collector);
 
     /**
      * 権限を取得します。
@@ -51,11 +52,11 @@ public interface UserRoleDao {
     /**
      * 権限を1件取得します。
      *
-     * @param permission
+     * @param criteria
      * @return
      */
     @Select
-    Optional<Permission> select(Permission permission);
+    Optional<Permission> select(PermissionCriteria criteria);
 
     /**
      * 権限を登録します。

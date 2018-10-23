@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.CodeCategory;
+import com.sample.domain.dto.system.CodeCategoryCriteria;
 import com.sample.domain.helper.CodeHelper;
 import com.sample.domain.service.system.CodeCategoryService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
@@ -117,10 +118,10 @@ public class CodeCategoryHtmlController extends AbstractHtmlController {
     @GetMapping("/find")
     public String findCodeCategory(@ModelAttribute("searchCodeCategoryForm") SearchCodeCategoryForm form, Model model) {
         // 入力値から検索条件を作成する
-        val where = modelMapper.map(form, CodeCategory.class);
+        val criteria = modelMapper.map(form, CodeCategoryCriteria.class);
 
         // 10件区切りで取得する
-        val pages = codeCategoryService.findAll(where, form);
+        val pages = codeCategoryService.findAll(criteria, form);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
@@ -252,7 +253,7 @@ public class CodeCategoryHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val codes = codeCategoryService.findAll(new CodeCategory(), Pageable.NO_LIMIT);
+        val codes = codeCategoryService.findAll(new CodeCategoryCriteria(), Pageable.NO_LIMIT);
 
         // 詰め替える
         List<CodeCategoryCsv> csvList = modelMapper.map(codes.getData(), toListType(CodeCategoryCsv.class));

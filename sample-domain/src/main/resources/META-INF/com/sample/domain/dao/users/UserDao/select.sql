@@ -18,9 +18,12 @@ FROM
     users
 WHERE
     deleted_at IS NULL
-/*%if user.id != null */
-AND user_id = /* user.id */1
+/*%if criteria.id != null */
+AND user_id = /* criteria.id */1
 /*%end*/
-/*%if user.email != null */
-AND email = /* user.email */'aaaa@bbbb.com'
+/*%if criteria.email != null */
+AND email = /* criteria.email */'aaaa@bbbb.com'
+/*%end*/
+/*%if criteria.onlyNullAddress */
+AND address IS NULL
 /*%end*/

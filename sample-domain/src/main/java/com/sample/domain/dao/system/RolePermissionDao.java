@@ -9,6 +9,7 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.system.RolePermission;
+import com.sample.domain.dto.system.RolePermissionCriteria;
 
 @ConfigAutowireable
 @Dao
@@ -17,12 +18,12 @@ public interface RolePermissionDao {
     /**
      * 役割権限紐付けを取得します。
      *
-     * @param rolePermission
+     * @param criteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final RolePermission rolePermission, final SelectOptions options,
+    <R> R selectAll(final RolePermissionCriteria criteria, final SelectOptions options,
             final Collector<RolePermission, ?, R> collector);
 
     /**
@@ -37,11 +38,11 @@ public interface RolePermissionDao {
     /**
      * 役割権限紐付けを1件取得します。
      *
-     * @param rolePermission
+     * @param criteria
      * @return
      */
     @Select
-    Optional<RolePermission> select(RolePermission rolePermission);
+    Optional<RolePermission> select(RolePermissionCriteria criteria);
 
     /**
      * 役割権限紐付けを登録します。

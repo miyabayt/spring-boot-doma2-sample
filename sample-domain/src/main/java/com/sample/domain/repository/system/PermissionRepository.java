@@ -12,6 +12,7 @@ import com.sample.domain.dao.system.PermissionDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Permission;
+import com.sample.domain.dto.system.PermissionCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseRepository;
 
@@ -27,28 +28,28 @@ public class PermissionRepository extends BaseRepository {
     PermissionDao permissionDao;
 
     /**
-     * 権限を一括取得します。
+     * 権限を複数取得します。
      *
-     * @param where
+     * @param criteria
      * @param pageable
      * @return
      */
-    public Page<Permission> findAll(Permission where, Pageable pageable) {
+    public Page<Permission> findAll(PermissionCriteria criteria, Pageable pageable) {
         // ページングを指定する
         val options = createSelectOptions(pageable).count();
-        val data = permissionDao.selectAll(where, options, toList());
+        val data = permissionDao.selectAll(criteria, options, toList());
         return pageFactory.create(data, pageable, options.getCount());
     }
 
     /**
      * 権限を取得します。
      *
-     * @param where
+     * @param criteria
      * @return
      */
-    public Optional<Permission> findOne(Permission where) {
+    public Optional<Permission> findOne(PermissionCriteria criteria) {
         // 1件取得
-        return permissionDao.select(where);
+        return permissionDao.select(criteria);
     }
 
     /**

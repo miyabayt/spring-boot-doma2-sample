@@ -9,20 +9,22 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.system.Holiday;
+import com.sample.domain.dto.system.HolidayCriteria;
 
 @ConfigAutowireable
 @Dao
-public interface HolidayDao { // TODO
+public interface HolidayDao {
 
     /**
      * 祝日を取得します。
      *
-     * @param holiday
+     * @param criteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final Holiday holiday, final SelectOptions options, final Collector<Holiday, ?, R> collector);
+    <R> R selectAll(final HolidayCriteria criteria, final SelectOptions options,
+            final Collector<Holiday, ?, R> collector);
 
     /**
      * 祝日を1件取得します。
@@ -36,11 +38,11 @@ public interface HolidayDao { // TODO
     /**
      * 祝日を1件取得します。
      *
-     * @param holiday
+     * @param criteria
      * @return
      */
     @Select
-    Optional<Holiday> select(Holiday holiday);
+    Optional<Holiday> select(HolidayCriteria criteria);
 
     /**
      * 祝日を登録します。
@@ -77,4 +79,13 @@ public interface HolidayDao { // TODO
      */
     @BatchInsert
     int[] insert(List<Holiday> holidays);
+
+    /**
+     * 祝日を一括更新します。
+     *
+     * @param holidays
+     * @return
+     */
+    @BatchUpdate
+    int[] update(List<Holiday> holidays);
 }

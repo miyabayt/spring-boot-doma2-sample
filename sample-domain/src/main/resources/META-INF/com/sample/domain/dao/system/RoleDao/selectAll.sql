@@ -4,11 +4,11 @@ FROM
   roles
 WHERE
   deleted_at IS NULL
-/*%if role.id != null */
-  AND role_id = /* role.id */1
+/*%if criteria.id != null */
+  AND role_id = /* criteria.id */1
 /*%end*/
-/*%if role.roleKey != null */
-  AND role_key = /* role.roleKey */'user.editUser'
+/*%if criteria.roleKey != null */
+  AND role_key = /* criteria.roleKey */'user.editUser'
 /*%end*/
 ORDER BY
   role_id ASC

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.MailTemplate;
+import com.sample.domain.dto.system.MailTemplateCriteria;
 import com.sample.domain.service.system.MailTemplateService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.view.CsvView;
@@ -113,10 +114,10 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
     @GetMapping("/find")
     public String findMailtemplate(@ModelAttribute SearchMailTemplateForm form, Model model) {
         // 入力値を詰め替える
-        val where = modelMapper.map(form, MailTemplate.class);
+        val criteria = modelMapper.map(form, MailTemplateCriteria.class);
 
         // 10件区切りで取得する
-        val pages = mailTemplateService.findAll(where, form);
+        val pages = mailTemplateService.findAll(criteria, form);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
@@ -244,7 +245,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val mailTemplates = mailTemplateService.findAll(new MailTemplate(), Pageable.NO_LIMIT);
+        val mailTemplates = mailTemplateService.findAll(new MailTemplateCriteria(), Pageable.NO_LIMIT);
 
         // 詰め替える
         List<MailTemplateCsv> csvList = modelMapper.map(mailTemplates.getData(), toListType(MailTemplateCsv.class));
