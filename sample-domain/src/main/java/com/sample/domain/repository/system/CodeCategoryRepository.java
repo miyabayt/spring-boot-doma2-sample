@@ -34,7 +34,7 @@ public class CodeCategoryRepository extends BaseRepository {
     @Autowired
     CodeCategoryDao codeCategoryDao;
 
-    @Autowired
+    @Autowired(required = false)
     CacheManager cacheManager;
 
     /**
@@ -148,10 +148,12 @@ public class CodeCategoryRepository extends BaseRepository {
     @EventListener(ApplicationReadyEvent.class)
     public void loadCache() {
         // キャッシュする
-        val cache = cacheManager.getCache("code_category");
-        fetchAll().forEach(c -> {
-            cache.put(c.getCategoryKey(), c);
-            cache.put(c.getId(), c);
-        });
+        if (cacheManager != null) {
+            val cache = cacheManager.getCache("code_category");
+            fetchAll().forEach(c -> {
+                cache.put(c.getCategoryKey(), c);
+                cache.put(c.getId(), c);
+            });
+        }
     }
 }
