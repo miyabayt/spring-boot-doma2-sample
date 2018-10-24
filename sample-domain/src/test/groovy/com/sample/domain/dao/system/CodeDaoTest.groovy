@@ -1,7 +1,7 @@
-package com.sample.domain.dao
+package com.sample.domain.dao.system
 
 import com.sample.domain.dao.system.CodeDao
-import com.sample.domain.dto.system.Code
+import com.sample.domain.dto.system.CodeCriteria
 import org.seasar.doma.jdbc.SelectOptions
 import org.spockframework.util.Assert
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,9 +19,9 @@ class CodeDaoTest extends Specification {
 
     def "selectAllの結果がnullではないこと"() {
         expect:
-        def where = new Code()
+        def criteria = new CodeCriteria()
         def options = SelectOptions.get().offset(0).limit(10)
-        def codeList = codeDao.selectAll(where, options, toList())
+        def codeList = codeDao.selectAll(criteria, options, toList())
         Assert.notNull(codeList)
     }
 }

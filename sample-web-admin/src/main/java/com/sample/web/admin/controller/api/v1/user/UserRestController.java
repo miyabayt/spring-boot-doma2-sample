@@ -5,7 +5,6 @@ import static com.sample.web.base.WebConst.MESSAGE_SUCCESS;
 import java.io.IOException;
 import java.util.Arrays;
 
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.Errors;
@@ -15,12 +14,15 @@ import org.springframework.web.bind.annotation.*;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.user.User;
+import com.sample.domain.dto.user.UserCriteria;
 import com.sample.domain.exception.ValidationErrorException;
 import com.sample.domain.service.users.UserService;
 import com.sample.web.base.controller.api.AbstractRestController;
 import com.sample.web.base.controller.api.resource.PageableResource;
 import com.sample.web.base.controller.api.resource.PageableResourceImpl;
 import com.sample.web.base.controller.api.resource.Resource;
+
+import lombok.val;
 
 @RestController
 @RequestMapping(path = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -35,19 +37,20 @@ public class UserRestController extends AbstractRestController {
     }
 
     /**
-     * ユーザーを一括取得します。
+     * ユーザーを複数取得します。
      *
      * @param query
      * @param page
      * @return
      */
     @GetMapping
-    public PageableResource index(UserQuery query, @RequestParam(required = false, defaultValue = "1") int page) throws IOException {
+    public PageableResource index(UserQuery query, @RequestParam(required = false, defaultValue = "1") int page)
+            throws IOException {
         // 入力値からDTOを作成する
-        val where = modelMapper.map(query, User.class);
+        val criteria = modelMapper.map(query, UserCriteria.class);
 
         // 10件で区切って取得する
-        Page<User> users = userService.findAll(where, Pageable.DEFAULT);
+        Page<User> users = userService.findAll(criteria, Pageable.DEFAULT);
 
         PageableResource resource = modelMapper.map(users, PageableResourceImpl.class);
         resource.setMessage(getMessage(MESSAGE_SUCCESS));

@@ -9,6 +9,7 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.system.CodeCategory;
+import com.sample.domain.dto.system.CodeCategoryCriteria;
 
 @ConfigAutowireable
 @Dao
@@ -17,12 +18,12 @@ public interface CodeCategoryDao {
     /**
      * コード分類定義を取得します。
      * 
-     * @param codeCategory
+     * @param criteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final CodeCategory codeCategory, final SelectOptions options,
+    <R> R selectAll(final CodeCategoryCriteria criteria, final SelectOptions options,
             final Collector<CodeCategory, ?, R> collector);
 
     /**
@@ -54,11 +55,11 @@ public interface CodeCategoryDao {
     /**
      * コード分類を1件取得します。
      *
-     * @param codeCategory
+     * @param criteria
      * @return
      */
     @Select
-    Optional<CodeCategory> select(CodeCategory codeCategory);
+    Optional<CodeCategory> select(CodeCategoryCriteria criteria);
 
     /**
      * コード分類を登録します。

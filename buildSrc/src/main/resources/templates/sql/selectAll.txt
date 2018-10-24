@@ -4,8 +4,8 @@ FROM
   [[${lowerFuncName}]]s
 WHERE
   deleted_at IS NULL
-/*%if [[${lowerFuncName}]].id != null */
-  AND [[${lowerFuncName}]]_id = /* [[${lowerFuncName}]].id */1
+/*%if criteria.id != null */
+  AND [[${lowerFuncName}]]_id = /* criteria.id */1
 /*%end*/
 ORDER BY
   [[${lowerFuncName}]]_id ASC

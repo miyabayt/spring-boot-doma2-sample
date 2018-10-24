@@ -1,0 +1,76 @@
+package [[${daoPackageName}]].[[${subSystem}]]
+
+import [[${daoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Dao
+import com.sample.domain.dto.common.Pageable
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.dao.OptimisticLockingFailureException
+import org.springframework.transaction.annotation.Transactional
+import spock.lang.Specification
+
+import static com.sample.domain.util.DomaUtils.createSelectOptions
+import static java.util.stream.Collectors.toList
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE
+
+@SpringBootTest(webEnvironment = NONE)
+@Transactional // テスト後にロールバックする
+class [[${upperFuncName}]]DaoTest extends Specification {
+
+    @Autowired
+    [[${upperFuncName}]]Dao [[${lowerFuncName}]]Dao
+
+    def "存在しないIDで絞り込んだ場合、空のリストが返ること"() {
+        when:
+        def options = createSelectOptions(Pageable.DEFAULT).count()
+        def criteria = new [[${upperFuncName}]]Criteria()
+        criteria.setId(-9999)
+
+        def data = [[${lowerFuncName}]]Dao.selectAll(criteria, options, toList())
+
+        then:
+        data.size() == 0
+    }
+
+    def "存在しない名称で絞り込んだ場合、emptyが返ること"() {
+        when:
+        def criteria = new [[${upperFuncName}]]Criteria()
+        criteria.set[[${upperFuncName}]]Name("XXXXXXXXXX")
+
+        Optional<[[${upperFuncName}]]> [[${lowerFuncName}]] = [[${lowerFuncName}]]Dao.select(criteria)
+
+        then:
+        [[${lowerFuncName}]] == Optional.empty()
+    }
+
+    def "存在しないIDで絞り込んだ場合、emptyが返ること"() {
+        when:
+        Optional<[[${upperFuncName}]]> [[${lowerFuncName}]] = [[${lowerFuncName}]]Dao.selectById(-9999)
+
+        then:
+        [[${lowerFuncName}]] == Optional.empty()
+    }
+
+    def "改定番号を指定しないで更新した場合、例外がスローされること"() {
+        when:
+        def [[${lowerFuncName}]] = new [[${upperFuncName}]]()
+        [[${lowerFuncName}]].set[[${upperFuncName}]]Name("XXXXXXXXXX")
+        [[${lowerFuncName}]]Dao.update([[${lowerFuncName}]])
+
+        then:
+        thrown(OptimisticLockingFailureException)
+    }
+
+    def "存在するデータを指定して更新した場合、更新件数が1件になること"() {
+        when:
+        def [[${lowerFuncName}]] = [[${lowerFuncName}]]Dao.selectById(1)
+                        .orElseThrow({ new NoDataFoundException("データが見つかりません。") })
+
+        [[${lowerFuncName}]].set[[${upperFuncName}]]Name("XXXXXXXXXX")
+        def updated = [[${lowerFuncName}]]Dao.update([[${lowerFuncName}]])
+
+        then:
+        updated == 1
+    }
+}

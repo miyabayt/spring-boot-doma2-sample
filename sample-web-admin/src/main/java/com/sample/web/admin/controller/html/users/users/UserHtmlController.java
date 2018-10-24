@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.UploadFile;
 import com.sample.domain.dto.user.User;
+import com.sample.domain.dto.user.UserCriteria;
 import com.sample.domain.service.users.UserService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.util.MultipartFileUtils;
@@ -128,10 +129,10 @@ public class UserHtmlController extends AbstractHtmlController {
     @GetMapping("/find")
     public String findUser(@ModelAttribute SearchUserForm form, Model model) {
         // 入力値を詰め替える
-        val where = modelMapper.map(form, User.class);
+        val criteria = modelMapper.map(form, UserCriteria.class);
 
         // 10件区切りで取得する
-        val pages = userService.findAll(where, form);
+        val pages = userService.findAll(criteria, form);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
@@ -279,7 +280,7 @@ public class UserHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val users = userService.findAll(new User(), Pageable.NO_LIMIT);
+        val users = userService.findAll(new UserCriteria(), Pageable.NO_LIMIT);
 
         // 詰め替える
         List<UserCsv> csvList = modelMapper.map(users.getData(), toListType(UserCsv.class));
@@ -300,7 +301,7 @@ public class UserHtmlController extends AbstractHtmlController {
     @GetMapping(path = "/download/{filename:.+\\.xlsx}")
     public ModelAndView downloadExcel(@PathVariable String filename) {
         // 全件取得する
-        val users = userService.findAll(new User(), Pageable.NO_LIMIT);
+        val users = userService.findAll(new UserCriteria(), Pageable.NO_LIMIT);
         val view = new ExcelView(filename, new UserExcel());
 
         Map<String, Object> params = new HashMap<>();
@@ -318,7 +319,7 @@ public class UserHtmlController extends AbstractHtmlController {
     @GetMapping(path = "/download/{filename:.+\\.pdf}")
     public ModelAndView downloadPdf(@PathVariable String filename) {
         // 全件取得する
-        val users = userService.findAll(new User(), Pageable.NO_LIMIT);
+        val users = userService.findAll(new UserCriteria(), Pageable.NO_LIMIT);
 
         Map<String, Object> params = new HashMap<>();
         params.put("data", users.getData());

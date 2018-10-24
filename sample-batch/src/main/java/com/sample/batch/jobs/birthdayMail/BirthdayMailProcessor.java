@@ -13,6 +13,7 @@ import com.sample.batch.jobs.BaseItemProcessor;
 import com.sample.domain.dao.system.MailTemplateDao;
 import com.sample.domain.dto.common.CommaSeparatedString;
 import com.sample.domain.dto.system.MailTemplate;
+import com.sample.domain.dto.system.MailTemplateCriteria;
 import com.sample.domain.dto.system.SendMailQueue;
 import com.sample.domain.dto.user.User;
 import com.sample.domain.exception.NoDataFoundException;
@@ -63,10 +64,10 @@ public class BirthdayMailProcessor extends BaseItemProcessor<User, SendMailQueue
      * @return
      */
     protected MailTemplate getMailTemplate(String templateKey) {
-        val where = new MailTemplate();
-        where.setTemplateKey(templateKey);
-        val mailTemplate = mailTemplateDao.select(where).orElseThrow(
-                () -> new NoDataFoundException("templateKey=" + where.getTemplateKey() + " のデータが見つかりません。"));
+        val criteria = new MailTemplateCriteria();
+        criteria.setTemplateKey(templateKey);
+        val mailTemplate = mailTemplateDao.select(criteria).orElseThrow(
+                () -> new NoDataFoundException("templateKey=" + criteria.getTemplateKey() + " のデータが見つかりません。"));
 
         return mailTemplate;
     }

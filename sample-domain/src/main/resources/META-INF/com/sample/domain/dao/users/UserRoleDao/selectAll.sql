@@ -18,9 +18,9 @@ FROM
     AND p.deleted_at IS NULL
 WHERE
   ur.deleted_at IS NULL
-/*%if user.id != null */
-  AND ur.user_id = /* user.id */1
+/*%if userCriteria.id != null */
+  AND ur.user_id = /* userCriteria.id */1
 /*%end*/
-/*%if permission.permissionKey != null */
-  AND p.permission_key = /* permission.permissionKey */'01'
+/*%if permissionCriteria.permissionKey != null */
+  AND p.permission_key = /* permissionCriteria.permissionKey */'01'
 /*%end*/

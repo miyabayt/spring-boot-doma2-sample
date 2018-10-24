@@ -4,6 +4,8 @@ import static com.sample.domain.util.DomaUtils.createSelectOptions;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +15,7 @@ import com.sample.domain.dao.users.UserRoleDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.user.User;
+import com.sample.domain.dto.user.UserCriteria;
 import com.sample.domain.dto.user.UserRole;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseRepository;
@@ -34,34 +37,44 @@ public class UserRepository extends BaseRepository {
     /**
      * ユーザーを取得します。
      * 
-     * @param where
+     * @param criteria
      * @param pageable
      * @return
      */
-    public Page<User> findAll(User where, Pageable pageable) {
+    public Page<User> findAll(UserCriteria criteria, Pageable pageable) {
         // ページングを指定する
         val options = createSelectOptions(pageable).count();
-        val data = userDao.selectAll(where, options, toList());
+        val data = userDao.selectAll(criteria, options, toList());
         return pageFactory.create(data, pageable, options.getCount());
     }
 
     /**
      * ユーザーを取得します。
      * 
-     * @param id
+     * @param criteria
      * @return
      */
-    public User findOne(final Long id) {
+    public Optional<User> findOne(UserCriteria criteria) {
         // 1件取得
-        val user = userDao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("user_id=" + id + " のデータが見つかりません。"));
+        val user = userDao.select(criteria);
 
         // 添付ファイルを取得する
-        val uploadFileId = user.getUploadFileId();
-        val uploadFile = ofNullable(uploadFileId).map(uploadFileDao::selectById);
-        uploadFile.ifPresent(user::setUploadFile);
+        user.ifPresent(u -> {
+            val uploadFileId = u.getUploadFileId();
+            val uploadFile = ofNullable(uploadFileId).map(uploadFileDao::selectById);
+            uploadFile.ifPresent(u::setUploadFile);
+        });
 
         return user;
+    }
+
+    /**
+     * ユーザー取得します。
+     *
+     * @return
+     */
+    public User findById(final Long id) {
+        return userDao.selectById(id).orElseThrow(() -> new NoDataFoundException("user_id=" + id + " のデータが見つかりません。"));
     }
 
     /**

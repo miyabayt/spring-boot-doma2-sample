@@ -17,9 +17,11 @@ import org.springframework.stereotype.Component;
 import com.sample.domain.dao.system.StaffDao;
 import com.sample.domain.dao.system.StaffRoleDao;
 import com.sample.domain.dto.system.Staff;
+import com.sample.domain.dto.system.StaffCriteria;
 import com.sample.domain.dto.system.StaffRole;
 import com.sample.web.base.security.BaseRealm;
 
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -42,11 +44,11 @@ public class StaffDaoRealm extends BaseRealm {
 
         try {
             // login_idをメールアドレスと見立てる
-            Staff where = new Staff();
-            where.setEmail(email);
+            val criteria = new StaffCriteria();
+            criteria.setEmail(email);
 
             // 担当者を取得して、セッションに保存する
-            staff = staffDao.select(where)
+            staff = staffDao.select(criteria)
                     .orElseThrow(() -> new UsernameNotFoundException("no staff found [id=" + email + "]"));
 
             // 担当者権限を取得する

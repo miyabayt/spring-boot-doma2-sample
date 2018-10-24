@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.sample.domain.dto.user.UserCriteria;
+import lombok.val;
 import org.seasar.doma.jdbc.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,11 +45,11 @@ public class UserDaoRealm extends BaseRealm {
 
         try {
             // login_idをメールアドレスと見立てる
-            User where = new User();
-            where.setEmail(loginId);
+            val criteria = new UserCriteria();
+            criteria.setEmail(loginId);
 
             // ユーザーを取得して、セッションに保存する
-            user = userDao.select(where)
+            user = userDao.select(criteria)
                     .orElseThrow(() -> new UsernameNotFoundException("no user found. [id=" + loginId + "]"));
 
             // 担当者権限を取得する

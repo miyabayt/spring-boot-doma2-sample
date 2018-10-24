@@ -1,5 +1,7 @@
 package com.sample.domain.service.system;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +10,7 @@ import org.springframework.util.Assert;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Role;
+import com.sample.domain.dto.system.RoleCriteria;
 import com.sample.domain.repository.system.RoleRepository;
 import com.sample.domain.service.BaseTransactionalService;
 
@@ -21,14 +24,27 @@ public class RoleService extends BaseTransactionalService {
     RoleRepository roleRepository;
 
     /**
-     * 役割を一括取得します。
+     * 役割を複数取得します。
      *
+     * @param criteria
+     * @param pageable
      * @return
      */
     @Transactional(readOnly = true) // 読み取りのみの場合は指定する
-    public Page<Role> findAll(Role where, Pageable pageable) {
-        Assert.notNull(where, "where must not be null");
-        return roleRepository.findAll(where, pageable);
+    public Page<Role> findAll(RoleCriteria criteria, Pageable pageable) {
+        Assert.notNull(criteria, "criteria must not be null");
+        return roleRepository.findAll(criteria, pageable);
+    }
+
+    /**
+     * 役割を取得します。
+     *
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Optional<Role> findOne(RoleCriteria criteria) {
+        Assert.notNull(criteria, "criteria must not be null");
+        return roleRepository.findOne(criteria);
     }
 
     /**

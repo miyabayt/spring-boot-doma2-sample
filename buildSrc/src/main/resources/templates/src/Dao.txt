@@ -9,6 +9,7 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
 
 @ConfigAutowireable
 @Dao
@@ -17,12 +18,13 @@ public interface [[${upperFuncName}]]Dao {
     /**
      * [[${funcStr}]]を取得します。
      *
-     * @param [[${lowerFuncName}]]
+     * @param criteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final [[${upperFuncName}]] [[${lowerFuncName}]], final SelectOptions options, final Collector<[[${upperFuncName}]], ?, R> collector);
+    <R> R selectAll(final [[${upperFuncName}]]Criteria criteria, final SelectOptions options,
+            final Collector<[[${upperFuncName}]], ?, R> collector);
 
     /**
      * [[${funcStr}]]を1件取得します。
@@ -36,11 +38,11 @@ public interface [[${upperFuncName}]]Dao {
     /**
      * [[${funcStr}]]を1件取得します。
      *
-     * @param [[${lowerFuncName}]]
+     * @param criteria
      * @return
      */
     @Select
-    Optional<[[${upperFuncName}]]> select([[${upperFuncName}]] [[${lowerFuncName}]]);
+    Optional<[[${upperFuncName}]]> select([[${upperFuncName}]]Criteria criteria);
 
     /**
      * [[${funcStr}]]を登録します。
@@ -77,4 +79,13 @@ public interface [[${upperFuncName}]]Dao {
      */
     @BatchInsert
     int[] insert(List<[[${upperFuncName}]]> [[${lowerFuncName}]]s);
+
+    /**
+     * [[${funcStr}]]を一括更新します。
+     *
+     * @param [[${lowerFuncName}]]s
+     * @return
+     */
+    @BatchUpdate
+    int[] update(List<[[${upperFuncName}]]> [[${lowerFuncName}]]s);
 }

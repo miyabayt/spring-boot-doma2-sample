@@ -9,6 +9,7 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.system.Code;
+import com.sample.domain.dto.system.CodeCriteria;
 
 @ConfigAutowireable
 @Dao
@@ -17,12 +18,12 @@ public interface CodeDao {
     /**
      * コードを取得します。
      * 
-     * @param code
+     * @param criteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final Code code, final SelectOptions options, final Collector<Code, ?, R> collector);
+    <R> R selectAll(final CodeCriteria criteria, final SelectOptions options, final Collector<Code, ?, R> collector);
 
     /**
      * コードを1件取得します。
@@ -45,11 +46,11 @@ public interface CodeDao {
     /**
      * コードを1件取得します。
      *
-     * @param code
+     * @param criteria
      * @return
      */
     @Select
-    Optional<Code> select(Code code);
+    Optional<Code> select(CodeCriteria criteria);
 
     /**
      * コードを登録します。

@@ -9,6 +9,7 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.user.User;
+import com.sample.domain.dto.user.UserCriteria;
 
 @ConfigAutowireable
 @Dao
@@ -17,12 +18,12 @@ public interface UserDao {
     /**
      * ユーザーを取得します。
      *
-     * @param user
+     * @param criteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final User user, final SelectOptions options, final Collector<User, ?, R> collector);
+    <R> R selectAll(final UserCriteria criteria, final SelectOptions options, final Collector<User, ?, R> collector);
 
     /**
      * ユーザーを1件取得します。
@@ -36,11 +37,11 @@ public interface UserDao {
     /**
      * ユーザーを1件取得します。
      *
-     * @param user
+     * @param criteria
      * @return
      */
     @Select
-    Optional<User> select(User user);
+    Optional<User> select(UserCriteria criteria);
 
     /**
      * ユーザーを登録します。
@@ -77,4 +78,13 @@ public interface UserDao {
      */
     @BatchInsert
     int[] insert(List<User> users);
+
+    /**
+     * ユーザーを一括更新します。
+     *
+     * @param users
+     * @return
+     */
+    @BatchUpdate
+    int[] update(List<User> users);
 }
