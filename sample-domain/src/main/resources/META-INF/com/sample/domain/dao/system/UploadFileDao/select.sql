@@ -15,6 +15,6 @@ FROM
     upload_files
 WHERE
     deleted_at IS NULL
-/*%if uploadFile.id != null */
-AND upload_file_id = /* uploadFile.id */1
+/*%if criteria.id != null */
+AND upload_file_id = /* criteria.id */1
 /*%end*/

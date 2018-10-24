@@ -20,7 +20,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Permission;
+import com.sample.domain.dto.system.PermissionCriteria;
 import com.sample.domain.dto.system.Role;
+import com.sample.domain.dto.system.RoleCriteria;
 import com.sample.domain.service.system.PermissionService;
 import com.sample.domain.service.system.RoleService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
@@ -82,7 +84,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         }
 
         // 権限一覧を取得する
-        Page<Permission> permissions = permissionService.findAll(new Permission(), Pageable.NO_LIMIT);
+        Page<Permission> permissions = permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
         model.addAttribute("permissions", permissions);
 
         return "modules/system/roles/new";
@@ -123,10 +125,10 @@ public class RoleHtmlController extends AbstractHtmlController {
     @GetMapping("/find")
     public String findRole(@ModelAttribute SearchRoleForm form, Model model) {
         // 入力値を詰め替える
-        val where = modelMapper.map(form, Role.class);
+        val criteria = modelMapper.map(form, RoleCriteria.class);
 
         // 10件区切りで取得する
-        val pages = roleService.findAll(where, Pageable.DEFAULT);
+        val pages = roleService.findAll(criteria, Pageable.DEFAULT);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
@@ -168,7 +170,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         model.addAttribute("role", role);
 
         // 権限一覧を取得する
-        Page<Permission> permissions = permissionService.findAll(new Permission(), Pageable.NO_LIMIT);
+        Page<Permission> permissions = permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
         model.addAttribute("permissions", permissions);
 
         return "modules/system/roles/show";
@@ -194,7 +196,7 @@ public class RoleHtmlController extends AbstractHtmlController {
         }
 
         // 権限一覧を取得する
-        Page<Permission> permissions = permissionService.findAll(new Permission(), Pageable.NO_LIMIT);
+        Page<Permission> permissions = permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
         model.addAttribute("permissions", permissions);
 
         return "modules/system/roles/new";
@@ -261,7 +263,7 @@ public class RoleHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val roles = roleService.findAll(new Role(), Pageable.NO_LIMIT);
+        val roles = roleService.findAll(new RoleCriteria(), Pageable.NO_LIMIT);
 
         // 詰め替える
         List<RoleCsv> csvList = modelMapper.map(roles.getData(), toListType(RoleCsv.class));

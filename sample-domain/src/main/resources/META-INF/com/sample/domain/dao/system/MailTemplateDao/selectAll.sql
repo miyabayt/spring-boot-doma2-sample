@@ -4,11 +4,11 @@ FROM
   mail_templates
 WHERE
   deleted_at IS NULL
-/*%if mailTemplate.id != null */
-  AND mail_template_id = /* mailTemplate.id */1
+/*%if criteria.id != null */
+  AND mail_template_id = /* criteria.id */1
 /*%end*/
-/*%if mailTemplate.templateKey != null */
-  AND template_key = /* mailTemplate.templateKey */'thanks'
+/*%if criteria.templateKey != null */
+  AND template_key = /* criteria.templateKey */'thanks'
 /*%end*/
 ORDER BY
   mail_template_id ASC

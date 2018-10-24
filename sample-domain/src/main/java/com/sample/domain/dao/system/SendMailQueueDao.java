@@ -8,6 +8,7 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.system.SendMailQueue;
+import com.sample.domain.dto.system.SendMailQueueCriteria;
 
 @ConfigAutowireable
 @Dao
@@ -16,11 +17,13 @@ public interface SendMailQueueDao {
     /**
      * メール送信キューを取得します。
      *
+     * @param criteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final SelectOptions options, final Collector<SendMailQueue, ?, R> collector);
+    <R> R selectAll(final SendMailQueueCriteria criteria, final SelectOptions options,
+            final Collector<SendMailQueue, ?, R> collector);
 
     /**
      * メール送信キューを一括登録します。

@@ -19,4 +19,7 @@ FROM
 WHERE
     deleted_at IS NULL
 AND sent_at IS NULL
+/*%if criteria.id != null */
+  AND send_mail_queue_id = /* criteria.id */1
+/*%end*/
 ORDER BY send_mail_queue_id ASC

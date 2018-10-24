@@ -9,6 +9,7 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.system.Permission;
+import com.sample.domain.dto.system.PermissionCriteria;
 
 @ConfigAutowireable
 @Dao
@@ -17,12 +18,12 @@ public interface PermissionDao {
     /**
      * 権限を取得します。
      *
-     * @param permission
+     * @param criteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final Permission permission, final SelectOptions options,
+    <R> R selectAll(final PermissionCriteria criteria, final SelectOptions options,
             final Collector<Permission, ?, R> collector);
 
     /**
@@ -37,20 +38,20 @@ public interface PermissionDao {
     /**
      * 権限を1件取得します。
      *
-     * @param permission
+     * @param criteria
      * @return
      */
     @Select
-    Optional<Permission> select(Permission permission);
+    Optional<Permission> select(PermissionCriteria criteria);
 
     /**
      * 権限を登録します。
      *
-     * @param Permission
+     * @param permission
      * @return
      */
     @Insert
-    int insert(Permission Permission);
+    int insert(Permission permission);
 
     /**
      * 権限を更新します。
@@ -78,4 +79,13 @@ public interface PermissionDao {
      */
     @BatchInsert
     int[] insert(List<Permission> permissions);
+
+    /**
+     * 権限を一括更新します。
+     *
+     * @param permissions
+     * @return
+     */
+    @BatchUpdate
+    int[] update(List<Permission> permissions);
 }

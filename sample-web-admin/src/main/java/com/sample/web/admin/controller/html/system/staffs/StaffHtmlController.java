@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Staff;
+import com.sample.domain.dto.system.StaffCriteria;
 import com.sample.domain.service.system.StaffService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.view.CsvView;
@@ -122,10 +123,10 @@ public class StaffHtmlController extends AbstractHtmlController {
     @GetMapping("/find")
     public String findStaff(@ModelAttribute SearchStaffForm form, Model model) {
         // 入力値を詰め替える
-        val where = modelMapper.map(form, Staff.class);
+        val criteria = modelMapper.map(form, StaffCriteria.class);
 
         // 10件区切りで取得する
-        val pages = staffService.findAll(where, form);
+        val pages = staffService.findAll(criteria, form);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
@@ -257,7 +258,7 @@ public class StaffHtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val staffs = staffService.findAll(new Staff(), Pageable.NO_LIMIT);
+        val staffs = staffService.findAll(new StaffCriteria(), Pageable.NO_LIMIT);
 
         // 詰め替える
         List<StaffCsv> csvList = modelMapper.map(staffs.getData(), toListType(StaffCsv.class));

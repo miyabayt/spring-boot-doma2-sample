@@ -1,5 +1,6 @@
 package [[${controllerPackageName}]].[[${subSystem}]].[[${lowerFuncName}]]s;
 
+import static com.sample.domain.util.TypeUtils.toListType;
 import static [[${webBasePackageName}]].WebConst.MESSAGE_DELETED;
 import static [[${webBasePackageName}]].WebConst.GLOBAL_MESSAGE;
 
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import [[${commonDtoPackageName}]].Pageable;
 import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
 import [[${servicePackageName}]].[[${subSystem}]].[[${upperFuncName}]]Service;
 import [[${baseControllerPackageName}]].AbstractHtmlController;
 import [[${webBasePackageName}]].view.CsvView;
@@ -113,10 +115,10 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
     @GetMapping("/find")
     public String find[[${upperFuncName}]](@ModelAttribute("search[[${upperFuncName}]]Form") Search[[${upperFuncName}]]Form form, Model model) {
         // 入力値から検索条件を作成する
-        val where = modelMapper.map(form, [[${upperFuncName}]].class);
+        val criteria = modelMapper.map(form, [[${upperFuncName}]]Criteria.class);
 
         // 10件区切りで取得する
-        val pages = [[${lowerFuncName}]]Service.findAll(where, form);
+        val pages = [[${lowerFuncName}]]Service.findAll(criteria, form);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
@@ -245,11 +247,10 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val [[${lowerFuncName}]]s = [[${lowerFuncName}]]Service.findAll(new [[${upperFuncName}]](), Pageable.NO_LIMIT);
+        val [[${lowerFuncName}]]s = [[${lowerFuncName}]]Service.findAll(new [[${upperFuncName}]]Criteria(), Pageable.NO_LIMIT);
 
-        val listType = new TypeToken<List<[[${upperFuncName}]]Csv>>() {
-        }.getType();
-        List<[[${upperFuncName}]]Csv> csvList = modelMapper.map([[${lowerFuncName}]]s.getData(), listType);
+        // 詰め替える
+        List<[[${upperFuncName}]]Csv> csvList = modelMapper.map([[${lowerFuncName}]]s.getData(), toListType([[${upperFuncName}]]Csv.class));
 
         // レスポンスを設定する
         val view = new CsvView([[${upperFuncName}]]Csv.class, csvList);

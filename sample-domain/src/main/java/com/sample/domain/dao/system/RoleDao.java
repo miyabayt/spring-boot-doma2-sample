@@ -9,6 +9,7 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.system.Role;
+import com.sample.domain.dto.system.RoleCriteria;
 
 @ConfigAutowireable
 @Dao
@@ -17,12 +18,12 @@ public interface RoleDao {
     /**
      * 役割を取得します。
      *
-     * @param role
+     * @param criteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final Role role, final SelectOptions options, final Collector<Role, ?, R> collector);
+    <R> R selectAll(final RoleCriteria criteria, final SelectOptions options, final Collector<Role, ?, R> collector);
 
     /**
      * 役割を1件取得します。
@@ -36,20 +37,20 @@ public interface RoleDao {
     /**
      * 役割を1件取得します。
      *
-     * @param role
+     * @param criteria
      * @return
      */
     @Select
-    Optional<Role> select(Role role);
+    Optional<Role> select(RoleCriteria criteria);
 
     /**
      * 役割を登録します。
      *
-     * @param Role
+     * @param role
      * @return
      */
     @Insert
-    int insert(Role Role);
+    int insert(Role role);
 
     /**
      * 役割を更新します。
@@ -77,4 +78,13 @@ public interface RoleDao {
      */
     @BatchInsert
     int[] insert(List<Role> roles);
+
+    /**
+     * 役割を一括更新します。
+     *
+     * @param roles
+     * @return
+     */
+    @BatchUpdate
+    int[] update(List<Role> roles);
 }

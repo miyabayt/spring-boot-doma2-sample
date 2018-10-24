@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.sample.common.util.FileUtils;
 import com.sample.domain.helper.FileHelper;
 import com.sample.web.base.controller.html.AbstractHtmlController;
+import com.sample.web.base.util.MultipartFileUtils;
 import com.sample.web.base.view.FileDownloadView;
 
 import lombok.val;

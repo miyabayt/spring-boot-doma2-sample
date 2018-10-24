@@ -7,6 +7,7 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.system.UploadFile;
+import com.sample.domain.dto.system.UploadFileCriteria;
 
 @ConfigAutowireable
 @Dao
@@ -15,12 +16,12 @@ public interface UploadFileDao {
     /**
      * アップロードファイルを取得します。
      *
-     * @param uploadFile
+     * @param criteria
      * @param options
      * @return
      */
     @Select
-    List<UploadFile> selectAll(UploadFile uploadFile, SelectOptions options);
+    List<UploadFile> selectAll(UploadFileCriteria criteria, SelectOptions options);
 
     /**
      * アップロードファイルを1件取得します。
@@ -34,11 +35,11 @@ public interface UploadFileDao {
     /**
      * アップロードファイルを1件取得します。
      *
-     * @param uploadFile
+     * @param criteria
      * @return
      */
     @Select
-    UploadFile select(UploadFile uploadFile);
+    UploadFile select(UploadFileCriteria criteria);
 
     /**
      * アップロードファイルを登録します。

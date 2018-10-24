@@ -4,17 +4,17 @@ FROM
   staffs
 WHERE
   deleted_at IS NULL
-/*%if staff.id != null */
-  AND staff_id = /* staff.id */1
+/*%if criteria.id != null */
+  AND staff_id = /* criteria.id */1
 /*%end*/
-/*%if staff.lastName != null */
-  AND last_name LIKE /* @infix(staff.lastName) */'john' ESCAPE '$'
+/*%if criteria.lastName != null */
+  AND last_name LIKE /* @infix(criteria.lastName) */'john' ESCAPE '$'
 /*%end*/
-/*%if staff.firstName != null */
-  AND first_name LIKE /* @infix(staff.firstName) */'john' ESCAPE '$'
+/*%if criteria.firstName != null */
+  AND first_name LIKE /* @infix(criteria.firstName) */'john' ESCAPE '$'
 /*%end*/
-/*%if staff.email != null */
-  AND email = /* staff.email */'aaaa@bbbb.com'
+/*%if criteria.email != null */
+  AND email = /* criteria.email */'aaaa@bbbb.com'
 /*%end*/
 ORDER BY
   staff_id ASC

@@ -20,6 +20,7 @@ import com.sample.domain.dao.system.CodeDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Code;
+import com.sample.domain.dto.system.CodeCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseRepository;
 
@@ -34,7 +35,7 @@ public class CodeRepository extends BaseRepository {
     @Autowired
     CodeDao codeDao;
 
-    @Autowired
+    @Autowired(required = false)
     CacheManager cacheManager;
 
     /**
@@ -47,32 +48,32 @@ public class CodeRepository extends BaseRepository {
         // ページングを指定する
         val pageable = Pageable.NO_LIMIT;
         val options = createSelectOptions(pageable).count();
-        return codeDao.selectAll(new Code(), options, toList());
+        return codeDao.selectAll(new CodeCriteria(), options, toList());
     }
 
     /**
-     * コードを一括取得します。
+     * コードを複数取得します。
      *
-     * @param where
+     * @param criteria
      * @param pageable
      * @return
      */
-    public Page<Code> findAll(Code where, Pageable pageable) {
+    public Page<Code> findAll(CodeCriteria criteria, Pageable pageable) {
         // ページングを指定する
         val options = createSelectOptions(pageable).count();
-        val data = codeDao.selectAll(where, options, toList());
+        val data = codeDao.selectAll(criteria, options, toList());
         return pageFactory.create(data, pageable, options.getCount());
     }
 
     /**
      * コードを取得します。
      *
-     * @param where
+     * @param criteria
      * @return
      */
-    public Optional<Code> findOne(Code where) {
+    public Optional<Code> findOne(CodeCriteria criteria) {
         // 1件取得
-        return codeDao.select(where);
+        return codeDao.select(criteria);
     }
 
     /**
@@ -85,10 +86,10 @@ public class CodeRepository extends BaseRepository {
     @Cacheable(cacheNames = "code", key = "#categoryKey + '_' + #codeKey")
     public Optional<Code> findByCodeKey(String categoryKey, String codeKey) {
         // 1件取得
-        val where = new Code();
-        where.setCategoryKey(categoryKey);
-        where.setCodeKey(codeKey);
-        return codeDao.select(where);
+        val criteria = new CodeCriteria();
+        criteria.setCategoryKey(categoryKey);
+        criteria.setCodeKey(codeKey);
+        return codeDao.select(criteria);
     }
 
     /**
@@ -168,10 +169,12 @@ public class CodeRepository extends BaseRepository {
     @EventListener(ApplicationReadyEvent.class)
     public void loadCache() {
         // キャッシュする
-        val cache = cacheManager.getCache("code");
-        fetchAll().forEach(c -> {
-            cache.put(c.getCategoryKey() + "_" + c.getCodeKey(), c);
-            cache.put(c.getId(), c);
-        });
+        if (cacheManager != null) {
+            val cache = cacheManager.getCache("code");
+            fetchAll().forEach(c -> {
+                cache.put(c.getCategoryKey() + "_" + c.getCodeKey(), c);
+                cache.put(c.getId(), c);
+            });
+        }
     }
 }

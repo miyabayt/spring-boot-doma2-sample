@@ -1,0 +1,13 @@
+package [[${dtoPackageName}]].[[${subSystem}]];
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class [[${upperFuncName}]]Criteria extends [[${upperFuncName}]] {
+
+    private static final long serialVersionUID = -1;
+
+    // TODO 検索用のフィールドを定義する
+}

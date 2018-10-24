@@ -4,10 +4,10 @@ FROM
   code_category
 WHERE
   deleted_at IS NULL
-/*%if codeCategory.id != null */
-  AND code_category_id = /* codeCategory.id */1
+/*%if criteria.id != null */
+  AND code_category_id = /* criteria.id */1
 /*%end*/
-/*%if codeCategory.categoryKey != null */
-  AND category_key = /* codeCategory.categoryKey */'01'
+/*%if criteria.categoryKey != null */
+  AND category_key = /* criteria.categoryKey */'01'
 /*%end*/
 LIMIT 1

@@ -13,6 +13,7 @@ import com.sample.domain.dao.system.StaffRoleDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Staff;
+import com.sample.domain.dto.system.StaffCriteria;
 import com.sample.domain.dto.system.StaffRole;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseRepository;
@@ -32,27 +33,27 @@ public class StaffRepository extends BaseRepository {
     StaffRoleDao staffRoleDao;
 
     /**
-     * 担当者を一括取得します。
+     * 担当者を複数取得します。
      *
-     * @param where
+     * @param criteria
      * @param pageable
      * @return
      */
-    public Page<Staff> findAll(Staff where, Pageable pageable) {
+    public Page<Staff> findAll(StaffCriteria criteria, Pageable pageable) {
         // ページングを指定する
         val options = createSelectOptions(pageable).count();
-        val data = staffDao.selectAll(where, options, toList());
+        val data = staffDao.selectAll(criteria, options, toList());
         return pageFactory.create(data, pageable, options.getCount());
     }
 
     /**
      * 担当者を取得します。
      *
-     * @param where
+     * @param criteria
      * @return
      */
-    public Optional<Staff> findOne(Staff where) {
-        return staffDao.select(where);
+    public Optional<Staff> findOne(StaffCriteria criteria) {
+        return staffDao.select(criteria);
     }
 
     /**

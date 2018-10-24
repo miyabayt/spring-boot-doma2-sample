@@ -12,6 +12,7 @@ import com.sample.domain.dao.system.MailTemplateDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.MailTemplate;
+import com.sample.domain.dto.system.MailTemplateCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseRepository;
 
@@ -27,28 +28,28 @@ public class MailTemplateRepository extends BaseRepository {
     MailTemplateDao mailTemplateDao;
 
     /**
-     * メールテンプレートを一括取得します。
+     * メールテンプレートを複数取得します。
      *
-     * @param where
+     * @param criteria
      * @param pageable
      * @return
      */
-    public Page<MailTemplate> findAll(MailTemplate where, Pageable pageable) {
+    public Page<MailTemplate> findAll(MailTemplateCriteria criteria, Pageable pageable) {
         // ページングを指定する
         val options = createSelectOptions(pageable).count();
-        val data = mailTemplateDao.selectAll(where, options, toList());
+        val data = mailTemplateDao.selectAll(criteria, options, toList());
         return pageFactory.create(data, pageable, options.getCount());
     }
 
     /**
      * メールテンプレートを取得します。
      *
-     * @param where
+     * @param criteria
      * @return
      */
-    public Optional<MailTemplate> findOne(MailTemplate where) {
+    public Optional<MailTemplate> findOne(MailTemplateCriteria criteria) {
         // 1件取得
-        return mailTemplateDao.select(where);
+        return mailTemplateDao.select(criteria);
     }
 
     /**

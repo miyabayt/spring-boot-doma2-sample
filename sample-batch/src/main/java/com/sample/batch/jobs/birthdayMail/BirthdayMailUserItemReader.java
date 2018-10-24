@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.sample.batch.jobs.BasePageableItemReader;
 import com.sample.domain.dao.users.UserDao;
 import com.sample.domain.dto.user.User;
+import com.sample.domain.dto.user.UserCriteria;
 
 import lombok.val;
 
@@ -22,10 +23,8 @@ public class BirthdayMailUserItemReader extends BasePageableItemReader<User> {
 
     @Override
     protected List<User> getList() {
-        val where = new User();
-
+        val criteria = new UserCriteria();
         val options = getSelectOptions();
-        val target = userDao.selectAll(where, options, toList());
-        return target;
+        return userDao.selectAll(criteria, options, toList());
     }
 }

@@ -20,6 +20,7 @@ import com.sample.domain.dao.system.CodeCategoryDao;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.CodeCategory;
+import com.sample.domain.dto.system.CodeCategoryCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseRepository;
 
@@ -34,7 +35,7 @@ public class CodeCategoryRepository extends BaseRepository {
     @Autowired
     CodeCategoryDao codeCategoryDao;
 
-    @Autowired
+    @Autowired(required = false)
     CacheManager cacheManager;
 
     /**
@@ -46,32 +47,32 @@ public class CodeCategoryRepository extends BaseRepository {
         // ページングを指定する
         val pageable = Pageable.NO_LIMIT;
         val options = createSelectOptions(pageable).count();
-        return codeCategoryDao.selectAll(new CodeCategory(), options, toList());
+        return codeCategoryDao.selectAll(new CodeCategoryCriteria(), options, toList());
     }
 
     /**
-     * コード分類を一括取得します。
+     * コード分類を複数取得します。
      *
-     * @param where
+     * @param criteria
      * @param pageable
      * @return
      */
-    public Page<CodeCategory> findAll(CodeCategory where, Pageable pageable) {
+    public Page<CodeCategory> findAll(CodeCategoryCriteria criteria, Pageable pageable) {
         // ページングを指定する
         val options = createSelectOptions(pageable).count();
-        val data = codeCategoryDao.selectAll(where, options, toList());
+        val data = codeCategoryDao.selectAll(criteria, options, toList());
         return pageFactory.create(data, pageable, options.getCount());
     }
 
     /**
      * コード分類を取得します。
      *
-     * @param where
+     * @param criteria
      * @return
      */
-    public Optional<CodeCategory> findOne(CodeCategory where) {
+    public Optional<CodeCategory> findOne(CodeCategoryCriteria criteria) {
         // 1件取得
-        return codeCategoryDao.select(where);
+        return codeCategoryDao.select(criteria);
     }
 
     /**
@@ -148,10 +149,12 @@ public class CodeCategoryRepository extends BaseRepository {
     @EventListener(ApplicationReadyEvent.class)
     public void loadCache() {
         // キャッシュする
-        val cache = cacheManager.getCache("code_category");
-        fetchAll().forEach(c -> {
-            cache.put(c.getCategoryKey(), c);
-            cache.put(c.getId(), c);
-        });
+        if (cacheManager != null) {
+            val cache = cacheManager.getCache("code_category");
+            fetchAll().forEach(c -> {
+                cache.put(c.getCategoryKey(), c);
+                cache.put(c.getId(), c);
+            });
+        }
     }
 }

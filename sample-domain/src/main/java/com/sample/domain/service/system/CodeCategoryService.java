@@ -1,5 +1,7 @@
 package com.sample.domain.service.system;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +10,7 @@ import org.springframework.util.Assert;
 import com.sample.domain.dto.common.Page;
 import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.CodeCategory;
+import com.sample.domain.dto.system.CodeCategoryCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.repository.system.CodeCategoryRepository;
 import com.sample.domain.service.BaseTransactionalService;
@@ -24,14 +27,27 @@ public class CodeCategoryService extends BaseTransactionalService {
     CodeCategoryRepository codeCategoryRepository;
 
     /**
-     * コード分類を一括取得します。
+     * コード分類を複数取得します。
      *
+     * @param criteria
+     * @param pageable
      * @return
      */
     @Transactional(readOnly = true) // 読み取りのみの場合は指定する
-    public Page<CodeCategory> findAll(CodeCategory where, Pageable pageable) {
-        Assert.notNull(where, "where must not be null");
-        return codeCategoryRepository.findAll(where, pageable);
+    public Page<CodeCategory> findAll(CodeCategoryCriteria criteria, Pageable pageable) {
+        Assert.notNull(criteria, "criteria must not be null");
+        return codeCategoryRepository.findAll(criteria, pageable);
+    }
+
+    /**
+     * コード分類を取得します。
+     *
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Optional<CodeCategory> findOne(CodeCategoryCriteria criteria) {
+        Assert.notNull(criteria, "criteria must not be null");
+        return codeCategoryRepository.findOne(criteria);
     }
 
     /**
@@ -55,11 +71,11 @@ public class CodeCategoryService extends BaseTransactionalService {
     public CodeCategory findByKey(final String categoryKey) {
         Assert.notNull(categoryKey, "categoryKey must not be null");
 
-        val where = new CodeCategory();
-        where.setCategoryKey(categoryKey);
+        val criteria = new CodeCategoryCriteria();
+        criteria.setCategoryKey(categoryKey);
 
         // 1件取得
-        return codeCategoryRepository.findOne(where)
+        return codeCategoryRepository.findOne(criteria)
                 .orElseThrow(() -> new NoDataFoundException("category_key=" + categoryKey + " のデータが見つかりません。"));
     }
 

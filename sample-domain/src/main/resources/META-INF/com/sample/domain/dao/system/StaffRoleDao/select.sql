@@ -15,9 +15,9 @@ FROM
     AND p.deleted_at IS NULL
 WHERE
   sr.deleted_at IS NULL
-/*%if permission.id != null */
-  AND p.permission_id = /* permission.id */1
+/*%if criteria.id != null */
+  AND p.permission_id = /* criteria.id */1
 /*%end*/
-/*%if permission.permissionKey != null */
-  AND permission_key = /* permission.permissionKey */'01'
+/*%if criteria.permissionKey != null */
+  AND permission_key = /* criteria.permissionKey */'01'
 /*%end*/

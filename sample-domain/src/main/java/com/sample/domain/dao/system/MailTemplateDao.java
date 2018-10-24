@@ -9,6 +9,7 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import com.sample.domain.dto.system.MailTemplate;
+import com.sample.domain.dto.system.MailTemplateCriteria;
 
 @ConfigAutowireable
 @Dao
@@ -17,12 +18,12 @@ public interface MailTemplateDao {
     /**
      * メールテンプレートを取得します。
      *
-     * @param mailTemplate
+     * @param criteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final MailTemplate mailTemplate, final SelectOptions options,
+    <R> R selectAll(final MailTemplateCriteria criteria, final SelectOptions options,
             final Collector<MailTemplate, ?, R> collector);
 
     /**
@@ -37,20 +38,20 @@ public interface MailTemplateDao {
     /**
      * メールテンプレートを1件取得します。
      *
-     * @param mailTemplate
+     * @param criteria
      * @return
      */
     @Select
-    Optional<MailTemplate> select(MailTemplate mailTemplate);
+    Optional<MailTemplate> select(MailTemplateCriteria criteria);
 
     /**
      * メールテンプレートを登録します。
      *
-     * @param MailTemplate
+     * @param mailtemplate
      * @return
      */
     @Insert
-    int insert(MailTemplate MailTemplate);
+    int insert(MailTemplate mailtemplate);
 
     /**
      * メールテンプレートを更新します。
@@ -79,4 +80,13 @@ public interface MailTemplateDao {
      */
     @BatchInsert
     int[] insert(List<MailTemplate> mailTemplates);
+
+    /**
+     * メールテンプレートを一括更新します。
+     *
+     * @param mailtemplates
+     * @return
+     */
+    @BatchUpdate
+    int[] update(List<MailTemplate> mailtemplates);
 }
