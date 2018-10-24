@@ -3,9 +3,11 @@ package com.sample.web.admin.controller.html.users.users;
 import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.DARK_GREEN;
 import static org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined.WHITE;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import lombok.val;
 import org.apache.poi.ss.usermodel.*;
 
 import com.sample.domain.dto.user.User;
@@ -16,7 +18,7 @@ import lombok.val;
 public class UserExcel implements ExcelView.Callback {
 
     @Override
-    public void buildExcelWorkbook(Map<String, Object> model, Workbook workbook) {
+    public void buildExcelWorkbook(Map<String, Object> model, Collection<?> data, Workbook workbook) {
 
         // シートを作成する
         Sheet sheet = workbook.createSheet("ユーザー");
@@ -44,7 +46,7 @@ public class UserExcel implements ExcelView.Callback {
 
         // 明細
         @SuppressWarnings("unchecked")
-        List<User> users = (List<User>) model.get("data");
+        val users = (List<User>) data;
 
         int count = 1;
         for (User user : users) {

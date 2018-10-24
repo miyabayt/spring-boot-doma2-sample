@@ -26,7 +26,7 @@ public class SnakeToLowerCamelCaseModelAttributeMethodProcessor extends ServletM
     protected void bindRequestParameters(WebDataBinder binder, NativeWebRequest nativeWebRequest) {
         val target = binder.getTarget();
         val dataBinder = new SnakeToLowerCamelCaseRequestDataBinder(target, binder.getObjectName());
-        requestMappingHandlerAdapter.getWebBindingInitializer().initBinder(dataBinder, nativeWebRequest);
+        requestMappingHandlerAdapter.getWebBindingInitializer().initBinder(dataBinder);
         super.bindRequestParameters(dataBinder, nativeWebRequest);
     }
 }

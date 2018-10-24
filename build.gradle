@@ -1,27 +1,20 @@
 buildscript {
     ext {
-        springBootVersion = "1.5.6.RELEASE"
+        springBootVersion = "2.0.6.RELEASE"
+        spockVersion = "1.2-groovy-2.5"
+        groovyVersion = "2.5.3"
+        lombokVersion = "1.18.2"
         dockerComposePluginVersion = "0.6.6"
     }
     repositories {
-        mavenLocal()
         mavenCentral()
         jcenter()
-        maven { url "http://repo.spring.io/plugins-release" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-        classpath "io.spring.gradle:propdeps-plugin:0.0.9.RELEASE" // optionalとprovidedが使えるようにする
         classpath "com.github.tntim96:fakesmtp:2.0" // ローカルでダミーのSMTPサーバーを立てる
         classpath "com.avast.gradle:gradle-docker-compose-plugin:${dockerComposePluginVersion}"
     }
-}
-
-configure(subprojects) {
-    apply plugin: "propdeps"
-    apply plugin: "propdeps-maven"
-    apply plugin: "propdeps-idea"
-    apply plugin: "propdeps-eclipse"
 }
 
 subprojects {
@@ -29,10 +22,11 @@ subprojects {
     apply plugin: "groovy"
     apply plugin: "idea"
     apply plugin: "eclipse"
-    apply plugin: "org.springframework.boot" // for Maven BOM
+    apply plugin: "org.springframework.boot"
+    apply plugin: "io.spring.dependency-management"
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 11
+    targetCompatibility = 11
     [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.encoding = "UTF-8"
     [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.compilerArgs = ["-Xlint:all"]
 
@@ -53,6 +47,12 @@ subprojects {
         maven { url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/" }
     }
 
+    dependencyManagement {
+        imports {
+            mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+        }
+    }
+
     idea {
         module {
             downloadJavadoc = true
@@ -67,222 +67,31 @@ subprojects {
     eclipse {
         classpath {
             containers.remove("org.eclipse.jdt.launching.JRE_CONTAINER")
-            containers "org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"
+            containers "org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"
         }
     }
 
-    // Support Thymeleaf 3
-    //     https://github.com/spring-projects/spring-boot/issues/4393
-    ext["thymeleaf.version"] = "3.0.6.RELEASE"
-    ext["thymeleaf-extras-conditionalcomments.version"] = "2.1.2.RELEASE"
-    ext["thymeleaf-layout-dialect.version"] = "2.2.2"
-    ext["thymeleaf-extras-java8time.version"] = "3.0.0.RELEASE"
-
-    ext["assertj.version"] = "3.8.0"
-    ext["spock.version"] = "1.1-groovy-2.4"
-    ext["groovy.version"] = "2.4.12"
-    ext["mockito.version"] = "2.+"
-
-    // v3.2.1 -> 4.2.0
-    ext["flyway.version"] = "4.2.0"
-
     bootRun {
-        addResources = true
+        sourceResources sourceSets.main
         jvmArgs "-XX:TieredStopAtLevel=1", "-Xverify:none"
     }
 
+    ext["groovy.version"] = groovyVersion
+    
     dependencies {
-        optional "org.projectlombok:lombok"
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
 
         testCompile "org.assertj:assertj-core"
-        testCompile "org.codehaus.groovy:groovy-all"
-        testCompile "org.spockframework:spock-core"
+        testCompile "org.spockframework:spock-core:${spockVersion}"
         testCompile "org.mockito:mockito-core"
-    }
-}
-
-project(":sample-common") {
-    bootRepackage {
-        enabled = false
-    }
-    dependencies {
-        // springframework
-        compile "org.springframework.boot:spring-boot-configuration-processor"
-        compile "org.springframework.boot:spring-boot-starter"
-
-        compile "org.apache.commons:commons-lang3:3.1"
-        compile "org.apache.commons:commons-compress:1.14"
-        compile "commons-collections:commons-collections"
-        compile "commons-codec:commons-codec"
-        compile "commons-digester:commons-digester"
-        compile "commons-io:commons-io:2.5"
-        compile "org.apache.tika:tika-core:1.15"
-        compile "dom4j:dom4j"
-        compile "com.ibm.icu:icu4j:59.1"
-    }
-}
-
-project(":sample-domain") {
-    bootRepackage {
-        enabled = false
-    }
-    // for Doma 2
-    // JavaクラスとSQLファイルの出力先ディレクトリを同じにする
-    processResources.destinationDir = compileJava.destinationDir
-    // コンパイルより前にSQLファイルを出力先ディレクトリにコピーするために依存関係を逆転する
-    compileJava.dependsOn processResources
-
-    dependencies {
-        compile project(":sample-common")
-
-        // springframework
-        compile "org.springframework.boot:spring-boot-starter-aop"
-        compile "org.springframework.boot:spring-boot-starter-validation"
-        compile "org.springframework.boot:spring-boot-starter-mail"
-        compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-        compile("org.springframework.boot:spring-boot-starter-jdbc") {
-            // exclude tomcat-jdbc to use HikariCP
-            exclude group: "org.apache.tomcat", module: "tomcat-jdbc"
-        }
-
-        // doma exclude springframework
-        compile("org.seasar.doma.boot:doma-spring-boot-starter:1.1.1") {
-            exclude group: "org.springframework.boot"
-        }
-
-        // jackson
-        compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-        compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
-        compile "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
-
-        // modelmapper
-        compile "org.modelmapper:modelmapper:0.7.5"
-
-        // thymeleaf for text template engine
-        compile "org.thymeleaf:thymeleaf"
-        compile "org.thymeleaf.extras:thymeleaf-extras-java8time"
-        compile "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments"
-
-        // mysql database
-        compile "mysql:mysql-connector-java"
-        compile "org.flywaydb:flyway-core"
-        compile "com.zaxxer:HikariCP"
-
-        testCompile "org.springframework.boot:spring-boot-starter-test"
-        testCompile "org.spockframework:spock-spring"
-    }
-}
-
-project(":sample-web-base") {
-    bootRepackage {
-        enabled = false
-    }
-
-    dependencies {
-        compile project(":sample-domain")
-
-        // springframework
-        compile "org.springframework.boot:spring-boot-starter-cache"
-        compile("org.springframework.boot:spring-boot-starter-web") {
-            // exclude embedded tomcat to use Jetty
-            exclude module: "spring-boot-starter-tomcat"
-        }
-        compile "org.springframework.boot:spring-boot-starter-security"
-        compile "org.springframework.boot:spring-boot-starter-mobile" // デバイス判定
-        compile "org.springframework.boot:spring-boot-starter-jetty"
-        compile "org.springframework.session:spring-session-jdbc" // セッション格納先にDBを使う場合
-        //compile "org.springframework.boot:spring-boot-starter-data-redis" // セッション格納先にredisを使う場合
-
-        // thymeleaf
-        compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4"
-        compile "org.thymeleaf.extras:thymeleaf-extras-java8time"
-        compile "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments"
-
-        // jasperreports
-        compile "net.sf.jasperreports:jasperreports:6.4.0"
-        compile "com.lowagie:itext:2.1.7.js5"
-
-        // apache POI
-        compile "org.apache.poi:poi:3.16"
-        compile "org.apache.poi:poi-ooxml:3.16"
-
-        // EhCache
-        compile "net.sf.ehcache:ehcache"
-
-        // webjars
-        compile "org.webjars:webjars-locator"
-        compile "org.webjars:bootstrap:3.3.7"
-        compile "org.webjars:jquery:2.2.4"
-        compile "org.webjars:jquery-validation:1.17.0"
-        compile "org.webjars:bootstrap-datepicker:1.7.1"
-        compile("org.webjars.bower:iCheck:1.0.2") {
-            exclude module: "jquery"
-        }
-        compile "org.webjars:html5shiv:3.7.3"
-        compile "org.webjars:respond:1.4.2"
-        compile "org.webjars:AdminLTE:2.3.8"
-        compile "org.webjars:font-awesome:4.7.0"
-        compile "org.webjars:ionicons:2.0.1"
-
-        testCompile "org.springframework.security:spring-security-test"
-        testCompile "org.springframework.boot:spring-boot-starter-test"
-        testCompile "org.spockframework:spock-spring"
-    }
-}
-
-project(":sample-web-admin") {
-    bootRepackage {
-        executable = true
-    }
-
-    dependencies {
-        compile project(":sample-web-base")
-        optional "org.springframework.boot:spring-boot-devtools"
-
-        testCompile "org.springframework.security:spring-security-test"
-        testCompile "org.springframework.boot:spring-boot-starter-test"
-        testCompile "org.spockframework:spock-spring"
-    }
-}
-
-project(":sample-web-front") {
-    bootRepackage {
-        executable = true
-    }
-
-    dependencies {
-        compile project(":sample-web-base")
-        optional "org.springframework.boot:spring-boot-devtools"
-
-        testCompile "org.springframework.security:spring-security-test"
-        testCompile "org.springframework.boot:spring-boot-starter-test"
-        testCompile "org.spockframework:spock-spring"
-    }
-}
-
-project(":sample-batch") {
-    bootRun {
-        // プロジェクトプロパティを引数として渡す
-        if (project.hasProperty("args")) {
-            args project.args.split("\\s+")
-        }
-    }
-
-    dependencies {
-        compile project(":sample-domain")
-
-        // springframework
-        compile "org.springframework.boot:spring-boot-starter-batch"
-
-        testCompile "org.springframework.boot:spring-boot-starter-test"
-        testCompile "org.springframework.batch:spring-batch-test"
-        testCompile "org.spockframework:spock-spring"
     }
 }
 
 task startFakeSmtpServer(type: JavaExec) {
     classpath = buildscript.configurations.classpath
-    args = ["--start-server", '-m'] // -m (memory-mode)
+    args = ["--start-server", "-m"] // -m (memory-mode)
     main = "com.nilhcem.fakesmtp.FakeSMTP"
 }
 
@@ -312,5 +121,5 @@ codegen {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = "2.9"
+    gradleVersion = "4.10.2"
 }

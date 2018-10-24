@@ -1,4 +1,4 @@
-package com.sample.domain.validator.annotation;
+package com.sample.web.base.validator.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

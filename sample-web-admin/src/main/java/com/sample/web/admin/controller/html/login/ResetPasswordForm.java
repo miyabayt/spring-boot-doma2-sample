@@ -2,7 +2,7 @@ package com.sample.web.admin.controller.html.login;
 
 import java.io.Serializable;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.Getter;
 import lombok.Setter;

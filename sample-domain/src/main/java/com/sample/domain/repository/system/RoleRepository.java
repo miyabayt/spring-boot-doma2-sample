@@ -7,7 +7,6 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.*;
 
-import com.sample.domain.dto.system.RolePermissionCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +17,7 @@ import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Role;
 import com.sample.domain.dto.system.RoleCriteria;
 import com.sample.domain.dto.system.RolePermission;
+import com.sample.domain.dto.system.RolePermissionCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseRepository;
 

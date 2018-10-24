@@ -1,13 +1,13 @@
 package com.sample.web.admin.controller.html.users.users;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sample.domain.validator.annotation.ContentType;
+import com.sample.web.base.validator.annotation.ContentType;
 import com.sample.web.base.controller.html.BaseForm;
 
 import lombok.Getter;

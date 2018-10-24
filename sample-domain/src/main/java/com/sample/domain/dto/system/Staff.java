@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.Digits;
 
-import org.hibernate.validator.constraints.Email;
+import javax.validation.constraints.Email;
 import org.seasar.doma.*;
 
 import com.sample.domain.dto.common.DomaDtoImpl;

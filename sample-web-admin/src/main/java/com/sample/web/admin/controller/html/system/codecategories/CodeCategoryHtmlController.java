@@ -258,9 +258,8 @@ public class CodeCategoryHtmlController extends AbstractHtmlController {
         // 詰め替える
         List<CodeCategoryCsv> csvList = modelMapper.map(codes.getData(), toListType(CodeCategoryCsv.class));
 
-        // レスポンスを設定する
-        val view = new CsvView(CodeCategoryCsv.class, csvList);
-        view.setFilename(filename);
+        // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
+        val view = new CsvView(CodeCategoryCsv.class, csvList, filename);
 
         return new ModelAndView(view);
     }

@@ -1,30 +1,28 @@
 spring:
   profiles: local
   messages:
-    cache-seconds: -1
+    cache-duration: -1
   datasource:
     platform: mysql
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/sample?useSSL=false&characterEncoding=UTF-8
     username: root
     password: passw0rd
-  session:
-    jdbc:
-      # spring-session-jdbcに必要なテーブルを作成する
-      schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
   resources:
     # キャッシュの無効化
-    cache-period: 0
-flyway:
-  enable: true
-  baseline-on-migrate: true
+    cache:
+      period: 0
+  flyway:
+    enable: true
+    baseline-on-migrate: true
 doma:
   # SQLファイルをキャッシュしない
   sql-file-repository: no_cache
 logging:
   level:
     org.springframework: INFO
-    org.thymeleaf: DEBUG
+    org.thymeleaf: INFO
+    com.sample: DEBUG
 
 ####
 # アプリケーションの設定

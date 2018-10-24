@@ -4,7 +4,7 @@
 
 ```properties
 spring.messages.basename=messages,ValidationMessages,PropertyNames # カンマ区切りで複数ファイルを指定できる
-spring.messages.cache-seconds=-1 # -1でキャッシュが無効になる。本番環境ではある程度キャッシュする
+spring.messages.cache-duration=-1 # -1でキャッシュが無効になる。本番環境ではある程度キャッシュする
 spring.messages.encoding=UTF-8
 ```
 

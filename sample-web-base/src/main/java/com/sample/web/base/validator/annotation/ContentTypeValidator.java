@@ -1,4 +1,4 @@
-package com.sample.domain.validator.annotation;
+package com.sample.web.base.validator.annotation;
 
 import java.util.ArrayList;
 import java.util.List;

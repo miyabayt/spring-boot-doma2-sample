@@ -8,7 +8,7 @@ spring:
   messages:
     # メッセージ定義ファイルのパスを含めて設定する
     basename: messages,ValidationMessages,PropertyNames
-    cache-seconds: -1
+    cache-duration: -1
     encoding: UTF-8
   jackson:
     # JSONのキーをアンダースコア区切りの文字列にする
@@ -19,14 +19,14 @@ spring:
   session:
     jdbc:
       # spring-session-jdbcに必要なテーブルを作成する
-      initializer:
-        enabled: true
+      initialize-schema: always
       schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
       table-name: SPRING_SESSION
     store-type: JDBC
   resources:
     # 静的コンテンツをキャッシュする
-    cache-period: 604800
+    cache:
+      period: 604800
     chain:
       # GZipされているリソースがあれば使う
       gzipped: true
@@ -35,11 +35,14 @@ spring:
           # コンテンツのMD5ハッシュ値によるバージョニング
           enabled: true
           paths: /**
-  http:
+  servlet:
     multipart:
       # アップロードのサイズ制限を設定する
       max-file-size: 5MB
       max-request-size: 5MB
+  security:
+    filter:
+      dispatcher-types: forward,async,error,request
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     hikari:
@@ -76,11 +79,12 @@ server:
   port: 18081
   compression:
     enabled: true
-  session:
-    timeout: 7200
-    # URLにセッションIDを出力しないようにする
-    tracking-modes: cookie
-  contextPath: /admin
+  servlet:
+    session:
+      timeout: 7200
+      # URLにセッションIDを出力しないようにする
+      tracking-modes: cookie
+    contextPath: /admin
 logging:
   pattern:
     # MDCで設定した値を出力する

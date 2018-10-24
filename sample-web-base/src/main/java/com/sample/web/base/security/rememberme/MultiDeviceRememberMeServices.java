@@ -3,6 +3,7 @@ package com.sample.web.base.security.rememberme;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Base64;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.CookieTheftException;
 import org.springframework.security.web.authentication.rememberme.InvalidCookieException;
@@ -162,13 +162,13 @@ public class MultiDeviceRememberMeServices extends AbstractRememberMeServices {
     protected String generateSeriesData() {
         byte[] newSeries = new byte[DEFAULT_SERIES_LENGTH];
         random.nextBytes(newSeries);
-        return new String(Base64.encode(newSeries));
+        return new String(Base64.getEncoder().encode(newSeries));
     }
 
     protected String generateTokenData() {
         byte[] newToken = new byte[DEFAULT_TOKEN_LENGTH];
         random.nextBytes(newToken);
-        return new String(Base64.encode(newToken));
+        return new String(Base64.getEncoder().encode(newToken));
     }
 
     protected String getUserAgent(HttpServletRequest request) {
