@@ -1,8 +1,7 @@
 package com.sample.web.admin.controller.html.system.codes;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 import com.sample.web.base.controller.html.BaseForm;
 

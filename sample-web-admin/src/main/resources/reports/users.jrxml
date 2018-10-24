@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" pageWidth="595" pageHeight="842" whenNoDataType="NoPages" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bd5bf893-182e-4b8c-aab1-91325dfc759f">
 	<field name="FirstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
@@ -10,27 +10,43 @@
 	<field name="Email" class="java.lang.String">
 		<fieldDescription><![CDATA[email]]></fieldDescription>
 	</field>
+	<title>
+		<band height="50">
+			<staticText>
+				<reportElement x="225" y="10" width="100" height="30" uuid="b79de7e2-69ee-48d7-b033-9aaec117caa7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="IPAexゴシック" size="14"/>
+				</textElement>
+				<text><![CDATA[顧客一覧]]></text>
+			</staticText>
+		</band>
+	</title>
 	<detail>
-		<band height="45" splitType="Stretch">
+		<band height="24" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="15" uuid="2a07a2ad-165d-4ace-9fdb-92a99f33feef"/>
+				<reportElement x="0" y="3" width="60" height="15" uuid="2a07a2ad-165d-4ace-9fdb-92a99f33feef"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="IPAexゴシック"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FirstName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="0" width="100" height="15" uuid="3a341cb3-8acc-4e16-bab7-b938352ff705"/>
+				<reportElement x="60" y="3" width="60" height="15" uuid="3a341cb3-8acc-4e16-bab7-b938352ff705"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="IPAexゴシック"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{LastName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="0" width="100" height="15" uuid="966618ef-5992-4273-9040-43295486ff7b"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<reportElement x="120" y="3" width="160" height="15" uuid="966618ef-5992-4273-9040-43295486ff7b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="IPAexゴシック"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Email}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="0" y="18" width="550" height="1" uuid="e4d351f1-0741-4a6b-8805-5adb5edaf29f"/>
+			</line>
 		</band>
 	</detail>
 </jasperReport>

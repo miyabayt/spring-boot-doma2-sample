@@ -2,7 +2,7 @@ package com.sample.web.admin.controller.html.system.holidays;
 
 import java.time.LocalDate;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import com.sample.web.base.controller.html.BaseForm;
 

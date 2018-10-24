@@ -95,11 +95,11 @@ $ ./gradlew :sample-batch:bootRun -Pargs="--job=importStaffJob"
 ### 接続先情報
 #### テストユーザー test@sample.com / passw0rd
 
-| 接続先    | URL                                      |
-| :----- | :--------------------------------------- |
-| 管理側画面  | http://localhost:18081/admin             |
-| 管理側API | http://localhost:18081/admin/api/v1/users.json |
-| フロント側  | http://localhost:18080/                  |
+| 接続先| URL|
+| :-----| :---------------------------------------|
+| 管理側画面| http://localhost:18081/admin|
+| 管理側API| http://localhost:18081/admin/api/v1/users.json|
+| フロント側| http://localhost:18080/|
 
 #### データベース接続先
 
@@ -119,19 +119,18 @@ $ ./gradlew codegen -PsubSystem=system -Pfunc=client -PfuncStr=取引先 [-Ptarg
 
 ## 参考
 
-| プロジェクト                                   | 概要                               |
-| :--------------------------------------- | :------------------------------- |
-| [Lombok Project](https://projectlombok.org/) | 定型的なコードを書かなくてもよくする               |
-| [Springframework](https://projects.spring.io/spring-framework/) | Spring Framework                 |
-| [Spring Security](https://projects.spring.io/spring-security/) | セキュリティ対策、認証・認可のフレームワーク           |
-| [Spring Mobile](http://projects.spring.io/spring-mobile/) | モバイルデバイス検知、解像度検知を行うフレームワーク       |
-| [Doma2](https://doma.readthedocs.io/ja/stable/) | O/Rマッパー                          |
-| [spring-boot-doma2](https://github.com/domaframework/doma-spring-boot) | Doma2とSpring Bootを連携する           |
-| [Flyway](https://flywaydb.org/)          | DBマイグレーションツール                    |
-| [Thymeleaf](http://www.thymeleaf.org/)   | テンプレートエンジン                       |
-| [Thymeleaf Layout Dialect](https://ultraq.github.io/thymeleaf-layout-dialect/) | テンプレートをレイアウト化する                  |
-| [WebJars](https://www.webjars.org/)      | jQueryなどのクライアント側ライブラリをJARとして組み込む |
-| [ModelMapper](http://modelmapper.org/)   | Beanマッピングライブラリ                   |
-| [Ehcache](http://www.ehcache.org/)       | キャッシュライブラリ                       |
-| [Spock](http://spockframework.org/)      | テストフレームワーク                       |
-| [Mockito](http://site.mockito.org/)      | モッキングフレームワーク                     |
+| プロジェクト| 概要|
+| :---------------------------------------| :-------------------------------|
+| [Lombok Project](https://projectlombok.org/)| 定型的なコードを書かなくてもよくする|
+| [Springframework](https://projects.spring.io/spring-framework/)| Spring Framework|
+| [Spring Security](https://projects.spring.io/spring-security/)| セキュリティ対策、認証・認可のフレームワーク|
+| [Doma2](https://doma.readthedocs.io/ja/stable/)| O/Rマッパー|
+| [spring-boot-doma2](https://github.com/domaframework/doma-spring-boot)| Doma2とSpring Bootを連携する|
+| [Flyway](https://flywaydb.org/)| DBマイグレーションツール|
+| [Thymeleaf](http://www.thymeleaf.org/)| テンプレートエンジン|
+| [Thymeleaf Layout Dialect](https://ultraq.github.io/thymeleaf-layout-dialect/)| テンプレートをレイアウト化する|
+| [WebJars](https://www.webjars.org/)| jQueryなどのクライアント側ライブラリをJARとして組み込む|
+| [ModelMapper](http://modelmapper.org/)| Beanマッピングライブラリ|
+| [Ehcache](http://www.ehcache.org/)| キャッシュライブラリ|
+| [Spock](http://spockframework.org/)| テストフレームワーク|
+| [Mockito](http://site.mockito.org/)| モッキングフレームワーク |

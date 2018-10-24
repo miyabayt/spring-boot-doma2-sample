@@ -3,8 +3,6 @@ package com.sample.web.base.controller.html;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import org.springframework.mobile.device.Device;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,9 +11,6 @@ import lombok.Setter;
 public abstract class BaseForm implements Serializable {
 
     private static final long serialVersionUID = 893506941860422885L;
-
-    // デバイス情報
-    Device device;
 
     // 作成・更新者に使用する値
     String auditUser;

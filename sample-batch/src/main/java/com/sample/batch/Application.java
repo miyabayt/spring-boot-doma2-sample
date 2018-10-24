@@ -1,6 +1,7 @@
 package com.sample.batch;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.sample.ComponentScanBasePackage;
@@ -16,7 +17,7 @@ public class Application {
 
         try {
             val application = new SpringApplication(Application.class);
-            application.setWebEnvironment(false);
+            application.setWebApplicationType(WebApplicationType.NONE);
 
             val context = application.run(args);
             val exitCode = SpringApplication.exit(context);

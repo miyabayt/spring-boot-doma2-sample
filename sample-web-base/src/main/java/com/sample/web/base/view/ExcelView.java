@@ -2,6 +2,7 @@ package com.sample.web.base.view;
 
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,8 @@ public class ExcelView extends AbstractXlsxView {
 
     protected String filename;
 
+    protected Collection<?> data;
+
     protected Callback callback;
 
     /**
@@ -32,13 +35,16 @@ public class ExcelView extends AbstractXlsxView {
 
     /**
      * コンストラクタ
-     * 
+     *
+     * @param callback
+     * @param data
      * @param filename
      */
-    public ExcelView(String filename, Callback callback) {
+    public ExcelView(Callback callback, Collection<?> data, String filename) {
         this();
-        this.filename = filename;
         this.callback = callback;
+        this.data = data;
+        this.filename = filename;
     }
 
     @Override
@@ -51,7 +57,7 @@ public class ExcelView extends AbstractXlsxView {
         response.setHeader(CONTENT_DISPOSITION, contentDisposition);
 
         // Excelブックを構築する
-        callback.buildExcelWorkbook(model, workbook);
+        callback.buildExcelWorkbook(model, this.data, workbook);
     }
 
     public interface Callback {
@@ -60,8 +66,9 @@ public class ExcelView extends AbstractXlsxView {
          * Excelブックを構築します。
          *
          * @param model
+         * @param data
          * @param workbook
          */
-        void buildExcelWorkbook(Map<String, Object> model, Workbook workbook);
+        void buildExcelWorkbook(Map<String, Object> model, Collection<?> data, Workbook workbook);
     }
 }

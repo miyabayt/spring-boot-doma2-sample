@@ -9,25 +9,23 @@ import java.util.regex.PatternSyntaxException;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.hibernate.validator.internal.util.logging.Log;
-import org.hibernate.validator.internal.util.logging.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 入力チェック（電話番号）
  */
+@Slf4j
 public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
-
-    private static final Log log = LoggerFactory.make();
 
     private Pattern pattern;
 
     @Override
     public void initialize(PhoneNumber phoneNumber) {
-
         try {
             pattern = Pattern.compile(phoneNumber.regexp());
         } catch (PatternSyntaxException e) {
-            throw log.getInvalidRegularExpressionException(e);
+            log.error("invalid regular expression.", e);
+            throw e;
         }
     }
 
