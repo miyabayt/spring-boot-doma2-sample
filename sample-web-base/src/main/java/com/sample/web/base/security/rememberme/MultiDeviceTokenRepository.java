@@ -77,9 +77,9 @@ public class MultiDeviceTokenRepository extends JdbcDaoSupport {
             token = getJdbcTemplate().queryForObject(tokensBySeriesSql, (rs, rowNum) -> {
                 val t = new MultiDeviceRememberMeToken();
                 t.setUsername(rs.getString(1));
-                t.setSeries(rs.getString(2));
-                t.setRemoteAddress(rs.getString(3));
-                t.setUserAgent(rs.getString(4));
+                t.setRemoteAddress(rs.getString(2));
+                t.setUserAgent(rs.getString(3));
+                t.setSeries(rs.getString(4));
                 t.setTokenValue(rs.getString(5));
                 t.setLastUsed(rs.getTimestamp(6).toLocalDateTime());
                 return t;
