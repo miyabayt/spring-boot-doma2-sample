@@ -28,6 +28,11 @@ resource "aws_alb_target_group" "springboot" {
   vpc_id   = "${data.aws_vpc.selected.id}"
   target_type = "ip"
 
+  health_check {
+    path = "/admin/login"
+    matcher = "200-399"
+  }
+
   tags {
       Name = "${var.app_name}-tg"
       Group = "${var.app_name}"

@@ -12,6 +12,7 @@
       }
     ],
     "environment" : [
+      { "name" : "LANG", "value" : "ja_JP.UTF-8" },
       { "name" : "SPRING_PROFILES_ACTIVE", "value" : "production" },
       { "name" : "MYSQL_DB_HOST", "value" : "springboot-fargate-sample-aurora-cluster.cluster-ccqbozkgxyaj.us-east-1.rds.amazonaws.com" }
     ],
