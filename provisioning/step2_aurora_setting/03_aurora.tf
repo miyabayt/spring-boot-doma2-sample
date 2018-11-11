@@ -44,6 +44,6 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
   cluster_identifier = "${aws_rds_cluster.default.id}"
   db_subnet_group_name = "${aws_db_subnet_group.aurora_subnet_group.name}"
   instance_class     = "${var.db_instance_type}"
-  performance_insights_enabled = true
+  performance_insights_enabled = false
 }
 
