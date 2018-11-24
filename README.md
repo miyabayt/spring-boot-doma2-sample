@@ -98,7 +98,7 @@ $ ./gradlew :sample-batch:bootRun -Pargs="--job=importStaffJob"
 | 接続先| URL|
 | :-----| :---------------------------------------|
 | 管理側画面| http://localhost:18081/admin|
-| 管理側API| http://localhost:18081/admin/api/v1/users.json|
+| 管理側API| http://localhost:18081/admin/api/v1/users|
 | フロント側| http://localhost:18080/|
 
 #### データベース接続先
