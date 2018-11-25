@@ -1,6 +1,5 @@
 package com.sample.web.admin.controller.html.home
 
-
 import org.hamcrest.Matchers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,6 +16,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup
 
+/**
+ * ユーザAPIテストクラス
+ */
 @SpringBootTest
 class UserRestControllerTest extends Specification {
 
@@ -27,7 +29,12 @@ class UserRestControllerTest extends Specification {
     MockMvc mvc
 
     /**
-     * テストクラス内で一度きりの初期化
+     * APIルートパス
+     */
+    def String apiRoot = "/api/v1/users"
+
+    /**
+     * テストクラス全体の初期化
      */
     def setupSpec() {
         // no-op
@@ -43,8 +50,8 @@ class UserRestControllerTest extends Specification {
     /**
      * 応答情報コンソール出力
      */
-    def systemOutResponse(ResultActions resultActs) {
-        def content = resultActs.andReturn().getResponse().getContentAsString()
+    def systemOutResponse(ResultActions resultActions) {
+        def content = resultActions.andReturn().getResponse().getContentAsString()
         System.out.println("■応答データ:")
         System.out.println(content)
     }
@@ -55,7 +62,7 @@ class UserRestControllerTest extends Specification {
     @WithMockUser()
     def "API_TEST_CASE: ユーザ取得（複数）"() {
         setup:
-        def resultActions = mvc.perform(get("/api/v1/users").contentType(MediaType.APPLICATION_JSON))
+        def resultActions = mvc.perform(get(apiRoot).contentType(MediaType.APPLICATION_JSON))
         systemOutResponse(resultActions)
         /* Expected Response Data Sample
             {
@@ -86,7 +93,6 @@ class UserRestControllerTest extends Specification {
                 .andExpect(jsonPath('$.total_pages').value(1))
         // 応答データ（個別）
                 .andExpect(jsonPath('$.data').isArray())
-                .andExpect(jsonPath('$.data', Matchers.hasSize(1)))
         // 応答データ（詳細）
                 .andExpect(jsonPath('$.data[0].id').value(1))
                 .andExpect(jsonPath('$.data[0].email').value("test@sample.com"))
@@ -99,7 +105,7 @@ class UserRestControllerTest extends Specification {
     def "API_TEST_CASE: ユーザ取得（単数）"() {
         setup:
         def userId = 1
-        def resultActions = mvc.perform(get("/api/v1/users/" + userId).contentType(MediaType.APPLICATION_JSON))
+        def resultActions = mvc.perform(get(apiRoot + "/" + userId).contentType(MediaType.APPLICATION_JSON))
         systemOutResponse(resultActions)
         /* Expected Response Data Sample
             {
@@ -130,5 +136,19 @@ class UserRestControllerTest extends Specification {
         // 応答データ（詳細）
                 .andExpect(jsonPath('$.data[0].id').value(1))
                 .andExpect(jsonPath('$.data[0].email').value("test@sample.com"))
+    }
+
+    /**
+     * テストケースごとの後始末
+     */
+    def cleanup() {
+        // no-op
+    }
+
+    /**
+     * テストクラス全体の後始末
+     */
+    def cleanupSpec() {
+        // no-op
     }
 }
