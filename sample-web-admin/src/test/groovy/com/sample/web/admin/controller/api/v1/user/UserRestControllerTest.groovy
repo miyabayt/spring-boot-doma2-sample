@@ -6,7 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.ResultActions
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
 import spock.lang.Shared
 import spock.lang.Specification
@@ -48,22 +49,12 @@ class UserRestControllerTest extends Specification {
     }
 
     /**
-     * 応答情報コンソール出力
-     */
-    def systemOutResponse(ResultActions resultActions) {
-        def content = resultActions.andReturn().getResponse().getContentAsString()
-        System.out.println("■応答データ:")
-        System.out.println(content)
-    }
-
-    /**
      * Case: ユーザ取得（複数）
      */
     @WithMockUser()
     def "API_TEST_CASE: ユーザ取得（複数）"() {
-        setup:
+        when:
         def resultActions = mvc.perform(get(apiRoot).contentType(MediaType.APPLICATION_JSON))
-        systemOutResponse(resultActions)
         /* Expected Response Data Sample
             {
               "data": [
@@ -82,7 +73,7 @@ class UserRestControllerTest extends Specification {
               "total_pages": 1
             }
          */
-        expect:
+        then:
         resultActions
         // 応答共通チェック
                 .andExpect(status().isOk())
@@ -96,6 +87,8 @@ class UserRestControllerTest extends Specification {
         // 応答データ（詳細）
                 .andExpect(jsonPath('$.data[0].id').value(1))
                 .andExpect(jsonPath('$.data[0].email').value("test@sample.com"))
+        // コンソール出力
+                .andDo(MockMvcResultHandlers.print())
     }
 
     /**
@@ -105,8 +98,9 @@ class UserRestControllerTest extends Specification {
     def "API_TEST_CASE: ユーザ取得（単数）"() {
         setup:
         def userId = 1
+
+        when:
         def resultActions = mvc.perform(get(apiRoot + "/" + userId).contentType(MediaType.APPLICATION_JSON))
-        systemOutResponse(resultActions)
         /* Expected Response Data Sample
             {
               "data": [
@@ -123,7 +117,7 @@ class UserRestControllerTest extends Specification {
               "message": "正常終了"
             }
          */
-        expect:
+        then:
         resultActions
         // 応答共通チェック
                 .andExpect(status().isOk())
@@ -136,6 +130,8 @@ class UserRestControllerTest extends Specification {
         // 応答データ（詳細）
                 .andExpect(jsonPath('$.data[0].id').value(1))
                 .andExpect(jsonPath('$.data[0].email').value("test@sample.com"))
+        // コンソール出力
+                .andDo(MockMvcResultHandlers.print())
     }
 
     /**
