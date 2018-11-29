@@ -117,6 +117,35 @@ $ cd /path/to/spring-boot-doma2-sample
 $ ./gradlew codegen -PsubSystem=system -Pfunc=client -PfuncStr=取引先 [-Ptarget=dao|dto|repository|service|controller|html]
 ```
 
+## その他
+### IntelliJから自動テストが実行できない
+自動テスト実行時に以下のように表示されて実行できない場合があります
+ ```
+ Command Line is too Long. Shorten command line for your_test or also for JUnit default configuration. 
+```
+
+その場合は以下を試みましょう[（参考）](https://stackoverflow.com/questions/47926382/how-to-configure-shorten-command-line-method-for-whole-project-in-intellij)
+
+以下のファイルをエディタで開く
+```
+/path/to/spring-boot-doma2-sample/.idea/workspace.xml 
+```
+
+以下を
+```xml
+<property name="dynamic.classpath" value="true" />
+```
+
+以下のタグの中に追加する
+
+```xml
+  <component name="PropertiesComponent">
+.
+.
+.
+  </component>
+```
+
 ## 参考
 
 | プロジェクト| 概要|
