@@ -183,6 +183,7 @@ class UserRestControllerTest extends Specification {
 
     /**
      * Case: ユーザ編集（変更）
+     * TODO: API修正（UserRestController.update()）が必要かも...
      */
     @WithMockUser()
     def "API_TEST: ユーザ編集（変更）"() {
