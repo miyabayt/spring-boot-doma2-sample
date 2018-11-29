@@ -27,4 +27,5 @@ before_install:
   - docker-compose -f docker/docker-compose.yml up -d
 
 script:
-  - ./gradlew clean test --info
+  - ./gradlew clean test --info -x :it/sample-web-admin:test -x :it/sample-web-front:test
+
