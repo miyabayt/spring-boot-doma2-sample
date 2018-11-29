@@ -1,11 +1,15 @@
 package com.sample.web.admin.controller.html.home
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.sample.domain.dto.user.User
 import org.hamcrest.Matchers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
@@ -21,6 +25,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
  * ユーザAPIテストクラス
  */
 @SpringBootTest
+@Transactional // テスト後にロールバックする
 class UserRestControllerTest extends Specification {
 
     @Autowired
@@ -28,6 +33,9 @@ class UserRestControllerTest extends Specification {
 
     @Shared
     MockMvc mvc
+
+    @Shared
+    ObjectMapper omp
 
     /**
      * APIルートパス
@@ -38,7 +46,8 @@ class UserRestControllerTest extends Specification {
      * テストクラス全体の初期化
      */
     def setupSpec() {
-        // no-op
+        omp = new ObjectMapper()
+        omp.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
     }
 
     /**
@@ -52,7 +61,7 @@ class UserRestControllerTest extends Specification {
      * Case: ユーザ取得（複数）
      */
     @WithMockUser()
-    def "API_TEST_CASE: ユーザ取得（複数）"() {
+    def "API_TEST: ユーザ取得（複数）"() {
         when:
         def resultActions = mvc.perform(get(apiRoot).contentType(MediaType.APPLICATION_JSON))
         /* Expected Response Data Sample
@@ -95,7 +104,7 @@ class UserRestControllerTest extends Specification {
      * Case: ユーザ取得（単数）
      */
     @WithMockUser()
-    def "API_TEST_CASE: ユーザ取得（単数）"() {
+    def "API_TEST: ユーザ取得（単数）"() {
         setup:
         def userId = 1
 
@@ -130,6 +139,114 @@ class UserRestControllerTest extends Specification {
         // 応答データ（詳細）
                 .andExpect(jsonPath('$.data[0].id').value(1))
                 .andExpect(jsonPath('$.data[0].email').value("test@sample.com"))
+        // コンソール出力
+                .andDo(MockMvcResultHandlers.print())
+    }
+
+    /**
+     * Case: ユーザ編集（追加）
+     */
+    @WithMockUser()
+    def "API_TEST: ユーザ編集（追加）"() {
+        setup:
+        def user = new User()
+        user.firstName = "firstName"
+        user.lastName = "lastName"
+        user.email = "add@api.users.test.com"
+        user.tel = "123456789"
+        user.zip = "zip"
+        user.address = "address"
+
+        when:
+        // JSON型式に変換
+        def json = omp.writerWithDefaultPrettyPrinter().writeValueAsString(user)
+        println(json)
+        // リクエスト送信（追加）
+        def resultActions = mvc.perform(MockMvcRequestBuilders.
+                post(apiRoot).contentType(MediaType.APPLICATION_JSON).content(json))
+
+        then:
+        resultActions
+        // 応答共通チェック
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        // 応答データ（共通）
+                .andExpect(jsonPath('$.message').value("正常終了"))
+        // 応答データ（個別）
+                .andExpect(jsonPath('$.data').isArray())
+                .andExpect(jsonPath('$.data', Matchers.hasSize(1)))
+        // 応答データ（詳細）
+                .andExpect(jsonPath('$.data[0].email').value("add@api.users.test.com"))
+        // コンソール出力
+                .andDo(MockMvcResultHandlers.print())
+    }
+
+    /**
+     * Case: ユーザ編集（変更）
+     */
+    @WithMockUser()
+    def "API_TEST: ユーザ編集（変更）"() {
+        setup:
+        def userId = 1
+        def user = omp.createObjectNode();
+        user.put("id", userId)
+        user.put("first_name", "firstName2")
+        user.put("last_name", "lastName2")
+        user.put("email", "upd@api.users.test.com")
+        user.put("tel", "123456789")
+        user.put("zip", "zip")
+        user.put("address", "address")
+        user.put("password", "password")
+        user.put("created_by", '2018-11-29 12:48:44.1884468')
+        user.put("created_at", "user")
+        user.put("version", 1)
+
+        when:
+        // JSON型式に変換
+        def json = omp.writerWithDefaultPrettyPrinter().writeValueAsString(user)
+        println(json)
+        // リクエスト送信（追加）
+        def resultActions = mvc.perform(MockMvcRequestBuilders.
+                put(apiRoot + "/" + userId).contentType(MediaType.APPLICATION_JSON).content(json))
+
+        then:
+        resultActions
+        // 応答共通チェック
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        // 応答データ（共通）
+                .andExpect(jsonPath('$.message').value("正常終了"))
+        // 応答データ（個別）
+                .andExpect(jsonPath('$.data').isArray())
+                .andExpect(jsonPath('$.data', Matchers.hasSize(1)))
+        // 応答データ（詳細）
+                .andExpect(jsonPath('$.data[0].firstName').value("firstName2"))
+                .andExpect(jsonPath('$.data[0].lastName').value("lastName2"))
+                .andExpect(jsonPath('$.data[0].email').value("upd@api.users.test.com"))
+        // コンソール出力
+                .andDo(MockMvcResultHandlers.print())
+    }
+
+    /**
+     * Case: ユーザ編集（削除）
+     */
+    @WithMockUser()
+    def "API_TEST: ユーザ編集（削除）"() {
+        setup:
+        def userId = 1
+
+        when:
+        // JSON型式に変換
+        def resultActions = mvc.perform(MockMvcRequestBuilders.
+                delete(apiRoot + "/" + userId).contentType(MediaType.APPLICATION_JSON))
+
+        then:
+        resultActions
+        // 応答共通チェック
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        // 応答データ（共通）
+                .andExpect(jsonPath('$.message').value("正常終了"))
         // コンソール出力
                 .andDo(MockMvcResultHandlers.print())
     }
