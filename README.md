@@ -111,6 +111,21 @@ mysql -h 127.0.0.1 -P 3306 -uroot -ppassw0rd sample
 mysql -h 192.168.99.100 -P 3306 -uroot -ppassw0rd sample
 ```
 
+#### ブラウザを用いた自動テスト（結合テスト）
+実行方法
+
+| テスト対象| 実行方法|
+| :-----| :---------------------------------------|
+| 管理側画面| gradlew :it/sample-web-admin:test
+| フロント側| gradlew :it/sample-web-front:test
+
+※ IntelliJから起動する場合は他のテストと同様にテストクラスを選択して実行してください
+
+CIなどで結合テストを行わない場合は以下のようにして対象から外します
+```bash
+$ ./gradlew clean test --info -x :it/sample-web-admin:test -x :it/sample-web-front:test
+```
+
 ### コード自動生成（おまけ）
 ```bash
 $ cd /path/to/spring-boot-doma2-sample
