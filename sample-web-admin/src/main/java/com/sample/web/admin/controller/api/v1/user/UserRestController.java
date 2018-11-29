@@ -5,6 +5,9 @@ import static com.sample.web.base.WebConst.MESSAGE_SUCCESS;
 import java.io.IOException;
 import java.util.Arrays;
 
+import com.sample.domain.DefaultModelMapperFactory;
+import org.modelmapper.Conditions;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.Errors;
@@ -112,7 +115,16 @@ public class UserRestController extends AbstractRestController {
 
         // 1件更新する
         inputUser.setId(userId);
-        User user = userService.update(inputUser);
+        User user;
+        {
+            //TODO 本来ならサービスで実装すべき
+            //created_byなどがAPIからは取得できないので、DBから取得して、パラメータで更新内容を上書きしている
+            user = userService.findById(inputUser.getId());
+            ModelMapper modelMapper = DefaultModelMapperFactory.create();
+            modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+            modelMapper.map(inputUser, user);
+        }
+        user = userService.update(user);
 
         Resource resource = resourceFactory.create();
         resource.setData(Arrays.asList(user));
