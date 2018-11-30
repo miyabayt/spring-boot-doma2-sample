@@ -47,7 +47,6 @@ public abstract class DomaDtoImpl implements DomaDto, Serializable {
     // 楽観的排他制御で使用する改定番号
     @Version
     @Column(name = "version")
-    @JsonIgnore
     Integer version;
 
     // 作成・更新者に使用する値
