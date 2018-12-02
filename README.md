@@ -111,10 +111,54 @@ mysql -h 127.0.0.1 -P 3306 -uroot -ppassw0rd sample
 mysql -h 192.168.99.100 -P 3306 -uroot -ppassw0rd sample
 ```
 
+#### ブラウザを用いた自動テスト（結合テスト）
+実行方法
+
+| テスト対象| 実行方法|
+| :-----| :---------------------------------------|
+| 管理側画面| gradlew :it/sample-web-admin:test
+| フロント側| gradlew :it/sample-web-front:test
+
+※ IntelliJから起動する場合は他のテストと同様にテストクラスを選択して実行してください
+
+CIなどで結合テストを行わない場合は以下のようにして対象から外します
+```bash
+$ ./gradlew clean test --info -x :it/sample-web-admin:test -x :it/sample-web-front:test
+```
+
 ### コード自動生成（おまけ）
 ```bash
 $ cd /path/to/spring-boot-doma2-sample
 $ ./gradlew codegen -PsubSystem=system -Pfunc=client -PfuncStr=取引先 [-Ptarget=dao|dto|repository|service|controller|html]
+```
+
+## その他
+### IntelliJから自動テストが実行できない
+自動テスト実行時に以下のように表示されて実行できない場合があります
+ ```
+ Command Line is too Long. Shorten command line for your_test or also for JUnit default configuration. 
+```
+
+その場合は以下を試みましょう[（参考）](https://stackoverflow.com/questions/47926382/how-to-configure-shorten-command-line-method-for-whole-project-in-intellij)
+
+以下のファイルをエディタで開く
+```
+/path/to/spring-boot-doma2-sample/.idea/workspace.xml 
+```
+
+以下を
+```xml
+<property name="dynamic.classpath" value="true" />
+```
+
+以下のタグの中に追加する
+
+```xml
+  <component name="PropertiesComponent">
+.
+.
+.
+  </component>
 ```
 
 ## 参考
