@@ -183,24 +183,18 @@ class UserRestControllerTest extends Specification {
 
     /**
      * Case: ユーザ編集（変更）
-     * TODO: API修正（UserRestController.update()）が必要かも...
      */
     @WithMockUser()
     def "API_TEST: ユーザ編集（変更）"() {
         setup:
         def userId = 1
-        def user = omp.createObjectNode();
-        user.put("id", userId)
-        user.put("first_name", "firstName2")
-        user.put("last_name", "lastName2")
-        user.put("email", "upd@api.users.test.com")
-        user.put("tel", "123456789")
-        user.put("zip", "zip")
-        user.put("address", "address")
-        user.put("password", "password")
-        user.put("created_by", '2018-11-29 12:48:44.1884468')
-        user.put("created_at", "user")
-        user.put("version", 1)
+        def user = new User()
+        user.id = userId
+        user.firstName = "firstName2"
+        user.lastName = "lastName2"
+        user.email = "upd@api.users.test.com"
+        user.zip = "zip2"
+        user.address = "address2"
 
         when:
         // JSON型式に変換
@@ -221,9 +215,11 @@ class UserRestControllerTest extends Specification {
                 .andExpect(jsonPath('$.data').isArray())
                 .andExpect(jsonPath('$.data', Matchers.hasSize(1)))
         // 応答データ（詳細）
-                .andExpect(jsonPath('$.data[0].firstName').value("firstName2"))
-                .andExpect(jsonPath('$.data[0].lastName').value("lastName2"))
+                .andExpect(jsonPath('$.data[0].first_name').value("firstName2"))
+                .andExpect(jsonPath('$.data[0].last_name').value("lastName2"))
                 .andExpect(jsonPath('$.data[0].email').value("upd@api.users.test.com"))
+                .andExpect(jsonPath('$.data[0].zip').value("zip2"))
+                .andExpect(jsonPath('$.data[0].address').value("address2"))
         // コンソール出力
                 .andDo(MockMvcResultHandlers.print())
     }
