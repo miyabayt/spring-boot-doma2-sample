@@ -13,8 +13,10 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.http.HttpStatus;
 
 import com.sample.common.util.MessageUtils;
 import com.sample.domain.exception.DoubleSubmitErrorException;
@@ -42,6 +44,7 @@ public class HtmlExceptionHandler {
      * @return
      */
     @ExceptionHandler({ FileNotFoundException.class, NoDataFoundException.class })
+    @ResponseStatus(value=HttpStatus.NOT_FOUND)
     public String handleNotFoundException(Exception e, HttpServletRequest request, HttpServletResponse response) {
         if (log.isDebugEnabled()) {
             log.debug("not found.", e);
@@ -62,6 +65,7 @@ public class HtmlExceptionHandler {
      * @return
      */
     @ExceptionHandler({ AccessDeniedException.class })
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     public String handleAccessDeniedException(Exception e, HttpServletRequest request, HttpServletResponse response) {
         if (log.isDebugEnabled()) {
             log.debug("forbidden.", e);
@@ -128,6 +132,7 @@ public class HtmlExceptionHandler {
      * @return
      */
     @ExceptionHandler({ Exception.class })
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(Exception e, HttpServletRequest request, HttpServletResponse response) {
         // TODO
         // ハンドルする例外がある場合は、条件分岐する
