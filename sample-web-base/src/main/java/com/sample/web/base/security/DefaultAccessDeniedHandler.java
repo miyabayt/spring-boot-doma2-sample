@@ -14,6 +14,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.csrf.InvalidCsrfTokenException;
 import org.springframework.security.web.csrf.MissingCsrfTokenException;
 
 public class DefaultAccessDeniedHandler implements AccessDeniedHandler {
@@ -31,7 +32,8 @@ public class DefaultAccessDeniedHandler implements AccessDeniedHandler {
             return;
         }
 
-        if (accessDeniedException instanceof MissingCsrfTokenException) {
+        if (accessDeniedException instanceof MissingCsrfTokenException
+                || accessDeniedException instanceof InvalidCsrfTokenException) {
             authenticationEntryPoint.commence(request, response, null);
         } else {
             redirectStrategy.sendRedirect(request, response, FORBIDDEN_URL);

@@ -12,7 +12,7 @@
                     管理側ログイン
                 </div>
                 <div class="login-box-body">
-                    <form class="form-horizontal" th:object="${loginForm}" th:action="@{'/login'}" method="post">
+                    <form id="loginForm" class="form-horizontal" th:object="${loginForm}" th:action="@{'/login'}" method="post">
                         <div class="box-body">
                             <div class="form-group" th:with="invalid=${#fields.hasErrors('loginId')}"
                                  th:class="${'form-group' + (invalid ? ' has-error' : '')}">
@@ -45,6 +45,20 @@
                         checkboxClass: "icheckbox_square-purple",
                         radioClass: "iradio_square-purple",
                         increaseArea: "20%"
+                    });
+                });
+            </script>
+        </div>
+        <div layout:fragment="scripts">
+            <script>
+                <!--/* 二度押しするとforbiddenにリダイレクトされるので防止 */-->
+                var submitted;
+                $(document).ready(function(){
+                    $('#loginForm').on('submit', function(){
+                        if(submitted){
+                            return false;
+                        }
+                        submitted = true;
                     });
                 });
             </script>
