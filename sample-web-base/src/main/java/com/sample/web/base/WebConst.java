@@ -28,11 +28,11 @@ public interface WebConst {
     String MESSAGE_SUCCESS = "Success";
 
     /** ---- View ---- **/
-    String ERROR_VIEW = "error";
+    String ERROR_VIEW = "/error/500.html";
 
-    String NOTFOUND_VIEW = "notfound";
+    String NOTFOUND_VIEW = "/error/404.html";
 
-    String FORBIDDEN_VIEW = "forbidden";
+    String FORBIDDEN_VIEW = "/error/403.html";
 
     /** ---- DateFormat ---- **/
     String LOCALDATE_FORMAT = "yyyy/MM/dd";
@@ -52,8 +52,6 @@ public interface WebConst {
     String HOME_URL = "/";
 
     String ERROR_URL = "/error";
-
-    String NOTFOUND_URL = "/notfound";
 
     String FORBIDDEN_URL = "/forbidden";
 

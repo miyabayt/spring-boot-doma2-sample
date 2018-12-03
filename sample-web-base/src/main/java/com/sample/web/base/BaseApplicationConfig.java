@@ -76,14 +76,11 @@ public abstract class BaseApplicationConfig
 
     @Override
     public void customize(ConfigurableServletWebServerFactory container) {
-        container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, NOTFOUND_URL));
-        container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, ERROR_URL));
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         // コントローラーを追加する
-        registry.addViewController(NOTFOUND_URL).setViewName(NOTFOUND_VIEW);
         registry.addViewController(FORBIDDEN_URL).setViewName(FORBIDDEN_VIEW);
         registry.addViewController(ERROR_URL).setViewName(ERROR_VIEW);
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);

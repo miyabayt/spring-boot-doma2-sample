@@ -50,7 +50,7 @@ public class HtmlExceptionHandler {
         val stackTrace = getStackTraceAsString(e);
         outputFlashMap(request, response, VIEW_ATTR_STACKTRACE, stackTrace);
 
-        return "redirect:" + NOTFOUND_URL;
+        return NOTFOUND_VIEW;
     }
 
     /**
@@ -70,7 +70,7 @@ public class HtmlExceptionHandler {
         val stackTrace = getStackTraceAsString(e);
         outputFlashMap(request, response, VIEW_ATTR_STACKTRACE, stackTrace);
 
-        return "redirect:" + FORBIDDEN_URL;
+        return FORBIDDEN_VIEW;
     }
 
     /**
@@ -136,7 +136,7 @@ public class HtmlExceptionHandler {
         val stackTrace = getStackTraceAsString(e);
         outputFlashMap(request, response, VIEW_ATTR_STACKTRACE, stackTrace);
 
-        return "redirect:" + ERROR_URL;
+        return ERROR_VIEW;
     }
 
     /**
