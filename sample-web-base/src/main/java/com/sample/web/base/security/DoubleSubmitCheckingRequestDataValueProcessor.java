@@ -16,8 +16,11 @@ public class DoubleSubmitCheckingRequestDataValueProcessor implements RequestDat
 
     private static final CsrfRequestDataValueProcessor PROCESSOR = new CsrfRequestDataValueProcessor();
 
+    private static final ThreadLocal<String> ACTION_HOLDER = new ThreadLocal<>();
+
     @Override
     public String processAction(HttpServletRequest request, String action, String httpMethod) {
+        ACTION_HOLDER.set(action);
         return PROCESSOR.processAction(request, action, httpMethod);
     }
 
@@ -29,14 +32,19 @@ public class DoubleSubmitCheckingRequestDataValueProcessor implements RequestDat
     @Override
     public Map<String, String> getExtraHiddenFields(HttpServletRequest request) {
         val map = PROCESSOR.getExtraHiddenFields(request);
-        String token = DoubleSubmitCheckToken.getExpectedToken(request);
-        if (token == null) {
-            token = DoubleSubmitCheckToken.renewToken(request);
-        }
 
         if (!map.isEmpty()) {
+            val action = ACTION_HOLDER.get();
+            String token = DoubleSubmitCheckToken.getExpectedToken(request, action);
+
+            if (token == null) {
+                token = DoubleSubmitCheckToken.renewToken(request, action);
+            }
+
             map.put(DoubleSubmitCheckToken.DOUBLE_SUBMIT_CHECK_PARAMETER, token);
+            ACTION_HOLDER.remove();
         }
+
         return map;
     }
 

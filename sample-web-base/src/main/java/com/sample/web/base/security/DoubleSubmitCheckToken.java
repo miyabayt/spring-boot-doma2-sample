@@ -29,6 +29,31 @@ public class DoubleSubmitCheckToken {
     }
 
     /**
+     * 指定のキーをもとにセッションに保存されているトークンを返します。
+     *
+     * @param request
+     * @param key
+     * @return expected token
+     */
+    @SuppressWarnings("unchecked")
+    public static String getExpectedToken(HttpServletRequest request, String key) {
+        String token = null;
+
+        if (key == null) {
+            key = request.getRequestURI();
+        }
+
+        Object mutex = SessionUtils.getMutex(request);
+        if (mutex != null) {
+            synchronized (mutex) {
+                token = getToken(request, key);
+            }
+        }
+
+        return token;
+    }
+
+    /**
      * セッションに保存されているトークンを返します。
      *
      * @param request
@@ -36,13 +61,27 @@ public class DoubleSubmitCheckToken {
      */
     @SuppressWarnings("unchecked")
     public static String getExpectedToken(HttpServletRequest request) {
-        String token = null;
-        val key = request.getRequestURI();
+        return getExpectedToken(request, null);
+    }
+
+    /**
+     * 指定のキーをもとにセッションにトークンを設定します。
+     *
+     * @param request
+     * @param key
+     * @return token
+     */
+    @SuppressWarnings("unchecked")
+    public static String renewToken(HttpServletRequest request, String key) {
+        if (key == null) {
+            key = request.getRequestURI();
+        }
+        val token = generateToken();
 
         Object mutex = SessionUtils.getMutex(request);
         if (mutex != null) {
             synchronized (mutex) {
-                token = getToken(request, key);
+                setToken(request, key, token);
             }
         }
 
@@ -57,17 +96,7 @@ public class DoubleSubmitCheckToken {
      */
     @SuppressWarnings("unchecked")
     public static String renewToken(HttpServletRequest request) {
-        val key = request.getRequestURI();
-        val token = generateToken();
-
-        Object mutex = SessionUtils.getMutex(request);
-        if (mutex != null) {
-            synchronized (mutex) {
-                setToken(request, key, token);
-            }
-        }
-
-        return token;
+        return renewToken(request, null);
     }
 
     /**
