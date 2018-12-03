@@ -14,6 +14,8 @@ import lombok.Setter;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.sample.web.base.WebConst.ERROR_URL;
+
 /**
  * リクエストパラメーターの文字数が想定外に多い場合はエラー画面に遷移させる
  */
@@ -22,8 +24,6 @@ public class CheckOverflowFilter extends OncePerRequestFilter {
 
     @Setter
     private int maxLength = 20000;
-
-    private static final String ERROR_URL = "/error";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
