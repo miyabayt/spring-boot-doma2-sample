@@ -13,6 +13,7 @@ public class DoubleSubmitCheckTokenHolder {
     private String key;
     private String expected;
     private String actual;
+    private boolean existsExpectedTokenKey;
     private boolean excludeCheck;
 
     /**
@@ -21,13 +22,15 @@ public class DoubleSubmitCheckTokenHolder {
      * @param key
      * @param expected
      * @param actual
+     * @param existsExpectedTokenKey
      * @aparam excludeCheck
      */
-    public static void set(String key, String expected, String actual, boolean excludeCheck) {
+    public static void set(String key, String expected, String actual, boolean existsExpectedTokenKey, boolean excludeCheck) {
         val me = new DoubleSubmitCheckTokenHolder();
         me.key = key;
         me.expected = expected;
         me.actual = actual;
+        me.existsExpectedTokenKey = existsExpectedTokenKey;
         me.excludeCheck = excludeCheck;
         HOLDER.set(me);
     }
@@ -57,6 +60,15 @@ public class DoubleSubmitCheckTokenHolder {
      */
     public static String getActualToken() {
         return me().actual;
+    }
+
+    /**
+     * セッション中にトークンキーがあるかを返します
+     *
+     * @return
+     */
+    public static boolean isExistsExpectedTokenKey(){
+        return me().existsExpectedTokenKey;
     }
 
     /**

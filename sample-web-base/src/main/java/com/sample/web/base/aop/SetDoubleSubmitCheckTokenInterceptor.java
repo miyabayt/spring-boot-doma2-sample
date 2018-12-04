@@ -31,8 +31,9 @@ public class SetDoubleSubmitCheckTokenInterceptor extends BaseHandlerInterceptor
         val key = takeOutTokenKey(handler).orElse(null);
         val expected = DoubleSubmitCheckToken.getExpectedToken(request, key);
         val actual = DoubleSubmitCheckToken.getActualToken(request);
+        val existsExpectedTokenKey = DoubleSubmitCheckToken.isExistsExpectedTokenKey(request, key);
         val excludeCheck = excludeCheckToken(handler);
-        DoubleSubmitCheckTokenHolder.set(key, expected, actual, excludeCheck);
+        DoubleSubmitCheckTokenHolder.set(key, expected, actual, existsExpectedTokenKey, excludeCheck);
         return true;
     }
 
@@ -44,6 +45,11 @@ public class SetDoubleSubmitCheckTokenInterceptor extends BaseHandlerInterceptor
             if(DoubleSubmitCheckTokenHolder.isExcludeCheck()){
                 return;
             }
+
+            if( ! DoubleSubmitCheckTokenHolder.isExistsExpectedTokenKey()){
+                throw new IllegalStateException("指定されたキーが見つかりませんでした。@TokenKeyの設定を確認してください");
+            }
+
             // POSTされたときにトークンが一致していれば新たなトークンを発行する
             val key = DoubleSubmitCheckTokenHolder.getTokenKey();
             val expected = DoubleSubmitCheckToken.getExpectedToken(request, key);
