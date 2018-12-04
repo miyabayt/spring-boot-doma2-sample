@@ -1,13 +1,17 @@
 package com.sample.domain.dao;
 
+import lombok.val;
+
+import java.util.Objects;
+
 /**
  * 二重送信防止チェックトークンホルダー
  */
 public class DoubleSubmitCheckTokenHolder {
 
-    private static final ThreadLocal<String> EXPECTED_TOKEN = new ThreadLocal<>();
-
-    private static final ThreadLocal<String> ACTUAL_TOKEN = new ThreadLocal<>();
+    private static final ThreadLocal<DoubleSubmitCheckTokenHolder> HOLDER = new ThreadLocal<>();
+    private String expected;
+    private String actual;
 
     /**
      * トークンを保存します。
@@ -16,8 +20,10 @@ public class DoubleSubmitCheckTokenHolder {
      * @param actual
      */
     public static void set(String expected, String actual) {
-        EXPECTED_TOKEN.set(expected);
-        ACTUAL_TOKEN.set(actual);
+        val me = new DoubleSubmitCheckTokenHolder();
+        me.expected = expected;
+        me.actual = actual;
+        HOLDER.set(me);
     }
 
     /**
@@ -26,7 +32,7 @@ public class DoubleSubmitCheckTokenHolder {
      * @return
      */
     public static String getExpectedToken() {
-        return EXPECTED_TOKEN.get();
+        return me().expected;
     }
 
     /**
@@ -35,14 +41,20 @@ public class DoubleSubmitCheckTokenHolder {
      * @return
      */
     public static String getActualToken() {
-        return ACTUAL_TOKEN.get();
+        return me().actual;
     }
 
     /**
      * 監査情報をクリアします。
      */
     public static void clear() {
-        EXPECTED_TOKEN.remove();
-        ACTUAL_TOKEN.remove();
+        HOLDER.remove();
+    }
+
+    private static DoubleSubmitCheckTokenHolder me(){
+        if( Objects.isNull(HOLDER.get()) ){
+            return new DoubleSubmitCheckTokenHolder();
+        }
+        return HOLDER.get();
     }
 }
