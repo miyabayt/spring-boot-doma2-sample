@@ -37,7 +37,7 @@ public class DoubleSubmitCheckingRequestDataValueProcessor implements RequestDat
             val action = ACTION_HOLDER.get();
             String token = DoubleSubmitCheckToken.getExpectedToken(request, action);
 
-            if (token == null) {
+            if (Objects.isNull(token)) {
                 token = DoubleSubmitCheckToken.renewToken(request, action);
             }
 
