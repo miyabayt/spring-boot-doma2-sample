@@ -19,6 +19,7 @@ spring:
     flyway:
         enabled: true
         baseline-on-migrate: true
+        placeholder-replacement: false
 logging:
     level:
         org.springframework: INFO
