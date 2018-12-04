@@ -15,6 +15,7 @@ spring:
   flyway:
     enable: true
     baseline-on-migrate: true
+    placeholder-replacement: false
 doma:
   # SQLファイルをキャッシュしない
   sql-file-repository: no_cache
