@@ -58,8 +58,11 @@ public class DoubleSubmitCheckToken {
      *
      * @param request
      * @return expected token
+     * @Deprecated @link{com.sample.web.base.security.DoubleSubmitCheckToken#getExpectedToken(HttpServletRequest, String)}を使ってください
+     *
      */
     @SuppressWarnings("unchecked")
+    @Deprecated
     public static String getExpectedToken(HttpServletRequest request) {
         return getExpectedToken(request, null);
     }

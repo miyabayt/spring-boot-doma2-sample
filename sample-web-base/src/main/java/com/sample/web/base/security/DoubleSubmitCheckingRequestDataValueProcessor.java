@@ -1,9 +1,11 @@
 package com.sample.web.base.security;
 
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sample.domain.dao.DoubleSubmitCheckTokenHolder;
 import org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
@@ -34,11 +36,14 @@ public class DoubleSubmitCheckingRequestDataValueProcessor implements RequestDat
         val map = PROCESSOR.getExtraHiddenFields(request);
 
         if (!map.isEmpty()) {
-            val action = ACTION_HOLDER.get();
-            String token = DoubleSubmitCheckToken.getExpectedToken(request, action);
+            String key = DoubleSubmitCheckTokenHolder.getTokenKey();
+            if(Objects.isNull(key)) {
+                key = ACTION_HOLDER.get();
+            }
+            String token = DoubleSubmitCheckToken.getExpectedToken(request, key);
 
             if (Objects.isNull(token)) {
-                token = DoubleSubmitCheckToken.renewToken(request, action);
+                token = DoubleSubmitCheckToken.renewToken(request, key);
             }
 
             map.put(DoubleSubmitCheckToken.DOUBLE_SUBMIT_CHECK_PARAMETER, token);

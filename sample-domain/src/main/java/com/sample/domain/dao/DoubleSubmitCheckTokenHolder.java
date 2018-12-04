@@ -10,6 +10,7 @@ import java.util.Objects;
 public class DoubleSubmitCheckTokenHolder {
 
     private static final ThreadLocal<DoubleSubmitCheckTokenHolder> HOLDER = new ThreadLocal<>();
+    private String key;
     private String expected;
     private String actual;
     private boolean excludeCheck;
@@ -17,16 +18,27 @@ public class DoubleSubmitCheckTokenHolder {
     /**
      * トークンを保存します。
      *
+     * @param key
      * @param expected
      * @param actual
      * @aparam excludeCheck
      */
-    public static void set(String expected, String actual, boolean excludeCheck) {
+    public static void set(String key, String expected, String actual, boolean excludeCheck) {
         val me = new DoubleSubmitCheckTokenHolder();
+        me.key = key;
         me.expected = expected;
         me.actual = actual;
         me.excludeCheck = excludeCheck;
         HOLDER.set(me);
+    }
+
+    /**
+     * トークンのキーを返します。
+     *
+     * @return
+     */
+    public static String getTokenKey() {
+        return me().key;
     }
 
     /**
