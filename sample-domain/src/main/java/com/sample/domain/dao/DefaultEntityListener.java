@@ -31,8 +31,10 @@ public class DefaultEntityListener<ENTITY> implements EntityListener<ENTITY> {
         val expected = DoubleSubmitCheckTokenHolder.getExpectedToken();
         val actual = DoubleSubmitCheckTokenHolder.getActualToken();
 
-        if (expected != null && actual != null && !Objects.equals(expected, actual)) {
-            throw new DoubleSubmitErrorException();
+        if( ! DoubleSubmitCheckTokenHolder.isExcludeCheck()) {
+            if (expected != null && actual != null && !Objects.equals(expected, actual)) {
+                throw new DoubleSubmitErrorException();
+            }
         }
 
         if (entity instanceof DomaDto) {

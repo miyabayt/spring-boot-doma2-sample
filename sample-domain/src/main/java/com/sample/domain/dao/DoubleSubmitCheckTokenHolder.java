@@ -12,17 +12,20 @@ public class DoubleSubmitCheckTokenHolder {
     private static final ThreadLocal<DoubleSubmitCheckTokenHolder> HOLDER = new ThreadLocal<>();
     private String expected;
     private String actual;
+    private boolean excludeCheck;
 
     /**
      * トークンを保存します。
      *
      * @param expected
      * @param actual
+     * @aparam excludeCheck
      */
-    public static void set(String expected, String actual) {
+    public static void set(String expected, String actual, boolean excludeCheck) {
         val me = new DoubleSubmitCheckTokenHolder();
         me.expected = expected;
         me.actual = actual;
+        me.excludeCheck = excludeCheck;
         HOLDER.set(me);
     }
 
@@ -42,6 +45,15 @@ public class DoubleSubmitCheckTokenHolder {
      */
     public static String getActualToken() {
         return me().actual;
+    }
+
+    /**
+     * トークンチェックの対象から除外するかを返します。
+     *
+     * @return
+     */
+    public static boolean isExcludeCheck() {
+        return me().excludeCheck;
     }
 
     /**
