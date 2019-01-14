@@ -91,7 +91,7 @@ public class UserRepository extends BaseRepository {
         // 役割権限紐付けを登録する
         val userRole = new UserRole();
         userRole.setUserId(inputUser.getId());
-        userRole.setRoleKey("users");
+        userRole.setRoleKey("user");
         userRoleDao.insert(userRole);
 
         return inputUser;
