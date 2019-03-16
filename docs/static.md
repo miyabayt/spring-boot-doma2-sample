@@ -77,7 +77,7 @@ webjars-locatorを使うとバージョン指定が不要になる。
 Jarファイルに内包されたGZip済みリソースを使うようにする。
 
 ```properties
-spring.resources.chain.gzipped=true
+spring.resources.chain.compressed=true
 ```
 
 ## セキュリティ

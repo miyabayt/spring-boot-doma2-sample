@@ -5,6 +5,9 @@ spring:
     # ローカル環境以外は環境変数でプロファイルを切り替える
     default: local
     active: local
+  main:
+    # DataValueProcessorのBean上書きのため暫定対応
+    allow-bean-definition-overriding: true
   messages:
     # メッセージ定義ファイルのパスを含めて設定する
     basename: messages,ValidationMessages
@@ -29,7 +32,7 @@ spring:
       period: 604800
     chain:
       # GZipされているリソースがあれば使う
-      gzipped: true
+      compressed: true
       strategy:
         content:
           # コンテンツのMD5ハッシュ値によるバージョニング
