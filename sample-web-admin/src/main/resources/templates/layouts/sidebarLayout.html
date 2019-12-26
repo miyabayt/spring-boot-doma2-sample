@@ -147,6 +147,23 @@
                 $("#logout").bind("click", function() {
                     $("form[name='logout']").submit();
                 });
+
+                $(function() {
+                    var path = [# th:text="@{/}" /];　
+                    $("body").on("collapsed.pushMenu", function() {
+                        document.cookie = "sidebarToggleState=closed; path=" + path + ";";
+                    });
+                    $("body").on("expanded.pushMenu", function() {
+                        document.cookie = "sidebarToggleState=opened; path=" + path + ";";
+                    });
+
+                    var re = new RegExp('sidebarToggleState' + "=([^;]+)");
+                    var value = re.exec(document.cookie);
+                    var toggleState = (value != null) ? unescape(value[1]) : null;
+                    if (toggleState == 'closed') {
+                        $("body").addClass('sidebar-collapse');
+                    }
+                });
             });
         </script>
     </body>
