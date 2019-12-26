@@ -7,7 +7,7 @@
     <body>
         <nav layout:fragment="navi" class=""></nav>
         <div layout:fragment="content">
-            <form class="form-horizontal" th:object="${loginForm}" th:action="@{'/login'}" method="post">
+            <form id="loginForm" class="form-horizontal" th:object="${loginForm}" th:action="@{'/login'}" method="post">
                 <div class="form-group has-feedback">
                     <div class="form-group" th:with="invalid=${#fields.hasErrors('loginId')}" th:class="${'form-group' + (invalid ? ' has-error' : '')}">
                         <label class="col-sm-2 control-label">ログインID</label>
@@ -38,6 +38,20 @@
                     </div>
                 </div>
             </form>
+        </div>
+        <div layout:fragment="scripts">
+            <script>
+                <!--/* 二度押しするとforbiddenにリダイレクトされるので防止 */-->
+                var submitted;
+                $(document).ready(function(){
+                    $('#loginForm').on('submit', function(){
+                        if(submitted){
+                            return false;
+                        }
+                        submitted = true;
+                    });
+                });
+            </script>
         </div>
     </body>
 </html>
