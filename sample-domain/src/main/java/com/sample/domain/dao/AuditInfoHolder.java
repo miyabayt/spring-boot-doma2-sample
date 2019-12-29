@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
  */
 public class AuditInfoHolder {
 
-    private static final ThreadLocal<String> AUDIT_USER = new ThreadLocal<>();
+    private static final InheritableThreadLocal<String> AUDIT_USER = new InheritableThreadLocal<>();
 
-    private static final ThreadLocal<LocalDateTime> AUDIT_DATE_TIME = new ThreadLocal<>();
+    private static final InheritableThreadLocal<LocalDateTime> AUDIT_DATE_TIME = new InheritableThreadLocal<>();
 
     /**
      * 監査情報を保存します。
