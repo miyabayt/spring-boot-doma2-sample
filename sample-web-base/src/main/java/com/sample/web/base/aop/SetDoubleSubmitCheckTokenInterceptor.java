@@ -1,11 +1,15 @@
 package com.sample.web.base.aop;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sample.web.base.security.annotation.TokenKey;
+import com.sample.web.base.security.annotation.ExcludeCheckToken;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sample.domain.dao.DoubleSubmitCheckTokenHolder;
@@ -24,9 +28,12 @@ public class SetDoubleSubmitCheckTokenInterceptor extends BaseHandlerInterceptor
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         // コントローラーの動作前
-        val expected = DoubleSubmitCheckToken.getExpectedToken(request);
+        val key = takeOutTokenKey(handler).orElse(null);
+        val expected = DoubleSubmitCheckToken.getExpectedToken(request, key);
         val actual = DoubleSubmitCheckToken.getActualToken(request);
-        DoubleSubmitCheckTokenHolder.set(expected, actual);
+        val existsExpectedTokenKey = DoubleSubmitCheckToken.isExistsExpectedTokenKey(request, key);
+        val excludeCheck = excludeCheckToken(handler);
+        DoubleSubmitCheckTokenHolder.set(key, expected, actual, existsExpectedTokenKey, excludeCheck);
         return true;
     }
 
@@ -35,14 +42,35 @@ public class SetDoubleSubmitCheckTokenInterceptor extends BaseHandlerInterceptor
             ModelAndView modelAndView) throws Exception {
         // コントローラーの動作後
         if (StringUtils.equalsIgnoreCase(request.getMethod(), "POST")) {
+            if(DoubleSubmitCheckTokenHolder.isExcludeCheck()){
+                return;
+            }
+
+            if( ! DoubleSubmitCheckTokenHolder.isExistsExpectedTokenKey()){
+                throw new IllegalStateException("指定されたキーが見つかりませんでした。@TokenKeyの設定を確認してください");
+            }
+
             // POSTされたときにトークンが一致していれば新たなトークンを発行する
-            val expected = DoubleSubmitCheckToken.getExpectedToken(request);
+            val key = DoubleSubmitCheckTokenHolder.getTokenKey();
+            val expected = DoubleSubmitCheckToken.getExpectedToken(request, key);
             val actual = DoubleSubmitCheckToken.getActualToken(request);
 
             if (expected != null && actual != null && Objects.equals(expected, actual)) {
-                DoubleSubmitCheckToken.renewToken(request);
+                DoubleSubmitCheckToken.renewToken(request, key);
             }
         }
+    }
+
+    boolean excludeCheckToken(Object handler) {
+        if (!(handler instanceof HandlerMethod)) {
+            return false;
+        }
+        val hm = (HandlerMethod)handler;
+        if (hm.getBeanType().isAnnotationPresent(ExcludeCheckToken.class)
+                || hm.getMethod().isAnnotationPresent(ExcludeCheckToken.class)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -51,4 +79,19 @@ public class SetDoubleSubmitCheckTokenInterceptor extends BaseHandlerInterceptor
         // 処理完了後
         DoubleSubmitCheckTokenHolder.clear();
     }
+
+    Optional<String> takeOutTokenKey(Object handler) {
+        if (!(handler instanceof HandlerMethod)) {
+            return Optional.empty();
+        }
+        val hm = (HandlerMethod)handler;
+        if(hm.getMethod().isAnnotationPresent(TokenKey.class)){
+            return Optional.of(hm.getMethod().getAnnotation(TokenKey.class).value());
+        }
+        if(hm.getBeanType().isAnnotationPresent(TokenKey.class)){
+            return Optional.of(hm.getBeanType().getAnnotation(TokenKey.class).value());
+        }
+        return Optional.empty();
+    }
+
 }

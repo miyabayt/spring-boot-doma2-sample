@@ -9,6 +9,8 @@ import com.sample.web.base.util.SessionUtils;
 
 import lombok.val;
 
+import java.util.Objects;
+
 public class DoubleSubmitCheckToken {
 
     public static final String DOUBLE_SUBMIT_CHECK_PARAMETER = "_double";
@@ -58,8 +60,11 @@ public class DoubleSubmitCheckToken {
      *
      * @param request
      * @return expected token
+     * @Deprecated @link{com.sample.web.base.security.DoubleSubmitCheckToken#getExpectedToken(HttpServletRequest, String)}を使ってください
+     *
      */
     @SuppressWarnings("unchecked")
+    @Deprecated
     public static String getExpectedToken(HttpServletRequest request) {
         return getExpectedToken(request, null);
     }
@@ -122,6 +127,22 @@ public class DoubleSubmitCheckToken {
         }
 
         return map;
+    }
+
+    public static boolean isExistsExpectedTokenKey(HttpServletRequest request, String key){
+        //キーが指定されている場合は、キーがSession中のMapにあることを保証する
+        if(Objects.isNull(key) || ! hasTokenInSession(request)) {
+            return true;
+        }
+        LRUMap map = getLRUMap(request);
+        if( map.containsKey(key) ){
+            return true;
+        }
+        return false;
+    }
+
+    protected static boolean hasTokenInSession(HttpServletRequest request) {
+        return Objects.nonNull(SessionUtils.getAttribute(request, DOUBLE_SUBMIT_CHECK_CONTEXT));
     }
 
     /**
