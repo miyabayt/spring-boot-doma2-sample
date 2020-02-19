@@ -5,15 +5,20 @@ buildscript {
         groovyVersion = "2.5.3"
         lombokVersion = "1.18.2"
         dockerComposePluginVersion = "0.6.6"
+        jibPluginVersion = "2.0.0"
     }
     repositories {
         mavenCentral()
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "com.github.tntim96:fakesmtp:2.0" // ローカルでダミーのSMTPサーバーを立てる
         classpath "com.avast.gradle:gradle-docker-compose-plugin:${dockerComposePluginVersion}"
+        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:${jibPluginVersion}"
     }
 }
 
@@ -24,6 +29,7 @@ subprojects {
     apply plugin: "eclipse"
     apply plugin: "org.springframework.boot"
     apply plugin: "io.spring.dependency-management"
+    apply plugin: "com.google.cloud.tools.jib"
 
     sourceCompatibility = 11
     targetCompatibility = 11
@@ -76,6 +82,12 @@ subprojects {
         jvmArgs "-XX:TieredStopAtLevel=1", "-Xverify:none"
     }
 
+    jib {
+        from {
+            image = "amazoncorretto:11"
+        }
+    }
+
     ext["groovy.version"] = groovyVersion
     
     dependencies {
@@ -119,8 +131,4 @@ codegen {
     baseValidatorPackageName = "com.sample.domain.validator"
     baseControllerPackageName = "com.sample.web.base.controller.html"
     controllerPackageName = "com.sample.web.admin.controller.html"
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = "4.10.2"
 }
