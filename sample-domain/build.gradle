@@ -6,11 +6,27 @@ jar {
     enabled = true
 }
 
-// for Doma 2
-// JavaクラスとSQLファイルの出力先ディレクトリを同じにする
-processResources.destinationDir = compileJava.destinationDir
-// コンパイルより前にSQLファイルを出力先ディレクトリにコピーするために依存関係を逆転する
-compileJava.dependsOn processResources
+// Copy the resources referred by the Doma annotation processors to
+// the destinationDir of the compileJava task
+task copyDomaResources(type: Sync)  {
+    from sourceSets.main.resources.srcDirs
+    into compileJava.destinationDir
+    include "doma.compile.config"
+    include "META-INF/**/*.sql"
+    include "META-INF/**/*.script"
+}
+
+compileJava {
+    // Depend on the above task
+    dependsOn copyDomaResources
+    options.encoding = "UTF-8"
+}
+
+compileTestJava {
+    options.encoding = "UTF-8"
+    // Disable the annotation processors during the test run
+    options.compilerArgs = ["-proc:none"]
+}
 
 dependencies {
     compile project(":sample-common")
