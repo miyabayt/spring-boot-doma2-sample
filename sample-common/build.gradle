@@ -19,5 +19,5 @@ dependencies {
     compile "commons-io:commons-io:2.8.0"
     compile "org.apache.tika:tika-core:1.15"
     compile "dom4j:dom4j"
-    compile "com.ibm.icu:icu4j:59.1"
+    compile "com.ibm.icu:icu4j:68.2"
 }
