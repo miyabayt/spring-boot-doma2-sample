@@ -25,7 +25,7 @@ dependencies {
 
     // jasperreports
     compile "net.sf.jasperreports:jasperreports:6.4.0"
-    compile "com.lowagie:itext:2.1.7.js5"
+    compile "com.lowagie:itext:4.2.2"
 
     // apache POI
     compile "org.apache.poi:poi:3.16"
