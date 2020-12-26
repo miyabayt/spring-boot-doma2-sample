@@ -38,7 +38,7 @@ dependencies {
     compile "org.webjars:webjars-locator-core"
     compile "org.webjars:bootstrap:4.5.3"
     compile "org.webjars:jquery:3.5.1"
-    compile "org.webjars:jquery-validation:1.17.0"
+    compile "org.webjars:jquery-validation:1.19.0"
     compile "org.webjars:bootstrap-datepicker:1.9.0"
     compile("org.webjars.bower:iCheck:1.0.2") {
         exclude module: "jquery"
