@@ -17,7 +17,7 @@ dependencies {
     compile "commons-codec:commons-codec"
     compile "org.apache.commons:commons-digester3:3.2"
     compile "commons-io:commons-io:2.8.0"
-    compile "org.apache.tika:tika-core:1.15"
+    compile "org.apache.tika:tika-core:1.25"
     compile "dom4j:dom4j"
     compile "com.ibm.icu:icu4j:59.1"
 }
