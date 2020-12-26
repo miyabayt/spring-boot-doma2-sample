@@ -12,7 +12,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter"
 
     compile "org.apache.commons:commons-lang3"
-    compile "org.apache.commons:commons-text:1.4"
+    compile "org.apache.commons:commons-text:1.9"
     compile "org.apache.commons:commons-compress:1.20"
     compile "commons-codec:commons-codec"
     compile "org.apache.commons:commons-digester3:3.2"
