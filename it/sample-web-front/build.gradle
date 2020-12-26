@@ -7,7 +7,7 @@ jar {
 }
 
 dependencies {
-    testCompile "org.codehaus.groovy:groovy-all:2.5.3"
+    testCompile "org.codehaus.groovy:groovy-all:3.0.7"
 
     def gebVersion = "3.4.1"
     def seleniumVersion = "3.141.59"
