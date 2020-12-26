@@ -56,7 +56,7 @@ dependencies {
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
 
     // modelmapper
-    compile "org.modelmapper:modelmapper:0.7.5"
+    compile "org.modelmapper:modelmapper:2.3.9"
 
     // mysql database
     compile "mysql:mysql-connector-java"
