@@ -4,7 +4,7 @@ buildscript {
         spockVersion = "1.2-groovy-2.5"
         groovyVersion = "2.5.3"
         lombokVersion = "1.18.2"
-        dockerComposePluginVersion = "0.6.6"
+        dockerComposePluginVersion = "0.14.0"
         jibPluginVersion = "2.0.0"
     }
     repositories {
