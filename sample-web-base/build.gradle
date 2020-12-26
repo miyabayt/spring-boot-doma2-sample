@@ -37,7 +37,7 @@ dependencies {
     // webjars
     compile "org.webjars:webjars-locator-core"
     compile "org.webjars:bootstrap:3.3.7"
-    compile "org.webjars:jquery:2.2.4"
+    compile "org.webjars:jquery:3.5.1"
     compile "org.webjars:jquery-validation:1.17.0"
     compile "org.webjars:bootstrap-datepicker:1.9.0"
     compile("org.webjars.bower:iCheck:1.0.2") {
