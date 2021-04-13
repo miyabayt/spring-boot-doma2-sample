@@ -9,7 +9,7 @@ jar {
 dependencies {
     testCompile "org.codehaus.groovy:groovy-all:3.0.7"
 
-    def gebVersion = "3.4.1"
+    def gebVersion = "4.1"
     def seleniumVersion = "3.141.59"
 
     testCompile "org.gebish:geb-spock:$gebVersion"
