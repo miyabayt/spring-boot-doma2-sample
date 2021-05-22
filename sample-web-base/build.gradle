@@ -46,7 +46,7 @@ dependencies {
     compile "org.webjars:html5shiv:3.7.3-1"
     compile "org.webjars:respond:1.4.2-1"
     compile "org.webjars:AdminLTE:3.0.5"
-    compile "org.webjars:font-awesome:5.15.1"
+    compile "org.webjars:font-awesome:5.15.2"
     compile "org.webjars:ionicons:2.0.1"
 
     testCompile "org.springframework.security:spring-security-test"
