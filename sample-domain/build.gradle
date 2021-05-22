@@ -40,14 +40,14 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-json"
 
     // doma exclude springframework
-    annotationProcessor "org.seasar.doma.boot:doma-spring-boot-starter:1.1.1"
+    annotationProcessor "org.seasar.doma.boot:doma-spring-boot-starter:1.5.0"
     compile("org.seasar.doma.boot:doma-spring-boot-starter:1.1.1") {
         exclude group: "org.springframework.boot"
     }
 
     // thymeleaf
     compile "org.codehaus.groovy:groovy:${groovyVersion}"
-    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.3.0") {
+    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.5.3") {
         exclude group: "org.codehaus.groovy", module: "groovy"
         exclude group: "org.thymeleaf", module: "thymeleaf"
     }
@@ -56,7 +56,7 @@ dependencies {
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
 
     // modelmapper
-    compile "org.modelmapper:modelmapper:0.7.5"
+    compile "org.modelmapper:modelmapper:2.4.3"
 
     // mysql database
     compile "mysql:mysql-connector-java"
