@@ -24,7 +24,7 @@ dependencies {
     compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
 
     // jasperreports
-    compile "net.sf.jasperreports:jasperreports:6.16.0"
+    compile "net.sf.jasperreports:jasperreports:6.17.0"
     compile "com.lowagie:itext:4.2.2"
 
     // apache POI
