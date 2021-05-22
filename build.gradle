@@ -5,7 +5,7 @@ buildscript {
         groovyVersion = "3.0.7"
         lombokVersion = "1.18.16"
         dockerComposePluginVersion = "0.14.0"
-        jibPluginVersion = "2.7.0"
+        jibPluginVersion = "3.0.0"
     }
     repositories {
         mavenCentral()
