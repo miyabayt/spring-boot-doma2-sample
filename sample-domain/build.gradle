@@ -47,7 +47,7 @@ dependencies {
 
     // thymeleaf
     compile "org.codehaus.groovy:groovy:${groovyVersion}"
-    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.5.1") {
+    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.5.3") {
         exclude group: "org.codehaus.groovy", module: "groovy"
         exclude group: "org.thymeleaf", module: "thymeleaf"
     }
