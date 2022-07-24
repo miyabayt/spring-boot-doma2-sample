@@ -4,8 +4,19 @@ import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
 import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
+import com.sample.domain.dto.common.Page;
+import com.sample.domain.dto.common.Pageable;
+import com.sample.domain.dto.system.Permission;
+import com.sample.domain.dto.system.PermissionCriteria;
+import com.sample.domain.dto.system.Role;
+import com.sample.domain.dto.system.RoleCriteria;
+import com.sample.domain.service.system.PermissionService;
+import com.sample.domain.service.system.RoleService;
+import com.sample.web.base.controller.html.AbstractHtmlController;
+import com.sample.web.base.view.CsvView;
 import java.util.List;
-
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,260 +28,253 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
-import com.sample.domain.dto.system.Permission;
-import com.sample.domain.dto.system.PermissionCriteria;
-import com.sample.domain.dto.system.Role;
-import com.sample.domain.dto.system.RoleCriteria;
-import com.sample.domain.service.system.PermissionService;
-import com.sample.domain.service.system.RoleService;
-import com.sample.web.base.controller.html.AbstractHtmlController;
-import com.sample.web.base.view.CsvView;
-
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
-/**
- * 役割管理
- */
+/** 役割管理 */
 @Controller
 @RequestMapping("/system/roles")
-@SessionAttributes(types = { RoleForm.class })
+@SessionAttributes(types = {RoleForm.class})
 @Slf4j
 public class RoleHtmlController extends AbstractHtmlController {
 
-    @Autowired
-    RoleFormValidator roleFormValidator;
+  @Autowired RoleFormValidator roleFormValidator;
 
-    @Autowired
-    RoleService roleService;
+  @Autowired RoleService roleService;
 
-    @Autowired
-    PermissionService permissionService;
+  @Autowired PermissionService permissionService;
 
-    @ModelAttribute("roleForm")
-    public RoleForm roleForm() {
-        return new RoleForm();
+  @ModelAttribute("roleForm")
+  public RoleForm roleForm() {
+    return new RoleForm();
+  }
+
+  @ModelAttribute("searchRoleForm")
+  public SearchRoleForm searchRoleForm() {
+    return new SearchRoleForm();
+  }
+
+  @InitBinder("roleForm")
+  public void validatorBinder(WebDataBinder binder) {
+    binder.addValidators(roleFormValidator);
+  }
+
+  @Override
+  public String getFunctionName() {
+    return "A_ROLE";
+  }
+
+  /**
+   * 登録画面 初期表示
+   *
+   * @param form
+   * @param model
+   * @return
+   */
+  @GetMapping("/new")
+  public String newRole(@ModelAttribute("roleForm") RoleForm form, Model model) {
+    if (!form.isNew()) {
+      // SessionAttributeに残っている場合は再生成する
+      model.addAttribute("roleForm", new RoleForm());
     }
 
-    @ModelAttribute("searchRoleForm")
-    public SearchRoleForm searchRoleForm() {
-        return new SearchRoleForm();
+    // 権限一覧を取得する
+    Page<Permission> permissions =
+        permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
+    model.addAttribute("permissions", permissions);
+
+    return "modules/system/roles/new";
+  }
+
+  /**
+   * 登録処理
+   *
+   * @param form
+   * @param br
+   * @param attributes
+   * @return
+   */
+  @PostMapping("/new")
+  public String newRole(
+      @Validated @ModelAttribute("roleForm") RoleForm form,
+      BindingResult br,
+      RedirectAttributes attributes) {
+    // 入力チェックエラーがある場合は、元の画面にもどる
+    if (br.hasErrors()) {
+      setFlashAttributeErrors(attributes, br);
+      return "redirect:/system/roles/new";
     }
 
-    @InitBinder("roleForm")
-    public void validatorBinder(WebDataBinder binder) {
-        binder.addValidators(roleFormValidator);
+    // 入力値からDTOを作成する
+    val inputRole = modelMapper.map(form, Role.class);
+
+    // 登録する
+    val createdRole = roleService.create(inputRole);
+
+    return "redirect:/system/roles/show/" + createdRole.getId();
+  }
+
+  /**
+   * 一覧画面 初期表示
+   *
+   * @param model
+   * @return
+   */
+  @GetMapping("/find")
+  public String findRole(@ModelAttribute SearchRoleForm form, Model model) {
+    // 入力値を詰め替える
+    val criteria = modelMapper.map(form, RoleCriteria.class);
+
+    // 10件区切りで取得する
+    val pages = roleService.findAll(criteria, Pageable.DEFAULT);
+
+    // 画面に検索結果を渡す
+    model.addAttribute("pages", pages);
+
+    return "modules/system/roles/find";
+  }
+
+  /**
+   * 検索結果
+   *
+   * @param form
+   * @param br
+   * @param attributes
+   * @return
+   */
+  @PostMapping("/find")
+  public String findRole(
+      @Validated @ModelAttribute("searchRoleForm") SearchRoleForm form,
+      BindingResult br,
+      RedirectAttributes attributes) {
+    // 入力チェックエラーがある場合は、元の画面にもどる
+    if (br.hasErrors()) {
+      setFlashAttributeErrors(attributes, br);
+      return "redirect:/system/roles/find";
     }
 
-    @Override
-    public String getFunctionName() {
-        return "A_ROLE";
+    return "redirect:/system/roles/find";
+  }
+
+  /**
+   * 詳細画面
+   *
+   * @param roleId
+   * @param model
+   * @return
+   */
+  @GetMapping("/show/{roleId}")
+  public String showRole(@PathVariable Long roleId, Model model) {
+    // 1件取得する
+    val role = roleService.findById(roleId);
+    model.addAttribute("role", role);
+
+    // 権限一覧を取得する
+    Page<Permission> permissions =
+        permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
+    model.addAttribute("permissions", permissions);
+
+    return "modules/system/roles/show";
+  }
+
+  /**
+   * 編集画面 初期表示
+   *
+   * @param roleId
+   * @param form
+   * @param model
+   * @return
+   */
+  @GetMapping("/edit/{roleId}")
+  public String editRole(
+      @PathVariable Long roleId, @ModelAttribute("roleForm") RoleForm form, Model model) {
+    // セッションから取得できる場合は、読み込み直さない
+    if (!hasErrors(model)) {
+      // 1件取得する
+      val role = roleService.findById(roleId);
+
+      // 取得したDtoをFromに詰め替える
+      modelMapper.map(role, form);
     }
 
-    /**
-     * 登録画面 初期表示
-     *
-     * @param form
-     * @param model
-     * @return
-     */
-    @GetMapping("/new")
-    public String newRole(@ModelAttribute("roleForm") RoleForm form, Model model) {
-        if (!form.isNew()) {
-            // SessionAttributeに残っている場合は再生成する
-            model.addAttribute("roleForm", new RoleForm());
-        }
+    // 権限一覧を取得する
+    Page<Permission> permissions =
+        permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
+    model.addAttribute("permissions", permissions);
 
-        // 権限一覧を取得する
-        Page<Permission> permissions = permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
-        model.addAttribute("permissions", permissions);
+    return "modules/system/roles/new";
+  }
 
-        return "modules/system/roles/new";
+  /**
+   * 編集画面 更新処理
+   *
+   * @param form
+   * @param br
+   * @param roleId
+   * @param sessionStatus
+   * @param attributes
+   * @return
+   */
+  @PostMapping("/edit/{roleId}")
+  public String editRole(
+      @Validated @ModelAttribute("roleForm") RoleForm form,
+      BindingResult br,
+      @PathVariable Long roleId,
+      SessionStatus sessionStatus,
+      RedirectAttributes attributes) {
+    // 入力チェックエラーがある場合は、元の画面にもどる
+    if (br.hasErrors()) {
+      setFlashAttributeErrors(attributes, br);
+      return "redirect:/system/roles/edit/" + roleId;
     }
 
-    /**
-     * 登録処理
-     *
-     * @param form
-     * @param br
-     * @param attributes
-     * @return
-     */
-    @PostMapping("/new")
-    public String newRole(@Validated @ModelAttribute("roleForm") RoleForm form, BindingResult br,
-            RedirectAttributes attributes) {
-        // 入力チェックエラーがある場合は、元の画面にもどる
-        if (br.hasErrors()) {
-            setFlashAttributeErrors(attributes, br);
-            return "redirect:/system/roles/new";
-        }
+    // 更新対象を取得する
+    val role = roleService.findById(roleId);
 
-        // 入力値からDTOを作成する
-        val inputRole = modelMapper.map(form, Role.class);
+    // 入力値を詰め替える
+    modelMapper.map(form, role);
 
-        // 登録する
-        val createdRole = roleService.create(inputRole);
+    // 更新する
+    val updatedRole = roleService.update(role);
 
-        return "redirect:/system/roles/show/" + createdRole.getId();
-    }
+    // セッションのroleFormをクリアする
+    sessionStatus.setComplete();
 
-    /**
-     * 一覧画面 初期表示
-     *
-     * @param model
-     * @return
-     */
-    @GetMapping("/find")
-    public String findRole(@ModelAttribute SearchRoleForm form, Model model) {
-        // 入力値を詰め替える
-        val criteria = modelMapper.map(form, RoleCriteria.class);
+    return "redirect:/system/roles/show/" + updatedRole.getId();
+  }
 
-        // 10件区切りで取得する
-        val pages = roleService.findAll(criteria, Pageable.DEFAULT);
+  /**
+   * 削除処理
+   *
+   * @param roleId
+   * @param attributes
+   * @return
+   */
+  @PostMapping("/remove/{roleId}")
+  public String removeRole(@PathVariable Long roleId, RedirectAttributes attributes) {
+    // 論理削除する
+    roleService.delete(roleId);
 
-        // 画面に検索結果を渡す
-        model.addAttribute("pages", pages);
+    // 削除成功メッセージ
+    attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));
 
-        return "modules/system/roles/find";
-    }
+    return "redirect:/system/roles/find";
+  }
 
-    /**
-     * 検索結果
-     *
-     * @param form
-     * @param br
-     * @param attributes
-     * @return
-     */
-    @PostMapping("/find")
-    public String findRole(@Validated @ModelAttribute("searchRoleForm") SearchRoleForm form, BindingResult br,
-            RedirectAttributes attributes) {
-        // 入力チェックエラーがある場合は、元の画面にもどる
-        if (br.hasErrors()) {
-            setFlashAttributeErrors(attributes, br);
-            return "redirect:/system/roles/find";
-        }
+  /**
+   * CSVダウンロード
+   *
+   * @param filename
+   * @return
+   */
+  @GetMapping("/download/{filename:.+\\.csv}")
+  public ModelAndView downloadCsv(@PathVariable String filename) {
+    // 全件取得する
+    val roles = roleService.findAll(new RoleCriteria(), Pageable.NO_LIMIT);
 
-        return "redirect:/system/roles/find";
-    }
+    // 詰め替える
+    List<RoleCsv> csvList = modelMapper.map(roles.getData(), toListType(RoleCsv.class));
 
-    /**
-     * 詳細画面
-     *
-     * @param roleId
-     * @param model
-     * @return
-     */
-    @GetMapping("/show/{roleId}")
-    public String showRole(@PathVariable Long roleId, Model model) {
-        // 1件取得する
-        val role = roleService.findById(roleId);
-        model.addAttribute("role", role);
+    // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
+    val view = new CsvView(RoleCsv.class, csvList, filename);
 
-        // 権限一覧を取得する
-        Page<Permission> permissions = permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
-        model.addAttribute("permissions", permissions);
-
-        return "modules/system/roles/show";
-    }
-
-    /**
-     * 編集画面 初期表示
-     *
-     * @param roleId
-     * @param form
-     * @param model
-     * @return
-     */
-    @GetMapping("/edit/{roleId}")
-    public String editRole(@PathVariable Long roleId, @ModelAttribute("roleForm") RoleForm form, Model model) {
-        // セッションから取得できる場合は、読み込み直さない
-        if (!hasErrors(model)) {
-            // 1件取得する
-            val role = roleService.findById(roleId);
-
-            // 取得したDtoをFromに詰め替える
-            modelMapper.map(role, form);
-        }
-
-        // 権限一覧を取得する
-        Page<Permission> permissions = permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
-        model.addAttribute("permissions", permissions);
-
-        return "modules/system/roles/new";
-    }
-
-    /**
-     * 編集画面 更新処理
-     *
-     * @param form
-     * @param br
-     * @param roleId
-     * @param sessionStatus
-     * @param attributes
-     * @return
-     */
-    @PostMapping("/edit/{roleId}")
-    public String editRole(@Validated @ModelAttribute("roleForm") RoleForm form, BindingResult br,
-            @PathVariable Long roleId, SessionStatus sessionStatus, RedirectAttributes attributes) {
-        // 入力チェックエラーがある場合は、元の画面にもどる
-        if (br.hasErrors()) {
-            setFlashAttributeErrors(attributes, br);
-            return "redirect:/system/roles/edit/" + roleId;
-        }
-
-        // 更新対象を取得する
-        val role = roleService.findById(roleId);
-
-        // 入力値を詰め替える
-        modelMapper.map(form, role);
-
-        // 更新する
-        val updatedRole = roleService.update(role);
-
-        // セッションのroleFormをクリアする
-        sessionStatus.setComplete();
-
-        return "redirect:/system/roles/show/" + updatedRole.getId();
-    }
-
-    /**
-     * 削除処理
-     *
-     * @param roleId
-     * @param attributes
-     * @return
-     */
-    @PostMapping("/remove/{roleId}")
-    public String removeRole(@PathVariable Long roleId, RedirectAttributes attributes) {
-        // 論理削除する
-        roleService.delete(roleId);
-
-        // 削除成功メッセージ
-        attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));
-
-        return "redirect:/system/roles/find";
-    }
-
-    /**
-     * CSVダウンロード
-     *
-     * @param filename
-     * @return
-     */
-    @GetMapping("/download/{filename:.+\\.csv}")
-    public ModelAndView downloadCsv(@PathVariable String filename) {
-        // 全件取得する
-        val roles = roleService.findAll(new RoleCriteria(), Pageable.NO_LIMIT);
-
-        // 詰め替える
-        List<RoleCsv> csvList = modelMapper.map(roles.getData(), toListType(RoleCsv.class));
-
-        // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
-        val view = new CsvView(RoleCsv.class, csvList, filename);
-
-        return new ModelAndView(view);
-    }
+    return new ModelAndView(view);
+  }
 }

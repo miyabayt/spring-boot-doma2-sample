@@ -3,16 +3,14 @@ package com.sample.batch.item;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * 処理対象のエラーメッセージ
- */
+/** 処理対象のエラーメッセージ */
 @Setter
 @Getter
 public class ItemError {
 
-    String sourceName;
+  String sourceName;
 
-    int position;
+  int position;
 
-    String errorMessage;
+  String errorMessage;
 }

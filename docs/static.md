@@ -6,7 +6,7 @@
 デフォルト値は下記が設定されているので、`src/main/resources/static`、`src/main/resources/public`などに配置されたファイルは静的コンテンツとして公開される。
 
 ```properties
-spring.resources.static-locations=classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+spring.web.resources.static-locations=classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
 ```
 
 ## キャッシュコントロール
@@ -14,7 +14,7 @@ spring.resources.static-locations=classpath:/META-INF/resources/,classpath:/reso
 キャッシュする時間を設定する。24時間キャッシュする場合は、下記を設定する。
 
 ```properties
-spring.resources.cache-period=86400
+spring.web.resources.cache-period=86400
 ```
 
 静的コンテンツファイルをバージョニングする。ファイル名を変更せずにファイル内容を変えた場合に、キャッシュが効かないようにする。
@@ -23,8 +23,8 @@ spring.resources.cache-period=86400
 下記の設定をすると自動的にファイル名にハッシュ値が含まれるようになる。
 
 ```properties
-spring.resources.chain.strategy.content.enabled=true
-spring.resources.chain.strategy.content.paths=/**
+spring.web.resources.chain.strategy.content.enabled=true
+spring.web.resources.chain.strategy.content.paths=/**
 ```
 
 - 出力例
@@ -43,8 +43,8 @@ WebJarsを使ってJavascript、CSSライブラリを管理する。
 build.gradleにライブラリを追加する。
 
 ```groovy
-compile "org.webjars:webjars-locator"
-compile "org.webjars:jquery:2.2.4"
+implementation "org.webjars:webjars-locator"
+implementation "org.webjars:jquery:2.2.4"
 ```
 
 webjars-locatorを使えるようにする。
@@ -77,7 +77,7 @@ webjars-locatorを使うとバージョン指定が不要になる。
 Jarファイルに内包されたGZip済みリソースを使うようにする。
 
 ```properties
-spring.resources.chain.compressed=true
+spring.web.resources.chain.compressed=true
 ```
 
 ## セキュリティ

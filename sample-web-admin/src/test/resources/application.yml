@@ -1,0 +1,36 @@
+spring:
+  main:
+    # DataValueProcessorのBean上書きのため暫定対応
+    allow-bean-definition-overriding: true
+  jackson:
+    # 日付型をISO形式で出力する
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  datasource:
+    username: root
+    password: passw0rd
+  mail:
+    protocol: smtp
+    username: test
+    password: test
+    properties:
+      mail:
+        from: test@example.com
+  flyway:
+    baseline-on-migrate: true
+    placeholder-replacement: false
+doma:
+  dialect: mysql
+  # 小文字のスネークケースに変換する（firstName → first_name）
+  naming: SNAKE_LOWER_CASE
+  # バルクインサート・アップデートのサイズ
+  batch-size: 1000
+logging:
+  level:
+    com.sample: DEBUG
+
+####
+# アプリケーションの設定
+application:
+  siteUrl: http://localhost:8080
+  fileUploadLocation: build/sample

@@ -14,8 +14,9 @@ spring:
     cache-duration: -1
     encoding: UTF-8
   jackson:
-    # JSONのキーをアンダースコア区切りの文字列にする
-    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+    # 日付型をISO形式で出力する
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
   thymeleaf:
     # HTML5モードが非推奨になったのでHTMLモードにする
     mode: HTML
@@ -26,18 +27,19 @@ spring:
       schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
       table-name: SPRING_SESSION
     store-type: JDBC
-  resources:
-    # 静的コンテンツをキャッシュする
-    cache:
-      period: 604800
-    chain:
-      # GZipされているリソースがあれば使う
-      compressed: true
-      strategy:
-        content:
-          # コンテンツのMD5ハッシュ値によるバージョニング
-          enabled: true
-          paths: /**
+  web:
+    resources:
+      # 静的コンテンツをキャッシュする
+      cache:
+        period: 604800
+      chain:
+        # GZipされているリソースがあれば使う
+        compressed: true
+        strategy:
+          content:
+            # コンテンツのMD5ハッシュ値によるバージョニング
+            enabled: true
+            paths: /**
   servlet:
     multipart:
       # アップロードのサイズ制限を設定する
@@ -47,7 +49,7 @@ spring:
     filter:
       dispatcher-types: forward,async,error,request
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       autoCommit: false
       connectionTimeout: 30000

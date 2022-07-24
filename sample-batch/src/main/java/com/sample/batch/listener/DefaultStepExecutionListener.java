@@ -1,4 +1,3 @@
 package com.sample.batch.listener;
 
-public class DefaultStepExecutionListener extends BaseStepExecutionListener {
-}
+public class DefaultStepExecutionListener extends BaseStepExecutionListener {}

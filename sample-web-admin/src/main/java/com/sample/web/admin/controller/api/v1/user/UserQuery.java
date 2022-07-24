@@ -1,7 +1,6 @@
 package com.sample.web.admin.controller.api.v1.user;
 
 import java.io.Serializable;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,17 +8,17 @@ import lombok.Setter;
 @Getter
 public class UserQuery implements Serializable {
 
-    private static final long serialVersionUID = 7593564324192730932L;
+  private static final long serialVersionUID = 7593564324192730932L;
 
-    String email;
+  String email;
 
-    String firstName;
+  String firstName;
 
-    String lastName;
+  String lastName;
 
-    String tel;
+  String tel;
 
-    String zip;
+  String zip;
 
-    String address;
+  String address;
 }

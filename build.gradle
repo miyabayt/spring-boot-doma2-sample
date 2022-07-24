@@ -1,120 +1,87 @@
-buildscript {
-    ext {
-        springBootVersion = "2.1.3.RELEASE"
-        spockVersion = "1.2-groovy-2.5"
-        groovyVersion = "2.5.3"
-        lombokVersion = "1.18.2"
-        dockerComposePluginVersion = "0.6.6"
-        jibPluginVersion = "2.0.0"
-    }
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-        classpath "com.github.tntim96:fakesmtp:2.0" // ローカルでダミーのSMTPサーバーを立てる
-        classpath "com.avast.gradle:gradle-docker-compose-plugin:${dockerComposePluginVersion}"
-        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:${jibPluginVersion}"
-    }
+plugins {
+    id "idea"
+    id "org.springframework.boot" version "${springBootVersion}" apply false
+    id "io.spring.dependency-management" version "${dependencyManagementVersion}" apply false
+    id "org.seasar.doma.compile" version "1.1.0" apply false
+    id "com.google.cloud.tools.jib" version "3.2.1" apply false
+    id "com.avast.gradle.docker-compose" version "0.16.8" apply false
+    id "com.diffplug.spotless" version "${spotlessVersion}"
 }
+
+apply plugin: "docker-compose"
+apply plugin: com.sample.CodeGenPlugin
 
 subprojects {
     apply plugin: "java"
     apply plugin: "groovy"
-    apply plugin: "idea"
-    apply plugin: "eclipse"
     apply plugin: "org.springframework.boot"
     apply plugin: "io.spring.dependency-management"
-    apply plugin: "com.google.cloud.tools.jib"
-
-    sourceCompatibility = 11
-    targetCompatibility = 11
-    [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.encoding = "UTF-8"
-    [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.compilerArgs = ["-Xlint:all"]
-
-    sourceSets {
-        test.resources {
-            // テスト時にsrc/main/resourcesにある設定ファイルを使用する
-            srcDirs "src/main/resources"
-            srcDirs "src/test/resources"
-        }
-    }
+    apply plugin: "com.diffplug.spotless"
 
     repositories {
         mavenCentral()
-        jcenter()
-
-        // jasperreports
-        maven { url "http://jasperreports.sourceforge.net/maven2/" }
-        maven { url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/" }
+        mavenLocal()
+        maven { url "https://repo.spring.io/release" }
+        maven { url "https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/" }
     }
 
-    dependencyManagement {
-        imports {
-            mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+    spotless {
+        java {
+            googleJavaFormat()
+            trimTrailingWhitespace()
+            endWithNewline()
         }
-    }
 
-    idea {
-        module {
-            downloadJavadoc = true
-            downloadSources = true
-
-            inheritOutputDirs = false
-            outputDir = compileJava.destinationDir
-            testOutputDir = compileTestJava.destinationDir
+        groovy {
+            trimTrailingWhitespace()
+            indentWithSpaces(4)
+            endWithNewline()
         }
-    }
 
-    eclipse {
-        classpath {
-            containers.remove("org.eclipse.jdt.launching.JRE_CONTAINER")
-            containers "org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"
+        groovyGradle {
+            target "*.gradle", "**/*.gradle"
+            trimTrailingWhitespace()
+            indentWithSpaces(4)
+            endWithNewline()
         }
-    }
 
-    bootRun {
-        sourceResources sourceSets.main
-        jvmArgs "-XX:TieredStopAtLevel=1", "-Xverify:none"
-    }
-
-    jib {
-        from {
-            image = "amazoncorretto:11"
+        format "misc", {
+            target "**/*.md", "**/*.yml"
+            trimTrailingWhitespace()
+            indentWithSpaces(2)
+            endWithNewline()
         }
+
+        lineEndings "UNIX"
     }
 
-    ext["groovy.version"] = groovyVersion
-    
+    sourceCompatibility = "17"
+    [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.encoding = "UTF-8"
+    [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.compilerArgs = ["-Xlint:all"]
+
     dependencies {
-        compileOnly "org.projectlombok:lombok:${lombokVersion}"
-        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
-        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        compileOnly "org.projectlombok:lombok"
+        annotationProcessor "org.projectlombok:lombok"
+        testCompileOnly "org.projectlombok:lombok"
+        testAnnotationProcessor "org.projectlombok:lombok"
 
-        testCompile "org.assertj:assertj-core"
-        testCompile "org.spockframework:spock-core:${spockVersion}"
-        testCompile "org.mockito:mockito-core"
+        testImplementation "org.springframework.security:spring-security-test"
+        testImplementation "org.springframework.boot:spring-boot-starter-test"
+        testImplementation "org.spockframework:spock-spring:${spockVersion}"
+        testImplementation "org.codehaus.groovy:groovy-all:3.0.11"
+
+        runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
     }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
+
+    compileJava.dependsOn "spotlessApply"
 }
-
-task startFakeSmtpServer(type: JavaExec) {
-    classpath = buildscript.configurations.classpath
-    args = ["--start-server", "-m"] // -m (memory-mode)
-    main = "com.nilhcem.fakesmtp.FakeSMTP"
-}
-
-apply plugin: "docker-compose"
-
-dockerCompose {
-    useComposeFiles = ["docker/docker-compose.yml"]
-}
-
-apply plugin: com.sample.CodeGenPlugin
 
 codegen {
     domainProjectName = "sample-domain"

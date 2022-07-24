@@ -1,17 +1,19 @@
 spring:
-  profiles: local
+  config:
+    activate:
+      on-profile: local
   messages:
     cache-duration: -1
   datasource:
-    platform: mysql
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/sample?useSSL=false&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/sample?allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=UTF-8
     username: root
     password: passw0rd
-  resources:
-    # キャッシュの無効化
-    cache:
-      period: 0
+  web:
+    resources:
+      # キャッシュの無効化
+      cache:
+        period: 0
   flyway:
     enable: true
     baseline-on-migrate: true

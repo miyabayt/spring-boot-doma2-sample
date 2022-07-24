@@ -1,2 +1,16 @@
-include "sample-common", "sample-domain", "sample-web-base", "sample-web-front", "sample-web-admin", "sample-batch", "it:sample-web-admin", "it:sample-web-front"
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
 
+include "sample-common"
+include "sample-domain"
+include "sample-web-base"
+include "sample-web-front"
+include "sample-web-admin"
+include "sample-batch"
+include "it:sample-web-admin"
+include "it:sample-web-front"

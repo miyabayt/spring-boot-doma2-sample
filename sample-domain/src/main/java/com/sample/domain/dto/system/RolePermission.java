@@ -1,11 +1,9 @@
 package com.sample.domain.dto.system;
 
-import org.seasar.doma.*;
-
 import com.sample.domain.dto.common.DomaDtoImpl;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.seasar.doma.*;
 
 @Table(name = "role_permissions")
 @Entity
@@ -13,19 +11,19 @@ import lombok.Setter;
 @Setter
 public class RolePermission extends DomaDtoImpl {
 
-    private static final long serialVersionUID = 4915898548766398327L;
+  private static final long serialVersionUID = 4915898548766398327L;
 
-    @OriginalStates // 差分UPDATEのために定義する
-    RolePermission originalStates;
+  @OriginalStates // 差分UPDATEのために定義する
+  RolePermission originalStates;
 
-    @Id
-    @Column(name = "role_permission_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @Column(name = "role_permission_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    // 役割キー
-    String roleKey;
+  // 役割キー
+  String roleKey;
 
-    // 権限ID
-    Integer permissionId;
+  // 権限ID
+  Integer permissionId;
 }

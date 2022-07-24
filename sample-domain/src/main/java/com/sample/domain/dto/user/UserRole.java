@@ -1,11 +1,9 @@
 package com.sample.domain.dto.user;
 
-import org.seasar.doma.*;
-
 import com.sample.domain.dto.common.DomaDtoImpl;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.seasar.doma.*;
 
 @Table(name = "user_roles")
 @Entity
@@ -13,26 +11,26 @@ import lombok.Setter;
 @Setter
 public class UserRole extends DomaDtoImpl {
 
-    private static final long serialVersionUID = -6750983302974218054L;
+  private static final long serialVersionUID = -6750983302974218054L;
 
-    // 担当者役割ID
-    @Id
-    @Column(name = "user_role_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  // 担当者役割ID
+  @Id
+  @Column(name = "user_role_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    // ユーザーID
-    Long userId;
+  // ユーザーID
+  Long userId;
 
-    // 役割キー
-    String roleKey;
+  // 役割キー
+  String roleKey;
 
-    // 役割名
-    String roleName;
+  // 役割名
+  String roleName;
 
-    // 権限キー
-    String permissionKey;
+  // 権限キー
+  String permissionKey;
 
-    // 権限名
-    String permissionName;
+  // 権限名
+  String permissionName;
 }

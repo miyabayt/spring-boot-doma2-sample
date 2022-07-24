@@ -1,6 +1,6 @@
 package com.sample.domain.dao.users
 
-import com.sample.domain.dao.users.UserDao
+import com.sample.domain.BaseTestContainerSpec
 import com.sample.domain.dto.common.Pageable
 import com.sample.domain.dto.user.User
 import com.sample.domain.dto.user.UserCriteria
@@ -16,8 +16,7 @@ import static java.util.stream.Collectors.toList
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE
 
 @SpringBootTest(webEnvironment = NONE)
-@Transactional // テスト後にロールバックする
-class UserDaoTest extends Specification {
+class UserDaoTest extends BaseTestContainerSpec {
 
     @Autowired
     UserDao userDao

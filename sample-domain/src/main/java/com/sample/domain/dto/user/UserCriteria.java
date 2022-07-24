@@ -7,8 +7,8 @@ import lombok.Setter;
 @Setter
 public class UserCriteria extends User {
 
-    private static final long serialVersionUID = -1;
+  private static final long serialVersionUID = -1;
 
-    // 住所がNULLのデータに絞り込む
-    Boolean onlyNullAddress;
+  // 住所がNULLのデータに絞り込む
+  Boolean onlyNullAddress;
 }

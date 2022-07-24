@@ -3,11 +3,16 @@ package com.sample.web.front.security;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
+import com.sample.domain.dao.users.UserDao;
+import com.sample.domain.dao.users.UserRoleDao;
+import com.sample.domain.dto.user.User;
+import com.sample.domain.dto.user.UserCriteria;
+import com.sample.domain.dto.user.UserRole;
+import com.sample.web.base.security.BaseRealm;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.sample.domain.dto.user.UserCriteria;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.seasar.doma.jdbc.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,64 +22,56 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.sample.domain.dao.users.UserDao;
-import com.sample.domain.dao.users.UserRoleDao;
-import com.sample.domain.dto.user.User;
-import com.sample.domain.dto.user.UserRole;
-import com.sample.web.base.security.BaseRealm;
-
-import lombok.extern.slf4j.Slf4j;
-
-/**
- * フロント側 認証認可
- */
+/** フロント側 認証認可 */
 @Component
 @Slf4j
 public class UserDaoRealm extends BaseRealm {
 
-    @Autowired
-    UserDao userDao;
+  @Autowired UserDao userDao;
 
-    @Autowired
-    UserRoleDao userRoleDao;
+  @Autowired UserRoleDao userRoleDao;
 
-    @Override
-    protected UserDetails getLoginUser(String loginId) {
-        User user = null;
-        List<GrantedAuthority> authorityList = null;
+  @Override
+  protected UserDetails getLoginUser(String loginId) {
+    User user = null;
+    List<GrantedAuthority> authorityList = null;
 
-        try {
-            // login_idをメールアドレスと見立てる
-            val criteria = new UserCriteria();
-            criteria.setEmail(loginId);
+    try {
+      // login_idをメールアドレスと見立てる
+      val criteria = new UserCriteria();
+      criteria.setEmail(loginId);
 
-            // ユーザーを取得して、セッションに保存する
-            user = userDao.select(criteria)
-                    .orElseThrow(() -> new UsernameNotFoundException("no user found. [id=" + loginId + "]"));
+      // ユーザーを取得して、セッションに保存する
+      user =
+          userDao
+              .select(criteria)
+              .orElseThrow(
+                  () -> new UsernameNotFoundException("no user found. [id=" + loginId + "]"));
 
-            // 担当者権限を取得する
-            List<UserRole> userRoles = userRoleDao.selectByUserId(user.getId(), toList());
+      // 担当者権限を取得する
+      List<UserRole> userRoles = userRoleDao.selectByUserId(user.getId(), toList());
 
-            // 役割キーにプレフィックスをつけてまとめる
-            Set<String> roleKeys = userRoles.stream().map(UserRole::getRoleKey).collect(toSet());
+      // 役割キーにプレフィックスをつけてまとめる
+      Set<String> roleKeys = userRoles.stream().map(UserRole::getRoleKey).collect(toSet());
 
-            // 権限キーをまとめる
-            Set<String> permissionKeys = userRoles.stream().map(UserRole::getPermissionKey).collect(toSet());
+      // 権限キーをまとめる
+      Set<String> permissionKeys =
+          userRoles.stream().map(UserRole::getPermissionKey).collect(toSet());
 
-            // 役割と権限を両方ともGrantedAuthorityとして渡す
-            Set<String> authorities = new HashSet<>();
-            authorities.addAll(roleKeys);
-            authorities.addAll(permissionKeys);
-            authorityList = AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]));
+      // 役割と権限を両方ともGrantedAuthorityとして渡す
+      Set<String> authorities = new HashSet<>();
+      authorities.addAll(roleKeys);
+      authorities.addAll(permissionKeys);
+      authorityList = AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]));
 
-        } catch (Exception e) {
-            // 0件例外がスローされた場合は何もしない
-            // それ以外の例外は、認証エラーの例外で包む
-            if (!(e instanceof NoResultException)) {
-                throw new UsernameNotFoundException("could not select user.", e);
-            }
-        }
-
-        return new LoginUser(user, authorityList);
+    } catch (Exception e) {
+      // 0件例外がスローされた場合は何もしない
+      // それ以外の例外は、認証エラーの例外で包む
+      if (!(e instanceof NoResultException)) {
+        throw new UsernameNotFoundException("could not select user.", e);
+      }
     }
+
+    return new LoginUser(user, authorityList);
+  }
 }

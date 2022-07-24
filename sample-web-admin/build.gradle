@@ -1,19 +1,29 @@
-bootJar {
-    launchScript()
-}
-
-configurations {
-    developmentOnly
-    runtimeClasspath {
-        extendsFrom developmentOnly
-    }
-}
+apply plugin: "com.google.cloud.tools.jib"
 
 dependencies {
-    compile project(":sample-web-base")
-    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    implementation project(":sample-web-base")
+    testImplementation project(":sample-domain").sourceSets.test.output
 
-    testCompile "org.springframework.security:spring-security-test"
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile "org.spockframework:spock-spring:${spockVersion}"
+    testImplementation "org.flywaydb.flyway-test-extensions:flyway-spring-test:7.0.0"
+    testImplementation "org.testcontainers:spock:1.17.3"
+    testImplementation "org.testcontainers:mysql:1.17.3"
+
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+}
+
+jib {
+    from {
+        image = "amazoncorretto:17"
+    }
+    container {
+        jvmFlags = [
+            "-Djava.awt.headless=true",
+            "-Djava.security.egd=file:/dev/./urandom",
+            "-Dfile.encoding=UTF-8",
+            "-Duser.language=ja",
+            "-Duser.country=JP",
+            "-Duser.timezone=Asia/Tokyo",
+            "-XX:MaxRAMPercentage=90"
+        ]
+    }
 }

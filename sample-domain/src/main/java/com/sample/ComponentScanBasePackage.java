@@ -1,7 +1,4 @@
 package com.sample;
 
-/**
- * コンポーネントスキャンのbasePackagesを設定する
- */
-public class ComponentScanBasePackage {
-}
+/** コンポーネントスキャンのbasePackagesを設定する */
+public class ComponentScanBasePackage {}

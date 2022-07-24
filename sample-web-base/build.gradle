@@ -1,3 +1,5 @@
+apply plugin: "java-library"
+
 bootJar {
     enabled = false
 }
@@ -7,49 +9,41 @@ jar {
 }
 
 dependencies {
-    compile project(":sample-domain")
+    api project(":sample-common")
+    api project(":sample-domain")
 
-    // springframework
-    compile "org.springframework.boot:spring-boot-starter-cache"
-    compile("org.springframework.boot:spring-boot-starter-web") {
+    api "org.springframework.boot:spring-boot-starter-validation"
+    api "org.springframework.boot:spring-boot-starter-cache"
+    api("org.springframework.boot:spring-boot-starter-web") {
         // exclude embedded tomcat to use Jetty
         exclude module: "spring-boot-starter-tomcat"
     }
-    compile "org.springframework.boot:spring-boot-starter-security"
-    compile "org.springframework.boot:spring-boot-starter-jetty"
-    compile "org.springframework.session:spring-session-jdbc" // セッション格納先にDBを使う場合
-    //compile "org.springframework.boot:spring-boot-starter-data-redis" // セッション格納先にredisを使う場合
+    api "org.springframework.boot:spring-boot-starter-security"
+    api "org.springframework.boot:spring-boot-starter-jetty"
+    api "org.springframework.session:spring-session-jdbc" // セッション格納先にDBを使う場合
+    //implementation "org.springframework.boot:spring-boot-starter-data-redis" // セッション格納先にredisを使う場合
 
-    // thymeleaf
-    compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
+    api "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
+    api "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
+    api "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
+    api "org.modelmapper:modelmapper:3.1.0"
+    api "net.sf.jasperreports:jasperreports:6.19.1"
+    api "org.apache.poi:poi:5.2.2"
+    api "org.apache.poi:poi-ooxml:5.2.2"
+    api "net.sf.ehcache:ehcache"
+    api "org.apache.tika:tika-core:2.3.0"
 
-    // jasperreports
-    compile "net.sf.jasperreports:jasperreports:6.17.0"
-    compile "com.lowagie:itext:2.1.7.js5"
-
-    // apache POI
-    compile "org.apache.poi:poi:3.16"
-    compile "org.apache.poi:poi-ooxml:3.16"
-
-    // EhCache
-    compile "net.sf.ehcache:ehcache"
-
-    // webjars
-    compile "org.webjars:webjars-locator-core"
-    compile "org.webjars:bootstrap:3.3.7"
-    compile "org.webjars:jquery:2.2.4"
-    compile "org.webjars:jquery-validation:1.17.0"
-    compile "org.webjars:bootstrap-datepicker:1.7.1"
-    compile("org.webjars.bower:iCheck:1.0.2") {
+    api "org.webjars:webjars-locator-core"
+    api "org.webjars:bootstrap:3.3.7"
+    api "org.webjars:jquery:2.2.4"
+    api "org.webjars:jquery-validation:1.17.0"
+    api "org.webjars:bootstrap-datepicker:1.7.1"
+    api("org.webjars.bower:iCheck:1.0.2") {
         exclude module: "jquery"
     }
-    compile "org.webjars:html5shiv:3.7.3"
-    compile "org.webjars:respond:1.4.2"
-    compile "org.webjars:AdminLTE:2.3.8"
-    compile "org.webjars:font-awesome:4.7.0"
-    compile "org.webjars:ionicons:2.0.1"
-
-    testCompile "org.springframework.security:spring-security-test"
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile "org.spockframework:spock-spring:${spockVersion}"
+    api "org.webjars:html5shiv:3.7.3"
+    api "org.webjars:respond:1.4.2"
+    api "org.webjars:AdminLTE:2.3.8"
+    api "org.webjars:font-awesome:4.7.0"
+    api "org.webjars:ionicons:2.0.1"
 }

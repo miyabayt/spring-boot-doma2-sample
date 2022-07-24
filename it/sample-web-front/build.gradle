@@ -1,3 +1,7 @@
+ext {
+    drivers = ["dockerChrome", "dockerFirefox"]
+}
+
 bootJar {
     enabled = false
 }
@@ -7,17 +11,34 @@ jar {
 }
 
 dependencies {
-    testCompile "org.codehaus.groovy:groovy-all:2.5.3"
+    testImplementation project(":sample-web-front")
 
-    def gebVersion = "2.2"
-    def seleniumVersion = "3.141.59"
+    testImplementation "org.gebish:geb-spock:${gebVersion}"
+    testImplementation "org.seleniumhq.selenium:htmlunit-driver:3.62.0"
+    testImplementation "org.seleniumhq.selenium:selenium-chrome-driver:${seleniumVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-remote-driver:${seleniumVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-support:${seleniumVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-api:${seleniumVersion}"
+    testImplementation "org.testcontainers:spock:1.17.3"
+    testImplementation "org.testcontainers:selenium:1.17.3"
+    testImplementation "org.testcontainers:mysql:1.17.3"
+}
 
-    testCompile "org.gebish:geb-spock:$gebVersion"
-    testCompile "org.spockframework:spock-core:1.2-groovy-2.5"
-    testCompile "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
-    testCompile "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
+drivers.each { driver ->
+    task "${driver}Test"(type: Test) {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+        group JavaBasePlugin.VERIFICATION_GROUP
+        outputs.upToDateWhen { false }  // Always run tests
+        systemProperty "geb.build.reportsDir", reporting.file("geb/$name")
+        systemProperty "geb.env", driver
+    }
 }
 
 test {
-    systemProperties "geb.build.reportsDir": "$reportsDir/geb"
+    dependsOn drivers.collect { tasks["${it}Test"] }
+    enabled = false
 }
