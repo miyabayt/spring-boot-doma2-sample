@@ -14,7 +14,7 @@ spring:
     # JSONのキーをアンダースコア区切りの文字列にする
     property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       autoCommit: false
       connectionTimeout: 30000

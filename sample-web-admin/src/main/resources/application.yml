@@ -47,7 +47,7 @@ spring:
     filter:
       dispatcher-types: forward,async,error,request
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       autoCommit: false
       connectionTimeout: 30000

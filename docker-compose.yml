@@ -1,0 +1,34 @@
+version: '3.4'
+services:
+  mysql:
+    image: mysql:8
+    command: 'mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci'
+    environment:
+      MYSQL_DATABASE: sample
+      MYSQL_ROOT_PASSWORD: passw0rd
+      TZ: 'Asia/Tokyo'
+    ports:
+      - '3306:3306'
+  redis:
+    image: 'redis:latest'
+    ports:
+      - '6379:6379'
+    command: redis-server --appendonly yes
+  #  localstack:
+  #    image: localstack/localstack
+  #    environment:
+  #      DATA_DIR: /tmp/localstack/data
+  #      HOSTNAME_EXTERNAL: host.docker.internal
+  #    ports:
+  #      - '4566:4566'
+  #      - '4572:4572'
+  #    volumes:
+  #      - /tmp/localstack:/tmp/localstack
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+    environment:
+      MH_STORAGE: maildir
+      MH_MAILDIR_PATH: /tmp

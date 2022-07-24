@@ -50,7 +50,7 @@ spring:
       # spring-securityのベーシック認証を無効化する
       enabled: false
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       autoCommit: false
       connectionTimeout: 30000
