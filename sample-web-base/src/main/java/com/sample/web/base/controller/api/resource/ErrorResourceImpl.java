@@ -1,9 +1,7 @@
 package com.sample.web.base.controller.api.resource;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,12 +12,11 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ErrorResourceImpl extends ResourceImpl {
 
-    // リクエストID
-    String requestId;
+  // リクエストID
+  String requestId;
 
-    // 入力エラー
-    List<FieldErrorResource> fieldErrors;
+  // 入力エラー
+  List<FieldErrorResource> fieldErrors;
 
-    public ErrorResourceImpl() {
-    }
+  public ErrorResourceImpl() {}
 }

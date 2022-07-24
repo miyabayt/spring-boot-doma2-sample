@@ -2,11 +2,11 @@ package com.sample.web.base.controller.api.resource;
 
 public interface PageableResource extends Resource {
 
-    int getPage();
+  int getPage();
 
-    int getTotalPages();
+  int getTotalPages();
 
-    void setPage(int page);
+  void setPage(int page);
 
-    void setTotalPages(int totalPages);
+  void setTotalPages(int totalPages);
 }

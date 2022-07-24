@@ -1,7 +1,6 @@
 package com.sample.web.base.security.rememberme;
 
 import java.time.LocalDateTime;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,15 +8,15 @@ import lombok.Setter;
 @Getter
 public class MultiDeviceRememberMeToken {
 
-    private String username;
+  private String username;
 
-    private String remoteAddress;
+  private String remoteAddress;
 
-    private String userAgent;
+  private String userAgent;
 
-    private String series;
+  private String series;
 
-    private String tokenValue;
+  private String tokenValue;
 
-    private LocalDateTime lastUsed;
+  private LocalDateTime lastUsed;
 }

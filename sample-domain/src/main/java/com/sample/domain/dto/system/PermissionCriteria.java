@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class PermissionCriteria extends Permission {
 
-    private static final long serialVersionUID = -1;
+  private static final long serialVersionUID = -1;
 }

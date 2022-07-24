@@ -4,19 +4,19 @@ import java.time.LocalDateTime;
 
 public interface DomaHistoryDto {
 
-    Integer getChangedId();
+  Integer getChangedId();
 
-    void setChangedId(Integer changedId);
+  void setChangedId(Integer changedId);
 
-    String getChangedPropertyNames();
+  String getChangedPropertyNames();
 
-    void setChangedPropertyNames(String changedPropertyNames);
+  void setChangedPropertyNames(String changedPropertyNames);
 
-    Integer getChangedBy();
+  Integer getChangedBy();
 
-    void setChangedBy(Integer changedBy);
+  void setChangedBy(Integer changedBy);
 
-    LocalDateTime getChangedAt();
+  LocalDateTime getChangedAt();
 
-    void setChangedAt(LocalDateTime changedAt);
+  void setChangedAt(LocalDateTime changedAt);
 }

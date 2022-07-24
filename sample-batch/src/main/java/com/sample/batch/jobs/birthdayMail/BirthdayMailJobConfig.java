@@ -1,5 +1,9 @@
 package com.sample.batch.jobs.birthdayMail;
 
+import com.sample.batch.listener.DefaultStepExecutionListener;
+import com.sample.domain.dto.system.SendMailQueue;
+import com.sample.domain.dto.user.User;
+import lombok.val;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
@@ -15,64 +19,63 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 
-import com.sample.batch.listener.DefaultStepExecutionListener;
-import com.sample.domain.dto.system.SendMailQueue;
-import com.sample.domain.dto.user.User;
-
-import lombok.val;
-
-/**
- * バースデーメール送信バッチ
- */
+/** バースデーメール送信バッチ */
 @Configuration
 @EnableBatchProcessing
 public class BirthdayMailJobConfig {
 
-    @Autowired
-    JobBuilderFactory jobBuilderFactory;
+  @Autowired JobBuilderFactory jobBuilderFactory;
 
-    @Autowired
-    StepBuilderFactory stepBuilderFactory;
+  @Autowired StepBuilderFactory stepBuilderFactory;
 
-    @Autowired
-    TaskExecutor taskExecutor;
+  @Autowired TaskExecutor taskExecutor;
 
-    @Bean
-    public ItemReader<User> birthdayMailUserItemReader() {
-        val reader = new BirthdayMailUserItemReader();
-        reader.setPageSize(100); // 100件ずつ取得するサンプル
-        return reader;
-    }
+  @Bean
+  public ItemReader<User> birthdayMailUserItemReader() {
+    val reader = new BirthdayMailUserItemReader();
+    reader.setPageSize(100); // 100件ずつ取得するサンプル
+    return reader;
+  }
 
-    @Bean
-    public ItemProcessor<User, SendMailQueue> birthdayMailProcessor() {
-        // UserをSendMailQueueに変換する
-        return new BirthdayMailProcessor();
-    }
+  @Bean
+  public ItemProcessor<User, SendMailQueue> birthdayMailProcessor() {
+    // UserをSendMailQueueに変換する
+    return new BirthdayMailProcessor();
+  }
 
-    @Bean
-    public ItemWriter<SendMailQueue> birthdayMailItemWriter() {
-        return new BirthdayMailItemWriter();
-    }
+  @Bean
+  public ItemWriter<SendMailQueue> birthdayMailItemWriter() {
+    return new BirthdayMailItemWriter();
+  }
 
-    @Bean
-    public JobExecutionListener birthdayMailJobListener() {
-        return new BirthdayMailJobListener();
-    }
+  @Bean
+  public JobExecutionListener birthdayMailJobListener() {
+    return new BirthdayMailJobListener();
+  }
 
-    @Bean
-    public Job birthdayMailJob() {
-        return jobBuilderFactory.get("birthdayMailJob").incrementer(new RunIdIncrementer())
-                .listener(birthdayMailJobListener()).flow(birthdayMailStep()).end().build();
-    }
+  @Bean
+  public Job birthdayMailJob() {
+    return jobBuilderFactory
+        .get("birthdayMailJob")
+        .incrementer(new RunIdIncrementer())
+        .listener(birthdayMailJobListener())
+        .flow(birthdayMailStep())
+        .end()
+        .build();
+  }
 
-    @Bean
-    public Step birthdayMailStep() {
-        return stepBuilderFactory.get("birthdayMailStep").listener(new DefaultStepExecutionListener())
-                .<User, SendMailQueue>chunk(100).reader(birthdayMailUserItemReader()).processor(birthdayMailProcessor())
-                .writer(birthdayMailItemWriter()).taskExecutor(taskExecutor)
-                // 2つのスレッドで処理するサンプル
-                .throttleLimit(2).build();
-
-    }
+  @Bean
+  public Step birthdayMailStep() {
+    return stepBuilderFactory
+        .get("birthdayMailStep")
+        .listener(new DefaultStepExecutionListener())
+        .<User, SendMailQueue>chunk(100)
+        .reader(birthdayMailUserItemReader())
+        .processor(birthdayMailProcessor())
+        .writer(birthdayMailItemWriter())
+        .taskExecutor(taskExecutor)
+        // 2つのスレッドで処理するサンプル
+        .throttleLimit(2)
+        .build();
+  }
 }

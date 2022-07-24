@@ -1,14 +1,12 @@
 package com.sample.web.base.controller.api.resource;
 
-/**
- * リソースファクトリ
- */
+/** リソースファクトリ */
 public interface ResourceFactory {
 
-    /**
-     * インスタンスを作成します。
-     *
-     * @return
-     */
-    Resource create();
+  /**
+   * インスタンスを作成します。
+   *
+   * @return
+   */
+  Resource create();
 }

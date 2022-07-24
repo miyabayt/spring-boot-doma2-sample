@@ -17,9 +17,6 @@ $ git clone https://github.com/miyabayt/spring-boot-doma2-sample.git
 
 - Lombok pluginをインストールする。
   - Settings > Build, Excecution, Deployment > Compiler > Annotation Processor > `Enable Annotation Processing`をONにする。
-- Eclipse Code Formatterをインストールする。
-  - Settings > Other Settings > Eclipse Code Formatter > `Use the Eclipse code formatter`をONにする。
-    - `Eclipse Java Formatter config file`に`eclipse-formatter.xml`を指定する。
 - bootRunを実行している場合でもビルドされるようにする。
   - Intellij > Ctrl+Shift+A > type Registry... > `compiler.automake.allow.when.app.running`をONにする。
 - Windowsの場合は、コンソール出力が文字化けするため、`C:¥Program Files¥JetBrains¥IntelliJ Idea xx.x.x¥bin`の中にある`idea64.exe.vmoptions`ファイルに`-Dfile.encoding=UTF-8`を追記する。

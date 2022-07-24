@@ -1,9 +1,7 @@
 package com.sample.web.admin.controller.html.system.mailtemplates;
 
-import javax.validation.constraints.NotEmpty;
-
 import com.sample.web.base.controller.html.BaseForm;
-
+import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,19 +9,16 @@ import lombok.Setter;
 @Getter
 public class MailTemplateForm extends BaseForm {
 
-    private static final long serialVersionUID = -5860252006532570164L;
+  private static final long serialVersionUID = -5860252006532570164L;
 
-    Long id;
+  Long id;
 
-    // メールテンプレートキー
-    @NotEmpty
-    String templateKey;
+  // メールテンプレートキー
+  @NotEmpty String templateKey;
 
-    // メールタイトル
-    @NotEmpty
-    String subject;
+  // メールタイトル
+  @NotEmpty String subject;
 
-    // メール本文
-    @NotEmpty
-    String templateBody;
+  // メール本文
+  @NotEmpty String templateBody;
 }

@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class RolePermissionCriteria extends RolePermission {
 
-    private static final long serialVersionUID = -1;
+  private static final long serialVersionUID = -1;
 }

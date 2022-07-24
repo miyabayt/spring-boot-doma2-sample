@@ -5,11 +5,6 @@ import static com.sample.common.util.ValidateUtils.isTrue;
 import static com.sample.domain.util.DomaUtils.createSelectOptions;
 import static java.util.stream.Collectors.toList;
 
-import java.util.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import com.sample.domain.dao.system.RoleDao;
 import com.sample.domain.dao.system.RolePermissionDao;
 import com.sample.domain.dto.common.Page;
@@ -20,188 +15,194 @@ import com.sample.domain.dto.system.RolePermission;
 import com.sample.domain.dto.system.RolePermissionCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.service.BaseRepository;
-
+import java.util.*;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-/**
- * 役割リポジトリ
- */
+/** 役割リポジトリ */
 @Repository
 public class RoleRepository extends BaseRepository {
 
-    @Autowired
-    RoleDao roleDao;
+  @Autowired RoleDao roleDao;
 
-    @Autowired
-    RolePermissionDao rolePermissionDao;
+  @Autowired RolePermissionDao rolePermissionDao;
 
-    /**
-     * 役割を複数取得します。
-     *
-     * @param criteria
-     * @param pageable
-     * @return
-     */
-    public Page<Role> findAll(RoleCriteria criteria, Pageable pageable) {
-        // ページングを指定する
-        val options = createSelectOptions(pageable).count();
-        val data = roleDao.selectAll(criteria, options, toList());
-        return pageFactory.create(data, pageable, options.getCount());
-    }
+  /**
+   * 役割を複数取得します。
+   *
+   * @param criteria
+   * @param pageable
+   * @return
+   */
+  public Page<Role> findAll(RoleCriteria criteria, Pageable pageable) {
+    // ページングを指定する
+    val options = createSelectOptions(pageable).count();
+    val data = roleDao.selectAll(criteria, options, toList());
+    return pageFactory.create(data, pageable, options.getCount());
+  }
 
-    /**
-     * 役割を取得します。
-     *
-     * @param criteria
-     * @return
-     */
-    public Optional<Role> findOne(RoleCriteria criteria) {
-        // 1件取得
-        val role = roleDao.select(criteria);
+  /**
+   * 役割を取得します。
+   *
+   * @param criteria
+   * @return
+   */
+  public Optional<Role> findOne(RoleCriteria criteria) {
+    // 1件取得
+    val role = roleDao.select(criteria);
 
-        role.ifPresent(r -> {
-            val rolePermissions = findRolePermissions(r);
-            if (isNotEmpty(rolePermissions)) {
-                Map<Integer, Boolean> permissions = new HashMap<>();
-                rolePermissions.forEach(rp -> permissions.putIfAbsent(rp.getPermissionId(), true));
-                r.setPermissions(permissions);
-            }
-        });
-
-        return role;
-    }
-
-    /**
-     * 役割を取得します。
-     *
-     * @return
-     */
-    public Role findById(final Long id) {
-        // 1件取得
-        val role = roleDao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("role_id=" + id + " のデータが見つかりません。"));
-
-        val rolePermissions = findRolePermissions(role);
-        if (isNotEmpty(rolePermissions)) {
+    role.ifPresent(
+        r -> {
+          val rolePermissions = findRolePermissions(r);
+          if (isNotEmpty(rolePermissions)) {
             Map<Integer, Boolean> permissions = new HashMap<>();
             rolePermissions.forEach(rp -> permissions.putIfAbsent(rp.getPermissionId(), true));
-            role.setPermissions(permissions);
-        }
+            r.setPermissions(permissions);
+          }
+        });
 
-        return role;
+    return role;
+  }
+
+  /**
+   * 役割を取得します。
+   *
+   * @return
+   */
+  public Role findById(final Long id) {
+    // 1件取得
+    val role =
+        roleDao
+            .selectById(id)
+            .orElseThrow(() -> new NoDataFoundException("role_id=" + id + " のデータが見つかりません。"));
+
+    val rolePermissions = findRolePermissions(role);
+    if (isNotEmpty(rolePermissions)) {
+      Map<Integer, Boolean> permissions = new HashMap<>();
+      rolePermissions.forEach(rp -> permissions.putIfAbsent(rp.getPermissionId(), true));
+      role.setPermissions(permissions);
     }
 
-    /**
-     * 役割を追加します。
-     *
-     * @param inputRole
-     * @return
-     */
-    public Role create(final Role inputRole) {
-        // 1件登録
-        roleDao.insert(inputRole);
+    return role;
+  }
 
-        // 役割権限紐付けを登録する
-        insertRolePermissions(inputRole);
+  /**
+   * 役割を追加します。
+   *
+   * @param inputRole
+   * @return
+   */
+  public Role create(final Role inputRole) {
+    // 1件登録
+    roleDao.insert(inputRole);
 
-        return inputRole;
+    // 役割権限紐付けを登録する
+    insertRolePermissions(inputRole);
+
+    return inputRole;
+  }
+
+  /**
+   * 役割を更新します。
+   *
+   * @param inputRole
+   * @return
+   */
+  public Role update(final Role inputRole) {
+    // 1件更新
+    int updated = roleDao.update(inputRole);
+
+    if (updated < 1) {
+      throw new NoDataFoundException("role_id=" + inputRole.getId() + " のデータが見つかりません。");
     }
 
-    /**
-     * 役割を更新します。
-     *
-     * @param inputRole
-     * @return
-     */
-    public Role update(final Role inputRole) {
-        // 1件更新
-        int updated = roleDao.update(inputRole);
+    // 役割権限紐付けを論理削除する
+    deleteRolePermissions(inputRole);
 
-        if (updated < 1) {
-            throw new NoDataFoundException("role_id=" + inputRole.getId() + " のデータが見つかりません。");
-        }
+    // 役割権限紐付けを登録する
+    insertRolePermissions(inputRole);
 
-        // 役割権限紐付けを論理削除する
-        deleteRolePermissions(inputRole);
+    return inputRole;
+  }
 
-        // 役割権限紐付けを登録する
-        insertRolePermissions(inputRole);
+  /**
+   * 役割を論理削除します。
+   *
+   * @return
+   */
+  public Role delete(final Long id) {
+    val role =
+        roleDao
+            .selectById(id)
+            .orElseThrow(() -> new NoDataFoundException("role_id=" + id + " のデータが見つかりません。"));
 
-        return inputRole;
+    int updated = roleDao.delete(role);
+
+    if (updated < 1) {
+      throw new NoDataFoundException("role_id=" + id + " は更新できませんでした。");
     }
 
-    /**
-     * 役割を論理削除します。
-     *
-     * @return
-     */
-    public Role delete(final Long id) {
-        val role = roleDao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("role_id=" + id + " のデータが見つかりません。"));
+    // 役割権限紐付けを論理削除する
+    deleteRolePermissions(role);
 
-        int updated = roleDao.delete(role);
+    return role;
+  }
 
-        if (updated < 1) {
-            throw new NoDataFoundException("role_id=" + id + " は更新できませんでした。");
-        }
+  /**
+   * 役割権限紐付けを登録する
+   *
+   * @param inputRole
+   */
+  protected void insertRolePermissions(final Role inputRole) {
+    // 入力値がない場合はスキップする
+    if (isNotEmpty(inputRole.getPermissions())) {
+      List<RolePermission> rolePermissionsToInsert = new ArrayList<>();
 
-        // 役割権限紐付けを論理削除する
-        deleteRolePermissions(role);
-
-        return role;
-    }
-
-    /**
-     * 役割権限紐付けを登録する
-     *
-     * @param inputRole
-     */
-    protected void insertRolePermissions(final Role inputRole) {
-        // 入力値がない場合はスキップする
-        if (isNotEmpty(inputRole.getPermissions())) {
-            List<RolePermission> rolePermissionsToInsert = new ArrayList<>();
-
-            // 権限のチェックがある場合
-            inputRole.getPermissions().forEach((key, value) -> {
+      // 権限のチェックがある場合
+      inputRole
+          .getPermissions()
+          .forEach(
+              (key, value) -> {
                 // チェックされている
                 if (isTrue(value)) {
-                    val rolePermission = new RolePermission();
-                    rolePermission.setRoleKey(inputRole.getRoleKey());
-                    rolePermission.setPermissionId(key);
-                    rolePermissionsToInsert.add(rolePermission);
+                  val rolePermission = new RolePermission();
+                  rolePermission.setRoleKey(inputRole.getRoleKey());
+                  rolePermission.setPermissionId(key);
+                  rolePermissionsToInsert.add(rolePermission);
                 }
-            });
+              });
 
-            // 一括登録
-            rolePermissionDao.insert(rolePermissionsToInsert);
-        }
+      // 一括登録
+      rolePermissionDao.insert(rolePermissionsToInsert);
     }
+  }
 
-    /**
-     * 役割権限紐付けを論理削除する
-     *
-     * @param inputRole
-     */
-    protected void deleteRolePermissions(final Role inputRole) {
-        List<RolePermission> rolePermissionsToDelete = findRolePermissions(inputRole);
+  /**
+   * 役割権限紐付けを論理削除する
+   *
+   * @param inputRole
+   */
+  protected void deleteRolePermissions(final Role inputRole) {
+    List<RolePermission> rolePermissionsToDelete = findRolePermissions(inputRole);
 
-        if (isNotEmpty(rolePermissionsToDelete)) {
-            rolePermissionDao.delete(rolePermissionsToDelete);// 一括論理削除
-        }
+    if (isNotEmpty(rolePermissionsToDelete)) {
+      rolePermissionDao.delete(rolePermissionsToDelete); // 一括論理削除
     }
+  }
 
-    /**
-     * 役割権限紐付けを取得する
-     *
-     * @param inputRole
-     * @return
-     */
-    protected List<RolePermission> findRolePermissions(Role inputRole) {
-        // 役割権限紐付けを役割キーで取得する
-        val criteria = new RolePermissionCriteria();
-        criteria.setRoleKey(inputRole.getRoleKey());
+  /**
+   * 役割権限紐付けを取得する
+   *
+   * @param inputRole
+   * @return
+   */
+  protected List<RolePermission> findRolePermissions(Role inputRole) {
+    // 役割権限紐付けを役割キーで取得する
+    val criteria = new RolePermissionCriteria();
+    criteria.setRoleKey(inputRole.getRoleKey());
 
-        val options = createSelectOptions(Pageable.NO_LIMIT);
-        return rolePermissionDao.selectAll(criteria, options, toList());
-    }
+    val options = createSelectOptions(Pageable.NO_LIMIT);
+    return rolePermissionDao.selectAll(criteria, options, toList());
+  }
 }

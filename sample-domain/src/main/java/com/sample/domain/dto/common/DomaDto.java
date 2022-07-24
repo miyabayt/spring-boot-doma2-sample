@@ -5,31 +5,31 @@ import java.time.LocalDateTime;
 // TODO: コメントを書く
 public interface DomaDto extends Dto {
 
-    String getCreatedBy();
+  String getCreatedBy();
 
-    void setCreatedBy(String createdBy);
+  void setCreatedBy(String createdBy);
 
-    LocalDateTime getCreatedAt();
+  LocalDateTime getCreatedAt();
 
-    void setCreatedAt(LocalDateTime createdAt);
+  void setCreatedAt(LocalDateTime createdAt);
 
-    String getUpdatedBy();
+  String getUpdatedBy();
 
-    void setUpdatedBy(String updatedBy);
+  void setUpdatedBy(String updatedBy);
 
-    LocalDateTime getUpdatedAt();
+  LocalDateTime getUpdatedAt();
 
-    void setUpdatedAt(LocalDateTime updatedAt);
+  void setUpdatedAt(LocalDateTime updatedAt);
 
-    String getDeletedBy();
+  String getDeletedBy();
 
-    void setDeletedBy(String deletedBy);
+  void setDeletedBy(String deletedBy);
 
-    LocalDateTime getDeletedAt();
+  LocalDateTime getDeletedAt();
 
-    void setDeletedAt(LocalDateTime deletedAt);
+  void setDeletedAt(LocalDateTime deletedAt);
 
-    Integer getVersion();
+  Integer getVersion();
 
-    void setVersion(Integer version);
+  void setVersion(Integer version);
 }

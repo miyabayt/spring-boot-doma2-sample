@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class HolidayCriteria extends Holiday {
 
-    private static final long serialVersionUID = -1;
+  private static final long serialVersionUID = -1;
 }

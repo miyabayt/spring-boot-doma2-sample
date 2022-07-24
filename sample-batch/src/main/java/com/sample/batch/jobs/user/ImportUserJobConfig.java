@@ -1,5 +1,6 @@
 package com.sample.batch.jobs.user;
 
+import com.sample.batch.listener.DefaultStepExecutionListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
@@ -12,40 +13,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.sample.batch.listener.DefaultStepExecutionListener;
-
-/**
- * ユーザー情報取り込み
- */
+/** ユーザー情報取り込み */
 @Configuration
 @EnableBatchProcessing
 public class ImportUserJobConfig {
 
-    @Autowired
-    JobBuilderFactory jobBuilderFactory;
+  @Autowired JobBuilderFactory jobBuilderFactory;
 
-    @Autowired
-    StepBuilderFactory stepBuilderFactory;
+  @Autowired StepBuilderFactory stepBuilderFactory;
 
-    @Bean
-    public JobExecutionListener importUserJobListener() {
-        return new ImportUserJobListener();
-    }
+  @Bean
+  public JobExecutionListener importUserJobListener() {
+    return new ImportUserJobListener();
+  }
 
-    @Bean
-    public Job importUserJob() {
-        return jobBuilderFactory.get("importUserJob").incrementer(new RunIdIncrementer())
-                .listener(importUserJobListener()).flow(importUserStep()).end().build();
-    }
+  @Bean
+  public Job importUserJob() {
+    return jobBuilderFactory
+        .get("importUserJob")
+        .incrementer(new RunIdIncrementer())
+        .listener(importUserJobListener())
+        .flow(importUserStep())
+        .end()
+        .build();
+  }
 
-    @Bean
-    public Step importUserStep() {
-        return stepBuilderFactory.get("importUserStep").listener(new DefaultStepExecutionListener())
-                .tasklet(importUserTasklet()).build();
-    }
+  @Bean
+  public Step importUserStep() {
+    return stepBuilderFactory
+        .get("importUserStep")
+        .listener(new DefaultStepExecutionListener())
+        .tasklet(importUserTasklet())
+        .build();
+  }
 
-    @Bean
-    public Tasklet importUserTasklet() {
-        return new ImportUserTasklet();
-    }
+  @Bean
+  public Tasklet importUserTasklet() {
+    return new ImportUserTasklet();
+  }
 }

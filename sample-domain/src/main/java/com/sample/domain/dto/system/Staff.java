@@ -1,16 +1,12 @@
 package com.sample.domain.dto.system;
 
-import java.time.LocalDateTime;
-
-import javax.validation.constraints.Digits;
-
-import javax.validation.constraints.Email;
-import org.seasar.doma.*;
-
 import com.sample.domain.dto.common.DomaDtoImpl;
-
+import java.time.LocalDateTime;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
+import org.seasar.doma.*;
 
 @Table(name = "staffs")
 @Entity
@@ -18,35 +14,34 @@ import lombok.Setter;
 @Setter
 public class Staff extends DomaDtoImpl {
 
-    private static final long serialVersionUID = -3762941082070995608L;
+  private static final long serialVersionUID = -3762941082070995608L;
 
-    @OriginalStates // 差分UPDATEのために定義する
-    Staff originalStates;
+  @OriginalStates // 差分UPDATEのために定義する
+  Staff originalStates;
 
-    @Id
-    @Column(name = "staff_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+  @Id
+  @Column(name = "staff_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
 
-    String password;
+  String password;
 
-    // 名前
-    String firstName;
+  // 名前
+  String firstName;
 
-    // 苗字
-    String lastName;
+  // 苗字
+  String lastName;
 
-    // メールアドレス
-    @Email
-    String email;
+  // メールアドレス
+  @Email String email;
 
-    // 電話番号
-    @Digits(fraction = 0, integer = 10)
-    String tel;
+  // 電話番号
+  @Digits(fraction = 0, integer = 10)
+  String tel;
 
-    // パスワードリセットトークン
-    String passwordResetToken;
+  // パスワードリセットトークン
+  String passwordResetToken;
 
-    // トークン失効日
-    LocalDateTime tokenExpiresAt;
+  // トークン失効日
+  LocalDateTime tokenExpiresAt;
 }

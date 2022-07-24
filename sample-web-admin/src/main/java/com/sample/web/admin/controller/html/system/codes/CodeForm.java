@@ -1,10 +1,8 @@
 package com.sample.web.admin.controller.html.system.codes;
 
+import com.sample.web.base.controller.html.BaseForm;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import com.sample.web.base.controller.html.BaseForm;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,25 +10,22 @@ import lombok.Setter;
 @Getter
 public class CodeForm extends BaseForm {
 
-    private static final long serialVersionUID = 7555305356779221873L;
+  private static final long serialVersionUID = 7555305356779221873L;
 
-    Long id;
+  Long id;
 
-    // コードキー
-    @NotEmpty
-    String codeKey;
+  // コードキー
+  @NotEmpty String codeKey;
 
-    // コード名
-    @NotEmpty
-    String codeValue;
+  // コード名
+  @NotEmpty String codeValue;
 
-    // コードエイリアス
-    String codeAlias;
+  // コードエイリアス
+  String codeAlias;
 
-    // 表示順
-    @NotNull
-    Integer displayOrder;
+  // 表示順
+  @NotNull Integer displayOrder;
 
-    // 無効フラグ
-    Boolean isInvalid;
+  // 無効フラグ
+  Boolean isInvalid;
 }

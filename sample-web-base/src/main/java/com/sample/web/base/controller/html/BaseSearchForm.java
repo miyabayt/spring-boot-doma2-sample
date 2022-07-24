@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 public abstract class BaseSearchForm extends BaseForm {
 
-    private static final long serialVersionUID = -7129975017789825804L;
+  private static final long serialVersionUID = -7129975017789825804L;
 
-    int page = 1;
+  int page = 1;
 
-    int perpage = 10;
+  int perpage = 10;
 }

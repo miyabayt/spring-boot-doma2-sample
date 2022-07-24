@@ -1,120 +1,117 @@
 package com.sample.common;
 
 import java.util.concurrent.TimeUnit;
-
 import lombok.val;
 
-/**
- * スロットリングする
- */
+/** スロットリングする */
 public class Throttler {
 
-    private long maxRequestsPerPeriod = 0;
+  private long maxRequestsPerPeriod = 0;
 
-    private long timePeriodMillis = 1000;
+  private long timePeriodMillis = 1000;
 
-    private TimeSlot timeSlot = null;
+  private TimeSlot timeSlot = null;
 
-    /**
-     * コンストラクタ
-     *
-     * @param maxRequestsPerPeriod
-     */
-    public Throttler(int maxRequestsPerPeriod) {
-        this.maxRequestsPerPeriod = maxRequestsPerPeriod;
+  /**
+   * コンストラクタ
+   *
+   * @param maxRequestsPerPeriod
+   */
+  public Throttler(int maxRequestsPerPeriod) {
+    this.maxRequestsPerPeriod = maxRequestsPerPeriod;
+  }
+
+  /**
+   * 処理を実行します。
+   *
+   * @param callback
+   */
+  public <T> void process(Callback<T> callback) {
+    // 秒間アクセス数を超えている場合の遅延させるべきミリ秒数
+    long delay = this.calculateDelay();
+
+    if (0 < delay) {
+      this.delay(delay);
     }
 
-    /**
-     * 処理を実行します。
-     *
-     * @param callback
-     */
-    public <T> void process(Callback<T> callback) {
-        // 秒間アクセス数を超えている場合の遅延させるべきミリ秒数
-        long delay = this.calculateDelay();
+    callback.execute();
+  }
 
-        if (0 < delay) {
-            this.delay(delay);
-        }
+  /**
+   * 指定されたミリ秒スリープさせる。
+   *
+   * @param delay
+   * @throws InterruptedException
+   */
+  protected void delay(long delay) {
+    if (0 < delay) {
+      try {
+        TimeUnit.MICROSECONDS.sleep(delay);
+      } catch (InterruptedException e) {
+      }
+    }
+  }
 
-        callback.execute();
+  protected synchronized long calculateDelay() {
+    TimeSlot slot = nextSlot();
+
+    if (!slot.isActive()) {
+      return slot.startTime - System.currentTimeMillis();
     }
 
-    /**
-     * 指定されたミリ秒スリープさせる。
-     *
-     * @param delay
-     * @throws InterruptedException
-     */
-    protected void delay(long delay) {
-        if (0 < delay) {
-            try {
-                TimeUnit.MICROSECONDS.sleep(delay);
-            } catch (InterruptedException e) {
-            }
-        }
+    return 0;
+  }
+
+  protected synchronized TimeSlot nextSlot() {
+    if (timeSlot == null) {
+      timeSlot = new TimeSlot();
     }
 
-    protected synchronized long calculateDelay() {
-        TimeSlot slot = nextSlot();
-
-        if (!slot.isActive()) {
-            return slot.startTime - System.currentTimeMillis();
-        }
-
-        return 0;
+    if (timeSlot.isFull()) {
+      timeSlot = timeSlot.next();
     }
 
-    protected synchronized TimeSlot nextSlot() {
-        if (timeSlot == null) {
-            timeSlot = new TimeSlot();
-        }
+    timeSlot.assign();
 
-        if (timeSlot.isFull()) {
-            timeSlot = timeSlot.next();
-        }
+    return timeSlot;
+  }
 
-        timeSlot.assign();
+  protected class TimeSlot {
 
-        return timeSlot;
+    private long capacity = Throttler.this.maxRequestsPerPeriod;
+
+    private long duration = Throttler.this.timePeriodMillis;
+
+    private long startTime;
+
+    protected TimeSlot() {
+      this(System.currentTimeMillis());
     }
 
-    protected class TimeSlot {
-
-        private long capacity = Throttler.this.maxRequestsPerPeriod;
-
-        private long duration = Throttler.this.timePeriodMillis;
-
-        private long startTime;
-
-        protected TimeSlot() {
-            this(System.currentTimeMillis());
-        }
-
-        protected TimeSlot(long startTime) {
-            this.startTime = startTime;
-        }
-
-        protected synchronized void assign() {
-            capacity--;
-        }
-
-        protected synchronized TimeSlot next() {
-            val startTime = Math.max(System.currentTimeMillis(), this.startTime + this.duration);
-            val slot = new TimeSlot(startTime);
-            return slot;
-        }
-
-        protected synchronized boolean isActive() {
-            return startTime <= System.currentTimeMillis();
-        }
-
-        protected synchronized boolean isFull() {
-            return capacity <= 0;
-        }
+    protected TimeSlot(long startTime) {
+      this.startTime = startTime;
     }
 
-    public interface Callback<T> {
-        T execute();
+    protected synchronized void assign() {
+      capacity--;
     }
+
+    protected synchronized TimeSlot next() {
+      val startTime = Math.max(System.currentTimeMillis(), this.startTime + this.duration);
+      val slot = new TimeSlot(startTime);
+      return slot;
+    }
+
+    protected synchronized boolean isActive() {
+      return startTime <= System.currentTimeMillis();
+    }
+
+    protected synchronized boolean isFull() {
+      return capacity <= 0;
+    }
+  }
+
+  public interface Callback<T> {
+    T execute();
+  }
 }

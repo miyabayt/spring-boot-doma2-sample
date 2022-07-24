@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class CodeCategoryCriteria extends CodeCategory {
 
-    private static final long serialVersionUID = -1;
+  private static final long serialVersionUID = -1;
 }
