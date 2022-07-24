@@ -1,3 +1,6 @@
+apply plugin: "java-library"
+apply plugin: "org.seasar.doma.compile"
+
 bootJar {
     enabled = false
 }
@@ -6,62 +9,36 @@ jar {
     enabled = true
 }
 
-// Copy the resources referred by the Doma annotation processors to
-// the destinationDir of the compileJava task
-task copyDomaResources(type: Sync)  {
-    from sourceSets.main.resources.srcDirs
-    into compileJava.destinationDir
-    include "doma.compile.config"
-    include "META-INF/**/*.sql"
-    include "META-INF/**/*.script"
-}
-
-compileJava {
-    // Depend on the above task
-    dependsOn copyDomaResources
-    options.encoding = "UTF-8"
-}
-
-compileTestJava {
-    options.encoding = "UTF-8"
-    // Disable the annotation processors during the test run
-    options.compilerArgs = ["-proc:none"]
-}
-
 dependencies {
-    compile project(":sample-common")
+    implementation project(":sample-common")
 
-    // springframework
-    compile "org.springframework.boot:spring-boot-starter-aop"
-    compile "org.springframework.boot:spring-boot-starter-validation"
-    compile "org.springframework.boot:spring-boot-starter-mail"
-    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-    compile "org.springframework.boot:spring-boot-starter-jdbc"
-    compile "org.springframework.boot:spring-boot-starter-json"
+    api "org.springframework.boot:spring-boot-starter-aop"
+    api "org.springframework.boot:spring-boot-starter-validation"
+    api "org.springframework.boot:spring-boot-starter-mail"
+    api "org.springframework.boot:spring-boot-starter-thymeleaf"
+    api "org.springframework.boot:spring-boot-starter-jdbc"
+    api "org.springframework.boot:spring-boot-starter-json"
 
-    // doma exclude springframework
-    annotationProcessor "org.seasar.doma.boot:doma-spring-boot-starter:1.1.1"
-    compile("org.seasar.doma.boot:doma-spring-boot-starter:1.1.1") {
-        exclude group: "org.springframework.boot"
-    }
+    api "org.springframework.data:spring-data-commons"
+    api "org.seasar.doma.boot:doma-spring-boot-starter:${domaSpringBootVersion}"
+    api "org.seasar.doma:doma-core:${domaVersion}"
+    api "org.seasar.doma:doma-slf4j:${domaVersion}"
+    annotationProcessor "org.seasar.doma:doma-processor:${domaVersion}"
 
     // thymeleaf
-    compile "org.codehaus.groovy:groovy:${groovyVersion}"
-    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.3.0") {
-        exclude group: "org.codehaus.groovy", module: "groovy"
-        exclude group: "org.thymeleaf", module: "thymeleaf"
-    }
+    api "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
 
     // jackson
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
+    api "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
 
     // modelmapper
-    compile "org.modelmapper:modelmapper:0.7.5"
+    api "org.modelmapper:modelmapper:3.1.0"
 
     // mysql database
-    compile "mysql:mysql-connector-java"
-    compile "org.flywaydb:flyway-core"
+    api "mysql:mysql-connector-java"
+    api "org.flywaydb:flyway-core"
+    api "org.flywaydb:flyway-mysql"
 
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile "org.spockframework:spock-spring:${spockVersion}"
+    testImplementation "org.testcontainers:spock:1.17.3"
+    testImplementation "org.testcontainers:mysql:1.17.3"
 }

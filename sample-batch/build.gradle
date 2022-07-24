@@ -1,3 +1,5 @@
+apply plugin: "com.google.cloud.tools.jib"
+
 bootRun {
     // プロジェクトプロパティを引数として渡す
     if (project.hasProperty("args")) {
@@ -6,12 +8,7 @@ bootRun {
 }
 
 dependencies {
-    compile project(":sample-domain")
-
-    // springframework
-    compile "org.springframework.boot:spring-boot-starter-batch"
-
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile "org.springframework.batch:spring-batch-test"
-    testCompile "org.spockframework:spock-spring:${spockVersion}"
+    implementation project(":sample-common")
+    implementation project(":sample-domain")
+    implementation "org.springframework.boot:spring-boot-starter-batch"
 }

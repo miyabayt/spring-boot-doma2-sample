@@ -1,3 +1,9 @@
+apply plugin: "java"
+
+ext {
+    drivers = ["dockerChrome", "dockerFirefox"]
+}
+
 bootJar {
     enabled = false
 }
@@ -7,17 +13,17 @@ jar {
 }
 
 dependencies {
-    testCompile "org.codehaus.groovy:groovy-all:2.5.3"
+    testImplementation project(":sample-web-admin")
 
-    def gebVersion = "2.2"
-    def seleniumVersion = "3.141.59"
-
-    testCompile "org.gebish:geb-spock:$gebVersion"
-    testCompile "org.spockframework:spock-core:1.2-groovy-2.5"
-    testCompile "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
-    testCompile "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
+    testImplementation "org.testcontainers:junit-jupiter:1.17.3"
+    testImplementation "org.testcontainers:mysql:1.17.3"
+    testImplementation "org.testcontainers:selenium:1.17.3"
+    testImplementation "com.codeborne:selenide:6.6.6"
 }
 
 test {
-    systemProperties "geb.build.reportsDir": "$reportsDir/geb"
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
