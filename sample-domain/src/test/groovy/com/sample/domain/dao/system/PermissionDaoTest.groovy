@@ -1,8 +1,7 @@
 package com.sample.domain.dao.system
 
-import com.sample.domain.dao.system.PermissionDao
+import com.sample.domain.BaseTestContainerSpec
 import com.sample.domain.dto.common.Pageable
-import com.sample.domain.dto.system.Permission
 import com.sample.domain.dto.system.Permission
 import com.sample.domain.dto.system.PermissionCriteria
 import com.sample.domain.exception.NoDataFoundException
@@ -17,8 +16,7 @@ import static java.util.stream.Collectors.toList
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE
 
 @SpringBootTest(webEnvironment = NONE)
-@Transactional // テスト後にロールバックする
-class PermissionDaoTest extends Specification {
+class PermissionDaoTest extends BaseTestContainerSpec {
 
     @Autowired
     PermissionDao permissionDao

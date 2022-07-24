@@ -1,5 +1,6 @@
 package com.sample.domain.service
 
+import com.sample.domain.BaseTestContainerSpec
 import com.sample.domain.dto.common.Pageable
 import com.sample.domain.dto.system.CodeCriteria
 import com.sample.domain.service.system.CodeService
@@ -10,7 +11,7 @@ import spock.lang.Specification
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE
 
 @SpringBootTest(webEnvironment = NONE)
-class CodeServiceTest extends Specification {
+class CodeServiceTest extends BaseTestContainerSpec {
 
     @Autowired
     CodeService codeService

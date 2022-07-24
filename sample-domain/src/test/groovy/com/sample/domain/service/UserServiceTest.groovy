@@ -1,5 +1,6 @@
 package com.sample.domain.service
 
+import com.sample.domain.BaseTestContainerSpec
 import com.sample.domain.dto.common.Pageable
 import com.sample.domain.dto.user.UserCriteria
 import com.sample.domain.service.users.UserService
@@ -11,9 +12,7 @@ import spock.lang.Specification
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE
 
 @SpringBootTest(webEnvironment = NONE)
-@Transactional
-// テスト後にロールバックする
-class UserServiceTest extends Specification {
+class UserServiceTest extends BaseTestContainerSpec {
 
     @Autowired
     UserService userService

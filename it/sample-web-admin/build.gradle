@@ -1,9 +1,5 @@
 apply plugin: "java"
 
-ext {
-    drivers = ["dockerChrome", "dockerFirefox"]
-}
-
 bootJar {
     enabled = false
 }
