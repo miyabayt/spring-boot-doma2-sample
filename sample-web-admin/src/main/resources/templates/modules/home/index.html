@@ -3,20 +3,22 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/sidebarLayout}">
     <head>
-        <title>Home</title>
+        <title>ホーム</title>
     </head>
     <body>
         <!--/* この形式のコメントはHTMLソースから削除される */-->
         <div layout:fragment="sidebar">
             <div th:replace="~{layouts/sidebar :: sidebar ('', '')}"></div>
         </div>
-        <section layout:fragment="content-header">
-            <h1>ダッシュボード</h1>
-            <ol class="breadcrumb">
-                <li><a th:href="@{/}">Home</a></li>
-                <li>ダッシュボード</li>
-            </ol>
-        </section>
+        <div class="content-header" layout:fragment="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <h1 class="m-0 text-md d-none d-sm-inline-block">ホーム</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
         <section layout:fragment="content"></section>
     </body>
 </html>

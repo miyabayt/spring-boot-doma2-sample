@@ -3,10 +3,12 @@
         <form>
             <th:block th:fragment="input (type, label, name)">
                 <div th:with="valid=${!#fields.hasErrors(name)}" th:class="${'form-group' + (valid ? '' : ' has-error')}" class="form-group">
-                    <label class="col-sm-2 control-label" th:text="${label}">Label</label>
-                    <div class="col-sm-10">
-                        <input class="form-control" type="text" th:type="${type}" th:field="*{__${name}__}" />
-                        <span th:if="${!valid}" class="help-block" th:errors="*{__${name}__}">Error</span>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label" th:text="${label}">Label</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" th:type="${type}" th:field="*{__${name}__}" />
+                            <span th:if="${!valid}" class="help-block" th:errors="*{__${name}__}">Error</span>
+                        </div>
                     </div>
                 </div>
             </th:block>

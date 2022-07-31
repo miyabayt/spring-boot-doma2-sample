@@ -17,11 +17,13 @@ $(function() {
         // エラーメッセージ出力先
         errorPlacement: function(error, element) {
             $(element).next(".help-block").remove();
+            $(element).addClass("is-invalid");
             $(element).closest(".form-group").addClass("has-error");
             error.insertAfter(element);
         },
         success: function(error, element) {
             $(element).closest(".form-group").removeClass("has-error");
+            $(element).removeClass("is-invalid");
             $(element).next(".help-block").remove();
             $(error).remove();
         },

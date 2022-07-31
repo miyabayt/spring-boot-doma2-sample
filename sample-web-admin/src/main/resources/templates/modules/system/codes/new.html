@@ -3,54 +3,66 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/sidebarLayout}">
     <head>
-        <title>コード管理</title>
+        <title>コードマスタ</title>
     </head>
     <body>
         <div layout:fragment="sidebar">
             <div th:replace="~{layouts/sidebar :: sidebar ('system', 'code')}"></div>
         </div>
-        <section layout:fragment="content-header">
-            <h1 th:with="text=${codeForm.isNew()} ? 'コード登録' : 'コード編集'" th:text="${text}">コード登録</h1>
-            <ol class="breadcrumb">
-                <li><a th:href="@{/}">Home</a></li>
-                <li><a th:href="@{/system/codes/find(page=1)}">コード検索</a></li>
-                <li th:with="text=${codeForm.isNew()} ? 'コード登録' : 'コード編集'" th:text="${text}">コード登録</li>
-            </ol>
-        </section>
+        <div class="content-header" layout:fragment="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-md d-none d-sm-inline-block" th:with="text=${codeForm.isNew()} ? 'コードマスタ登録' : 'コードマスタ編集'" th:text="${text}">コードマスタ登録</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/system/codes/find(page=1)}">コードマスタ検索</a></li>
+                            <li class="breadcrumb-item active" th:with="text=${codeForm.isNew()} ? 'コードマスタ登録' : 'コードマスタ編集'" th:text="${text}">コードマスタ登録</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
         <section layout:fragment="content">
-            <div class="box">
-                <form th:object="${codeForm}" th:action="${action}" id="form1"
-                      th:with="action=${codeForm.isNew()} ? @{/system/codes/new} : @{/system/codes/edit/{id}(id=*{id})}"
-                      class="form-horizontal" enctype="multipart/form-data" method="post">
-                    <div class="box-body">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">コードキー</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" th:value="*{codeKey}" th:readonly="${not codeForm.isNew()}" />
+            <div class="container-fluid">
+                <div class="card card-outline card-purple shadow">
+                    <form th:object="${codeForm}" th:action="${action}" id="form1"
+                          th:with="action=${codeForm.isNew()} ? @{/system/codes/new} : @{/system/codes/edit/{id}(id=*{id})}"
+                          class="form-horizontal" enctype="multipart/form-data" method="post">
+                        <div class="card-header">
+                            <h3 class="card-title"
+                                th:with="text=${codeForm.isNew()} ? '新規登録' : '編集'" th:text="${text}">新規登録</h3>
+                        </div>
+                        <div class="card-body">
+                            <input th:replace="~{fragments/selectField :: select ('分類', 'categoryCode', ${codeCategories}, 'categoryCode', 'categoryName')}" />
+                            <input th:replace="~{fragments/inputField :: input ('text', 'コード名', 'codeValue')}" />
+                            <input th:replace="~{fragments/inputField :: input ('text', 'コード値', 'codeName')}" />
+                            <input th:replace="~{fragments/inputField :: input ('text', 'コードエイリアス', 'codeAlias')}" />
+                            <input th:replace="~{fragments/inputField :: input ('text', '表示順', 'displayOrder')}" />
+                            <div class="form-group">
+                                <div class="row align-items-center">
+                                    <label class="col-sm-2 col-form-label">無効フラグ</label>
+                                    <div class="col-sm-10">
+                                        <input type="checkbox"
+                                               th:field="*{isInvalid}"
+                                               th:value="${invalid}"
+                                               th:with="invalid=*{isInvalid eq true}" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <input th:replace="~{fragments/inputField :: input ('text', 'コード値', 'codeValue')}" />
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">コードエイリアス</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" th:value="*{codeAlias}" th:readonly="${not codeForm.isNew()}" />
+                        <div class="card-footer clearfix">
+                            <div class="row justify-content-md-center">
+                                <button class="btn btn-primary" type="submit" style="width: 140px;"
+                                        th:with="text=${codeForm.isNew()} ? '登録' : '保存'" th:text="${text}">
+                                    Add Code
+                                </button>
                             </div>
                         </div>
-                        <input th:replace="~{fragments/inputField :: input ('text', '表示順', 'displayOrder')}" />
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">無効フラグ</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" th:value="${invalid}" th:with="invalid=*{isInvalid eq true}" th:readonly="${not codeForm.isNew()}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-footer">
-                        <button class="btn btn-default bg-purple" type="submit"
-                                th:with="text=${codeForm.isNew()} ? '登録' : '保存'" th:text="${text}">
-                            Add Code
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </section>
     </body>

@@ -3,22 +3,22 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/sidebarLayout}">
     <head>
-        <title>ロール管理</title>
+        <title>分類マスタ</title>
     </head>
     <body>
         <div layout:fragment="sidebar">
-            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'role')}"></div>
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'codeCategory')}"></div>
         </div>
         <div class="content-header" layout:fragment="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-md d-none d-sm-inline-block">ロール検索</h1>
+                        <h1 class="m-0 text-md d-none d-sm-inline-block">分類マスタ検索</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
-                            <li class="breadcrumb-item active">ロール検索</li>
+                            <li class="breadcrumb-item active">分類マスタ検索</li>
                         </ol>
                     </div>
                 </div>
@@ -26,35 +26,24 @@
         </div>
         <section layout:fragment="content">
             <div class="container-fluid">
-                <form th:object="${searchRoleForm}" th:action="@{/system/roles/find(page=1)}" method="post" class="form-horizontal">
+                <form th:object="${searchCodeCategoryForm}" th:action="@{/system/codeCategories/find(page=1)}" method="post" class="form-horizontal">
                     <div class="card card-outline card-purple shadow">
                         <div class="card-header">
                             <h3 class="card-title">検索条件</h3>
                             <div class="card-tools">
-                                <a th:href="@{/system/roles/new}" class="btn btn-primary btn-sm btn-tool2 mx-1" role="button">
+                                <a th:href="@{/system/codeCategories/new}" class="btn btn-primary btn-sm btn-tool2 mx-1" role="button">
                                     <i class="fas fa-plus"></i>
-                                    ロール登録
+                                    分類マスタ登録
                                 </a>
-                                <a th:href="@{/system/roles/download/ロール.csv}" class="btn btn-primary btn-sm btn-tool2 mx-1" role="button">
+                                <a th:href="@{/system/codeCategories/download/分類.csv}" class="btn btn-primary btn-sm btn-tool2 mx-1" role="button">
                                     <i class="fas fa-download"></i>
                                     CSVダウンロード
                                 </a>
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="form-group">
-                                <div class="row" id="roleName">
-                                    <label class="col-sm-2 col-form-label">ロール名</label>
-                                    <div class="col-sm-10">
-                                        <input class="form-control" th:field="*{roleName}" size="10" maxlength="80" />
-                                        <span class="help-inline">
-                                            <div th:if="${#fields.hasAnyErrors()}">
-                                                <p th:each="err : ${#fields.allErrors()}" th:text="${err}">Error</p>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            <input th:replace="~{fragments/searchInputField :: input ('text', '分類コード', 'categoryCode')}" />
+                            <input th:replace="~{fragments/searchInputField :: input ('text', '分類名', 'categoryName')}" />
                         </div>
                         <div class="card-footer">
                             <div class="row justify-content-md-center">
@@ -68,27 +57,27 @@
                         <h3 class="card-title">検索結果</h3>
                     </div>
                     <div class="card-body table-responsive p-0">
-                        <table id="roles" class="table table-hover" th:if="${pages} != null and ${pages.content} != null">
+                        <table id="codes" class="table table-hover" th:if="${pages} != null and ${pages.content} != null">
                             <thead>
                                 <tr class="d-flex">
                                     <th class="col-2">ID</th>
-                                    <th class="col">ロールコード</th>
-                                    <th class="col">ロール名</th>
+                                    <th class="col">分類コード</th>
+                                    <th class="col">分類名</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="d-flex" th:each="role : ${pages.content}">
+                                <tr class="d-flex" th:each="codeCategory : ${pages.content}">
                                     <td class="col-2">
-                                        <a th:href="@{/system/roles/show/__${role.id}__}" th:text="${role.id}" />
+                                        <a th:href="@{/system/codeCategories/show/__${codeCategory.id}__}" th:text="${codeCategory.id}" />
                                     </td>
-                                    <td class="col" th:text="${role.roleCode}" />
-                                    <td class="col" th:text="${role.roleName}" />
+                                    <td class="col" th:text="${codeCategory.categoryCode}" />
+                                    <td class="col" th:text="${codeCategory.categoryName}" />
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="card-footer clearfix">
-                        <div th:replace="~{fragments/paginator :: paginator (${pages}, '/system/roles/find')}" />
+                        <div th:replace="~{fragments/paginator :: paginator (${pages}, '/system/codeCategories/find')}" />
                     </div>
                 </div>
             </div>

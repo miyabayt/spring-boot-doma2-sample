@@ -6,10 +6,23 @@
 	</head>
 	<body>
 		<div layout:fragment="content">
-			<h2>内部エラーが発生しました。</h2>
-
-			<div th:if="${exception != null and @environment.acceptsProfiles('development')}">
-				<pre th:text="${trace}"></pre>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-12">
+						<h1>500 Internal Server Error</h1>
+					</div>
+					<div class="col-12">
+						<h3>システムエラーが発生しました。</h3>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 pt-4">
+						<a th:href="@{/}">トップページにもどる</a>
+					</div>
+				</div>
+				<div th:if="${exception != null and @environment.acceptsProfiles('development')}">
+					<pre th:text="${trace}"></pre>
+				</div>
 			</div>
 		</div>
 	</body>
