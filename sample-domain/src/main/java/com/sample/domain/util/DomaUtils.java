@@ -1,7 +1,7 @@
 package com.sample.domain.util;
 
-import com.sample.domain.dto.common.Pageable;
 import org.seasar.doma.jdbc.SelectOptions;
+import org.springframework.data.domain.Pageable;
 
 /** Doma関連ユーティリティ */
 public class DomaUtils {
@@ -22,8 +22,11 @@ public class DomaUtils {
    * @return
    */
   public static SelectOptions createSelectOptions(Pageable pageable) {
-    int page = pageable.getPage();
-    int perpage = pageable.getPerpage();
+    if (pageable.isUnpaged()) {
+      return SelectOptions.get();
+    }
+    int page = pageable.getPageNumber();
+    int perpage = pageable.getPageSize();
     return createSelectOptions(page, perpage);
   }
 
@@ -35,7 +38,7 @@ public class DomaUtils {
    * @return
    */
   public static SelectOptions createSelectOptions(int page, int perpage) {
-    int offset = (page - 1) * perpage;
+    int offset = page * perpage;
     return SelectOptions.get().offset(offset).limit(perpage);
   }
 }

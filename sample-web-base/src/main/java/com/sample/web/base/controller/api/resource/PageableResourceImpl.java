@@ -19,8 +19,8 @@ public class PageableResourceImpl extends ResourceImpl implements PageableResour
 
   public PageableResourceImpl() {}
 
-  public PageableResourceImpl(List<? extends Dto> data, int page, int totalPages) {
-    this.data = data;
+  public PageableResourceImpl(List<? extends Dto> content, int page, int totalPages) {
+    this.content = content;
     this.page = page;
     this.totalPages = totalPages;
   }

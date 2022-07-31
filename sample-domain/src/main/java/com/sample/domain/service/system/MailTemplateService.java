@@ -1,22 +1,24 @@
 package com.sample.domain.service.system;
 
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.MailTemplate;
 import com.sample.domain.dto.system.MailTemplateCriteria;
 import com.sample.domain.repository.system.MailTemplateRepository;
 import com.sample.domain.service.BaseTransactionalService;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /** メールテンプレートサービス */
+@RequiredArgsConstructor
 @Service
 public class MailTemplateService extends BaseTransactionalService {
 
-  @Autowired MailTemplateRepository mailTemplateRepository;
+  @NonNull final MailTemplateRepository mailTemplateRepository;
 
   /**
    * メールテンプレートを複数取得します。

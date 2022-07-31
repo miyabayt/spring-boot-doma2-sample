@@ -87,9 +87,4 @@ public class LoginController extends AbstractHtmlController {
     attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage("logout.success"));
     return "redirect:/login";
   }
-
-  @Override
-  public boolean authorityRequired() {
-    return false;
-  }
 }

@@ -1,6 +1,5 @@
 package com.sample.web.admin.controller.html.system.holidays;
 
-import com.sample.domain.dto.common.Pageable;
 import com.sample.web.base.controller.html.BaseSearchForm;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -8,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class SearchHolidayForm extends BaseSearchForm implements Pageable {
+public class SearchHolidayForm extends BaseSearchForm {
 
   private static final long serialVersionUID = 7228669911978606034L;
 

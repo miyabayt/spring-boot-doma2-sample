@@ -26,7 +26,7 @@ public class FileHelper {
           .filter(path -> !path.equals(location))
           .map(location::relativize);
     } catch (IOException e) {
-      throw new IllegalArgumentException("failed to list uploadfiles. ", e);
+      throw new IllegalArgumentException("failed to list files. ", e);
     }
   }
 

@@ -1,13 +1,12 @@
 package com.sample.web.base.controller.api.resource;
 
-import com.sample.domain.dto.common.Dto;
 import java.util.List;
 
 public interface Resource {
 
-  List<? extends Dto> getData();
+  List<?> getContent();
 
-  void setData(List<? extends Dto> data);
+  void setContent(List<?> content);
 
   String getMessage();
 

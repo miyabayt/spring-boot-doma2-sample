@@ -1,22 +1,31 @@
 package com.sample.domain.service.system;
 
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
+import com.sample.domain.dto.system.Permission;
+import com.sample.domain.dto.system.PermissionCriteria;
 import com.sample.domain.dto.system.Role;
 import com.sample.domain.dto.system.RoleCriteria;
+import com.sample.domain.repository.system.PermissionRepository;
 import com.sample.domain.repository.system.RoleRepository;
 import com.sample.domain.service.BaseTransactionalService;
+import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /** ロールサービス */
+@RequiredArgsConstructor
 @Service
 public class RoleService extends BaseTransactionalService {
 
-  @Autowired RoleRepository roleRepository;
+  @NonNull final RoleRepository roleRepository;
+
+  @NonNull final PermissionRepository permissionRepository;
 
   /**
    * ロールを複数取得します。

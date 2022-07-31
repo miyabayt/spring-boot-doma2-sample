@@ -4,7 +4,6 @@ import static com.sample.web.base.WebConst.MAV_ERRORS;
 
 import com.sample.common.FunctionNameAware;
 import com.sample.web.base.controller.BaseController;
-import com.sample.web.base.security.authorization.Authorizable;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.ui.Model;
@@ -14,13 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /** 基底HTMLコントローラー */
 @Slf4j
-public abstract class AbstractHtmlController extends BaseController
-    implements FunctionNameAware, Authorizable {
-
-  @Override
-  public boolean authorityRequired() {
-    return true;
-  }
+public abstract class AbstractHtmlController extends BaseController implements FunctionNameAware {
 
   /**
    * 入力チェックエラーがある場合はtrueを返します。
@@ -31,9 +24,7 @@ public abstract class AbstractHtmlController extends BaseController
   public boolean hasErrors(Model model) {
     val errors = model.asMap().get(MAV_ERRORS);
 
-    if (errors != null && errors instanceof BeanPropertyBindingResult) {
-      val br = ((BeanPropertyBindingResult) errors);
-
+    if (errors instanceof BeanPropertyBindingResult br) {
       if (br.hasErrors()) {
         return true;
       }

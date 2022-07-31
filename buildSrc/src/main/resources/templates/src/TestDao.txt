@@ -1,21 +1,18 @@
 package [[${daoPackageName}]].[[${subSystem}]]
 
-import [[${daoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Dao
-import com.sample.domain.dto.common.Pageable
+import com.sample.domain.BaseTestContainerSpec
 import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]
 import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.OptimisticLockingFailureException
-import org.springframework.transaction.annotation.Transactional
-import spock.lang.Specification
+import org.springframework.data.domain.Pageable
 
 import static com.sample.domain.util.DomaUtils.createSelectOptions
 import static java.util.stream.Collectors.toList
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE
 
 @SpringBootTest(webEnvironment = NONE)
-@Transactional // テスト後にロールバックする
 class [[${upperFuncName}]]DaoTest extends Specification {
 
     @Autowired
@@ -23,7 +20,7 @@ class [[${upperFuncName}]]DaoTest extends Specification {
 
     def "存在しないIDで絞り込んだ場合、空のリストが返ること"() {
         when:
-        def options = createSelectOptions(Pageable.DEFAULT).count()
+        def options = createSelectOptions(Pageable.unpaged()).count()
         def criteria = new [[${upperFuncName}]]Criteria()
         criteria.setId(-9999)
 

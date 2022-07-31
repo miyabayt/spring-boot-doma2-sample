@@ -5,10 +5,11 @@ import static com.sample.web.base.WebConst.*;
 import com.sample.domain.service.login.LoginService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.util.RequestUtils;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,16 +21,17 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /** 管理側パスワードリセット */
+@RequiredArgsConstructor
 @Controller
 @SessionAttributes(types = {ChangePasswordForm.class})
 @Slf4j
 public class ResetPasswordHtmlController extends AbstractHtmlController {
 
-  @Autowired ChangePasswordFormValidator changePasswordFormValidator;
+  @NonNull final ChangePasswordFormValidator changePasswordFormValidator;
 
-  @Autowired LoginService loginService;
+  @NonNull final LoginService loginService;
 
-  @Autowired PasswordEncoder passwordEncoder;
+  @NonNull final PasswordEncoder passwordEncoder;
 
   @ModelAttribute("changePasswordForm")
   public ChangePasswordForm changePasswordForm() {
@@ -140,11 +142,5 @@ public class ResetPasswordHtmlController extends AbstractHtmlController {
     } else {
       return "redirect:/changePassword";
     }
-  }
-
-  @Override
-  public boolean authorityRequired() {
-    // 権限チェックを求めない
-    return false;
   }
 }

@@ -1,15 +1,13 @@
 package com.sample.domain.dao.users
 
 import com.sample.domain.BaseTestContainerSpec
-import com.sample.domain.dto.common.Pageable
 import com.sample.domain.dto.user.User
 import com.sample.domain.dto.user.UserCriteria
 import com.sample.domain.exception.NoDataFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.OptimisticLockingFailureException
-import org.springframework.transaction.annotation.Transactional
-import spock.lang.Specification
+import org.springframework.data.domain.Pageable
 
 import static com.sample.domain.util.DomaUtils.createSelectOptions
 import static java.util.stream.Collectors.toList
@@ -23,7 +21,7 @@ class UserDaoTest extends BaseTestContainerSpec {
 
     def "存在しないIDで絞り込んだ場合、空のリストが返ること"() {
         when:
-        def options = createSelectOptions(Pageable.DEFAULT).count()
+        def options = createSelectOptions(Pageable.unpaged()).count()
         def criteria = new UserCriteria()
         criteria.setId(-9999)
 

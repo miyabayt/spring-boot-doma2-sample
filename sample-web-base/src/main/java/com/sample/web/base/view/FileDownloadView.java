@@ -6,12 +6,13 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.Setter;
 import lombok.val;
-import org.apache.tika.Tika;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.view.AbstractView;
@@ -19,15 +20,13 @@ import org.springframework.web.servlet.view.AbstractView;
 /** FileDownloadビュー */
 public class FileDownloadView extends AbstractView {
 
-  private int chunkSize = 256;
+  private int chunkSize;
 
   private Resource resource;
 
   @Setter private boolean isAttachment = true;
 
   @Setter protected String filename;
-
-  protected static final Tika TIKA = new Tika();
 
   /** コンストラクタ */
   public FileDownloadView(Resource resource) {
@@ -47,13 +46,12 @@ public class FileDownloadView extends AbstractView {
 
     try (InputStream inputStream = resource.getInputStream();
         OutputStream outputStream = response.getOutputStream()) {
-      val file = resource.getFile();
-      val detectedContentType = TIKA.detect(file);
-      val mediaType = MediaType.parseMediaType(detectedContentType);
       val inlineOrAttachment = (isAttachment) ? "attachment" : "inline";
-      val contentDisposition = String.format("%s; filename=\"%s\"", inlineOrAttachment, filename);
+      val encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8);
+      val contentDisposition =
+          String.format("%s; filename*=UTF-8''%s", inlineOrAttachment, encodedFilename);
 
-      response.setHeader(CONTENT_TYPE, mediaType.toString());
+      response.setHeader(CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
       response.setHeader(CONTENT_DISPOSITION, contentDisposition);
 
       byte[] buffer = new byte[chunkSize];

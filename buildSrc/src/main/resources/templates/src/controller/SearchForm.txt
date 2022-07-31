@@ -1,14 +1,12 @@
 package [[${controllerPackageName}]].[[${subSystem}]].[[${lowerFuncName}]]s;
 
-import [[${commonDtoPackageName}]].Pageable;
 import [[${baseControllerPackageName}]].BaseSearchForm;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class Search[[${upperFuncName}]]Form extends BaseSearchForm implements Pageable {
+public class Search[[${upperFuncName}]]Form extends BaseSearchForm {
 
     private static final long serialVersionUID = -1L; // TODO
 

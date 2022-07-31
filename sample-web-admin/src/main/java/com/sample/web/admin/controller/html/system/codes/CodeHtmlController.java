@@ -4,17 +4,19 @@ import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
 import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Code;
 import com.sample.domain.dto.system.CodeCriteria;
-import com.sample.domain.helper.CodeHelper;
+import com.sample.domain.service.system.CodeCategoryService;
 import com.sample.domain.service.system.CodeService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.view.CsvView;
 import java.util.List;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,17 +28,18 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /** コード管理 */
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/system/codes")
 @SessionAttributes(types = {SearchCodeForm.class, CodeForm.class})
 @Slf4j
 public class CodeHtmlController extends AbstractHtmlController {
 
-  @Autowired CodeFormValidator codeFormValidator;
+  @NonNull final CodeFormValidator codeFormValidator;
 
-  @Autowired CodeService codeService;
+  @NonNull final CodeService codeService;
 
-  @Autowired CodeHelper codeHelper;
+  @NonNull final CodeCategoryService codeCategoryService;
 
   @ModelAttribute("codeForm")
   public CodeForm codeForm() {
@@ -65,6 +68,7 @@ public class CodeHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('code:save')")
   @GetMapping("/new")
   public String newCode(@ModelAttribute("codeForm") CodeForm form, Model model) {
     if (!form.isNew()) {
@@ -83,6 +87,7 @@ public class CodeHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('code:save')")
   @PostMapping("/new")
   public String newCode(
       @Validated @ModelAttribute("codeForm") CodeForm form,
@@ -109,19 +114,21 @@ public class CodeHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('code:read')")
   @GetMapping("/find")
-  public String findCode(@ModelAttribute("searchCodeForm") SearchCodeForm form, Model model) {
+  public String findCode(
+      @ModelAttribute("searchCodeForm") SearchCodeForm form, Pageable pageable, Model model) {
     // 入力値から検索条件を作成する
     val criteria = modelMapper.map(form, CodeCriteria.class);
 
     // 10件区切りで取得する
-    val pages = codeService.findAll(criteria, form);
+    val pages = codeService.findAll(criteria, pageable);
 
     // 画面に検索結果を渡す
     model.addAttribute("pages", pages);
 
     // カテゴリ分類一覧
-    val codeCategories = codeHelper.getCodeCategories();
+    val codeCategories = codeCategoryService.fetchAll();
     model.addAttribute("codeCategories", codeCategories);
 
     return "modules/system/codes/find";
@@ -135,6 +142,7 @@ public class CodeHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('code:read')")
   @PostMapping("/find")
   public String findCode(
       @Validated @ModelAttribute("searchCodeForm") SearchCodeForm form,
@@ -156,9 +164,9 @@ public class CodeHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('code:read')")
   @GetMapping("/show/{codeId}")
   public String showCode(@PathVariable Long codeId, Model model) {
-    // 1件取得する
     val code = codeService.findById(codeId);
     model.addAttribute("code", code);
     return "modules/system/codes/show";
@@ -172,6 +180,7 @@ public class CodeHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('code:save')")
   @GetMapping("/edit/{codeId}")
   public String editCode(
       @PathVariable Long codeId, @ModelAttribute("codeForm") CodeForm form, Model model) {
@@ -197,6 +206,7 @@ public class CodeHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('code:save')")
   @PostMapping("/edit/{codeId}")
   public String editCode(
       @Validated @ModelAttribute("codeForm") CodeForm form,
@@ -232,6 +242,7 @@ public class CodeHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('code:save')")
   @PostMapping("/remove/{codeId}")
   public String removeCode(@PathVariable Long codeId, RedirectAttributes attributes) {
     // 論理削除する
@@ -249,13 +260,14 @@ public class CodeHtmlController extends AbstractHtmlController {
    * @param filename
    * @return
    */
+  @PreAuthorize("hasAuthority('code:read')")
   @GetMapping("/download/{filename:.+\\.csv}")
   public ModelAndView downloadCsv(@PathVariable String filename) {
     // 全件取得する
-    val codes = codeService.findAll(new CodeCriteria(), Pageable.NO_LIMIT);
+    val codes = codeService.findAll(new CodeCriteria(), Pageable.unpaged());
 
     // 詰め替える
-    List<CodeCsv> csvList = modelMapper.map(codes.getData(), toListType(CodeCsv.class));
+    List<CodeCsv> csvList = modelMapper.map(codes.getContent(), toListType(CodeCsv.class));
 
     // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
     val view = new CsvView(CodeCsv.class, csvList, filename);

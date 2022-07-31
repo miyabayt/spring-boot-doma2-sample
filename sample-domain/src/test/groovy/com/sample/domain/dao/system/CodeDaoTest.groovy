@@ -6,7 +6,6 @@ import org.seasar.doma.jdbc.SelectOptions
 import org.spockframework.util.Assert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import spock.lang.Specification
 
 import static java.util.stream.Collectors.toList
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE

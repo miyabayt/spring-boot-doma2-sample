@@ -4,22 +4,24 @@ import static com.sample.domain.util.DomaUtils.createSelectOptions;
 import static java.util.stream.Collectors.toList;
 
 import com.sample.domain.dao.system.PermissionDao;
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Permission;
 import com.sample.domain.dto.system.PermissionCriteria;
 import com.sample.domain.exception.NoDataFoundException;
-import com.sample.domain.service.BaseRepository;
 import java.util.Optional;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 /** 権限リポジトリ */
+@RequiredArgsConstructor
 @Repository
-public class PermissionRepository extends BaseRepository {
+public class PermissionRepository {
 
-  @Autowired PermissionDao permissionDao;
+  @NonNull final PermissionDao permissionDao;
 
   /**
    * 権限を複数取得します。
@@ -29,10 +31,9 @@ public class PermissionRepository extends BaseRepository {
    * @return
    */
   public Page<Permission> findAll(PermissionCriteria criteria, Pageable pageable) {
-    // ページングを指定する
     val options = createSelectOptions(pageable).count();
     val data = permissionDao.selectAll(criteria, options, toList());
-    return pageFactory.create(data, pageable, options.getCount());
+    return new PageImpl<>(data, pageable, options.getCount());
   }
 
   /**
@@ -42,7 +43,6 @@ public class PermissionRepository extends BaseRepository {
    * @return
    */
   public Optional<Permission> findOne(PermissionCriteria criteria) {
-    // 1件取得
     return permissionDao.select(criteria);
   }
 
@@ -52,7 +52,6 @@ public class PermissionRepository extends BaseRepository {
    * @return
    */
   public Permission findById(final Long id) {
-    // 1件取得
     return permissionDao
         .selectById(id)
         .orElseThrow(() -> new NoDataFoundException("permission_id=" + id + " のデータが見つかりません。"));
@@ -65,7 +64,6 @@ public class PermissionRepository extends BaseRepository {
    * @return
    */
   public Permission create(final Permission inputPermission) {
-    // 1件登録
     permissionDao.insert(inputPermission);
 
     return inputPermission;
@@ -78,7 +76,6 @@ public class PermissionRepository extends BaseRepository {
    * @return
    */
   public Permission update(final Permission inputPermission) {
-    // 1件更新
     int updated = permissionDao.update(inputPermission);
 
     if (updated < 1) {

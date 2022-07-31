@@ -3,29 +3,28 @@ package [[${repositoryPackageName}]].[[${subSystem}]];
 import static com.sample.domain.util.DomaUtils.createSelectOptions;
 import static java.util.stream.Collectors.toList;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import [[${daoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Dao;
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
 import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
 import com.sample.domain.exception.NoDataFoundException;
-import com.sample.domain.service.BaseRepository;
-
+import java.util.List;
+import java.util.Optional;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 /**
  * [[${funcStr}]]リポジトリ
  */
+@RequiredArgsConstructor
 @Repository
-public class [[${upperFuncName}]]Repository extends BaseRepository {
+public class [[${upperFuncName}]]Repository {
 
-    @Autowired
-    [[${upperFuncName}]]Dao [[${lowerFuncName}]]Dao;
+    @NonNull final [[${upperFuncName}]]Dao [[${lowerFuncName}]]Dao;
 
     /**
      * [[${funcStr}]]を複数取得します。
@@ -35,10 +34,9 @@ public class [[${upperFuncName}]]Repository extends BaseRepository {
      * @return
      */
     public Page<[[${upperFuncName}]]> findAll([[${upperFuncName}]]Criteria criteria, Pageable pageable) {
-        // ページングを指定する
         val options = createSelectOptions(pageable).count();
         val data = [[${lowerFuncName}]]Dao.selectAll(criteria, options, toList());
-        return pageFactory.create(data, pageable, options.getCount());
+        return new PageImpl<>(data, pageable, options.getCount());
     }
 
     /**

@@ -3,8 +3,6 @@ package com.sample.web.admin.controller.api.v1.user;
 import static com.sample.web.base.WebConst.MESSAGE_SUCCESS;
 
 import com.sample.domain.DefaultModelMapperFactory;
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.user.User;
 import com.sample.domain.dto.user.UserCriteria;
 import com.sample.domain.exception.ValidationErrorException;
@@ -16,20 +14,23 @@ import com.sample.web.base.controller.api.resource.Resource;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserRestController extends AbstractRestController {
 
-  @Autowired UserService userService;
+  @NonNull final UserService userService;
 
   @Override
   public String getFunctionName() {
@@ -39,21 +40,18 @@ public class UserRestController extends AbstractRestController {
   /**
    * ユーザーを複数取得します。
    *
-   * @param query
-   * @param page
+   * @param request
+   * @param pageable
    * @return
    */
   @GetMapping
-  public PageableResource index(
-      UserQuery query, @RequestParam(required = false, defaultValue = "1") int page)
-      throws IOException {
+  public PageableResource index(SearchUserRequest request, Pageable pageable) throws IOException {
     // 入力値からDTOを作成する
-    val criteria = modelMapper.map(query, UserCriteria.class);
+    val criteria = modelMapper.map(request, UserCriteria.class);
 
     // 10件で区切って取得する
-    Page<User> users = userService.findAll(criteria, Pageable.DEFAULT);
-
-    PageableResource resource = modelMapper.map(users, PageableResourceImpl.class);
+    val users = userService.findAll(criteria, pageable);
+    val resource = modelMapper.map(users, PageableResourceImpl.class);
     resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
     return resource;
@@ -67,11 +65,9 @@ public class UserRestController extends AbstractRestController {
    */
   @GetMapping(value = "/{userId}")
   public Resource show(@PathVariable Long userId) {
-    // 1件取得する
-    User user = userService.findById(userId);
-
-    Resource resource = resourceFactory.create();
-    resource.setData(List.of(user));
+    val user = userService.findById(userId);
+    val resource = resourceFactory.create();
+    resource.setContent(List.of(user));
     resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
     return resource;
@@ -89,11 +85,9 @@ public class UserRestController extends AbstractRestController {
       throw new ValidationErrorException(errors);
     }
 
-    // 1件追加する
-    User user = userService.create(inputUser);
-
-    Resource resource = resourceFactory.create();
-    resource.setData(Arrays.asList(user));
+    val user = userService.create(inputUser);
+    val resource = resourceFactory.create();
+    resource.setContent(Arrays.asList(user));
     resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
     return resource;
@@ -112,7 +106,6 @@ public class UserRestController extends AbstractRestController {
       throw new ValidationErrorException(errors);
     }
 
-    // 1件更新する
     inputUser.setId(userId);
     User user;
     {
@@ -125,8 +118,8 @@ public class UserRestController extends AbstractRestController {
     }
     user = userService.update(user);
 
-    Resource resource = resourceFactory.create();
-    resource.setData(Arrays.asList(user));
+    val resource = resourceFactory.create();
+    resource.setContent(Arrays.asList(user));
     resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
     return resource;
@@ -139,11 +132,10 @@ public class UserRestController extends AbstractRestController {
    */
   @DeleteMapping(value = "/{userId}")
   public Resource delete(@PathVariable("userId") Long userId) {
-    // 1件取得する
-    User user = userService.delete(userId);
+    val user = userService.delete(userId);
 
-    Resource resource = resourceFactory.create();
-    resource.setData(Arrays.asList(user));
+    val resource = resourceFactory.create();
+    resource.setContent(Arrays.asList(user));
     resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
     return resource;

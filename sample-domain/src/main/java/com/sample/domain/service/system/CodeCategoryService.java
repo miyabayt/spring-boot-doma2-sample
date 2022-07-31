@@ -1,24 +1,37 @@
 package com.sample.domain.service.system;
 
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.CodeCategory;
 import com.sample.domain.dto.system.CodeCategoryCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.repository.system.CodeCategoryRepository;
 import com.sample.domain.service.BaseTransactionalService;
+import java.util.List;
 import java.util.Optional;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /** コード分類サービス */
+@RequiredArgsConstructor
 @Service
 public class CodeCategoryService extends BaseTransactionalService {
 
-  @Autowired CodeCategoryRepository codeCategoryRepository;
+  @NonNull final CodeCategoryRepository codeCategoryRepository;
+
+  /**
+   * コード分類を全件取得します。
+   *
+   * @return
+   */
+  @Transactional(readOnly = true) // 読み取りのみの場合は指定する
+  public List<CodeCategory> fetchAll() {
+    return codeCategoryRepository.fetchAll();
+  }
 
   /**
    * コード分類を複数取得します。

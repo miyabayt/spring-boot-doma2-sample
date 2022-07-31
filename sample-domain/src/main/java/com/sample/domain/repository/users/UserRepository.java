@@ -7,26 +7,29 @@ import static java.util.stream.Collectors.toList;
 import com.sample.domain.dao.system.UploadFileDao;
 import com.sample.domain.dao.users.UserDao;
 import com.sample.domain.dao.users.UserRoleDao;
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.user.User;
 import com.sample.domain.dto.user.UserCriteria;
 import com.sample.domain.dto.user.UserRole;
 import com.sample.domain.exception.NoDataFoundException;
-import com.sample.domain.service.BaseRepository;
 import java.util.Optional;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+/** ユーザーリポジトリ */
+@RequiredArgsConstructor
 @Repository
-public class UserRepository extends BaseRepository {
+public class UserRepository {
 
-  @Autowired UserDao userDao;
+  @NonNull final UserDao userDao;
 
-  @Autowired UserRoleDao userRoleDao;
+  @NonNull final UserRoleDao userRoleDao;
 
-  @Autowired UploadFileDao uploadFileDao;
+  @NonNull final UploadFileDao uploadFileDao;
 
   /**
    * ユーザーを取得します。
@@ -36,10 +39,9 @@ public class UserRepository extends BaseRepository {
    * @return
    */
   public Page<User> findAll(UserCriteria criteria, Pageable pageable) {
-    // ページングを指定する
     val options = createSelectOptions(pageable).count();
     val data = userDao.selectAll(criteria, options, toList());
-    return pageFactory.create(data, pageable, options.getCount());
+    return new PageImpl<>(data, pageable, options.getCount());
   }
 
   /**
@@ -49,7 +51,6 @@ public class UserRepository extends BaseRepository {
    * @return
    */
   public Optional<User> findOne(UserCriteria criteria) {
-    // 1件取得
     val user = userDao.select(criteria);
 
     // 添付ファイルを取得する
@@ -82,7 +83,6 @@ public class UserRepository extends BaseRepository {
    */
   public User create(final User inputUser) {
 
-    // 1件登録
     userDao.insert(inputUser);
 
     // ロール権限紐付けを登録する
@@ -115,7 +115,6 @@ public class UserRepository extends BaseRepository {
       inputUser.setUploadFileId(uploadFile.getId());
     }
 
-    // 1件更新
     int updated = userDao.update(inputUser);
 
     if (updated < 1) {

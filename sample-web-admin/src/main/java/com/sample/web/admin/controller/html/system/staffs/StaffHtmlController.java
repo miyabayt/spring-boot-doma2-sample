@@ -4,17 +4,19 @@ import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
 import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Staff;
 import com.sample.domain.dto.system.StaffCriteria;
 import com.sample.domain.service.system.StaffService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.view.CsvView;
 import java.util.List;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,17 +29,18 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /** 担当者管理 */
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/system/staffs")
 @SessionAttributes(types = {SearchStaffForm.class, StaffForm.class})
 @Slf4j
 public class StaffHtmlController extends AbstractHtmlController {
 
-  @Autowired StaffFormValidator staffFormValidator;
+  @NonNull final StaffFormValidator staffFormValidator;
 
-  @Autowired StaffService staffService;
+  @NonNull final StaffService staffService;
 
-  @Autowired PasswordEncoder passwordEncoder;
+  @NonNull final PasswordEncoder passwordEncoder;
 
   @ModelAttribute("staffForm")
   public StaffForm staffForm() {
@@ -66,6 +69,7 @@ public class StaffHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('staff:save')")
   @GetMapping("/new")
   public String newStaff(@ModelAttribute("staffForm") StaffForm form, Model model) {
     if (!form.isNew()) {
@@ -84,6 +88,7 @@ public class StaffHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('staff:save')")
   @PostMapping("/new")
   public String newStaff(
       @Validated @ModelAttribute("staffForm") StaffForm form,
@@ -114,13 +119,14 @@ public class StaffHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('staff:read')")
   @GetMapping("/find")
-  public String findStaff(@ModelAttribute SearchStaffForm form, Model model) {
+  public String findStaff(@ModelAttribute SearchStaffForm form, Pageable pageable, Model model) {
     // 入力値を詰め替える
     val criteria = modelMapper.map(form, StaffCriteria.class);
 
     // 10件区切りで取得する
-    val pages = staffService.findAll(criteria, form);
+    val pages = staffService.findAll(criteria, pageable);
 
     // 画面に検索結果を渡す
     model.addAttribute("pages", pages);
@@ -136,6 +142,7 @@ public class StaffHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('staff:read')")
   @PostMapping("/find")
   public String findStaff(
       @Validated @ModelAttribute("searchStaffForm") SearchStaffForm form,
@@ -157,9 +164,9 @@ public class StaffHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('staff:read')")
   @GetMapping("/show/{staffId}")
   public String showStaff(@PathVariable Long staffId, Model model) {
-    // 1件取得する
     val staff = staffService.findById(staffId);
     model.addAttribute("staff", staff);
     return "modules/system/staffs/show";
@@ -173,6 +180,7 @@ public class StaffHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('staff:save')")
   @GetMapping("/edit/{staffId}")
   public String editStaff(
       @PathVariable Long staffId, @ModelAttribute("staffForm") StaffForm form, Model model) {
@@ -198,6 +206,7 @@ public class StaffHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('staff:save')")
   @PostMapping("/edit/{staffId}")
   public String editStaff(
       @Validated @ModelAttribute("staffForm") StaffForm form,
@@ -239,6 +248,7 @@ public class StaffHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('staff:save')")
   @PostMapping("/remove/{staffId}")
   public String removeStaff(@PathVariable Long staffId, RedirectAttributes attributes) {
     // 論理削除する
@@ -256,13 +266,14 @@ public class StaffHtmlController extends AbstractHtmlController {
    * @param filename
    * @return
    */
+  @PreAuthorize("hasAuthority('staff:read')")
   @GetMapping("/download/{filename:.+\\.csv}")
   public ModelAndView downloadCsv(@PathVariable String filename) {
     // 全件取得する
-    val staffs = staffService.findAll(new StaffCriteria(), Pageable.NO_LIMIT);
+    val staffs = staffService.findAll(new StaffCriteria(), Pageable.unpaged());
 
     // 詰め替える
-    List<StaffCsv> csvList = modelMapper.map(staffs.getData(), toListType(StaffCsv.class));
+    List<StaffCsv> csvList = modelMapper.map(staffs.getContent(), toListType(StaffCsv.class));
 
     // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
     val view = new CsvView(StaffCsv.class, csvList, filename);

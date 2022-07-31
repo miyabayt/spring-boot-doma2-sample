@@ -1,32 +1,33 @@
 package com.sample.domain.repository.system;
 
 import static com.sample.common.util.ValidateUtils.isNotEmpty;
-import static com.sample.common.util.ValidateUtils.isTrue;
 import static com.sample.domain.util.DomaUtils.createSelectOptions;
 import static java.util.stream.Collectors.toList;
 
 import com.sample.domain.dao.system.RoleDao;
 import com.sample.domain.dao.system.RolePermissionDao;
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Role;
 import com.sample.domain.dto.system.RoleCriteria;
 import com.sample.domain.dto.system.RolePermission;
 import com.sample.domain.dto.system.RolePermissionCriteria;
 import com.sample.domain.exception.NoDataFoundException;
-import com.sample.domain.service.BaseRepository;
 import java.util.*;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 /** ロールリポジトリ */
+@RequiredArgsConstructor
 @Repository
-public class RoleRepository extends BaseRepository {
+public class RoleRepository {
 
-  @Autowired RoleDao roleDao;
+  @NonNull final RoleDao roleDao;
 
-  @Autowired RolePermissionDao rolePermissionDao;
+  @NonNull final RolePermissionDao rolePermissionDao;
 
   /**
    * ロールを複数取得します。
@@ -36,10 +37,9 @@ public class RoleRepository extends BaseRepository {
    * @return
    */
   public Page<Role> findAll(RoleCriteria criteria, Pageable pageable) {
-    // ページングを指定する
     val options = createSelectOptions(pageable).count();
     val data = roleDao.selectAll(criteria, options, toList());
-    return pageFactory.create(data, pageable, options.getCount());
+    return new PageImpl<>(data, pageable, options.getCount());
   }
 
   /**
@@ -49,7 +49,6 @@ public class RoleRepository extends BaseRepository {
    * @return
    */
   public Optional<Role> findOne(RoleCriteria criteria) {
-    // 1件取得
     val role = roleDao.select(criteria);
 
     role.ifPresent(
@@ -69,7 +68,6 @@ public class RoleRepository extends BaseRepository {
    * @return
    */
   public Role findById(final Long id) {
-    // 1件取得
     val role =
         roleDao
             .selectById(id)
@@ -90,7 +88,6 @@ public class RoleRepository extends BaseRepository {
    * @return
    */
   public Role create(final Role inputRole) {
-    // 1件登録
     roleDao.insert(inputRole);
 
     // ロール権限紐付けを登録する
@@ -107,7 +104,6 @@ public class RoleRepository extends BaseRepository {
    * @return
    */
   public Role update(final Role inputRole) {
-    // 1件更新
     int updated = roleDao.update(inputRole);
 
     if (updated < 1) {
@@ -170,7 +166,7 @@ public class RoleRepository extends BaseRepository {
     val criteria = new RolePermissionCriteria();
     criteria.setRoleCode(inputRole.getRoleCode());
 
-    val options = createSelectOptions(Pageable.NO_LIMIT);
+    val options = createSelectOptions(Pageable.unpaged());
     return rolePermissionDao.selectAll(criteria, options, toList());
   }
 }

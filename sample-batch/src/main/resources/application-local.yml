@@ -6,10 +6,9 @@ spring:
         username: root
         password: passw0rd
     mail:
-        default-encoding: ISO-2022-JP
         protocol: smtp
         host: 127.0.0.1
-        port: 25
+        port: 1025
         username: test
         password: test
         properties:

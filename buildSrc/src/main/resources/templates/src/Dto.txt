@@ -1,11 +1,9 @@
 package [[${dtoPackageName}]].[[${subSystem}]];
 
-import org.seasar.doma.*;
-
 import [[${commonDtoPackageName}]].DomaDtoImpl;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.seasar.doma.*;
 
 @Table(name = "[[${lowerFuncName}]]s")
 @Entity

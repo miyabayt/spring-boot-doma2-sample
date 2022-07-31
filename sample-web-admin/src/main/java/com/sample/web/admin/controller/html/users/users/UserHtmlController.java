@@ -4,7 +4,6 @@ import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
 import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.UploadFile;
 import com.sample.domain.dto.user.User;
 import com.sample.domain.dto.user.UserCriteria;
@@ -15,9 +14,12 @@ import com.sample.web.base.view.CsvView;
 import com.sample.web.base.view.ExcelView;
 import com.sample.web.base.view.PdfView;
 import java.util.List;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,17 +32,18 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /** ユーザー管理 */
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/users/users")
 @SessionAttributes(types = {SearchUserForm.class, UserForm.class})
 @Slf4j
 public class UserHtmlController extends AbstractHtmlController {
 
-  @Autowired UserFormValidator userFormValidator;
+  @NonNull final UserFormValidator userFormValidator;
 
-  @Autowired UserService userService;
+  @NonNull final UserService userService;
 
-  @Autowired PasswordEncoder passwordEncoder;
+  @NonNull final PasswordEncoder passwordEncoder;
 
   @ModelAttribute("userForm")
   public UserForm userForm() {
@@ -69,6 +72,7 @@ public class UserHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('user:save')")
   @GetMapping("/new")
   public String newUser(@ModelAttribute("userForm") UserForm form, Model model) {
     if (!form.isNew()) {
@@ -87,6 +91,7 @@ public class UserHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('user:save')")
   @PostMapping("/new")
   public String newUser(
       @Validated @ModelAttribute("userForm") UserForm form,
@@ -118,13 +123,14 @@ public class UserHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('user:read')")
   @GetMapping("/find")
-  public String findUser(@ModelAttribute SearchUserForm form, Model model) {
+  public String findUser(@ModelAttribute SearchUserForm form, Pageable pageable, Model model) {
     // 入力値を詰め替える
     val criteria = modelMapper.map(form, UserCriteria.class);
 
     // 10件区切りで取得する
-    val pages = userService.findAll(criteria, form);
+    val pages = userService.findAll(criteria, pageable);
 
     // 画面に検索結果を渡す
     model.addAttribute("pages", pages);
@@ -140,6 +146,7 @@ public class UserHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('user:read')")
   @PostMapping("/find")
   public String findUser(
       @Validated @ModelAttribute("searchUserForm") SearchUserForm form,
@@ -162,9 +169,9 @@ public class UserHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('user:read')")
   @GetMapping("/show/{userId}")
   public String showUser(@PathVariable Long userId, Model model) {
-    // 1件取得する
     val user = userService.findById(userId);
     model.addAttribute("user", user);
 
@@ -190,6 +197,7 @@ public class UserHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('user:save')")
   @GetMapping("/edit/{userId}")
   public String editUser(
       @PathVariable Long userId, @ModelAttribute("userForm") UserForm form, Model model) {
@@ -216,6 +224,7 @@ public class UserHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('user:save')")
   @PostMapping("/edit/{userId}")
   public String editUser(
       @Validated @ModelAttribute("userForm") UserForm form,
@@ -262,6 +271,7 @@ public class UserHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('user:save')")
   @PostMapping("/remove/{userId}")
   public String removeUser(@PathVariable Long userId, RedirectAttributes attributes) {
     // 論理削除する
@@ -279,13 +289,14 @@ public class UserHtmlController extends AbstractHtmlController {
    * @param filename
    * @return
    */
+  @PreAuthorize("hasAuthority('user:read')")
   @GetMapping("/download/{filename:.+\\.csv}")
   public ModelAndView downloadCsv(@PathVariable String filename) {
     // 全件取得する
-    val users = userService.findAll(new UserCriteria(), Pageable.NO_LIMIT);
+    val users = userService.findAll(new UserCriteria(), Pageable.unpaged());
 
     // 詰め替える
-    List<UserCsv> csvList = modelMapper.map(users.getData(), toListType(UserCsv.class));
+    List<UserCsv> csvList = modelMapper.map(users.getContent(), toListType(UserCsv.class));
 
     // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
     val view = new CsvView(UserCsv.class, csvList, filename);
@@ -299,13 +310,14 @@ public class UserHtmlController extends AbstractHtmlController {
    * @param filename
    * @return
    */
+  @PreAuthorize("hasAuthority('user:read')")
   @GetMapping(path = "/download/{filename:.+\\.xlsx}")
   public ModelAndView downloadExcel(@PathVariable String filename) {
     // 全件取得する
-    val users = userService.findAll(new UserCriteria(), Pageable.NO_LIMIT);
+    val users = userService.findAll(new UserCriteria(), Pageable.unpaged());
 
     // Excelプック生成コールバック、データ、ダウンロード時のファイル名を指定する
-    val view = new ExcelView(new UserExcel(), users.getData(), filename);
+    val view = new ExcelView(new UserExcel(), users.getContent(), filename);
 
     return new ModelAndView(view);
   }
@@ -316,13 +328,14 @@ public class UserHtmlController extends AbstractHtmlController {
    * @param filename
    * @return
    */
+  @PreAuthorize("hasAuthority('user:read')")
   @GetMapping(path = "/download/{filename:.+\\.pdf}")
   public ModelAndView downloadPdf(@PathVariable String filename) {
     // 全件取得する
-    val users = userService.findAll(new UserCriteria(), Pageable.NO_LIMIT);
+    val users = userService.findAll(new UserCriteria(), Pageable.unpaged());
 
     // 帳票レイアウト、データ、ダウンロード時のファイル名を指定する
-    val view = new PdfView("reports/users.jrxml", users.getData(), filename);
+    val view = new PdfView("reports/users.jrxml", users.getContent(), filename);
 
     return new ModelAndView(view);
   }

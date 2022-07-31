@@ -4,22 +4,24 @@ import static com.sample.domain.util.DomaUtils.createSelectOptions;
 import static java.util.stream.Collectors.toList;
 
 import com.sample.domain.dao.system.MailTemplateDao;
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.MailTemplate;
 import com.sample.domain.dto.system.MailTemplateCriteria;
 import com.sample.domain.exception.NoDataFoundException;
-import com.sample.domain.service.BaseRepository;
 import java.util.Optional;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 /** メールテンプレートリポジトリ */
+@RequiredArgsConstructor
 @Repository
-public class MailTemplateRepository extends BaseRepository {
+public class MailTemplateRepository {
 
-  @Autowired MailTemplateDao mailTemplateDao;
+  @NonNull final MailTemplateDao mailTemplateDao;
 
   /**
    * メールテンプレートを複数取得します。
@@ -29,10 +31,9 @@ public class MailTemplateRepository extends BaseRepository {
    * @return
    */
   public Page<MailTemplate> findAll(MailTemplateCriteria criteria, Pageable pageable) {
-    // ページングを指定する
     val options = createSelectOptions(pageable).count();
     val data = mailTemplateDao.selectAll(criteria, options, toList());
-    return pageFactory.create(data, pageable, options.getCount());
+    return new PageImpl<>(data, pageable, options.getCount());
   }
 
   /**
@@ -42,7 +43,6 @@ public class MailTemplateRepository extends BaseRepository {
    * @return
    */
   public Optional<MailTemplate> findOne(MailTemplateCriteria criteria) {
-    // 1件取得
     return mailTemplateDao.select(criteria);
   }
 
@@ -52,7 +52,6 @@ public class MailTemplateRepository extends BaseRepository {
    * @return
    */
   public MailTemplate findById(final Long id) {
-    // 1件取得
     return mailTemplateDao
         .selectById(id)
         .orElseThrow(() -> new NoDataFoundException("mailTemplate_id=" + id + " のデータが見つかりません。"));
@@ -65,7 +64,6 @@ public class MailTemplateRepository extends BaseRepository {
    * @return
    */
   public MailTemplate create(final MailTemplate inputMailTemplate) {
-    // 1件登録
     mailTemplateDao.insert(inputMailTemplate);
 
     return inputMailTemplate;
@@ -78,7 +76,6 @@ public class MailTemplateRepository extends BaseRepository {
    * @return
    */
   public MailTemplate update(final MailTemplate inputMailTemplate) {
-    // 1件更新
     int updated = mailTemplateDao.update(inputMailTemplate);
 
     if (updated < 1) {

@@ -1,15 +1,13 @@
 package [[${daoPackageName}]].[[${subSystem}]];
 
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
-
 import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
-
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
 
 @ConfigAutowireable
 @Dao

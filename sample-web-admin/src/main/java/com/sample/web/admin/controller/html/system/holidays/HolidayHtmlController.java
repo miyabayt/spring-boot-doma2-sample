@@ -4,16 +4,18 @@ import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
 import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Holiday;
 import com.sample.domain.dto.system.HolidayCriteria;
 import com.sample.domain.service.system.HolidayService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.view.CsvView;
 import java.util.List;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,15 +27,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /** 祝日管理 */
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/system/holidays")
 @SessionAttributes(types = {SearchHolidayForm.class, HolidayForm.class})
 @Slf4j
 public class HolidayHtmlController extends AbstractHtmlController {
 
-  @Autowired HolidayFormValidator holidayFormValidator;
+  @NonNull final HolidayFormValidator holidayFormValidator;
 
-  @Autowired HolidayService holidayService;
+  @NonNull final HolidayService holidayService;
 
   @ModelAttribute("holidayForm")
   public HolidayForm holidayForm() {
@@ -62,6 +65,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('holiday:save')")
   @GetMapping("/new")
   public String newHoliday(@ModelAttribute("holidayForm") HolidayForm form, Model model) {
     if (!form.isNew()) {
@@ -80,6 +84,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('holiday:save')")
   @PostMapping("/new")
   public String newHoliday(
       @Validated @ModelAttribute("holidayForm") HolidayForm form,
@@ -106,14 +111,15 @@ public class HolidayHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('holiday:read')")
   @GetMapping("/find")
   public String findHoliday(
-      @ModelAttribute("searchHolidayForm") SearchHolidayForm form, Model model) {
+      @ModelAttribute("searchHolidayForm") SearchHolidayForm form, Pageable pageable, Model model) {
     // 入力値から検索条件を作成する
     val criteria = modelMapper.map(form, HolidayCriteria.class);
 
     // 10件区切りで取得する
-    val pages = holidayService.findAll(criteria, form);
+    val pages = holidayService.findAll(criteria, pageable);
 
     // 画面に検索結果を渡す
     model.addAttribute("pages", pages);
@@ -129,6 +135,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('holiday:read')")
   @PostMapping("/find")
   public String findHoliday(
       @Validated @ModelAttribute("searchHolidayForm") SearchHolidayForm form,
@@ -150,9 +157,9 @@ public class HolidayHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('holiday:read')")
   @GetMapping("/show/{holidayId}")
   public String showHoliday(@PathVariable Long holidayId, Model model) {
-    // 1件取得する
     val holiday = holidayService.findById(holidayId);
     model.addAttribute("holiday", holiday);
     return "modules/system/holidays/show";
@@ -166,6 +173,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('holiday:save')")
   @GetMapping("/edit/{holidayId}")
   public String editHoliday(
       @PathVariable Long holidayId, @ModelAttribute("holidayForm") HolidayForm form, Model model) {
@@ -191,6 +199,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('holiday:save')")
   @PostMapping("/edit/{holidayId}")
   public String editHoliday(
       @Validated @ModelAttribute("holidayForm") HolidayForm form,
@@ -226,6 +235,7 @@ public class HolidayHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('holiday:save')")
   @PostMapping("/remove/{holidayId}")
   public String removeHoliday(@PathVariable Long holidayId, RedirectAttributes attributes) {
     // 論理削除する
@@ -243,13 +253,14 @@ public class HolidayHtmlController extends AbstractHtmlController {
    * @param filename
    * @return
    */
+  @PreAuthorize("hasAuthority('holiday:read')")
   @GetMapping("/download/{filename:.+\\.csv}")
   public ModelAndView downloadCsv(@PathVariable String filename) {
     // 全件取得する
-    val holidays = holidayService.findAll(new HolidayCriteria(), Pageable.NO_LIMIT);
+    val holidays = holidayService.findAll(new HolidayCriteria(), Pageable.unpaged());
 
     // 詰め替える
-    List<HolidayCsv> csvList = modelMapper.map(holidays.getData(), toListType(HolidayCsv.class));
+    List<HolidayCsv> csvList = modelMapper.map(holidays.getContent(), toListType(HolidayCsv.class));
 
     // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
     val view = new CsvView(HolidayCsv.class, csvList, filename);

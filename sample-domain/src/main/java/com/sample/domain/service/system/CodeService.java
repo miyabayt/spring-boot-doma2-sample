@@ -2,24 +2,26 @@ package com.sample.domain.service.system;
 
 import static com.sample.common.util.ValidateUtils.isEquals;
 
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Code;
 import com.sample.domain.dto.system.CodeCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.repository.system.CodeRepository;
 import com.sample.domain.service.BaseTransactionalService;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /** コードサービス */
+@RequiredArgsConstructor
 @Service
 public class CodeService extends BaseTransactionalService {
 
-  @Autowired CodeRepository codeRepository;
+  @NonNull final CodeRepository codeRepository;
 
   /**
    * コードを複数取得します。
