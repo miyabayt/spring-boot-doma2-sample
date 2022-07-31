@@ -1,7 +1,7 @@
 $(function() {
     var options = {
         rules: {
-            categoryKey: {
+            categoryCode: {
                 required: true,
                 maxlength: 100
             },

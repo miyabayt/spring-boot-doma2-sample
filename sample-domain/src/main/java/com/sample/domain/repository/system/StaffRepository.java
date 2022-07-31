@@ -70,10 +70,10 @@ public class StaffRepository extends BaseRepository {
     // 1件登録
     staffDao.insert(inputStaff);
 
-    // 役割権限紐付けを登録する
+    // ロール権限紐付けを登録する
     val staffRole = new StaffRole();
     staffRole.setStaffId(inputStaff.getId());
-    staffRole.setRoleKey("admin");
+    staffRole.setRoleCode("admin");
     staffRoleDao.insert(staffRole);
 
     return inputStaff;

@@ -1,6 +1,7 @@
 package com.sample.web.admin.controller.html.system.roles;
 
 import com.sample.web.base.controller.html.BaseForm;
+import java.util.HashMap;
 import java.util.Map;
 import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -14,12 +15,12 @@ public class RoleForm extends BaseForm {
 
   Long id;
 
-  // 役割キー
-  @NotEmpty String roleKey;
+  // ロールコード
+  @NotEmpty String roleCode;
 
-  // 役割名
+  // ロール名
   @NotEmpty String roleName;
 
   // 権限
-  Map<Integer, Boolean> permissions;
+  Map<String, Boolean> permissions = new HashMap<>();
 }

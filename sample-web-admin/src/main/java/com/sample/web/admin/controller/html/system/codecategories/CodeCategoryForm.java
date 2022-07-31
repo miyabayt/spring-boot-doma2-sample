@@ -13,9 +13,9 @@ public class CodeCategoryForm extends BaseForm {
 
   Long id;
 
-  // コード分類キー
-  @NotEmpty String categoryKey;
+  // 分類コード
+  @NotEmpty String categoryCode;
 
-  // コード分類名
+  // 分類名
   @NotEmpty String categoryName;
 }

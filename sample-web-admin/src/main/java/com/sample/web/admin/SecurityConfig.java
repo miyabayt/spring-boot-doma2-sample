@@ -21,7 +21,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableGlobalMethodSecurity(
     prePostEnabled = true,
-    securedEnabled = true) // アノテーションで役割、権限チェックを行うために定義する
+    securedEnabled = true) // アノテーションでロール、権限チェックを行うために定義する
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends BaseSecurityConfig {

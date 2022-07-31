@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.seasar.doma.*;
 
-@Table(name = "code")
+@Table(name = "codes")
 @Entity
 @Getter
 @Setter
@@ -19,42 +19,21 @@ public class Code extends DomaDtoImpl {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
 
-  // コード分類キー
-  String categoryKey;
+  // 分類コード
+  String categoryCode;
 
   // コード分類名
   String categoryName;
 
-  // コードキー
-  String codeKey;
-
   // コード値
   String codeValue;
+
+  // コード名
+  String codeName;
 
   // エイリアス
   String codeAlias;
 
-  // 属性1
-  String attribute1;
-
-  // 属性2
-  String attribute2;
-
-  // 属性3
-  String attribute3;
-
-  // 属性4
-  String attribute4;
-
-  // 属性5
-  String attribute5;
-
-  // 属性6
-  String attribute6;
-
   // 表示順
   Integer displayOrder;
-
-  // 無効フラグ
-  Boolean isInvalid;
 }

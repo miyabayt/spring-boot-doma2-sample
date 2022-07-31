@@ -14,7 +14,7 @@ import org.seasar.doma.jdbc.SelectOptions;
 public interface RoleDao {
 
   /**
-   * 役割を取得します。
+   * ロールを取得します。
    *
    * @param criteria
    * @param options
@@ -27,7 +27,7 @@ public interface RoleDao {
       final Collector<Role, ?, R> collector);
 
   /**
-   * 役割を1件取得します。
+   * ロールを1件取得します。
    *
    * @param id
    * @return
@@ -36,7 +36,7 @@ public interface RoleDao {
   Optional<Role> selectById(Long id);
 
   /**
-   * 役割を1件取得します。
+   * ロールを1件取得します。
    *
    * @param criteria
    * @return
@@ -45,7 +45,7 @@ public interface RoleDao {
   Optional<Role> select(RoleCriteria criteria);
 
   /**
-   * 役割を登録します。
+   * ロールを登録します。
    *
    * @param role
    * @return
@@ -54,7 +54,7 @@ public interface RoleDao {
   int insert(Role role);
 
   /**
-   * 役割を更新します。
+   * ロールを更新します。
    *
    * @param role
    * @return
@@ -63,7 +63,7 @@ public interface RoleDao {
   int update(Role role);
 
   /**
-   * 役割を論理削除します。
+   * ロールを論理削除します。
    *
    * @param role
    * @return
@@ -72,7 +72,7 @@ public interface RoleDao {
   int delete(Role role);
 
   /**
-   * 役割を一括登録します。
+   * ロールを一括登録します。
    *
    * @param roles
    * @return
@@ -81,7 +81,7 @@ public interface RoleDao {
   int[] insert(List<Role> roles);
 
   /**
-   * 役割を一括更新します。
+   * ロールを一括更新します。
    *
    * @param roles
    * @return

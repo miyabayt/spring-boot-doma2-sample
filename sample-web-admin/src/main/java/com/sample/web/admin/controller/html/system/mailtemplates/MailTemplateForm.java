@@ -13,8 +13,8 @@ public class MailTemplateForm extends BaseForm {
 
   Long id;
 
-  // メールテンプレートキー
-  @NotEmpty String templateKey;
+  // メールテンプレートコード
+  @NotEmpty String templateCode;
 
   // メールタイトル
   @NotEmpty String subject;

@@ -28,7 +28,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** 役割管理 */
+/** ロール管理 */
 @Controller
 @RequestMapping("/system/roles")
 @SessionAttributes(types = {RoleForm.class})
@@ -75,9 +75,7 @@ public class RoleHtmlController extends AbstractHtmlController {
       model.addAttribute("roleForm", new RoleForm());
     }
 
-    // 権限一覧を取得する
-    Page<Permission> permissions =
-        permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
+    val permissions = getPermissions();
     model.addAttribute("permissions", permissions);
 
     return "modules/system/roles/new";
@@ -104,6 +102,13 @@ public class RoleHtmlController extends AbstractHtmlController {
 
     // 入力値からDTOを作成する
     val inputRole = modelMapper.map(form, Role.class);
+    for (val entry : form.getPermissions().entrySet()) {
+      val rp = new RolePermission();
+      rp.setRoleCode(form.getRoleCode());
+      rp.setPermissionCode(entry.getKey());
+      rp.setIsEnabled(entry.getValue());
+      inputRole.getRolePermissions().add(rp);
+    }
 
     // 登録する
     val createdRole = roleService.create(inputRole);
@@ -166,9 +171,7 @@ public class RoleHtmlController extends AbstractHtmlController {
     val role = roleService.findById(roleId);
     model.addAttribute("role", role);
 
-    // 権限一覧を取得する
-    Page<Permission> permissions =
-        permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
+    val permissions = getPermissions();
     model.addAttribute("permissions", permissions);
 
     return "modules/system/roles/show";
@@ -192,11 +195,15 @@ public class RoleHtmlController extends AbstractHtmlController {
 
       // 取得したDtoをFromに詰め替える
       modelMapper.map(role, form);
+      for (val p : role.getPermissions()) {
+        val permissionCode = p.getPermissionCode();
+        val isEnabled = role.hasPermission(permissionCode);
+        form.getPermissions().put(permissionCode, isEnabled);
+      }
     }
 
     // 権限一覧を取得する
-    Page<Permission> permissions =
-        permissionService.findAll(new PermissionCriteria(), Pageable.NO_LIMIT);
+    val permissions = getPermissions();
     model.addAttribute("permissions", permissions);
 
     return "modules/system/roles/new";
@@ -227,6 +234,12 @@ public class RoleHtmlController extends AbstractHtmlController {
 
     // 更新対象を取得する
     val role = roleService.findById(roleId);
+    val permissions = form.getPermissions();
+    for (val entry : permissions.entrySet()) {
+      val permissionCode = entry.getKey();
+      val isEnabled = Boolean.TRUE.equals(entry.getValue());
+      role.setPermission(permissionCode, isEnabled);
+    }
 
     // 入力値を詰め替える
     modelMapper.map(form, role);
@@ -276,5 +289,9 @@ public class RoleHtmlController extends AbstractHtmlController {
     val view = new CsvView(RoleCsv.class, csvList, filename);
 
     return new ModelAndView(view);
+  }
+
+  private Page<Permission> getPermissions() {
+    return permissionService.findAll(new PermissionCriteria(), Pageable.unpaged());
   }
 }

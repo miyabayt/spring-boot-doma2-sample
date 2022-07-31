@@ -36,7 +36,7 @@ class MailTemplateDaoTest extends BaseTestContainerSpec {
     def "存在しない名称で絞り込んだ場合、emptyが返ること"() {
         when:
         def criteria = new MailTemplateCriteria()
-        criteria.setTemplateKey("XXXXXXXXXX")
+        criteria.setTemplateCode("XXXXXXXXXX")
 
         Optional<MailTemplate> mailTemplate = mailTemplateDao.select(criteria)
 

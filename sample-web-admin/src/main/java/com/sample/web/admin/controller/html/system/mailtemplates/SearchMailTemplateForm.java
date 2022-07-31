@@ -13,8 +13,8 @@ public class SearchMailTemplateForm extends BaseSearchForm implements Pageable {
 
   Long id;
 
-  // メールテンプレートキー
-  String templateKey;
+  // メールテンプレートコード
+  String templateCode;
 
   // メールタイトル
   String subject;

@@ -27,10 +27,10 @@ public class UserService extends BaseTransactionalService { // ★親クラス�
         // 1件登録
         userDao.insert(inputUser); // ★1つ目のテーブル
 
-        // 役割権限紐付けを登録する
+        // ロール権限紐付けを登録する
         val userRole = new UserRole();
         userRole.setUserId(inputUser.getId());
-        userRole.setRoleKey("user");
+        userRole.setRoleCode("user");
         userRoleDao.insert(userRole); // ★2つ目のテーブル
 
         return inputUser;

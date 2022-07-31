@@ -46,15 +46,6 @@ public interface CodeCategoryDao {
   /**
    * コード分類を1件取得します。
    *
-   * @param categoryKey
-   * @return
-   */
-  @Select
-  Optional<CodeCategory> selectByKey(String categoryKey);
-
-  /**
-   * コード分類を1件取得します。
-   *
    * @param criteria
    * @return
    */
@@ -76,7 +67,7 @@ public interface CodeCategoryDao {
    * @param codeCategory
    * @return
    */
-  @Update(exclude = {"categoryKey"})
+  @Update
   int update(CodeCategory codeCategory);
 
   /**

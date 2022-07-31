@@ -33,10 +33,10 @@ class PermissionDaoTest extends BaseTestContainerSpec {
         data.size() == 0
     }
 
-    def "存在しない権限キーで絞り込んだ場合、emptyが返ること"() {
+    def "存在しない権限コードで絞り込んだ場合、emptyが返ること"() {
         when:
         def criteria = new PermissionCriteria()
-        criteria.setPermissionKey("XXXXXXXXXX")
+        criteria.setPermissionCode("XXXXXXXXXX")
 
         Optional<Permission> permission = permissionDao.select(criteria)
 

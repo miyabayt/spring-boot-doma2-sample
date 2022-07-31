@@ -13,9 +13,9 @@ public class SearchRoleForm extends BaseSearchForm implements Pageable {
 
   Long id;
 
-  // 役割キー
-  String roleKey;
+  // ロールコード
+  String roleCode;
 
-  // 役割名
+  // ロール名
   String roleName;
 }

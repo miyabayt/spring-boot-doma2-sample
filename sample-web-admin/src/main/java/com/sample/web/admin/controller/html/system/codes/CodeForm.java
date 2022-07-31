@@ -14,11 +14,14 @@ public class CodeForm extends BaseForm {
 
   Long id;
 
-  // コードキー
-  @NotEmpty String codeKey;
+  // 分類コード
+  @NotEmpty String categoryCode;
+
+  // コード値
+  @NotEmpty String codeValue;
 
   // コード名
-  @NotEmpty String codeValue;
+  @NotEmpty String codeName;
 
   // コードエイリアス
   String codeAlias;

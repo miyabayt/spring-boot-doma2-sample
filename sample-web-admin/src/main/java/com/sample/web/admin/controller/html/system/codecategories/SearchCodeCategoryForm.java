@@ -13,7 +13,7 @@ public class SearchCodeCategoryForm extends BaseSearchForm implements Pageable {
 
   Long id;
 
-  String categoryKey;
+  String categoryCode;
 
   String categoryName;
 }

@@ -13,7 +13,7 @@ public class UserRole extends DomaDtoImpl {
 
   private static final long serialVersionUID = -6750983302974218054L;
 
-  // 担当者役割ID
+  // 担当者ロールID
   @Id
   @Column(name = "user_role_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,14 +22,14 @@ public class UserRole extends DomaDtoImpl {
   // ユーザーID
   Long userId;
 
-  // 役割キー
-  String roleKey;
+  // ロールコード
+  String roleCode;
 
-  // 役割名
+  // ロール名
   String roleName;
 
-  // 権限キー
-  String permissionKey;
+  // 権限コード
+  String permissionCode;
 
   // 権限名
   String permissionName;

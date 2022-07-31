@@ -20,7 +20,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-/** 役割リポジトリ */
+/** ロールリポジトリ */
 @Repository
 public class RoleRepository extends BaseRepository {
 
@@ -29,7 +29,7 @@ public class RoleRepository extends BaseRepository {
   @Autowired RolePermissionDao rolePermissionDao;
 
   /**
-   * 役割を複数取得します。
+   * ロールを複数取得します。
    *
    * @param criteria
    * @param pageable
@@ -43,7 +43,7 @@ public class RoleRepository extends BaseRepository {
   }
 
   /**
-   * 役割を取得します。
+   * ロールを取得します。
    *
    * @param criteria
    * @return
@@ -56,9 +56,7 @@ public class RoleRepository extends BaseRepository {
         r -> {
           val rolePermissions = findRolePermissions(r);
           if (isNotEmpty(rolePermissions)) {
-            Map<Integer, Boolean> permissions = new HashMap<>();
-            rolePermissions.forEach(rp -> permissions.putIfAbsent(rp.getPermissionId(), true));
-            r.setPermissions(permissions);
+            r.getRolePermissions().addAll(rolePermissions);
           }
         });
 
@@ -66,7 +64,7 @@ public class RoleRepository extends BaseRepository {
   }
 
   /**
-   * 役割を取得します。
+   * ロールを取得します。
    *
    * @return
    */
@@ -79,16 +77,14 @@ public class RoleRepository extends BaseRepository {
 
     val rolePermissions = findRolePermissions(role);
     if (isNotEmpty(rolePermissions)) {
-      Map<Integer, Boolean> permissions = new HashMap<>();
-      rolePermissions.forEach(rp -> permissions.putIfAbsent(rp.getPermissionId(), true));
-      role.setPermissions(permissions);
+      role.getRolePermissions().addAll(rolePermissions);
     }
 
     return role;
   }
 
   /**
-   * 役割を追加します。
+   * ロールを追加します。
    *
    * @param inputRole
    * @return
@@ -97,14 +93,15 @@ public class RoleRepository extends BaseRepository {
     // 1件登録
     roleDao.insert(inputRole);
 
-    // 役割権限紐付けを登録する
-    insertRolePermissions(inputRole);
+    // ロール権限紐付けを登録する
+    val rolePermissions = inputRole.getRolePermissions();
+    rolePermissionDao.insert(rolePermissions);
 
     return inputRole;
   }
 
   /**
-   * 役割を更新します。
+   * ロールを更新します。
    *
    * @param inputRole
    * @return
@@ -117,17 +114,17 @@ public class RoleRepository extends BaseRepository {
       throw new NoDataFoundException("role_id=" + inputRole.getId() + " のデータが見つかりません。");
     }
 
-    // 役割権限紐付けを論理削除する
-    deleteRolePermissions(inputRole);
-
-    // 役割権限紐付けを登録する
-    insertRolePermissions(inputRole);
+    // ロール権限紐付けを更新する
+    val rolePermissions = inputRole.getRolePermissions();
+    for (val rp : rolePermissions) {
+      rolePermissionDao.update(rp);
+    }
 
     return inputRole;
   }
 
   /**
-   * 役割を論理削除します。
+   * ロールを論理削除します。
    *
    * @return
    */
@@ -143,43 +140,14 @@ public class RoleRepository extends BaseRepository {
       throw new NoDataFoundException("role_id=" + id + " は更新できませんでした。");
     }
 
-    // 役割権限紐付けを論理削除する
+    // ロール権限紐付けを論理削除する
     deleteRolePermissions(role);
 
     return role;
   }
 
   /**
-   * 役割権限紐付けを登録する
-   *
-   * @param inputRole
-   */
-  protected void insertRolePermissions(final Role inputRole) {
-    // 入力値がない場合はスキップする
-    if (isNotEmpty(inputRole.getPermissions())) {
-      List<RolePermission> rolePermissionsToInsert = new ArrayList<>();
-
-      // 権限のチェックがある場合
-      inputRole
-          .getPermissions()
-          .forEach(
-              (key, value) -> {
-                // チェックされている
-                if (isTrue(value)) {
-                  val rolePermission = new RolePermission();
-                  rolePermission.setRoleKey(inputRole.getRoleKey());
-                  rolePermission.setPermissionId(key);
-                  rolePermissionsToInsert.add(rolePermission);
-                }
-              });
-
-      // 一括登録
-      rolePermissionDao.insert(rolePermissionsToInsert);
-    }
-  }
-
-  /**
-   * 役割権限紐付けを論理削除する
+   * ロール権限紐付けを論理削除する
    *
    * @param inputRole
    */
@@ -192,15 +160,15 @@ public class RoleRepository extends BaseRepository {
   }
 
   /**
-   * 役割権限紐付けを取得する
+   * ロール権限紐付けを取得する
    *
    * @param inputRole
    * @return
    */
   protected List<RolePermission> findRolePermissions(Role inputRole) {
-    // 役割権限紐付けを役割キーで取得する
+    // ロール権限紐付けをロールコードで取得する
     val criteria = new RolePermissionCriteria();
-    criteria.setRoleKey(inputRole.getRoleKey());
+    criteria.setRoleCode(inputRole.getRoleCode());
 
     val options = createSelectOptions(Pageable.NO_LIMIT);
     return rolePermissionDao.selectAll(criteria, options, toList());

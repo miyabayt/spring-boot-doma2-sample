@@ -7,8 +7,8 @@ WHERE
 /*%if criteria.id != null */
   AND role_id = /* criteria.id */1
 /*%end*/
-/*%if criteria.roleKey != null */
-  AND role_key = /* criteria.roleKey */'user.editUser'
+/*%if criteria.roleCode != null */
+  AND role_code = /* criteria.roleCode */'user.editUser'
 /*%end*/
 ORDER BY
   role_id ASC

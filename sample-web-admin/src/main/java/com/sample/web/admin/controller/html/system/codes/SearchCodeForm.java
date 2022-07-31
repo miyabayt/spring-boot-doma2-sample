@@ -13,9 +13,9 @@ public class SearchCodeForm extends BaseSearchForm implements Pageable {
 
   Long id;
 
-  String categoryKey;
-
-  String codeKey;
+  String categoryCode;
 
   String codeValue;
+
+  String codeName;
 }

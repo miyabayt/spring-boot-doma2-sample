@@ -33,10 +33,10 @@ class RoleDaoTest extends BaseTestContainerSpec {
         data.size() == 0
     }
 
-    def "存在しない役割キーで絞り込んだ場合、emptyが返ること"() {
+    def "存在しないロールコードで絞り込んだ場合、emptyが返ること"() {
         when:
         def criteria = new RoleCriteria()
-        criteria.setRoleKey("XXXXXXXXXX")
+        criteria.setRoleCode("XXXXXXXXXX")
 
         Optional<Role> role = roleDao.select(criteria)
 

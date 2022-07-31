@@ -51,17 +51,17 @@ public class UserDaoRealm extends BaseRealm {
       // 担当者権限を取得する
       List<UserRole> userRoles = userRoleDao.selectByUserId(user.getId(), toList());
 
-      // 役割キーにプレフィックスをつけてまとめる
-      Set<String> roleKeys = userRoles.stream().map(UserRole::getRoleKey).collect(toSet());
+      // ロールコードにプレフィックスをつけてまとめる
+      Set<String> roleCodes = userRoles.stream().map(UserRole::getRoleCode).collect(toSet());
 
-      // 権限キーをまとめる
-      Set<String> permissionKeys =
-          userRoles.stream().map(UserRole::getPermissionKey).collect(toSet());
+      // 権限コードをまとめる
+      Set<String> permissionCodes =
+          userRoles.stream().map(UserRole::getPermissionCode).collect(toSet());
 
-      // 役割と権限を両方ともGrantedAuthorityとして渡す
+      // ロールと権限を両方ともGrantedAuthorityとして渡す
       Set<String> authorities = new HashSet<>();
-      authorities.addAll(roleKeys);
-      authorities.addAll(permissionKeys);
+      authorities.addAll(roleCodes);
+      authorities.addAll(permissionCodes);
       authorityList = AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]));
 
     } catch (Exception e) {

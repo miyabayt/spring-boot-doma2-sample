@@ -50,17 +50,17 @@ public class StaffDaoRealm extends BaseRealm {
       // 担当者権限を取得する
       List<StaffRole> staffRoles = staffRoleDao.selectByStaffId(staff.getId(), toList());
 
-      // 役割キーにプレフィックスをつけてまとめる
-      Set<String> roleKeys = staffRoles.stream().map(StaffRole::getRoleKey).collect(toSet());
+      // ロールコードにプレフィックスをつけてまとめる
+      Set<String> roleCodes = staffRoles.stream().map(StaffRole::getRoleCode).collect(toSet());
 
-      // 権限キーをまとめる
-      Set<String> permissionKeys =
-          staffRoles.stream().map(StaffRole::getPermissionKey).collect(toSet());
+      // 権限コードをまとめる
+      Set<String> permissionCodes =
+          staffRoles.stream().map(StaffRole::getPermissionCode).collect(toSet());
 
-      // 役割と権限を両方ともGrantedAuthorityとして渡す
+      // ロールと権限を両方ともGrantedAuthorityとして渡す
       Set<String> authorities = new HashSet<>();
-      authorities.addAll(roleKeys);
-      authorities.addAll(permissionKeys);
+      authorities.addAll(roleCodes);
+      authorities.addAll(permissionCodes);
       authorityList = AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]));
 
       return new LoginStaff(staff, authorityList);

@@ -128,14 +128,14 @@ public class LoginService extends BaseTransactionalService {
    *
    * @return
    */
-  protected MailTemplate getMailTemplate(String templateKey) {
+  protected MailTemplate getMailTemplate(String templateCode) {
     val criteria = new MailTemplateCriteria();
-    criteria.setTemplateKey(templateKey);
+    criteria.setTemplateCode(templateCode);
     return mailTemplateRepository
         .findOne(criteria)
         .orElseThrow(
             () ->
                 new NoDataFoundException(
-                    "templateKey=" + criteria.getTemplateKey() + " のデータが見つかりません。"));
+                    "templateCode=" + criteria.getTemplateCode() + " のデータが見つかりません。"));
   }
 }

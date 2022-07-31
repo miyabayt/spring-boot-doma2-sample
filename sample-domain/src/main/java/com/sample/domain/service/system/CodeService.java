@@ -60,16 +60,17 @@ public class CodeService extends BaseTransactionalService {
   /**
    * コードを取得します。
    *
-   * @param codeKey
+   * @param categoryCode
    * @return
    */
   @Transactional(readOnly = true)
-  public Code findByKey(final String codeKey) {
-    Assert.notNull(codeKey, "codeKey must not be null");
+  public Code findByCategoryCode(final String categoryCode) {
+    Assert.notNull(categoryCode, "categoryCode must not be null");
     return codeRepository.fetchAll().stream()
-        .filter(c -> isEquals(codeKey, c.getCodeKey()))
+        .filter(c -> isEquals(categoryCode, c.getCategoryCode()))
         .findFirst()
-        .orElseThrow(() -> new NoDataFoundException("code_key=" + codeKey + " のデータが見つかりません。"));
+        .orElseThrow(
+            () -> new NoDataFoundException("category_code=" + categoryCode + " のデータが見つかりません。"));
   }
 
   /**

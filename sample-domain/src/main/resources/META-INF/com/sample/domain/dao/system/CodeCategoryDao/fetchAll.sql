@@ -1,7 +1,7 @@
 SELECT
     /*%expand*/*
 FROM
-    code_category
+    code_categories
 WHERE
     deleted_at IS NULL
 ORDER BY

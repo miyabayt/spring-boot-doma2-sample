@@ -58,21 +58,20 @@ public class CodeCategoryService extends BaseTransactionalService {
   /**
    * コード分類を取得します。
    *
-   * @param categoryKey
+   * @param categoryCode
    * @return
    */
   @Transactional(readOnly = true)
-  public CodeCategory findByKey(final String categoryKey) {
-    Assert.notNull(categoryKey, "categoryKey must not be null");
+  public CodeCategory findByCategoryCode(final String categoryCode) {
+    Assert.notNull(categoryCode, "categoryCode must not be null");
 
     val criteria = new CodeCategoryCriteria();
-    criteria.setCategoryKey(categoryKey);
+    criteria.setCategoryCode(categoryCode);
 
-    // 1件取得
     return codeCategoryRepository
         .findOne(criteria)
         .orElseThrow(
-            () -> new NoDataFoundException("category_key=" + categoryKey + " のデータが見つかりません。"));
+            () -> new NoDataFoundException("category_code=" + categoryCode + " のデータが見つかりません。"));
   }
 
   /**

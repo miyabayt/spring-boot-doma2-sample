@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @JsonIgnoreProperties(ignoreUnknown = true) // 定義されていないプロパティを無視してマッピングする
-@JsonPropertyOrder({"メールテンプレートID", "メールテンプレートキー"}) // CSVのヘッダ順
+@JsonPropertyOrder({"メールテンプレートID", "メールテンプレートコード"}) // CSVのヘッダ順
 @Getter
 @Setter
 public class MailTemplateCsv implements Serializable {
@@ -18,8 +18,8 @@ public class MailTemplateCsv implements Serializable {
   @JsonProperty("メールテンプレートID")
   Long id;
 
-  @JsonProperty("メールテンプレートキー")
-  String templateKey;
+  @JsonProperty("メールテンプレートコード")
+  String templateCode;
 
   @JsonProperty("メールタイトル")
   String subject;
