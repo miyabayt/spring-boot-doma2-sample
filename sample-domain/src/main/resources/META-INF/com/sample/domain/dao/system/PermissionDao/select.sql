@@ -7,7 +7,7 @@ WHERE
 /*%if criteria.id != null */
   AND permission_id = /* criteria.id */1
 /*%end*/
-/*%if criteria.permissionKey != null */
-  AND permission_key = /* criteria.permissionKey */'01'
+/*%if criteria.permissionCode != null */
+  AND permission_code = /* criteria.permissionCode */'01'
 /*%end*/
 LIMIT 1

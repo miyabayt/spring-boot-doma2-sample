@@ -1,25 +1,34 @@
 package com.sample.domain.service.system;
 
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
+import com.sample.domain.dto.system.Permission;
+import com.sample.domain.dto.system.PermissionCriteria;
 import com.sample.domain.dto.system.Role;
 import com.sample.domain.dto.system.RoleCriteria;
+import com.sample.domain.repository.system.PermissionRepository;
 import com.sample.domain.repository.system.RoleRepository;
 import com.sample.domain.service.BaseTransactionalService;
+import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/** 役割サービス */
+/** ロールサービス */
+@RequiredArgsConstructor
 @Service
 public class RoleService extends BaseTransactionalService {
 
-  @Autowired RoleRepository roleRepository;
+  @NonNull final RoleRepository roleRepository;
+
+  @NonNull final PermissionRepository permissionRepository;
 
   /**
-   * 役割を複数取得します。
+   * ロールを複数取得します。
    *
    * @param criteria
    * @param pageable
@@ -32,29 +41,40 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * 役割を取得します。
+   * ロールを取得します。
    *
    * @return
    */
   @Transactional(readOnly = true)
   public Optional<Role> findOne(RoleCriteria criteria) {
     Assert.notNull(criteria, "criteria must not be null");
-    return roleRepository.findOne(criteria);
+    val role = roleRepository.findOne(criteria);
+
+    role.ifPresent(
+        r -> {
+          val permissions = getPermissions();
+          r.getPermissions().addAll(permissions);
+        });
+
+    return role;
   }
 
   /**
-   * 役割を取得します。
+   * ロールを取得します。
    *
    * @return
    */
   @Transactional(readOnly = true)
   public Role findById(final Long id) {
     Assert.notNull(id, "id must not be null");
-    return roleRepository.findById(id);
+    val role = roleRepository.findById(id);
+    val permissions = getPermissions();
+    role.getPermissions().addAll(permissions);
+    return role;
   }
 
   /**
-   * 役割を追加します。
+   * ロールを追加します。
    *
    * @param inputRole
    * @return
@@ -65,7 +85,7 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * 役割を更新します。
+   * ロールを更新します。
    *
    * @param inputRole
    * @return
@@ -76,12 +96,16 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * 役割を論理削除します。
+   * ロールを論理削除します。
    *
    * @return
    */
   public Role delete(final Long id) {
     Assert.notNull(id, "id must not be null");
     return roleRepository.delete(id);
+  }
+
+  private List<Permission> getPermissions() {
+    return permissionRepository.findAll(new PermissionCriteria(), Pageable.unpaged()).getContent();
   }
 }

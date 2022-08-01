@@ -9,66 +9,80 @@
         <div layout:fragment="sidebar">
             <div th:replace="~{layouts/sidebar :: sidebar ('system', 'uploadfile')}"></div>
         </div>
-        <section layout:fragment="content-header">
-            <h1>アップロードファイル一覧</h1>
-            <ol class="breadcrumb">
-                <li><a th:href="@{/}">Home</a></li>
-                <li>アップロードファイル一覧</li>
-            </ol>
-        </section>
-        <section layout:fragment="content">
-            <form th:action="@{'/system/uploadfiles/upload'}" enctype="multipart/form-data" method="post">
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">ファイル一覧</h3>
+        <div class="content-header" layout:fragment="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-md d-none d-sm-inline-block">ファイル管理</h1>
                     </div>
-                    <div class="box-body table-responsive">
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                            <li class="breadcrumb-item active">ファイル管理</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section layout:fragment="content">
+            <div class="container-fluid">
+                <div class="card card-outline card-purple shadow">
+                    <div class="card-header">
+                        <h3 class="card-title">ファイルアップロード</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="myDropzone" class="dropzone ">
+                            <div class="fallback"></div>
+                        </div>
+                    </div>
+                    <div class="card-footer clearfix">
+                        <div class="row justify-content-md-center">
+                            <form id="form1" th:action="@{'/system/uploadFiles/upload'}" enctype="multipart/form-data" method="post">
+                                <input type="submit" class="btn btn-primary" style="width: 140px;" value="アップロード" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-outline card-purple shadow">
+                    <div class="card-header">
+                        <h3 class="card-title">ファイル一覧</h3>
+                    </div>
+                    <div class="card-body table-responsive p-0">
                         <table id="files" class="table table-hover" th:if="${filenames} != null">
                             <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>ファイル名</th>
-                                    <th>ファイル</th>
+                                <tr class="d-flex">
+                                    <th class="col-1">No</th>
+                                    <th class="col-5">ファイル名</th>
+                                    <th class="col-5">ファイル</th>
+                                    <th class="col-1"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="filename, stat : ${filenames}">
-                                    <td th:text="${stat.index + 1}" />
-                                    <td>
-                                        <a th:href="@{/system/uploadfiles/download/} + ${filename}" th:text="${filename}" />
+                                <tr class="d-flex" th:each="filename, stat : ${filenames}">
+                                    <td class="col-1" th:text="${stat.index + 1}" />
+                                    <td class="col-5">
+                                        <a th:href="@{/system/uploadFiles/download/} + ${filename}" th:text="${filename}" />
                                     </td>
-                                    <td>
-                                        <img th:src="@{/system/uploadfiles/} + ${filename}" />
+                                    <td class="col-5">
+                                        <img th:if="${#strings.endsWith(filename, '.png') || #strings.endsWith(filename, '.jpg')}" th:src="@{/system/uploadFiles/} + ${filename}" width="100px" />
+                                    </td>
+                                    <td class="col-1">
+                                        <form id="form2" th:action="@{'/system/uploadFiles/delete/' + ${filename}}" method="post">
+                                            <input type="hidden" name="_method" value="delete">
+                                            <button type="submit" class="btn btn-danger btn-sm">削除</button>
+                                        </form>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="box-footer clearfix">
-                        <div class="form-group col-xs-4">
-                            <input type="file" name="file" id="uploadfile" style="display:none;">
-                            <div class="input-group">
-                                <input type="text" id="uploadFilePath" class="form-control" placeholder="ファイルを選択してください...">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-info" onclick="$('input[id=uploadfile]').click();">選択</button>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-default bg-purple" value="Upload" />
-                        </div>
-                    </div>
                 </div>
-            </form>
+            </div>
         </section>
     </body>
     <div layout:fragment="scripts">
-        <script type="text/javascript" th:inline="javascript">
-            $(document).ready(function() {
-                $('input[id=uploadfile]').change(function() {
-                    $('#uploadFilePath').val($(this).val().replace("C:\\fakepath\\", ""));
-                });
-            });
-        </script>
+        <script th:replace="~{fragments/validationScript :: script}" />
+        <script type="text/javascript" src="../public/static/js/system/fileUploads.js"
+                th:src="@{/static/js/system/fileUploads.js}"></script>
     </div>
 </html>

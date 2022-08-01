@@ -3,45 +3,62 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/sidebarLayout}">
     <head>
-        <title>担当者管理</title>
+        <title>担当者マスタ</title>
     </head>
     <body>
         <div layout:fragment="sidebar">
             <div th:replace="~{layouts/sidebar :: sidebar ('system', 'staff')}"></div>
         </div>
-        <section layout:fragment="content-header">
-            <h1>担当者詳細</h1>
-            <ol class="breadcrumb">
-                <li><a th:href="@{/}">Home</a></li>
-                <li><a th:href="@{/system/staffs/find(page=1)}">担当者検索</a></li>
-                <li>担当者詳細</li>
-            </ol>
-        </section>
-        <section layout:fragment="content">
-            <div class="box">
-                <div class="box-header with-border">
-                    <table class="table table-hover" th:object="${staff}">
-                        <tr>
-                            <th>ID</th>
-                            <td th:text="*{id}"></td>
-                        </tr>
-                        <tr>
-                            <th>氏名</th>
-                            <td><b th:text="*{firstName + ' ' + lastName}"></b></td>
-                        </tr>
-                        <tr>
-                            <th>メールアドレス</th>
-                            <td th:text="*{email}"></td>
-                        </tr>
-                        <tr>
-                            <th>電話番号</th>
-                            <td th:text="*{tel}"></td>
-                        </tr>
-                    </table>
+        <div class="content-header" layout:fragment="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-md d-none d-sm-inline-block">担当者マスタ詳細</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/system/staffs/find(page=1)}">担当者マスタ検索</a></li>
+                            <li class="breadcrumb-item">担当者マスタ詳細</li>
+                        </ol>
+                    </div>
                 </div>
-                <div class="box-footer clearfix">
-                    <a th:href="@{/system/staffs/edit/{id}(id=${staff.id})}" class="btn btn-default bg-purple">編集</a>
-                    <a href="#" class="btn btn-danger">削除</a>
+            </div>
+        </div>
+        <section layout:fragment="content">
+            <div class="container-fluid">
+                <div class="card card-outline card-purple shadow">
+                    <div class="card-header">
+                        <h3 class="card-title">詳細表示</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" th:object="${staff}">
+                            <tr class="d-flex">
+                                <th class="col-2">ID</th>
+                                <td class="col" th:text="*{id}"></td>
+                            </tr>
+                            <tr class="d-flex">
+                                <th class="col-2">氏名</th>
+                                <td class="col" th:text="*{firstName + ' ' + lastName}"></td>
+                            </tr>
+                            <tr class="d-flex">
+                                <th class="col-2">メールアドレス</th>
+                                <td class="col" th:text="*{email}"></td>
+                            </tr>
+                            <tr class="d-flex">
+                                <th class="col-2">電話番号</th>
+                                <td class="col" th:text="*{tel}"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="card-footer clearfix">
+                        <div class="row justify-content-md-center">
+                            <form th:action="@{'/system/staffs/remove/' + ${staff.id}}" method="post">
+                                <a th:href="@{/system/staffs/edit/{id}(id=${staff.id})}" class="btn btn-primary mx-2" style="width: 140px;">編集</a>
+                                <button type="submit" class="btn btn-danger mx-2" style="width: 140px;">削除</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

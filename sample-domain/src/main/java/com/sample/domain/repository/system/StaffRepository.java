@@ -3,27 +3,32 @@ package com.sample.domain.repository.system;
 import static com.sample.domain.util.DomaUtils.createSelectOptions;
 import static java.util.stream.Collectors.toList;
 
+import com.sample.domain.dao.system.RolePermissionDao;
 import com.sample.domain.dao.system.StaffDao;
 import com.sample.domain.dao.system.StaffRoleDao;
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Staff;
 import com.sample.domain.dto.system.StaffCriteria;
 import com.sample.domain.dto.system.StaffRole;
 import com.sample.domain.exception.NoDataFoundException;
-import com.sample.domain.service.BaseRepository;
 import java.util.Optional;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 /** 担当者リポジトリ */
+@RequiredArgsConstructor
 @Repository
-public class StaffRepository extends BaseRepository {
+public class StaffRepository {
 
-  @Autowired StaffDao staffDao;
+  @NonNull final StaffDao staffDao;
 
-  @Autowired StaffRoleDao staffRoleDao;
+  @NonNull final StaffRoleDao staffRoleDao;
+
+  @NonNull final RolePermissionDao rolePermissionDao;
 
   /**
    * 担当者を複数取得します。
@@ -33,10 +38,9 @@ public class StaffRepository extends BaseRepository {
    * @return
    */
   public Page<Staff> findAll(StaffCriteria criteria, Pageable pageable) {
-    // ページングを指定する
     val options = createSelectOptions(pageable).count();
     val data = staffDao.selectAll(criteria, options, toList());
-    return pageFactory.create(data, pageable, options.getCount());
+    return new PageImpl<>(data, pageable, options.getCount());
   }
 
   /**
@@ -67,13 +71,12 @@ public class StaffRepository extends BaseRepository {
    * @return
    */
   public Staff create(final Staff inputStaff) {
-    // 1件登録
     staffDao.insert(inputStaff);
 
-    // 役割権限紐付けを登録する
+    // ロール権限紐付けを登録する
     val staffRole = new StaffRole();
     staffRole.setStaffId(inputStaff.getId());
-    staffRole.setRoleKey("admin");
+    staffRole.setRoleCode("admin");
     staffRoleDao.insert(staffRole);
 
     return inputStaff;
@@ -86,7 +89,6 @@ public class StaffRepository extends BaseRepository {
    * @return
    */
   public Staff update(final Staff inputStaff) {
-    // 1件更新
     int updated = staffDao.update(inputStaff);
 
     if (updated < 1) {

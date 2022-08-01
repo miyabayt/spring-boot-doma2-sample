@@ -4,20 +4,26 @@ spring:
       on-profile: local
   messages:
     cache-duration: -1
+  thymeleaf:
+    prefix: file:src/main/resources/templates/
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/sample?allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=UTF-8
+    url: jdbc:mysql://127.0.0.1:3306/spring-boot-doma2-sample?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: passw0rd
   web:
     resources:
       # キャッシュの無効化
-      cache:
-        period: 0
+      static-locations: file:src/main/resources/public/
   flyway:
     enable: true
     baseline-on-migrate: true
     placeholder-replacement: false
+  mail:
+    host: 127.0.0.1
+    port: 1025
+    username: test
+    password: test
 doma:
   # SQLファイルをキャッシュしない
   sql-file-repository: no_cache

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.seasar.doma.*;
 
-@Table(name = "code_category")
+@Table(name = "code_categories")
 @Entity
 @Getter
 @Setter
@@ -19,9 +19,9 @@ public class CodeCategory extends DomaDtoImpl {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
 
-  // カテゴリキー
-  String categoryKey;
+  // 分類コード
+  String categoryCode;
 
-  // カテゴリ名
+  // 分類名
   String categoryName;
 }

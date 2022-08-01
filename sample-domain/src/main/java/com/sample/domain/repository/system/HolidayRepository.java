@@ -4,22 +4,24 @@ import static com.sample.domain.util.DomaUtils.createSelectOptions;
 import static java.util.stream.Collectors.toList;
 
 import com.sample.domain.dao.system.HolidayDao;
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Holiday;
 import com.sample.domain.dto.system.HolidayCriteria;
 import com.sample.domain.exception.NoDataFoundException;
-import com.sample.domain.service.BaseRepository;
 import java.util.Optional;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 /** 祝日リポジトリ */
+@RequiredArgsConstructor
 @Repository
-public class HolidayRepository extends BaseRepository {
+public class HolidayRepository {
 
-  @Autowired HolidayDao holidayDao;
+  @NonNull final HolidayDao holidayDao;
 
   /**
    * 祝日を複数取得します。
@@ -29,10 +31,9 @@ public class HolidayRepository extends BaseRepository {
    * @return
    */
   public Page<Holiday> findAll(HolidayCriteria criteria, Pageable pageable) {
-    // ページングを指定する
     val options = createSelectOptions(pageable).count();
     val data = holidayDao.selectAll(criteria, options, toList());
-    return pageFactory.create(data, pageable, options.getCount());
+    return new PageImpl<>(data, pageable, options.getCount());
   }
 
   /**
@@ -42,7 +43,6 @@ public class HolidayRepository extends BaseRepository {
    * @return
    */
   public Optional<Holiday> findOne(HolidayCriteria criteria) {
-    // 1件取得
     return holidayDao.select(criteria);
   }
 
@@ -52,7 +52,6 @@ public class HolidayRepository extends BaseRepository {
    * @return
    */
   public Holiday findById(final Long id) {
-    // 1件取得
     return holidayDao
         .selectById(id)
         .orElseThrow(() -> new NoDataFoundException("holiday_id=" + id + " のデータが見つかりません。"));
@@ -65,7 +64,6 @@ public class HolidayRepository extends BaseRepository {
    * @return
    */
   public Holiday create(final Holiday inputHoliday) {
-    // 1件登録
     holidayDao.insert(inputHoliday);
 
     return inputHoliday;
@@ -78,7 +76,6 @@ public class HolidayRepository extends BaseRepository {
    * @return
    */
   public Holiday update(final Holiday inputHoliday) {
-    // 1件更新
     int updated = holidayDao.update(inputHoliday);
 
     if (updated < 1) {

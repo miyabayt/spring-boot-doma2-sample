@@ -66,7 +66,6 @@ spring:
       # 自動的にバッチジョブが起動しないようにする
       enabled: false
   mail:
-    default-encoding: ISO-2022-JP
     protocol: smtp
     host: 127.0.0.1
     port: 25

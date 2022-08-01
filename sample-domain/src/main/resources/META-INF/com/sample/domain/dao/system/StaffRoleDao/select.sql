@@ -1,8 +1,8 @@
 SELECT
-  r.role_key
+  r.role_code
   , r.role_name
-  , p.category_key
-  , p.permission_key
+  , p.category_code
+  , p.permission_code
   , p.permission_name
   , sr.version
 FROM
@@ -11,13 +11,13 @@ FROM
     ON sr.role_id = r.role_id
     AND r.deleted_at IS NULL
   LEFT JOIN permissions p
-    ON r.permission_id = p.permission_id
+    ON r.permission_code = p.permission_code
     AND p.deleted_at IS NULL
 WHERE
   sr.deleted_at IS NULL
 /*%if criteria.id != null */
-  AND p.permission_id = /* criteria.id */1
+  AND p.staff_role_id = /* criteria.id */1
 /*%end*/
-/*%if criteria.permissionKey != null */
-  AND permission_key = /* criteria.permissionKey */'01'
+/*%if criteria.permissionCode != null */
+  AND permission_code = /* criteria.permissionCode */'01'
 /*%end*/

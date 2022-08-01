@@ -65,7 +65,7 @@ public interface UserRoleDao {
    * @param userRole
    * @return
    */
-  @Insert(exclude = {"roleName", "permissionKey", "permissionName"})
+  @Insert(exclude = {"roleName", "permissionCode", "permissionName"})
   int insert(UserRole userRole);
 
   /**
@@ -74,7 +74,7 @@ public interface UserRoleDao {
    * @param userRole
    * @return
    */
-  @Update(exclude = {"roleName", "permissionKey", "permissionName"})
+  @Update(exclude = {"roleName", "permissionCode", "permissionName"})
   int update(UserRole userRole);
 
   /**
@@ -92,6 +92,6 @@ public interface UserRoleDao {
    * @param userRoles
    * @return
    */
-  @BatchInsert(exclude = {"roleName", "permissionKey", "permissionName"})
+  @BatchInsert(exclude = {"roleName", "permissionCode", "permissionName"})
   int[] insert(List<UserRole> userRoles);
 }

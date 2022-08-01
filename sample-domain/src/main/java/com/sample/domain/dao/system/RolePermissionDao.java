@@ -14,7 +14,7 @@ import org.seasar.doma.jdbc.SelectOptions;
 public interface RolePermissionDao {
 
   /**
-   * 役割権限紐付けを取得します。
+   * ロール権限紐付けを取得します。
    *
    * @param criteria
    * @param options
@@ -27,7 +27,7 @@ public interface RolePermissionDao {
       final Collector<RolePermission, ?, R> collector);
 
   /**
-   * 役割権限紐付けを1件取得します。
+   * ロール権限紐付けを1件取得します。
    *
    * @param id
    * @return
@@ -36,7 +36,7 @@ public interface RolePermissionDao {
   Optional<RolePermission> selectById(Long id);
 
   /**
-   * 役割権限紐付けを1件取得します。
+   * ロール権限紐付けを1件取得します。
    *
    * @param criteria
    * @return
@@ -45,7 +45,7 @@ public interface RolePermissionDao {
   Optional<RolePermission> select(RolePermissionCriteria criteria);
 
   /**
-   * 役割権限紐付けを登録します。
+   * ロール権限紐付けを登録します。
    *
    * @param rolePermission
    * @return
@@ -54,7 +54,7 @@ public interface RolePermissionDao {
   int insert(RolePermission rolePermission);
 
   /**
-   * 役割権限紐付けを更新します。
+   * ロール権限紐付けを更新します。
    *
    * @param rolePermission
    * @return
@@ -63,7 +63,7 @@ public interface RolePermissionDao {
   int update(RolePermission rolePermission);
 
   /**
-   * 役割権限紐付けを論理削除します。
+   * ロール権限紐付けを論理削除します。
    *
    * @param rolePermission
    * @return
@@ -72,7 +72,7 @@ public interface RolePermissionDao {
   int delete(RolePermission rolePermission);
 
   /**
-   * 役割権限紐付けを一括論理削除します。
+   * ロール権限紐付けを一括論理削除します。
    *
    * @param rolePermissions
    * @return
@@ -81,7 +81,7 @@ public interface RolePermissionDao {
   int[] delete(List<RolePermission> rolePermissions);
 
   /**
-   * 役割権限紐付けを一括登録します。
+   * ロール権限紐付けを一括登録します。
    *
    * @param rolePermissions
    * @return

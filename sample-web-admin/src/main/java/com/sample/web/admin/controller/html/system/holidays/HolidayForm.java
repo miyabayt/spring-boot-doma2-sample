@@ -14,7 +14,7 @@ public class HolidayForm extends BaseForm {
 
   Long id;
 
-  // 祝日キー
+  // 名称
   @NotEmpty String holidayName;
 
   // 日付

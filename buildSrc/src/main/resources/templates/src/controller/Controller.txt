@@ -4,10 +4,18 @@ import static com.sample.domain.util.TypeUtils.toListType;
 import static [[${webBasePackageName}]].WebConst.MESSAGE_DELETED;
 import static [[${webBasePackageName}]].WebConst.GLOBAL_MESSAGE;
 
+import [[${commonDtoPackageName}]].Pageable;
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
+import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
+import [[${servicePackageName}]].[[${subSystem}]].[[${upperFuncName}]]Service;
+import [[${baseControllerPackageName}]].AbstractHtmlController;
+import [[${webBasePackageName}]].view.CsvView;
 import java.util.List;
-
-import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,30 +26,17 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import [[${commonDtoPackageName}]].Pageable;
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
-import [[${servicePackageName}]].[[${subSystem}]].[[${upperFuncName}]]Service;
-import [[${baseControllerPackageName}]].AbstractHtmlController;
-import [[${webBasePackageName}]].view.CsvView;
-
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
-/**
- * [[${funcStr}]]管理
- */
+/** [[${funcStr}]] */
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/[[${subSystem}]]/[[${lowerFuncName}]]s")
 @SessionAttributes(types = { Search[[${upperFuncName}]]Form.class, [[${upperFuncName}]]Form.class })
 @Slf4j
 public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
 
-    @Autowired
-    [[${upperFuncName}]]FormValidator [[${lowerFuncName}]]FormValidator;
+    @NonNull final [[${upperFuncName}]]FormValidator [[${lowerFuncName}]]FormValidator;
 
-    @Autowired
-    [[${upperFuncName}]]Service [[${lowerFuncName}]]Service;
+    @NonNull final [[${upperFuncName}]]Service [[${lowerFuncName}]]Service;
 
     @ModelAttribute("[[${lowerFuncName}]]Form")
     public [[${upperFuncName}]]Form [[${lowerFuncName}]]Form() {
@@ -113,12 +108,12 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
      * @return
      */
     @GetMapping("/find")
-    public String find[[${upperFuncName}]](@ModelAttribute("search[[${upperFuncName}]]Form") Search[[${upperFuncName}]]Form form, Model model) {
+    public String find[[${upperFuncName}]](@ModelAttribute("search[[${upperFuncName}]]Form") Search[[${upperFuncName}]]Form form, Pageable pageable, Model model) {
         // 入力値から検索条件を作成する
         val criteria = modelMapper.map(form, [[${upperFuncName}]]Criteria.class);
 
         // 10件区切りで取得する
-        val pages = [[${lowerFuncName}]]Service.findAll(criteria, form);
+        val pages = [[${lowerFuncName}]]Service.findAll(criteria, pageable);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
@@ -247,10 +242,10 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
     @GetMapping("/download/{filename:.+\\.csv}")
     public ModelAndView downloadCsv(@PathVariable String filename) {
         // 全件取得する
-        val [[${lowerFuncName}]]s = [[${lowerFuncName}]]Service.findAll(new [[${upperFuncName}]]Criteria(), Pageable.NO_LIMIT);
+        val [[${lowerFuncName}]]s = [[${lowerFuncName}]]Service.findAll(new [[${upperFuncName}]]Criteria(), Pageable.unpaged());
 
         // 詰め替える
-        List<[[${upperFuncName}]]Csv> csvList = modelMapper.map([[${lowerFuncName}]]s.getData(), toListType([[${upperFuncName}]]Csv.class));
+        List<[[${upperFuncName}]]Csv> csvList = modelMapper.map([[${lowerFuncName}]]s.getContent(), toListType([[${upperFuncName}]]Csv.class));
 
         // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
         val view = new CsvView([[${upperFuncName}]]Csv.class, csvList, filename);

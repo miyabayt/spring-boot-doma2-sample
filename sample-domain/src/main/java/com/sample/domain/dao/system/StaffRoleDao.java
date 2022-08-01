@@ -65,7 +65,7 @@ public interface StaffRoleDao {
    * @param staffRole
    * @return
    */
-  @Insert(exclude = {"roleName", "permissionKey", "permissionName"})
+  @Insert(exclude = {"roleName", "permissionCode", "permissionName"})
   int insert(StaffRole staffRole);
 
   /**
@@ -74,7 +74,7 @@ public interface StaffRoleDao {
    * @param staffRole
    * @return
    */
-  @Update(exclude = {"roleName", "permissionKey", "permissionName"})
+  @Update(exclude = {"roleName", "permissionCode", "permissionName"})
   int update(StaffRole staffRole);
 
   /**
@@ -92,6 +92,6 @@ public interface StaffRoleDao {
    * @param staffRoles
    * @return
    */
-  @BatchInsert(exclude = {"roleName", "permissionKey", "permissionName"})
+  @BatchInsert(exclude = {"roleName", "permissionCode", "permissionName"})
   int[] insert(List<StaffRole> staffRoles);
 }

@@ -8,19 +8,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 @JsonIgnoreProperties(ignoreUnknown = true) // 定義されていないプロパティを無視してマッピングする
-@JsonPropertyOrder({"役割ID", "役割キー", "役割名"}) // CSVのヘッダ順
+@JsonPropertyOrder({"ロールID", "ロールコード", "ロール名"}) // CSVのヘッダ順
 @Getter
 @Setter
 public class RoleCsv implements Serializable {
 
   private static final long serialVersionUID = -3895412714445561940L;
 
-  @JsonProperty("役割ID")
+  @JsonProperty("ロールID")
   Long id;
 
-  @JsonProperty("役割キー")
-  String roleKey;
+  @JsonProperty("ロールコード")
+  String roleCode;
 
-  @JsonProperty("役割名")
+  @JsonProperty("ロール名")
   String roleName;
 }

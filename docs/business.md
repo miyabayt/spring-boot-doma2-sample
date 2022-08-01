@@ -8,6 +8,7 @@
 
 
 ```java
+@RequiredArgsConstructor
 @Service
 public class UserService extends BaseTransactionalService { // ★親クラスで@Transactionalを宣言済み
 
@@ -27,10 +28,10 @@ public class UserService extends BaseTransactionalService { // ★親クラス�
         // 1件登録
         userDao.insert(inputUser); // ★1つ目のテーブル
 
-        // 役割権限紐付けを登録する
+        // ロール権限紐付けを登録する
         val userRole = new UserRole();
         userRole.setUserId(inputUser.getId());
-        userRole.setRoleKey("user");
+        userRole.setRoleCode("user");
         userRoleDao.insert(userRole); // ★2つ目のテーブル
 
         return inputUser;
@@ -54,7 +55,7 @@ public class UserService extends BaseTransactionalService { // ★親クラス�
         val users = userDao.selectAll(where, options, toList());
 
         // ★SelectOptionsのcountメソッドを呼び出すと、件数取得とレコード取得が一つのSQLで行える
-        return PageFactory.create(users, pageable, options.getCount()); // ファクトリメソッドにリストを渡してPageオブジェクトで包んで返す
+        return new PageImpl<>(users, pageable, options.getCount()); // ファクトリメソッドにリストを渡してPageオブジェクトで包んで返す
     }
 ```
 

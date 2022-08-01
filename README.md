@@ -59,7 +59,7 @@ $ ./gradlew :sample-batch:bootRun -Pargs="--job=importStaffJob"
 #### データベース接続先
 
 ```bash
-mysql -h 127.0.0.1 -P 3306 -uroot -ppassw0rd sample
+mysql -h 127.0.0.1 -P 3306 -uroot -ppassw0rd spring-boot-doma2-sample
 ```
 
 #### ブラウザを用いた自動テスト（結合テスト）

@@ -42,14 +42,14 @@ class WhenUseUserApiSpec extends BaseTestContainerSpec {
         h.delete "users"
     }
 
-    @WithMockUser(username = "test@sample.com", password = "passw0rd", authorities = ".*")
+    @WithMockUser(username = "test@sample.com", password = "passw0rd", roles = ["system_admin"])
     def "ユーザAPIを使うシナリオ"() {
         given: "ユーザが１件もない状態で"
         when:
         def json = ユーザの一覧を取得する()
 
         then: "0件であるべき"
-        json == '{"data":[],"message":"正常終了","page":1,"totalPages":1}'
+        json == '{"content":[],"message":"正常終了","page":1,"totalPages":0}'
 
         when:
         ユーザを追加する(asJson(["firstName": "ichiro"] <<
@@ -89,7 +89,7 @@ class WhenUseUserApiSpec extends BaseTestContainerSpec {
         and:
         json = ユーザの一覧を取得する()
         then: "0件であるべき"
-        json == '{"data":[],"message":"正常終了","page":1,"totalPages":1}'
+        json == '{"content":[],"message":"正常終了","page":1,"totalPages":0}'
     }
 
     def asJson(map) {
@@ -115,7 +115,7 @@ class WhenUseUserApiSpec extends BaseTestContainerSpec {
     def "追加したユーザを特定する"(jsonAsString) {
         def jsonSlurper = new JsonSlurper()
         def json = jsonSlurper.parseText(jsonAsString)
-        json['data'][0]
+        json['content'][0]
     }
 
     def "ユーザを取得する"(id) {

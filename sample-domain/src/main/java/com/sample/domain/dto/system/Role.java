@@ -1,7 +1,10 @@
 package com.sample.domain.dto.system;
 
+import static com.sample.common.util.ValidateUtils.isEquals;
+
 import com.sample.domain.dto.common.DomaDtoImpl;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.seasar.doma.*;
@@ -22,12 +25,25 @@ public class Role extends DomaDtoImpl {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
 
-  // 役割キー
-  String roleKey;
+  // ロールコード
+  String roleCode;
 
-  // 役割名
+  // ロール名
   String roleName;
 
-  // 権限
-  @Transient Map<Integer, Boolean> permissions;
+  final @Transient List<RolePermission> rolePermissions = new ArrayList<>();
+
+  final @Transient List<Permission> permissions = new ArrayList<>();
+
+  public boolean hasPermission(String permissionCode) {
+    return rolePermissions.stream()
+        .anyMatch(rp -> isEquals(rp.getPermissionCode(), permissionCode) && rp.getIsEnabled());
+  }
+
+  public void setPermission(String permissionCode, boolean isEnabled) {
+    rolePermissions.stream()
+        .filter(rp -> isEquals(rp.getPermissionCode(), permissionCode))
+        .findFirst()
+        .ifPresent(rp -> rp.setIsEnabled(isEnabled));
+  }
 }

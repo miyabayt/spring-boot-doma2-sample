@@ -21,9 +21,12 @@ public class RolePermission extends DomaDtoImpl {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
 
-  // 役割キー
-  String roleKey;
+  // ロールコード
+  String roleCode;
 
-  // 権限ID
-  Integer permissionId;
+  // 権限コード
+  String permissionCode;
+
+  // 有効
+  Boolean isEnabled;
 }

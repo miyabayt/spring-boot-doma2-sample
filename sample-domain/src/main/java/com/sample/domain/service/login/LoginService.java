@@ -14,24 +14,26 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 /** ログインサービス */
+@RequiredArgsConstructor
 @Service
 public class LoginService extends BaseTransactionalService {
 
   @Value("${spring.mail.properties.mail.from}")
   String fromAddress;
 
-  @Autowired StaffRepository staffRepository;
+  @NonNull final StaffRepository staffRepository;
 
-  @Autowired MailTemplateRepository mailTemplateRepository;
+  @NonNull final MailTemplateRepository mailTemplateRepository;
 
-  @Autowired SendMailHelper sendMailHelper;
+  @NonNull final SendMailHelper sendMailHelper;
 
   /**
    * パスワードリセットメールを送信します。
@@ -128,14 +130,14 @@ public class LoginService extends BaseTransactionalService {
    *
    * @return
    */
-  protected MailTemplate getMailTemplate(String templateKey) {
+  protected MailTemplate getMailTemplate(String templateCode) {
     val criteria = new MailTemplateCriteria();
-    criteria.setTemplateKey(templateKey);
+    criteria.setTemplateCode(templateCode);
     return mailTemplateRepository
         .findOne(criteria)
         .orElseThrow(
             () ->
                 new NoDataFoundException(
-                    "templateKey=" + criteria.getTemplateKey() + " のデータが見つかりません。"));
+                    "templateCode=" + criteria.getTemplateCode() + " のデータが見つかりません。"));
   }
 }

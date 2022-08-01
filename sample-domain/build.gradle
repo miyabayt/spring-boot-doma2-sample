@@ -39,6 +39,7 @@ dependencies {
     api "org.flywaydb:flyway-core"
     api "org.flywaydb:flyway-mysql"
 
+    testImplementation "org.flywaydb.flyway-test-extensions:flyway-spring-test:7.0.0"
     testImplementation "org.testcontainers:spock:1.17.3"
     testImplementation "org.testcontainers:mysql:1.17.3"
 }

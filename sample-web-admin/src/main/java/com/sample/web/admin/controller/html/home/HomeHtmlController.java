@@ -4,6 +4,7 @@ import static com.sample.web.base.WebConst.HOME_URL;
 
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ public class HomeHtmlController extends AbstractHtmlController {
    *
    * @return
    */
+  @PreAuthorize("hasAnyRole('system_admin', 'operator')")
   @GetMapping
   public String index(Model model) {
     return "modules/home/index";

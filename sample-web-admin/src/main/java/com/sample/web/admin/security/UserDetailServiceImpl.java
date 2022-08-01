@@ -3,64 +3,71 @@ package com.sample.web.admin.security;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
+import com.sample.domain.dao.system.RolePermissionDao;
 import com.sample.domain.dao.system.StaffDao;
 import com.sample.domain.dao.system.StaffRoleDao;
-import com.sample.domain.dto.system.Staff;
-import com.sample.domain.dto.system.StaffCriteria;
-import com.sample.domain.dto.system.StaffRole;
-import com.sample.web.base.security.BaseRealm;
+import com.sample.domain.dto.system.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.seasar.doma.jdbc.SelectOptions;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 /** 管理側 認証認可 */
+@RequiredArgsConstructor
 @Component
 @Slf4j
-public class StaffDaoRealm extends BaseRealm {
+public class UserDetailServiceImpl implements UserDetailsService {
 
-  @Autowired StaffDao staffDao;
+  @NonNull final StaffDao staffDao;
 
-  @Autowired StaffRoleDao staffRoleDao;
+  @NonNull final StaffRoleDao staffRoleDao;
+
+  @NonNull final RolePermissionDao rolePermissionDao;
 
   @Override
-  protected UserDetails getLoginUser(String email) {
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     Staff staff = null;
     List<GrantedAuthority> authorityList = null;
 
     try {
-      // login_idをメールアドレスと見立てる
       val criteria = new StaffCriteria();
-      criteria.setEmail(email);
+      criteria.setEmail(username);
 
       // 担当者を取得して、セッションに保存する
       staff =
           staffDao
               .select(criteria)
               .orElseThrow(
-                  () -> new UsernameNotFoundException("no staff found [id=" + email + "]"));
+                  () ->
+                      new UsernameNotFoundException("no staff found [username=" + username + "]"));
 
       // 担当者権限を取得する
-      List<StaffRole> staffRoles = staffRoleDao.selectByStaffId(staff.getId(), toList());
+      val staffRoles = staffRoleDao.selectByStaffId(staff.getId(), toList());
 
-      // 役割キーにプレフィックスをつけてまとめる
-      Set<String> roleKeys = staffRoles.stream().map(StaffRole::getRoleKey).collect(toSet());
+      // ロールコードにプレフィックスをつけてまとめる
+      val roleCodes = staffRoles.stream().map(StaffRole::getRoleCode).collect(toSet());
+      val rolePermissions = getRolePermissions(roleCodes);
 
-      // 権限キーをまとめる
-      Set<String> permissionKeys =
-          staffRoles.stream().map(StaffRole::getPermissionKey).collect(toSet());
+      // 権限コードをまとめる
+      val permissionCodes =
+          rolePermissions.stream().map(RolePermission::getPermissionCode).collect(toSet());
 
-      // 役割と権限を両方ともGrantedAuthorityとして渡す
+      // ロールと権限を両方ともGrantedAuthorityとして渡す
       Set<String> authorities = new HashSet<>();
-      authorities.addAll(roleKeys);
-      authorities.addAll(permissionKeys);
+      for (val roleCode : roleCodes) {
+        authorities.add("ROLE_%s".formatted(roleCode));
+      }
+      authorities.addAll(permissionCodes);
       authorityList = AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]));
 
       return new LoginStaff(staff, authorityList);
@@ -76,5 +83,12 @@ public class StaffDaoRealm extends BaseRealm {
       // それ以外の例外は、認証エラーの例外で包む
       throw new UsernameNotFoundException("could not select staff.", e);
     }
+  }
+
+  private List<RolePermission> getRolePermissions(Set<String> roleCodes) {
+    val criteria = new RolePermissionCriteria();
+    criteria.setRoleCodes(roleCodes);
+    criteria.setIsEnabled(true);
+    return rolePermissionDao.selectAll(criteria, SelectOptions.get(), toList());
   }
 }

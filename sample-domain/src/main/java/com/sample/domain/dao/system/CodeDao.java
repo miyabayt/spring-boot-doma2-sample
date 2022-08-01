@@ -38,15 +38,6 @@ public interface CodeDao {
   /**
    * コードを1件取得します。
    *
-   * @param codeKey
-   * @return
-   */
-  @Select
-  Optional<Code> selectByKey(String codeKey);
-
-  /**
-   * コードを1件取得します。
-   *
    * @param criteria
    * @return
    */
@@ -68,20 +59,7 @@ public interface CodeDao {
    * @param code
    * @return
    */
-  @Update(
-      exclude = {
-        "categoryKey",
-        "categoryName",
-        "codeKey",
-        "codeAlias",
-        "attribute1",
-        "attribute2",
-        "attribute3",
-        "attribute4",
-        "attribute5",
-        "attribute6",
-        "isInvalid"
-      })
+  @Update
   int update(Code code);
 
   /**

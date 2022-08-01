@@ -9,37 +9,53 @@
         <div layout:fragment="sidebar">
             <div th:replace="~{layouts/sidebar :: sidebar ('user', 'user')}"></div>
         </div>
-        <section layout:fragment="content-header">
-            <h1 th:with="text=${userForm.isNew()} ? '顧客登録' : '顧客編集'" th:text="${text}">顧客登録</h1>
-            <ol class="breadcrumb">
-                <li><a th:href="@{/}">Home</a></li>
-                <li><a th:href="@{/users/users/find(page=1)}">顧客検索</a></li>
-                <li th:with="text=${userForm.isNew()} ? '顧客登録' : '顧客編集'" th:text="${text}">顧客登録</li>
-            </ol>
-        </section>
+        <div class="content-header" layout:fragment="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-md d-none d-sm-inline-block" th:with="text=${userForm.isNew()} ? '顧客マスタ登録' : '顧客マスタ編集'" th:text="${text}">顧客マスタ登録</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/users/users/find(page=1)}">顧客マスタ検索</a></li>
+                            <li class="breadcrumb-item active" th:with="text=${userForm.isNew()} ? '顧客マスタ登録' : '顧客マスタ編集'" th:text="${text}">顧客マスタ登録</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
         <section layout:fragment="content">
-            <div class="box">
-                <form th:object="${userForm}" th:action="${action}" id="form1"
-                      th:with="action=${userForm.isNew()} ? @{/users/users/new} : @{/users/users/edit/{id}(id=*{id})}"
-                      class="form-horizontal" enctype="multipart/form-data" method="post">
-                    <div class="box-body">
-                        <input th:replace="~{fragments/inputField :: input ('text', '名前', 'firstName')}" />
-                        <input th:replace="~{fragments/inputField :: input ('text', '苗字', 'lastName')}" />
-                        <input th:replace="~{fragments/inputField :: input ('password', 'パスワード', 'password')}" />
-                        <input th:replace="~{fragments/inputField :: input ('password', '確認パスワード', 'passwordConfirm')}" />
-                        <input th:replace="~{fragments/inputField :: input ('text', 'メールアドレス', 'email')}" />
-                        <input th:replace="~{fragments/inputField :: input ('text', '郵便番号', 'zip')}" />
-                        <input th:replace="~{fragments/inputField :: input ('text', '住所', 'address')}" />
-                        <input th:replace="~{fragments/inputField :: input ('text', '電話番号', 'tel')}" />
-                        <input th:replace="~{fragments/inputField :: input ('file', '添付画像', 'userImage')}" />
-                    </div>
-                    <div class="box-footer">
-                        <button class="btn btn-default bg-purple" type="submit"
-                                th:with="text=${userForm.isNew()} ? '登録' : '保存'" th:text="${text}">
-                            Add User
-                        </button>
-                    </div>
-                </form>
+            <div class="container-fluid">
+                <div class="card card-outline card-purple shadow">
+                    <form th:object="${userForm}" th:action="${action}" id="form1"
+                          th:with="action=${userForm.isNew()} ? @{/users/users/new} : @{/users/users/edit/{id}(id=*{id})}"
+                          class="form-horizontal" enctype="multipart/form-data" method="post">
+                        <div class="card-header">
+                            <h3 class="card-title"
+                                th:with="text=${userForm.isNew()} ? '新規登録' : '編集'" th:text="${text}">新規登録</h3>
+                        </div>
+                        <div class="card-body">
+                            <input th:replace="~{fragments/inputField :: input ('text', '名', 'firstName')}" />
+                            <input th:replace="~{fragments/inputField :: input ('text', '姓', 'lastName')}" />
+                            <input th:replace="~{fragments/inputField :: input ('password', 'パスワード', 'password')}" />
+                            <input th:replace="~{fragments/inputField :: input ('password', '確認パスワード', 'passwordConfirm')}" />
+                            <input th:replace="~{fragments/inputField :: input ('text', 'メールアドレス', 'email')}" />
+                            <input th:replace="~{fragments/inputField :: input ('text', '郵便番号', 'zip')}" />
+                            <input th:replace="~{fragments/inputField :: input ('text', '住所', 'address')}" />
+                            <input th:replace="~{fragments/inputField :: input ('text', '電話番号', 'tel')}" />
+                            <input th:replace="~{fragments/inputField :: input ('file', '添付画像', 'userImage')}" />
+                        </div>
+                        <div class="card-footer clearfix">
+                            <div class="row justify-content-md-center">
+                                <button class="btn btn-primary" type="submit" style="width: 140px;"
+                                        th:with="text=${userForm.isNew()} ? '登録' : '保存'" th:text="${text}">
+                                    Add User
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </section>
     </body>

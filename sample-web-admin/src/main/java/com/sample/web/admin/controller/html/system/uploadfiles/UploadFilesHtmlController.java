@@ -10,11 +10,16 @@ import com.sample.web.base.util.MultipartFileUtils;
 import com.sample.web.base.view.FileDownloadView;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Map;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +27,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@RequiredArgsConstructor
 @Controller
-@RequestMapping("/system/uploadfiles")
+@RequestMapping("/system/uploadFiles")
 @Slf4j
 public class UploadFilesHtmlController extends AbstractHtmlController implements InitializingBean {
 
@@ -31,7 +37,7 @@ public class UploadFilesHtmlController extends AbstractHtmlController implements
       "${application.fileUploadLocation:#{systemProperties['java.io.tmpdir']}}") // 設定ファイルに定義されたアップロード先を取得する
   String fileUploadLocation;
 
-  @Autowired FileHelper fileHelper;
+  @NonNull final FileHelper fileHelper;
 
   @Override
   public String getFunctionName() {
@@ -45,6 +51,7 @@ public class UploadFilesHtmlController extends AbstractHtmlController implements
    * @return
    * @throws IOException
    */
+  @PreAuthorize("hasAuthority('uploadFile')")
   @GetMapping("/list")
   public String listFiles(Model model) throws IOException {
     // ファイル名のリストを作成する
@@ -54,7 +61,7 @@ public class UploadFilesHtmlController extends AbstractHtmlController implements
 
     model.addAttribute("filenames", filenames);
 
-    return "modules/system/uploadfiles/list";
+    return "modules/system/uploadFiles/list";
   }
 
   /**
@@ -63,6 +70,7 @@ public class UploadFilesHtmlController extends AbstractHtmlController implements
    * @param filename
    * @return
    */
+  @PreAuthorize("hasAuthority('uploadFile')")
   @GetMapping("/{filename:.+}")
   @ResponseBody
   public ModelAndView serveFile(@PathVariable String filename) {
@@ -83,6 +91,7 @@ public class UploadFilesHtmlController extends AbstractHtmlController implements
    * @param filename
    * @return
    */
+  @PreAuthorize("hasAuthority('uploadFile')")
   @GetMapping("/download/{filename:.+}")
   @ResponseBody
   public ModelAndView downloadFile(@PathVariable String filename) {
@@ -103,6 +112,7 @@ public class UploadFilesHtmlController extends AbstractHtmlController implements
    * @param redirectAttributes
    * @return
    */
+  @PreAuthorize("hasAuthority('uploadFile')")
   @PostMapping("/upload")
   public String uploadFile(
       @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
@@ -110,9 +120,41 @@ public class UploadFilesHtmlController extends AbstractHtmlController implements
     MultipartFileUtils.saveFile(Paths.get(fileUploadLocation), file);
 
     // リダイレクト先で完了メッセージを表示する
-    redirectAttributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage("uploadfiles.upload.success"));
+    redirectAttributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage("uploadFiles.upload.success"));
 
-    return "redirect:/system/uploadfiles/list";
+    return "redirect:/system/uploadFiles/list";
+  }
+
+  /**
+   * ファイルアップロード（Ajax）
+   *
+   * @param file
+   * @return
+   */
+  @PreAuthorize("hasAuthority('uploadFile')")
+  @PostMapping(
+      path = "/upload",
+      consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+      headers = "x-requested-with=XMLHttpRequest")
+  public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+    MultipartFileUtils.saveFile(Paths.get(fileUploadLocation), file);
+    val body =
+        Map.<String, Object>of(
+            "message", getMessage("uploadFiles.upload.success"), "success", true);
+    return ResponseEntity.ok().body(body);
+  }
+
+  /**
+   * ファイル削除
+   *
+   * @param filename
+   * @return
+   */
+  @PreAuthorize("hasAuthority('uploadFile')")
+  @DeleteMapping(path = "/delete/{filename:.+}")
+  public String deleteFile(@PathVariable String filename) {
+    FileUtils.deleteFile(Paths.get(fileUploadLocation), filename);
+    return "redirect:/system/uploadFiles/list";
   }
 
   @Override

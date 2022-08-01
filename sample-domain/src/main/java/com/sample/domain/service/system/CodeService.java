@@ -2,24 +2,26 @@ package com.sample.domain.service.system;
 
 import static com.sample.common.util.ValidateUtils.isEquals;
 
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Code;
 import com.sample.domain.dto.system.CodeCriteria;
 import com.sample.domain.exception.NoDataFoundException;
 import com.sample.domain.repository.system.CodeRepository;
 import com.sample.domain.service.BaseTransactionalService;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /** コードサービス */
+@RequiredArgsConstructor
 @Service
 public class CodeService extends BaseTransactionalService {
 
-  @Autowired CodeRepository codeRepository;
+  @NonNull final CodeRepository codeRepository;
 
   /**
    * コードを複数取得します。
@@ -60,16 +62,17 @@ public class CodeService extends BaseTransactionalService {
   /**
    * コードを取得します。
    *
-   * @param codeKey
+   * @param categoryCode
    * @return
    */
   @Transactional(readOnly = true)
-  public Code findByKey(final String codeKey) {
-    Assert.notNull(codeKey, "codeKey must not be null");
+  public Code findByCategoryCode(final String categoryCode) {
+    Assert.notNull(categoryCode, "categoryCode must not be null");
     return codeRepository.fetchAll().stream()
-        .filter(c -> isEquals(codeKey, c.getCodeKey()))
+        .filter(c -> isEquals(categoryCode, c.getCategoryCode()))
         .findFirst()
-        .orElseThrow(() -> new NoDataFoundException("code_key=" + codeKey + " のデータが見つかりません。"));
+        .orElseThrow(
+            () -> new NoDataFoundException("category_code=" + categoryCode + " のデータが見つかりません。"));
   }
 
   /**

@@ -1,7 +1,7 @@
 package com.sample.domain.service
 
 import com.sample.domain.BaseTestContainerSpec
-import com.sample.domain.dto.common.Pageable
+import org.springframework.data.domain.Pageable
 import com.sample.domain.dto.system.CodeCriteria
 import com.sample.domain.service.system.CodeService
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,9 +19,9 @@ class CodeServiceTest extends BaseTestContainerSpec {
     def "コード一覧が取得できること"() {
         when:
         def criteria = new CodeCriteria()
-        def pages = codeService.findAll(criteria, Pageable.NO_LIMIT)
+        def pages = codeService.findAll(criteria, Pageable.unpaged())
 
         then:
-        pages.getCount() >= 1
+        pages.totalElements >= 1
     }
 }

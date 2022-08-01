@@ -1,12 +1,26 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/layout}">
-    <head layout:fragment="~{layouts/layout::header}">
+	<head layout:fragment="~{layouts/layout::header}">
 		<title>エラー</title>
 	</head>
 	<body>
 		<div layout:fragment="content">
-			<h2>権限が不足しています。</h2>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-12">
+						<h1>403 Forbidden</h1>
+					</div>
+					<div class="col-12">
+						<h3>権限が不足しています。</h3>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 pt-4">
+						<a th:href="@{/}">トップページにもどる</a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>

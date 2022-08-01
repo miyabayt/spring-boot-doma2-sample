@@ -1,15 +1,13 @@
 package com.sample.domain.dao.system
 
 import com.sample.domain.BaseTestContainerSpec
-import com.sample.domain.dto.common.Pageable
 import com.sample.domain.dto.system.Permission
 import com.sample.domain.dto.system.PermissionCriteria
 import com.sample.domain.exception.NoDataFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.OptimisticLockingFailureException
-import org.springframework.transaction.annotation.Transactional
-import spock.lang.Specification
+import org.springframework.data.domain.Pageable
 
 import static com.sample.domain.util.DomaUtils.createSelectOptions
 import static java.util.stream.Collectors.toList
@@ -23,7 +21,7 @@ class PermissionDaoTest extends BaseTestContainerSpec {
 
     def "存在しないIDで絞り込んだ場合、空のリストが返ること"() {
         when:
-        def options = createSelectOptions(Pageable.DEFAULT).count()
+        def options = createSelectOptions(Pageable.unpaged()).count()
         def criteria = new PermissionCriteria()
         criteria.setId(-9999)
 
@@ -33,10 +31,10 @@ class PermissionDaoTest extends BaseTestContainerSpec {
         data.size() == 0
     }
 
-    def "存在しない権限キーで絞り込んだ場合、emptyが返ること"() {
+    def "存在しない権限コードで絞り込んだ場合、emptyが返ること"() {
         when:
         def criteria = new PermissionCriteria()
-        criteria.setPermissionKey("XXXXXXXXXX")
+        criteria.setPermissionCode("XXXXXXXXXX")
 
         Optional<Permission> permission = permissionDao.select(criteria)
 

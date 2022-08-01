@@ -21,11 +21,11 @@ public class MailTemplate extends DomaDtoImpl {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
 
-  // カテゴリキー
-  String categoryKey;
+  // カテゴリコード
+  String categoryCode;
 
-  // メールテンプレートキー
-  String templateKey;
+  // メールテンプレートコード
+  String templateCode;
 
   // メールタイトル
   String subject;

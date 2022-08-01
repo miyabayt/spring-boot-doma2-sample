@@ -34,16 +34,16 @@ class HomeHtmlControllerTest extends BaseTestContainerSpec {
                 .build()
     }
 
-    @WithMockUser(username = "test@sample.com", password = "passw0rd", authorities = ".*")
+    @WithMockUser(username = "test@sample.com", password = "passw0rd", roles = ["system_admin"])
     def "権限を持つ担当者でホームを開けること"() {
         expect:
         mvc.perform(get("/home"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Home | Sample")))
+                .andExpect(content().string(containsString("ホーム | Sample")))
                 .andExpect(model().hasNoErrors())
     }
 
-    @WithMockUser(username = "test@sample.com", password = "passw0rd", authorities = "test")
+    @WithMockUser(username = "test@sample.com", password = "passw0rd", roles = ["user"])
     def "権限を持たない担当者でホームが開けないこと"() {
         expect:
         mvc.perform(get("/home"))

@@ -2,20 +2,16 @@ package com.sample.common.util;
 
 import java.util.Locale;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Component;
 
-@Component
 @Slf4j
 public class MessageUtils {
 
   private static MessageSource messageSource;
 
-  @Autowired
-  public void setMessageSource(MessageSource messageSource) {
+  public static void init(MessageSource messageSource) {
     MessageUtils.messageSource = messageSource;
   }
 

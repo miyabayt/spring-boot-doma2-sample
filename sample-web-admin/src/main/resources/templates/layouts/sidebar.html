@@ -1,43 +1,73 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <body>
-        <aside class="main-sidebar" th:fragment="sidebar (category, item)">
-            <section class="sidebar">
-                <ul class="sidebar-menu">
-                    <!--/* メニューヘッダー */-->
-                    <!--/* Font-Awesomeアイコン http://fontawesome.io/icons/ */-->
-                    <!--li class="header">機能一覧</li-->
-                    <!--/* メニュー項目 */-->
-                    <li class="treeview" th:class="|treeview ${category=='user' ? 'active' : ''}|">
-                        <a href="#"><i class="fa fa-user-plus"></i>
-                            <span>顧客管理</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li th:class="${item=='user' ? 'active' : ''}"><a href="#" th:href="@{/users/users/find(page=1)}"><i class="fa fa-user-o"></i>顧客マスタ</a></li>
-                        </ul>
-                    </li>
-                    <li class="treeview" th:class="|treeview ${category=='system' ? 'active' : ''}|">
-                        <a href="#"><i class="fa fa-cogs"></i>
-                            <span>システム設定</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li th:class="${item=='staff' ? 'active' : ''}"><a href="#" th:href="@{/system/staffs/find(page=1)}"><i class="fa fa-user-o"></i>担当者マスタ</a></li>
-                            <li th:class="${item=='holiday' ? 'active' : ''}"><a href="#" th:href="@{/system/holidays/find(page=1)}"><i class="fa fa-circle-o"></i>祝日マスタ</a></li>
-                            <li th:class="${item=='mailTemplate' ? 'active' : ''}"><a href="#" th:href="@{/system/mailtemplates/find(page=1)}"><i class="fa fa-envelope"></i>メールテンプレート</a></li>
-                            <li th:class="${item=='uploadfile' ? 'active' : ''}"><a href="#" th:href="@{/system/uploadfiles/list}"><i class="fa fa-file"></i>ファイル管理</a></li>
-                            <li th:class="${item=='role' ? 'active' : ''}"><a href="#" th:href="@{/system/roles/find(page=1)}"><i class="fa fa-circle-o"></i>ロール管理</a></li>
-                            <li th:class="${item=='codeCategory' ? 'active' : ''}"><a href="#" th:href="@{/system/code_categories/find(page=1)}"><i class="fa fa-th-list"></i>コード分類マスタ</a></li>
-                            <li th:class="${item=='code' ? 'active' : ''}"><a href="#" th:href="@{/system/codes/find(page=1)}"><i class="fa fa-th-list"></i>コードマスタ</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </section>
+        <aside class="main-sidebar sidebar-dark-primary elevation-4" th:fragment="sidebar (category, item)">
+            <a th:href="@{/}" class="brand-link bg-purple">
+                <div class="brand-text font-weight-light text-center">Sample Admin</div>
+            </a>
+            <div class="sidebar">
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item" th:class="|nav-item ${category=='user' ? 'menu-open' : ''}|">
+                            <a href="#" class="nav-link" th:class="|nav-link ${category=='user' ? 'active' : ''}|">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>顧客管理<i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" th:href="@{/users/users/find(page=1)}" th:class="|nav-link ${item=='user' ? 'active' : ''}|">
+                                        <i class="nav-icon far fa-user"></i>
+                                        <p>顧客マスタ</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item" th:class="|nav-item ${category=='system' ? 'menu-open' : ''}|">
+                            <a href="#" class="nav-link" th:class="|nav-link ${category=='system' ? 'active' : ''}|">
+                                <i class="nav-icon fas fa-cogs"></i>
+                                <p>システム設定<i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" th:href="@{/system/staffs/find(page=1)}" th:class="|nav-link ${item=='staff' ? 'active' : ''}|">
+                                        <i class="nav-icon fas fa-user-cog"></i><p>担当者マスタ</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" th:href="@{/system/holidays/find(page=1)}" th:class="|nav-link ${item=='holiday' ? 'active' : ''}|">
+                                        <i class="nav-icon fas fa-birthday-cake"></i><p>祝日マスタ</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" th:href="@{/system/mailTemplates/find(page=1)}" th:class="|nav-link ${item=='mailTemplate' ? 'active' : ''}|">
+                                        <i class="nav-icon far fa-envelope"></i><p>メールテンプレート</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" th:href="@{/system/uploadFiles/list}" th:class="|nav-link ${item=='uploadfile' ? 'active' : ''}|">
+                                        <i class="nav-icon fas fa-cloud-upload-alt"></i><p>ファイル管理</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" th:href="@{/system/roles/find(page=1)}" th:class="|nav-link ${item=='role' ? 'active' : ''}|">
+                                        <i class="nav-icon fas fa-user-shield"></i><p>ロール管理</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" th:href="@{/system/codeCategories/find(page=1)}" th:class="|nav-link ${item=='codeCategory' ? 'active' : ''}|">
+                                        <i class="nav-icon fas fa-table"></i><p>分類マスタ</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" th:href="@{/system/codes/find(page=1)}" th:class="|nav-link ${item=='code' ? 'active' : ''}|">
+                                        <i class="nav-icon fas fa-list"></i><p>コードマスタ</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </aside>
     </body>
 </html>

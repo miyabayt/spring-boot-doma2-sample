@@ -1,22 +1,24 @@
 package com.sample.domain.service.system;
 
-import com.sample.domain.dto.common.Page;
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.Staff;
 import com.sample.domain.dto.system.StaffCriteria;
 import com.sample.domain.repository.system.StaffRepository;
 import com.sample.domain.service.BaseTransactionalService;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /** 担当者サービス */
+@RequiredArgsConstructor
 @Service
 public class StaffService extends BaseTransactionalService {
 
-  @Autowired StaffRepository staffRepository;
+  @NonNull final StaffRepository staffRepository;
 
   /**
    * 担当者を複数取得します。

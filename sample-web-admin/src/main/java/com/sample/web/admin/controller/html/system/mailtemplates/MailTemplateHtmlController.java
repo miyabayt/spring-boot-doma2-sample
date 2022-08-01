@@ -4,16 +4,18 @@ import static com.sample.domain.util.TypeUtils.toListType;
 import static com.sample.web.base.WebConst.GLOBAL_MESSAGE;
 import static com.sample.web.base.WebConst.MESSAGE_DELETED;
 
-import com.sample.domain.dto.common.Pageable;
 import com.sample.domain.dto.system.MailTemplate;
 import com.sample.domain.dto.system.MailTemplateCriteria;
 import com.sample.domain.service.system.MailTemplateService;
 import com.sample.web.base.controller.html.AbstractHtmlController;
 import com.sample.web.base.view.CsvView;
 import java.util.List;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,15 +27,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /** メールテンプレート管理 */
+@RequiredArgsConstructor
 @Controller
-@RequestMapping("/system/mailtemplates")
+@RequestMapping("/system/mailTemplates")
 @SessionAttributes(types = {SearchMailTemplateForm.class, MailTemplateForm.class})
 @Slf4j
 public class MailTemplateHtmlController extends AbstractHtmlController {
 
-  @Autowired MailTemplateFormValidator mailTemplateFormValidator;
+  @NonNull final MailTemplateFormValidator mailTemplateFormValidator;
 
-  @Autowired MailTemplateService mailTemplateService;
+  @NonNull final MailTemplateService mailTemplateService;
 
   @ModelAttribute("mailTemplateForm")
   public MailTemplateForm mailTemplateForm() {
@@ -62,15 +65,16 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('mailTemplate:save')")
   @GetMapping("/new")
-  public String newMailtemplate(
+  public String newMailTemplate(
       @ModelAttribute("mailTemplateForm") MailTemplateForm form, Model model) {
     if (!form.isNew()) {
       // SessionAttributeに残っている場合は再生成する
       model.addAttribute("mailTemplateForm", new MailTemplateForm());
     }
 
-    return "modules/system/mailtemplates/new";
+    return "modules/system/mailTemplates/new";
   }
 
   /**
@@ -81,24 +85,25 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('mailTemplate:save')")
   @PostMapping("/new")
-  public String newMailtemplate(
+  public String newMailTemplate(
       @Validated @ModelAttribute("mailTemplateForm") MailTemplateForm form,
       BindingResult br,
       RedirectAttributes attributes) {
     // 入力チェックエラーがある場合は、元の画面にもどる
     if (br.hasErrors()) {
       setFlashAttributeErrors(attributes, br);
-      return "redirect:/system/mailtemplates/new";
+      return "redirect:/system/mailTemplates/new";
     }
 
     // 入力値からDTOを作成する
-    val inputMailtemplate = modelMapper.map(form, MailTemplate.class);
+    val inputMailTemplate = modelMapper.map(form, MailTemplate.class);
 
     // 登録する
-    val createdMailtemplate = mailTemplateService.create(inputMailtemplate);
+    val createdMailTemplate = mailTemplateService.create(inputMailTemplate);
 
-    return "redirect:/system/mailtemplates/show/" + createdMailtemplate.getId();
+    return "redirect:/system/mailTemplates/show/" + createdMailTemplate.getId();
   }
 
   /**
@@ -107,18 +112,20 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('mailTemplate:read')")
   @GetMapping("/find")
-  public String findMailtemplate(@ModelAttribute SearchMailTemplateForm form, Model model) {
+  public String findMailTemplate(
+      @ModelAttribute SearchMailTemplateForm form, Pageable pageable, Model model) {
     // 入力値を詰め替える
     val criteria = modelMapper.map(form, MailTemplateCriteria.class);
 
     // 10件区切りで取得する
-    val pages = mailTemplateService.findAll(criteria, form);
+    val pages = mailTemplateService.findAll(criteria, pageable);
 
     // 画面に検索結果を渡す
     model.addAttribute("pages", pages);
 
-    return "modules/system/mailtemplates/find";
+    return "modules/system/mailTemplates/find";
   }
 
   /**
@@ -129,18 +136,19 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('mailTemplate:read')")
   @PostMapping("/find")
-  public String findMailtemplate(
+  public String findMailTemplate(
       @Validated @ModelAttribute("searchMailTemplateForm") SearchMailTemplateForm form,
       BindingResult br,
       RedirectAttributes attributes) {
     // 入力チェックエラーがある場合は、元の画面にもどる
     if (br.hasErrors()) {
       setFlashAttributeErrors(attributes, br);
-      return "redirect:/system/mailtemplates/find";
+      return "redirect:/system/mailTemplates/find";
     }
 
-    return "redirect:/system/mailtemplates/find";
+    return "redirect:/system/mailTemplates/find";
   }
 
   /**
@@ -150,12 +158,12 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('mailTemplate:read')")
   @GetMapping("/show/{mailTemplateId}")
-  public String showMailtemplate(@PathVariable Long mailTemplateId, Model model) {
-    // 1件取得する
+  public String showMailTemplate(@PathVariable Long mailTemplateId, Model model) {
     val mailTemplate = mailTemplateService.findById(mailTemplateId);
     model.addAttribute("mailTemplate", mailTemplate);
-    return "modules/system/mailtemplates/show";
+    return "modules/system/mailTemplates/show";
   }
 
   /**
@@ -166,8 +174,9 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
    * @param model
    * @return
    */
+  @PreAuthorize("hasAuthority('mailTemplate:save')")
   @GetMapping("/edit/{mailTemplateId}")
-  public String editMailtemplate(
+  public String editMailTemplate(
       @PathVariable Long mailTemplateId,
       @ModelAttribute("mailTemplateForm") MailTemplateForm form,
       Model model) {
@@ -180,7 +189,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
       modelMapper.map(mailTemplate, form);
     }
 
-    return "modules/system/mailtemplates/new";
+    return "modules/system/mailTemplates/new";
   }
 
   /**
@@ -193,8 +202,9 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('mailTemplate:save')")
   @PostMapping("/edit/{mailTemplateId}")
-  public String editMailtemplate(
+  public String editMailTemplate(
       @Validated @ModelAttribute("mailTemplateForm") MailTemplateForm form,
       BindingResult br,
       @PathVariable Long mailTemplateId,
@@ -203,7 +213,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
     // 入力チェックエラーがある場合は、元の画面にもどる
     if (br.hasErrors()) {
       setFlashAttributeErrors(attributes, br);
-      return "redirect:/system/mailtemplates/edit/" + mailTemplateId;
+      return "redirect:/system/mailTemplates/edit/" + mailTemplateId;
     }
 
     // 更新対象を取得する
@@ -218,7 +228,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
     // セッションのmailTemplateFormをクリアする
     sessionStatus.setComplete();
 
-    return "redirect:/system/mailtemplates/show/" + updatedMailTemplate.getId();
+    return "redirect:/system/mailTemplates/show/" + updatedMailTemplate.getId();
   }
 
   /**
@@ -228,6 +238,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
    * @param attributes
    * @return
    */
+  @PreAuthorize("hasAuthority('mailTemplate:save')")
   @PostMapping("/remove/{mailTemplateId}")
   public String removeMailTemplate(
       @PathVariable Long mailTemplateId, RedirectAttributes attributes) {
@@ -237,7 +248,7 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
     // 削除成功メッセージ
     attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));
 
-    return "redirect:/system/mailtemplates/find";
+    return "redirect:/system/mailTemplates/find";
   }
 
   /**
@@ -246,14 +257,15 @@ public class MailTemplateHtmlController extends AbstractHtmlController {
    * @param filename
    * @return
    */
+  @PreAuthorize("hasAuthority('mailTemplate:read')")
   @GetMapping("/download/{filename:.+\\.csv}")
   public ModelAndView downloadCsv(@PathVariable String filename) {
     // 全件取得する
-    val mailTemplates = mailTemplateService.findAll(new MailTemplateCriteria(), Pageable.NO_LIMIT);
+    val mailTemplates = mailTemplateService.findAll(new MailTemplateCriteria(), Pageable.unpaged());
 
     // 詰め替える
     List<MailTemplateCsv> csvList =
-        modelMapper.map(mailTemplates.getData(), toListType(MailTemplateCsv.class));
+        modelMapper.map(mailTemplates.getContent(), toListType(MailTemplateCsv.class));
 
     // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
     val view = new CsvView(MailTemplateCsv.class, csvList, filename);
