@@ -9,7 +9,9 @@ import com.sample.web.admin.selenide.base.BaseTestContainerTest;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 @SpringBootTest(
     classes = Application.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -23,6 +25,6 @@ public class ShowTopTest extends BaseTestContainerTest {
     $(By.name("password")).val("passw0rd");
     $("[type=submit]").click();
 
-    $(".alert").shouldHave(text("ログインしました"));
+    $(".callout").shouldHave(text("ログインしました"));
   }
 }
