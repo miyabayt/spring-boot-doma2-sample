@@ -53,15 +53,6 @@
                                 <th class="col-2">表示順</th>
                                 <td class="col" th:text="*{displayOrder}"></td>
                             </tr>
-                            <tr class="d-flex">
-                                <th class="col-2">無効フラグ</th>
-                                <td class="col">
-                                    <input type="checkbox"
-                                           th:field="*{isInvalid}"
-                                           th:value="${invalid}"
-                                           th:with="invalid=*{isInvalid eq true}" />
-                                </td>
-                            </tr>
                         </table>
                     </div>
                     <div class="card-footer clearfix">

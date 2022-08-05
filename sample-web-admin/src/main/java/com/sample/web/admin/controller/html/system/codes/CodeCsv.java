@@ -16,7 +16,6 @@ import lombok.Setter;
   "コード名",
   "コードエイリアス",
   "表示順",
-  "無効フラグ"
 }) // CSVのヘッダ順
 @Getter
 @Setter
@@ -44,7 +43,4 @@ public class CodeCsv implements Serializable {
 
   @JsonProperty("表示順")
   Integer displayOrder;
-
-  @JsonProperty("無効フラグ")
-  Boolean isInvalid;
 }

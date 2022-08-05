@@ -77,7 +77,6 @@
                                     <th class="col">コード値</th>
                                     <th class="col">コード名</th>
                                     <th class="col">表示順</th>
-                                    <th class="col">無効フラグ</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -89,7 +88,6 @@
                                     <td class="col" th:text="${code.codeValue}" />
                                     <td class="col" th:text="${code.codeName}" />
                                     <td class="col" th:text="${code.displayOrder}" />
-                                    <td class="col" th:text="${invalid}" th:with="invalid=${code.isInvalid eq true}" />
                                 </tr>
                             </tbody>
                         </table>

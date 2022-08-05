@@ -28,7 +28,4 @@ public class CodeForm extends BaseForm {
 
   // 表示順
   @NotNull Integer displayOrder;
-
-  // 無効フラグ
-  Boolean isInvalid;
 }

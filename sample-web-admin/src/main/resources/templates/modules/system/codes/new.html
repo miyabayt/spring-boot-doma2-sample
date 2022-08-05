@@ -41,17 +41,6 @@
                             <input th:replace="~{fragments/inputField :: input ('text', 'コード値', 'codeName')}" />
                             <input th:replace="~{fragments/inputField :: input ('text', 'コードエイリアス', 'codeAlias')}" />
                             <input th:replace="~{fragments/inputField :: input ('text', '表示順', 'displayOrder')}" />
-                            <div class="form-group">
-                                <div class="row align-items-center">
-                                    <label class="col-sm-2 col-form-label">無効フラグ</label>
-                                    <div class="col-sm-10">
-                                        <input type="checkbox"
-                                               th:field="*{isInvalid}"
-                                               th:value="${invalid}"
-                                               th:with="invalid=*{isInvalid eq true}" />
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="card-footer clearfix">
                             <div class="row justify-content-md-center">
