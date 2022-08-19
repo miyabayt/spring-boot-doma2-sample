@@ -27,12 +27,18 @@ public class DefaultEntityListener<ENTITY> implements EntityListener<ENTITY> {
 
     @Override
     public void preInsert(ENTITY entity, PreInsertContext<ENTITY> context) {
-        // 二重送信防止チェック
-        val expected = DoubleSubmitCheckTokenHolder.getExpectedToken();
-        val actual = DoubleSubmitCheckTokenHolder.getActualToken();
 
-        if (expected != null && actual != null && !Objects.equals(expected, actual)) {
-            throw new DoubleSubmitErrorException();
+        if( ! DoubleSubmitCheckTokenHolder.isExcludeCheck()) {
+            if( ! DoubleSubmitCheckTokenHolder.isExistsExpectedTokenKey()){
+                throw new IllegalStateException("指定されたキーが見つかりませんでした。@TokenKeyの設定を確認してください");
+            }
+
+            // 二重送信防止チェック
+            val expected = DoubleSubmitCheckTokenHolder.getExpectedToken();
+            val actual = DoubleSubmitCheckTokenHolder.getActualToken();
+            if (expected != null && actual != null && !Objects.equals(expected, actual)) {
+                throw new DoubleSubmitErrorException();
+            }
         }
 
         if (entity instanceof DomaDto) {
