@@ -1,4 +1,4 @@
-package com.sample.web.front.geb.base;
+package com.sample.web.front.geb.base
 
 import geb.spock.GebSpec
 import org.springframework.test.context.DynamicPropertyRegistry
@@ -8,7 +8,6 @@ import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.spock.Testcontainers
 
-@Testcontainers
 class BaseTestContainerGebSpec extends GebSpec {
 
     static final MySQLContainer<?> MYSQL_CONTAINER = new MySQLContainer<>("mysql:8")

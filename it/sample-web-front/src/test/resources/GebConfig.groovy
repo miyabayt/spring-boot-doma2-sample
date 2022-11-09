@@ -9,12 +9,16 @@ driver = {
     new HtmlUnitDriver()
 }
 
+waiting {
+    timeout = 30
+    retryInterval = 0.2
+}
+
 environments {
     "dockerChrome" {
         driver = {
             new TestcontainersWebDriver(new ChromeOptions()
                     .addArguments("--no-sandbox")
-                    .addArguments("--disable-gpu")
                     .addArguments("--disable-dev-shm-usage"))
         }
     }
