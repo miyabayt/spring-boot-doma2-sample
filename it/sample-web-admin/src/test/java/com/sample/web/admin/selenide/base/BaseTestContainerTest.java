@@ -25,7 +25,8 @@ public class BaseTestContainerTest {
           .withCapabilities(
               new ChromeOptions()
                   .addArguments("--no-sandbox")
-                  .addArguments("--disable-dev-shm-usage"));
+                  .addArguments("--disable-dev-shm-usage"))
+          .waitingFor(Wait.forLogMessage(".*Started Selenium Standalone.*", 1));
 
   static final MySQLContainer<?> MYSQL_CONTAINER = new MySQLContainer<>("mysql:8");
 
@@ -35,14 +36,16 @@ public class BaseTestContainerTest {
           .waitingFor(Wait.forHttp("/").forPort(8025));
 
   @BeforeAll
-  void beforeAll(@Autowired Environment environment) {
-    Testcontainers.exposeHostPorts(environment.getProperty("local.server.port", Integer.class));
+  static void beforeAll(@Autowired Environment environment) throws InterruptedException {
+    val localServerPort = environment.getProperty("local.server.port", Integer.class);
+    Testcontainers.exposeHostPorts(localServerPort);
     BROWSER_CONTAINER.start();
+    Configuration.timeout = 30000;
+    Configuration.pageLoadTimeout = 5000;
   }
 
   @BeforeEach
   void before() {
-    Configuration.timeout = 2000;
     Configuration.baseUrl = String.format("http://host.testcontainers.internal:%d", port);
     val driver = BROWSER_CONTAINER.getWebDriver();
     WebDriverRunner.setWebDriver(driver);
