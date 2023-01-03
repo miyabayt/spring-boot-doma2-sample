@@ -20,7 +20,7 @@
                 <div class="card-body login-card-body">
                     <div class="login-box-msg">
                         <p class="text-danger" th:remove="${#strings.isEmpty(str)} ? all : none"
-                           th:with="str=${GlobalMessage}" th:text="${str}">Sign in to start your session</p>
+                           th:with="str=${SuccessMessage}" th:text="${str}">Sign in to start your session</p>
                     </div>
                     <div class="login-box-body">
                         <form id="loginForm" th:action="@{'/login'}" method="post">
@@ -43,6 +43,7 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script>
             <!--/* 二度押しするとforbiddenにリダイレクトされるので防止 */-->
             var submitted;

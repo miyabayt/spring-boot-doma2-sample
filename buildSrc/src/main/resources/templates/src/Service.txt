@@ -1,8 +1,8 @@
-package [[${servicePackageName}]].[[${subSystem}]];
+package [[${servicePackageName}]].[[${lowerPhysicalFunctionName}]];
 
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
-import [[${repositoryPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Repository;
+import [[${dtoPackageName}]].[[${camelPhysicalFunctionName}]];
+import [[${dtoPackageName}]].[[${camelPhysicalFunctionName}]]Criteria;
+import [[${repositoryPackageName}]].[[${camelPhysicalFunctionName}]]Repository;
 import [[${commonServicePackageName}]].BaseTransactionalService;
 import java.util.List;
 import java.util.Optional;
@@ -15,77 +15,77 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/** [[${funcStr}]]サービス */
+/** [[${logicalFunctionName}]]サービス */
 @RequiredArgsConstructor
 @Service
-public class [[${upperFuncName}]]Service extends BaseTransactionalService {
+public class [[${camelPhysicalFunctionName}]]Service extends BaseTransactionalService {
 
-    @NonNull final [[${upperFuncName}]]Repository [[${lowerFuncName}]]Repository;
+    @NonNull final [[${camelPhysicalFunctionName}]]Repository [[${lowerPhysicalFunctionName}]]Repository;
 
     /**
-     * [[${funcStr}]]を複数取得します。
+     * [[${logicalFunctionName}]]を検索します。
      *
      * @param criteria
      * @param pageable
      * @return
      */
     @Transactional(readOnly = true) // 読み取りのみの場合は指定する
-    public Page<[[${upperFuncName}]]> findAll([[${upperFuncName}]]Criteria criteria, Pageable pageable) {
+    public Page<[[${camelPhysicalFunctionName}]]> findAll([[${camelPhysicalFunctionName}]]Criteria criteria, Pageable pageable) {
         Assert.notNull(criteria, "criteria must not be null");
-        return [[${lowerFuncName}]]Repository.findAll(criteria, pageable);
+        return [[${lowerPhysicalFunctionName}]]Repository.findAll(criteria, pageable);
     }
 
     /**
-     * [[${funcStr}]]を取得します。
+     * [[${logicalFunctionName}]]を1件取得します。
      *
      * @return
      */
     @Transactional(readOnly = true)
-    public Optional<[[${upperFuncName}]]> findOne([[${upperFuncName}]]Criteria criteria) {
+    public Optional<[[${camelPhysicalFunctionName}]]> findOne([[${camelPhysicalFunctionName}]]Criteria criteria) {
         Assert.notNull(criteria, "criteria must not be null");
-        return [[${lowerFuncName}]]Repository.findOne(criteria);
+        return [[${lowerPhysicalFunctionName}]]Repository.findOne(criteria);
     }
 
     /**
-     * [[${funcStr}]]を取得します。
+     * [[${logicalFunctionName}]]を1件取得します。
      *
      * @return
      */
     @Transactional(readOnly = true)
-    public [[${upperFuncName}]] findById(final Long id) {
+    public [[${camelPhysicalFunctionName}]] findById(final Long id) {
         Assert.notNull(id, "id must not be null");
-        return [[${lowerFuncName}]]Repository.findById(id);
+        return [[${lowerPhysicalFunctionName}]]Repository.findById(id);
     }
 
     /**
-     * [[${funcStr}]]を追加します。
+     * [[${logicalFunctionName}]]を追加します。
      *
-     * @param input[[${upperFuncName}]]
+     * @param input[[${camelPhysicalFunctionName}]]
      * @return
      */
-    public [[${upperFuncName}]] create(final [[${upperFuncName}]] input[[${upperFuncName}]]) {
-        Assert.notNull(input[[${upperFuncName}]], "input[[${upperFuncName}]] must not be null");
-        return [[${lowerFuncName}]]Repository.create(input[[${upperFuncName}]]);
+    public [[${camelPhysicalFunctionName}]] create(final [[${camelPhysicalFunctionName}]] input[[${camelPhysicalFunctionName}]]) {
+        Assert.notNull(input[[${camelPhysicalFunctionName}]], "input[[${camelPhysicalFunctionName}]] must not be null");
+        return [[${lowerPhysicalFunctionName}]]Repository.create(input[[${camelPhysicalFunctionName}]]);
     }
 
     /**
-     * [[${funcStr}]]を更新します。
+     * [[${logicalFunctionName}]]を更新します。
      *
-     * @param input[[${upperFuncName}]]
+     * @param input[[${camelPhysicalFunctionName}]]
      * @return
      */
-    public [[${upperFuncName}]] update(final [[${upperFuncName}]] input[[${upperFuncName}]]) {
-        Assert.notNull(input[[${upperFuncName}]], "input[[${upperFuncName}]] must not be null");
-        return [[${lowerFuncName}]]Repository.update(input[[${upperFuncName}]]);
+    public [[${camelPhysicalFunctionName}]] update(final [[${camelPhysicalFunctionName}]] input[[${camelPhysicalFunctionName}]]) {
+        Assert.notNull(input[[${camelPhysicalFunctionName}]], "input[[${camelPhysicalFunctionName}]] must not be null");
+        return [[${lowerPhysicalFunctionName}]]Repository.update(input[[${camelPhysicalFunctionName}]]);
     }
 
     /**
-     * [[${funcStr}]]を論理削除します。
+     * [[${logicalFunctionName}]]を論理削除します。
      *
      * @return
      */
-    public [[${upperFuncName}]] delete(final Long id) {
+    public [[${camelPhysicalFunctionName}]] delete(final Long id) {
         Assert.notNull(id, "id must not be null");
-        return [[${lowerFuncName}]]Repository.delete(id);
+        return [[${lowerPhysicalFunctionName}]]Repository.delete(id);
     }
 }

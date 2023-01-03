@@ -1,3 +1,9 @@
+buildscript {
+    dependencies {
+        classpath "com.google.cloud.tools:jib-spring-boot-extension-gradle:0.1.0"
+    }
+}
+
 plugins {
     id "idea"
     id "org.springframework.boot" version "${springBootVersion}" apply false
@@ -9,7 +15,7 @@ plugins {
 }
 
 apply plugin: "docker-compose"
-apply plugin: com.sample.CodeGenPlugin
+apply plugin: com.bigtreetc.sample.CodeGenPlugin
 
 subprojects {
     apply plugin: "java"
@@ -68,7 +74,7 @@ subprojects {
         testImplementation "org.springframework.security:spring-security-test"
         testImplementation "org.springframework.boot:spring-boot-starter-test"
         testImplementation "org.spockframework:spock-spring:${spockVersion}"
-        testImplementation "org.codehaus.groovy:groovy-all:3.0.12"
+        testImplementation "org.codehaus.groovy:groovy-all:3.0.14"
 
         runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
     }
@@ -80,6 +86,8 @@ subprojects {
         }
     }
 
+    task allDeps(type: DependencyReportTask) {}
+
     compileJava.dependsOn "spotlessApply"
 }
 
@@ -87,15 +95,15 @@ codegen {
     domainProjectName = "sample-domain"
     webProjectName = "sample-web-admin"
 
-    commonDtoPackageName = "com.sample.domain.dto.common"
-    daoPackageName = "com.sample.domain.dao"
-    dtoPackageName = "com.sample.domain.dto"
-    repositoryPackageName = "com.sample.domain.repository"
-    servicePackageName = "com.sample.domain.service"
-    commonServicePackageName = "com.sample.domain.service"
-    exceptionPackageName = "com.sample.domain.exception"
-    webBasePackageName = "com.sample.web.base"
-    baseValidatorPackageName = "com.sample.domain.validator"
-    baseControllerPackageName = "com.sample.web.base.controller.html"
-    controllerPackageName = "com.sample.web.admin.controller.html"
+    commonDtoPackageName = "com.bigtreetc.sample.domain.entity.common"
+    daoPackageName = "com.bigtreetc.sample.domain.dao"
+    dtoPackageName = "com.bigtreetc.sample.domain.entity"
+    repositoryPackageName = "com.bigtreetc.sample.domain.repository"
+    servicePackageName = "com.bigtreetc.sample.domain.service"
+    commonServicePackageName = "com.bigtreetc.sample.domain.service"
+    exceptionPackageName = "com.bigtreetc.sample.domain.exception"
+    webBasePackageName = "com.bigtreetc.sample.web.base"
+    baseValidatorPackageName = "com.bigtreetc.sample.domain.validator"
+    baseControllerPackageName = "com.bigtreetc.sample.web.base.controller.html"
+    controllerPackageName = "com.bigtreetc.sample.web.admin.controller"
 }

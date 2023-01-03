@@ -1,14 +1,30 @@
 apply plugin: "com.google.cloud.tools.jib"
 
-bootRun {
-    // プロジェクトプロパティを引数として渡す
-    if (project.hasProperty("args")) {
-        args project.args.split("\\s+")
-    }
-}
-
 dependencies {
     implementation project(":sample-common")
     implementation project(":sample-domain")
     implementation "org.springframework.boot:spring-boot-starter-batch"
+
+    testImplementation "org.springframework.batch:spring-batch-test"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "com.h2database:h2"
+    testImplementation "org.testcontainers:junit-jupiter:1.17.6"
+    testImplementation "org.testcontainers:mysql:1.17.6"
+}
+
+jib {
+    from {
+        image = "public.ecr.aws/amazoncorretto/amazoncorretto:17"
+    }
+    container {
+        jvmFlags = [
+                "-Djava.awt.headless=true",
+                "-Djava.security.egd=file:/dev/./urandom",
+                "-Dfile.encoding=UTF-8",
+                "-Duser.language=ja",
+                "-Duser.country=JP",
+                "-Duser.timezone=Asia/Tokyo",
+                "-XX:MaxRAMPercentage=90"
+        ]
+    }
 }

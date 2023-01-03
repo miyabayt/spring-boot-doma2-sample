@@ -1,7 +1,7 @@
-package [[${daoPackageName}]].[[${subSystem}]];
+package [[${daoPackageName}]];
 
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
+import [[${dtoPackageName}]].[[${camelPhysicalFunctionName}]];
+import [[${dtoPackageName}]].[[${camelPhysicalFunctionName}]]Criteria;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
@@ -11,79 +11,79 @@ import org.seasar.doma.jdbc.SelectOptions;
 
 @ConfigAutowireable
 @Dao
-public interface [[${upperFuncName}]]Dao {
+public interface [[${camelPhysicalFunctionName}]]Dao {
 
     /**
-     * [[${funcStr}]]を取得します。
+     * [[${logicalFunctionName}]]を検索します。
      *
      * @param criteria
      * @param options
      * @return
      */
     @Select(strategy = SelectType.COLLECT)
-    <R> R selectAll(final [[${upperFuncName}]]Criteria criteria, final SelectOptions options,
-            final Collector<[[${upperFuncName}]], ?, R> collector);
+    <R> R selectAll(final [[${camelPhysicalFunctionName}]]Criteria criteria, final SelectOptions options,
+            final Collector<[[${camelPhysicalFunctionName}]], ?, R> collector);
 
     /**
-     * [[${funcStr}]]を1件取得します。
+     * [[${logicalFunctionName}]]を1件取得します。
      *
      * @param id
      * @return
      */
     @Select
-    Optional<[[${upperFuncName}]]> selectById(Long id);
+    Optional<[[${camelPhysicalFunctionName}]]> selectById(Long id);
 
     /**
-     * [[${funcStr}]]を1件取得します。
+     * [[${logicalFunctionName}]]を1件取得します。
      *
      * @param criteria
      * @return
      */
     @Select
-    Optional<[[${upperFuncName}]]> select([[${upperFuncName}]]Criteria criteria);
+    Optional<[[${camelPhysicalFunctionName}]]> select([[${camelPhysicalFunctionName}]]Criteria criteria);
 
     /**
-     * [[${funcStr}]]を登録します。
+     * [[${logicalFunctionName}]]を登録します。
      *
-     * @param [[${lowerFuncName}]]
+     * @param [[${lowerPhysicalFunctionName}]]
      * @return
      */
     @Insert
-    int insert([[${upperFuncName}]] [[${lowerFuncName}]]);
+    int insert([[${camelPhysicalFunctionName}]] [[${lowerPhysicalFunctionName}]]);
 
     /**
-     * [[${funcStr}]]を更新します。
+     * [[${logicalFunctionName}]]を更新します。
      *
-     * @param [[${lowerFuncName}]]
+     * @param [[${lowerPhysicalFunctionName}]]
      * @return
      */
     @Update
-    int update([[${upperFuncName}]] [[${lowerFuncName}]]);
+    int update([[${camelPhysicalFunctionName}]] [[${lowerPhysicalFunctionName}]]);
 
     /**
-     * [[${funcStr}]]を論理削除します。
+     * [[${logicalFunctionName}]]を論理削除します。
      *
-     * @param [[${lowerFuncName}]]
+     * @param [[${lowerPhysicalFunctionName}]]
      * @return
      */
     @Update(excludeNull = true) // NULLの項目は更新対象にしない
-    int delete([[${upperFuncName}]] [[${lowerFuncName}]]);
+    int delete([[${camelPhysicalFunctionName}]] [[${lowerPhysicalFunctionName}]]);
 
     /**
-     * [[${funcStr}]]を一括登録します。
+     * [[${logicalFunctionName}]]を一括登録します。
      *
-     * @param [[${lowerFuncName}]]s
+     * @param [[${lowerPhysicalMultiFunctionName}]]
      * @return
      */
     @BatchInsert
-    int[] insert(List<[[${upperFuncName}]]> [[${lowerFuncName}]]s);
+    int[] insert(List<[[${camelPhysicalFunctionName}]]> [[${lowerPhysicalMultiFunctionName}]]);
 
     /**
-     * [[${funcStr}]]を一括更新します。
+     * [[${logicalFunctionName}]]を一括更新します。
      *
-     * @param [[${lowerFuncName}]]s
+     * @param [[${lowerPhysicalMultiFunctionName}]]
      * @return
      */
     @BatchUpdate
-    int[] update(List<[[${upperFuncName}]]> [[${lowerFuncName}]]s);
+    int[] update(List<[[${camelPhysicalFunctionName}]]> [[${lowerPhysicalMultiFunctionName}]]);
 }

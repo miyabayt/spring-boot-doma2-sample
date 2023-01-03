@@ -1,12 +1,12 @@
-package [[${repositoryPackageName}]].[[${subSystem}]];
+package [[${repositoryPackageName}]];
 
-import static com.sample.domain.util.DomaUtils.createSelectOptions;
+import static com.bigtreetc.sample.domain.util.DomaUtils.createSelectOptions;
 import static java.util.stream.Collectors.toList;
 
-import [[${daoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Dao;
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
-import com.sample.domain.exception.NoDataFoundException;
+import [[${daoPackageName}]].[[${camelPhysicalFunctionName}]]Dao;
+import [[${dtoPackageName}]].[[${camelPhysicalFunctionName}]];
+import [[${dtoPackageName}]].[[${camelPhysicalFunctionName}]]Criteria;
+import com.bigtreetc.sample.domain.exception.NoDataFoundException;
 import java.util.List;
 import java.util.Optional;
 import lombok.NonNull;
@@ -18,94 +18,94 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 /**
- * [[${funcStr}]]リポジトリ
+ * [[${logicalFunctionName}]]リポジトリ
  */
 @RequiredArgsConstructor
 @Repository
-public class [[${upperFuncName}]]Repository {
+public class [[${camelPhysicalFunctionName}]]Repository {
 
-    @NonNull final [[${upperFuncName}]]Dao [[${lowerFuncName}]]Dao;
+    @NonNull final [[${camelPhysicalFunctionName}]]Dao [[${lowerPhysicalFunctionName}]]Dao;
 
     /**
-     * [[${funcStr}]]を複数取得します。
+     * [[${logicalFunctionName}]]を検索します。
      *
      * @param criteria
      * @param pageable
      * @return
      */
-    public Page<[[${upperFuncName}]]> findAll([[${upperFuncName}]]Criteria criteria, Pageable pageable) {
+    public Page<[[${camelPhysicalFunctionName}]]> findAll([[${camelPhysicalFunctionName}]]Criteria criteria, Pageable pageable) {
         val options = createSelectOptions(pageable).count();
-        val data = [[${lowerFuncName}]]Dao.selectAll(criteria, options, toList());
+        val data = [[${lowerPhysicalFunctionName}]]Dao.selectAll(criteria, options, toList());
         return new PageImpl<>(data, pageable, options.getCount());
     }
 
     /**
-     * [[${funcStr}]]を取得します。
+     * [[${logicalFunctionName}]]を1件取得します。
      *
      * @param criteria
      * @return
      */
-    public Optional<[[${upperFuncName}]]> findOne([[${upperFuncName}]]Criteria criteria) {
+    public Optional<[[${camelPhysicalFunctionName}]]> findOne([[${camelPhysicalFunctionName}]]Criteria criteria) {
         // 1件取得
-        return [[${lowerFuncName}]]Dao.select(criteria);
+        return [[${lowerPhysicalFunctionName}]]Dao.select(criteria);
     }
 
     /**
-     * [[${funcStr}]]を取得します。
+     * [[${logicalFunctionName}]]を1件取得します。
      *
      * @return
      */
-    public [[${upperFuncName}]] findById(final Long id) {
+    public [[${camelPhysicalFunctionName}]] findById(final Long id) {
         // 1件取得
-        return [[${lowerFuncName}]]Dao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("[[${lowerFuncName}]]_id=" + id + " のデータが見つかりません。"));
+        return [[${lowerPhysicalFunctionName}]]Dao.selectById(id)
+                .orElseThrow(() -> new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + id + " のデータが見つかりません。"));
     }
 
     /**
-     * [[${funcStr}]]を追加します。
+     * [[${logicalFunctionName}]]を登録します。
      *
-     * @param input[[${upperFuncName}]]
+     * @param input[[${camelPhysicalFunctionName}]]
      * @return
      */
-    public [[${upperFuncName}]] create(final [[${upperFuncName}]] input[[${upperFuncName}]]) {
+    public [[${camelPhysicalFunctionName}]] create(final [[${camelPhysicalFunctionName}]] input[[${camelPhysicalFunctionName}]]) {
         // 1件登録
-        [[${lowerFuncName}]]Dao.insert(input[[${upperFuncName}]]);
+        [[${lowerPhysicalFunctionName}]]Dao.insert(input[[${camelPhysicalFunctionName}]]);
 
-        return input[[${upperFuncName}]];
+        return input[[${camelPhysicalFunctionName}]];
     }
 
     /**
-     * [[${funcStr}]]を更新します。
+     * [[${logicalFunctionName}]]を更新します。
      *
-     * @param input[[${upperFuncName}]]
+     * @param input[[${camelPhysicalFunctionName}]]
      * @return
      */
-    public [[${upperFuncName}]] update(final [[${upperFuncName}]] input[[${upperFuncName}]]) {
+    public [[${camelPhysicalFunctionName}]] update(final [[${camelPhysicalFunctionName}]] input[[${camelPhysicalFunctionName}]]) {
         // 1件更新
-        int updated = [[${lowerFuncName}]]Dao.update(input[[${upperFuncName}]]);
+        int updated = [[${lowerPhysicalFunctionName}]]Dao.update(input[[${camelPhysicalFunctionName}]]);
 
         if (updated < 1) {
-            throw new NoDataFoundException("[[${lowerFuncName}]]_id=" + input[[${upperFuncName}]].getId() + " のデータが見つかりません。");
+            throw new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + input[[${camelPhysicalFunctionName}]].getId() + " のデータが見つかりません。");
         }
 
-        return input[[${upperFuncName}]];
+        return input[[${camelPhysicalFunctionName}]];
     }
 
     /**
-     * [[${funcStr}]]を論理削除します。
+     * [[${logicalFunctionName}]]を論理削除します。
      *
      * @return
      */
-    public [[${upperFuncName}]] delete(final Long id) {
-        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Dao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("[[${lowerFuncName}]]_id=" + id + " のデータが見つかりません。"));
+    public [[${camelPhysicalFunctionName}]] delete(final Long id) {
+        val [[${lowerPhysicalFunctionName}]] = [[${lowerPhysicalFunctionName}]]Dao.selectById(id)
+                .orElseThrow(() -> new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + id + " のデータが見つかりません。"));
 
-        int updated = [[${lowerFuncName}]]Dao.delete([[${lowerFuncName}]]);
+        int updated = [[${lowerPhysicalFunctionName}]]Dao.delete([[${lowerPhysicalFunctionName}]]);
 
         if (updated < 1) {
-            throw new NoDataFoundException("[[${lowerFuncName}]]_id=" + id + " は更新できませんでした。");
+            throw new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + id + " は更新できませんでした。");
         }
 
-        return [[${lowerFuncName}]];
+        return [[${lowerPhysicalFunctionName}]];
     }
 }

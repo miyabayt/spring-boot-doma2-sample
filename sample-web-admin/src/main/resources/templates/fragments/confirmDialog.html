@@ -1,0 +1,30 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <form>
+            <th:block th:fragment="confirmDialog (id, title, body, ok, cancel)">
+                <div class="modal fade" th:id="${id}" tabindex="-1" role="dialog" th:aria-labelledby="|${id}lLabel|"
+                     aria-hidden="true" data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="modal-title" th:id="|${id}Label|">[[${title}]]</span>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">[[${body}]]</div>
+                            <div class="modal-footer">
+                                <div class="mx-auto">
+                                    <button id="confirmDialogOKButton" type="button" class="btn btn-danger mx-2" data-dismiss="modal"
+                                            th:text="${ok}" style="min-width: 140px;">OK</button>
+                                    <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal"
+                                            th:text="${cancel}" style="min-width: 140px;">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+  pre_build:
+    commands:
+      - yum -y install glibc-locale-source glibc-langpack-en
+      - localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+      - export LANG="ja_JP.UTF-8"
+      - export LANGUAGE="ja_JP:ja"
+      - export LC_ALL="ja_JP.UTF-8"
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region ap-northeast-1)
+  build:
+    commands:
+      - echo Build started on `date`
+      - GRADLE_OPTS=-XX:MaxRAMPercentage=90 ./gradlew clean :sample-web-admin:jib -Djib.to.image="${ECR_REPOSITORY_URL}:${IMAGE_TAG}" -Djib.console=plain
+      - echo Writing image definitions file...
+      - echo "[{\"name\":\"${CONTAINER_NAME}\",\"imageUri\":\"${ECR_REPOSITORY_URL}:${IMAGE_TAG}\"}]" > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json
+cache:
+  paths:
+    - '/root/.gradle/wrapper/**/*'
+    - '/root/.gradle/caches/**/*'

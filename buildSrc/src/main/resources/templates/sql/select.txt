@@ -1,10 +1,10 @@
 SELECT
   /*%expand*/*
 FROM
-  [[${lowerFuncName}]]s
+  [[${lowerPhysicalMultiFunctionName}]]
 WHERE
   deleted_at IS NULL
 /*%if criteria.id != null */
-  AND [[${lowerFuncName}]]_id = /* criteria.id */1
+  AND [[${lowerPhysicalFunctionName}]]_id = /* criteria.id */1
 /*%end*/
 LIMIT 1

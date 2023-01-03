@@ -1,4 +1,4 @@
-package [[${controllerPackageName}]].[[${subSystem}]].[[${lowerFuncName}]]s;
+package [[${controllerPackageName}]].[[${lowerPhysicalFunctionName}]];
 
 import [[${baseControllerPackageName}]].BaseForm;
 import javax.validation.constraints.NotEmpty;
@@ -7,13 +7,13 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class [[${upperFuncName}]]Form extends BaseForm {
+public class [[${camelPhysicalFunctionName}]]Form extends BaseForm {
 
     private static final long serialVersionUID = -1L; // TODO
 
     Long id;
 
-    // [[${funcStr}]]名
+    // [[${logicalFunctionName}]]名
     @NotEmpty
-    String [[${lowerFuncName}]]Name;
+    String [[${lowerPhysicalFunctionName}]]Name;
 }

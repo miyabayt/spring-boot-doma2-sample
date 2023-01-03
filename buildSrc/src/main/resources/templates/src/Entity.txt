@@ -1,0 +1,24 @@
+package [[${dtoPackageName}]];
+
+import [[${commonDtoPackageName}]].DomaEntityImpl;
+import lombok.Getter;
+import lombok.Setter;
+import org.seasar.doma.*;
+
+@Table(name = "[[${lowerPhysicalMultiFunctionName}]]")
+@Entity
+@Getter
+@Setter
+public class [[${camelPhysicalFunctionName}]] extends DomaEntityImpl {
+
+    private static final long serialVersionUID = -1L; // TODO
+
+    // [[${logicalFunctionName}]]ID
+    @Id
+    @Column(name = "[[${lowerPhysicalFunctionName}]]_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+
+    // [[${logicalFunctionName}]]名
+    String [[${lowerPhysicalFunctionName}]]Name;
+}

@@ -1,0 +1,60 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/sidebarLayout}">
+    <head>
+        <title>分類マスタ</title>
+    </head>
+    <body>
+        <div layout:fragment="sidebar">
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'codeCategory')}"></div>
+        </div>
+        <div class="content-header" layout:fragment="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-md d-none d-sm-inline-block" th:with="text=${codeCategoryForm.isNew()} ? '分類マスタ登録' : '分類マスタ編集'" th:text="${text}">分類マスタ登録</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/codeCategories/find(page=1)}">分類マスタ検索</a></li>
+                            <li class="breadcrumb-item active" th:with="text=${codeCategoryForm.isNew()} ? '分類マスタ登録' : '分類マスタ編集'" th:text="${text}">分類マスタ登録</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section layout:fragment="content">
+            <div class="container-fluid">
+                <div class="card card-outline card-purple shadow">
+                    <form th:object="${codeCategoryForm}" th:action="${action}" id="form1"
+                          th:with="action=${codeCategoryForm.isNew()} ? @{/codeCategories/new} : @{/codeCategories/edit/{id}(id=*{id})}"
+                          class="form-horizontal" enctype="multipart/form-data" method="post">
+                        <div class="card-header">
+                            <h3 class="card-title"
+                                th:with="text=${codeCategoryForm.isNew()} ? '新規登録' : '編集'" th:text="${text}">新規登録</h3>
+                        </div>
+                        <div class="card-body">
+                            <input th:replace="~{fragments/inputField :: input ('text', '分類コード', 'categoryCode')}" />
+                            <input th:replace="~{fragments/inputField :: input ('text', '分類名', 'categoryName')}" />
+                        </div>
+                        <div class="card-footer clearfix">
+                            <div class="row justify-content-md-center">
+                                <button class="btn btn-primary" type="submit" style="min-width: 140px;"
+                                        th:with="text=${codeCategoryForm.isNew()} ? '登録' : '保存'" th:text="${text}">
+                                    Add Code
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </body>
+    <div layout:fragment="scripts">
+        <script th:replace="~{fragments/validationScript :: script}" />
+        <script type="text/javascript" src="../public/static/js/codeCategories.js"
+                th:src="@{/static/js/codeCategories.js}"></script>
+    </div>
+</html>

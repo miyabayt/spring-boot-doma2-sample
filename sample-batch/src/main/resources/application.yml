@@ -25,12 +25,9 @@ spring:
       minimumIdle: 10
       maximumPoolSize: 30
   batch:
-    initializer:
+    jdbc:
       # ジョブ管理テーブルを自動的に作成しないようにする
-      enabled: false
-    job:
-      # 自動的にバッチジョブが起動しないようにする
-      enabled: false
+      initialize-schema: always
 doma:
   dialect: mysql
   # 小文字のスネークケースに変換する（firstName → first_name）

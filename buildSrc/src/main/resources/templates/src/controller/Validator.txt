@@ -1,17 +1,17 @@
-package [[${controllerPackageName}]].[[${subSystem}]].[[${lowerFuncName}]]s;
+package [[${controllerPackageName}]].[[${lowerPhysicalFunctionName}]];
 
 import [[${baseValidatorPackageName}]].AbstractValidator;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 /**
- * [[${funcStr}]]登録 入力チェック
+ * [[${logicalFunctionName}]]登録 入力チェック
  */
 @Component
-public class [[${upperFuncName}]]FormValidator extends AbstractValidator<[[${upperFuncName}]]Form> {
+public class [[${camelPhysicalFunctionName}]]FormValidator extends AbstractValidator<[[${camelPhysicalFunctionName}]]Form> {
 
     @Override
-    protected void doValidate([[${upperFuncName}]]Form form, Errors errors) {
+    protected void doValidate([[${camelPhysicalFunctionName}]]Form form, Errors errors) {
 
     }
 }
