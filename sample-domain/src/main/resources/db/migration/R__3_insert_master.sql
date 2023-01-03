@@ -8,4 +8,5 @@ INSERT INTO users(first_name, last_name, email, password, tel, address, created_
 
 DELETE FROM mail_templates WHERE created_by = 'init';
 INSERT INTO mail_templates (category_code, template_code, subject, template_body, created_by, created_at) VALUES
-(NULL, 'passwordReset', 'パスワードリセット完了のお願い', CONCAT('[[$', '{staff.firstName}]]さん\r\n\r\n下記のリンクを開いてパスワードをリセットしてください。\r\n[[$', '{url}]]'), 'init', NOW());
+(NULL, 'passwordReset', 'パスワードリセット完了のお願い', '[[${staff.firstName}]]さん\r\n\r\n下記のリンクを開いてパスワードをリセットしてください。\r\n[[${url}]]', 'init', NOW()),
+(NULL, 'birthdayMail', '誕生日のお祝いメール', '[[${user.lastName}]] [[${user.firstName}]]さん\r\n誕生日おめでとう！', 'init', NOW());

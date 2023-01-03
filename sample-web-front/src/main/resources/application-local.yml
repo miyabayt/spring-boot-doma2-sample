@@ -12,20 +12,24 @@ spring:
   web:
     resources:
       # キャッシュの無効化
-      cache:
-        period: 0
+      static-locations: file:src/main/resources/public/
   flyway:
     enable: true
     baseline-on-migrate: true
-    placeholder-replacement: false
+  mail:
+    host: 127.0.0.1
+    port: 1025
+    username: test
+    password: test
 doma:
   # SQLファイルをキャッシュしない
   sql-file-repository: no_cache
 logging:
   level:
     org.springframework: INFO
+    org.springframework.jdbc: INFO
     org.thymeleaf: INFO
-    com.sample: DEBUG
+    com.bigtreetc.sample: DEBUG
 
 ####
 # アプリケーションの設定

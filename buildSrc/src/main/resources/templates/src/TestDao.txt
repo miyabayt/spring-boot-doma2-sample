@@ -1,30 +1,32 @@
-package [[${daoPackageName}]].[[${subSystem}]]
+package [[${daoPackageName}]]
 
-import com.sample.domain.BaseTestContainerSpec
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria
+import com.bigtreetc.sample.domain.BaseTestContainerSpec
+import [[${dtoPackageName}]].[[${camelPhysicalFunctionName}]]
+import [[${dtoPackageName}]].[[${camelPhysicalFunctionName}]]Criteria
+import com.bigtreetc.sample.domain.exception.NoDataFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.data.domain.Pageable
+import spock.lang.Specification
 
-import static com.sample.domain.util.DomaUtils.createSelectOptions
+import static com.bigtreetc.sample.domain.util.DomaUtils.createSelectOptions
 import static java.util.stream.Collectors.toList
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE
 
 @SpringBootTest(webEnvironment = NONE)
-class [[${upperFuncName}]]DaoTest extends Specification {
+class [[${camelPhysicalFunctionName}]]DaoTest extends Specification {
 
     @Autowired
-    [[${upperFuncName}]]Dao [[${lowerFuncName}]]Dao
+    [[${camelPhysicalFunctionName}]]Dao [[${lowerPhysicalFunctionName}]]Dao
 
     def "存在しないIDで絞り込んだ場合、空のリストが返ること"() {
         when:
         def options = createSelectOptions(Pageable.unpaged()).count()
-        def criteria = new [[${upperFuncName}]]Criteria()
+        def criteria = new [[${camelPhysicalFunctionName}]]Criteria()
         criteria.setId(-9999)
 
-        def data = [[${lowerFuncName}]]Dao.selectAll(criteria, options, toList())
+        def data = [[${lowerPhysicalFunctionName}]]Dao.selectAll(criteria, options, toList())
 
         then:
         data.size() == 0
@@ -32,28 +34,28 @@ class [[${upperFuncName}]]DaoTest extends Specification {
 
     def "存在しない名称で絞り込んだ場合、emptyが返ること"() {
         when:
-        def criteria = new [[${upperFuncName}]]Criteria()
-        criteria.set[[${upperFuncName}]]Name("XXXXXXXXXX")
+        def criteria = new [[${camelPhysicalFunctionName}]]Criteria()
+        criteria.set[[${camelPhysicalFunctionName}]]Name("XXXXXXXXXX")
 
-        Optional<[[${upperFuncName}]]> [[${lowerFuncName}]] = [[${lowerFuncName}]]Dao.select(criteria)
+        Optional<[[${camelPhysicalFunctionName}]]> [[${lowerPhysicalFunctionName}]] = [[${lowerPhysicalFunctionName}]]Dao.select(criteria)
 
         then:
-        [[${lowerFuncName}]] == Optional.empty()
+        [[${lowerPhysicalFunctionName}]] == Optional.empty()
     }
 
     def "存在しないIDで絞り込んだ場合、emptyが返ること"() {
         when:
-        Optional<[[${upperFuncName}]]> [[${lowerFuncName}]] = [[${lowerFuncName}]]Dao.selectById(-9999)
+        Optional<[[${camelPhysicalFunctionName}]]> [[${lowerPhysicalFunctionName}]] = [[${lowerPhysicalFunctionName}]]Dao.selectById(-9999)
 
         then:
-        [[${lowerFuncName}]] == Optional.empty()
+        [[${lowerPhysicalFunctionName}]] == Optional.empty()
     }
 
     def "改定番号を指定しないで更新した場合、例外がスローされること"() {
         when:
-        def [[${lowerFuncName}]] = new [[${upperFuncName}]]()
-        [[${lowerFuncName}]].set[[${upperFuncName}]]Name("XXXXXXXXXX")
-        [[${lowerFuncName}]]Dao.update([[${lowerFuncName}]])
+        def [[${lowerPhysicalFunctionName}]] = new [[${camelPhysicalFunctionName}]]()
+        [[${lowerPhysicalFunctionName}]].set[[${camelPhysicalFunctionName}]]Name("XXXXXXXXXX")
+        [[${lowerPhysicalFunctionName}]]Dao.update([[${lowerPhysicalFunctionName}]])
 
         then:
         thrown(OptimisticLockingFailureException)
@@ -61,11 +63,11 @@ class [[${upperFuncName}]]DaoTest extends Specification {
 
     def "存在するデータを指定して更新した場合、更新件数が1件になること"() {
         when:
-        def [[${lowerFuncName}]] = [[${lowerFuncName}]]Dao.selectById(1)
+        def [[${lowerPhysicalFunctionName}]] = [[${lowerPhysicalFunctionName}]]Dao.selectById(1)
                         .orElseThrow({ new NoDataFoundException("データが見つかりません。") })
 
-        [[${lowerFuncName}]].set[[${upperFuncName}]]Name("XXXXXXXXXX")
-        def updated = [[${lowerFuncName}]]Dao.update([[${lowerFuncName}]])
+        [[${lowerPhysicalFunctionName}]].set[[${camelPhysicalFunctionName}]]Name("XXXXXXXXXX")
+        def updated = [[${lowerPhysicalFunctionName}]]Dao.update([[${lowerPhysicalFunctionName}]])
 
         then:
         updated == 1

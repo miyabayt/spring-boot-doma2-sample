@@ -21,14 +21,14 @@ dependencies {
     api "org.springframework.boot:spring-boot-starter-security"
     api "org.springframework.boot:spring-boot-starter-jetty"
     api "org.springframework.session:spring-session-jdbc" // セッション格納先にDBを使う場合
-    //implementation "org.springframework.boot:spring-boot-starter-data-redis" // セッション格納先にredisを使う場合
+    //api "org.springframework.boot:spring-boot-starter-data-redis" // セッション格納先にredisを使う場合
 
     api "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
     api "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
     api "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
     api "org.modelmapper:modelmapper:3.1.0"
     api "net.sf.jasperreports:jasperreports:6.20.0"
-    api "org.apache.poi:poi:5.2.2"
-    api "org.apache.poi:poi-ooxml:5.2.2"
+    api "org.apache.poi:poi:5.2.3"
+    api "org.apache.poi:poi-ooxml:5.2.3"
     api "com.github.ben-manes.caffeine:caffeine"
 }

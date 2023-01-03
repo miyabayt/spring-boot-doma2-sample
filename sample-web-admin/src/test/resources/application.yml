@@ -7,10 +7,14 @@ spring:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/spring-boot-doma2-sample?useSSL=false&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: passw0rd
   mail:
     protocol: smtp
+    host: 127.0.0.1
+    port: 25
     username: test
     password: test
     properties:
@@ -27,7 +31,7 @@ doma:
   batch-size: 1000
 logging:
   level:
-    com.sample: DEBUG
+    com.bigtreetc.sample: DEBUG
 
 ####
 # アプリケーションの設定

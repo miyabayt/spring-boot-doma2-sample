@@ -1,0 +1,30 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/spring-boot-doma2-sample?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: passw0rd
+  flyway:
+    enable: true
+    baseline-on-migrate: true
+doma:
+  # SQLファイルをキャッシュしない
+  sql-file-repository: no_cache
+logging:
+  level:
+    org.springframework: INFO
+    org.springframework.jdbc: INFO
+    org.thymeleaf: INFO
+    com.bigtreetc.sample: INFO
+
+####
+# アプリケーションの設定
+application:
+  fileUploadLocation: build/sample
+  cors:
+    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, X-XSRF-TOKEN"
+    allowedMethods: "POST, GET, PUT, OPTIONS, DELETE"
+    allowedOrigins: "*" # CORSを許可するドメイン名を指定する

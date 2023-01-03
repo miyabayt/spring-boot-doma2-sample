@@ -1,11 +1,11 @@
-package [[${dtoPackageName}]].[[${subSystem}]];
+package [[${dtoPackageName}]];
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class [[${upperFuncName}]]Criteria extends [[${upperFuncName}]] {
+public class [[${camelPhysicalFunctionName}]]Criteria extends [[${camelPhysicalFunctionName}]] {
 
     private static final long serialVersionUID = -1;
 

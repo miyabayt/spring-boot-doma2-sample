@@ -1,9 +1,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <body>
         <aside class="main-sidebar sidebar-dark-primary elevation-4" th:fragment="sidebar (category, item)">
             <a th:href="@{/}" class="brand-link bg-purple">
-                <div class="brand-text font-weight-light text-center">Sample Admin</div>
+                <div class="brand-text font-weight-light text-center">
+                    <span class="text-md">Sample Admin</span>
+                </div>
             </a>
             <div class="sidebar">
                 <nav class="mt-2">
@@ -15,7 +18,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="#" th:href="@{/users/users/find(page=1)}" th:class="|nav-link ${item=='user' ? 'active' : ''}|">
+                                    <a href="#" th:href="@{/users/find(init=true)}" th:class="|nav-link ${item=='user' ? 'active' : ''}|">
                                         <i class="nav-icon far fa-user"></i>
                                         <p>顧客マスタ</p>
                                     </a>
@@ -29,37 +32,37 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="#" th:href="@{/system/staffs/find(page=1)}" th:class="|nav-link ${item=='staff' ? 'active' : ''}|">
+                                    <a href="#" th:href="@{/staffs/find(init=true)}" th:class="|nav-link ${item=='staff' ? 'active' : ''}|">
                                         <i class="nav-icon fas fa-user-cog"></i><p>担当者マスタ</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" th:href="@{/system/holidays/find(page=1)}" th:class="|nav-link ${item=='holiday' ? 'active' : ''}|">
+                                    <a href="#" th:href="@{/holidays/find(init=true)}" th:class="|nav-link ${item=='holiday' ? 'active' : ''}|">
                                         <i class="nav-icon fas fa-birthday-cake"></i><p>祝日マスタ</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" th:href="@{/system/mailTemplates/find(page=1)}" th:class="|nav-link ${item=='mailTemplate' ? 'active' : ''}|">
+                                    <a href="#" th:href="@{/mailTemplates/find(init=true)}" th:class="|nav-link ${item=='mailTemplate' ? 'active' : ''}|">
                                         <i class="nav-icon far fa-envelope"></i><p>メールテンプレート</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" th:href="@{/system/uploadFiles/list}" th:class="|nav-link ${item=='uploadfile' ? 'active' : ''}|">
+                                    <a href="#" th:href="@{/uploadFiles/list}" th:class="|nav-link ${item=='uploadfile' ? 'active' : ''}|">
                                         <i class="nav-icon fas fa-cloud-upload-alt"></i><p>ファイル管理</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" th:href="@{/system/roles/find(page=1)}" th:class="|nav-link ${item=='role' ? 'active' : ''}|">
+                                    <a href="#" th:href="@{/roles/find(init=true)}" th:class="|nav-link ${item=='role' ? 'active' : ''}|">
                                         <i class="nav-icon fas fa-user-shield"></i><p>ロール管理</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" th:href="@{/system/codeCategories/find(page=1)}" th:class="|nav-link ${item=='codeCategory' ? 'active' : ''}|">
+                                    <a href="#" th:href="@{/codeCategories/find(init=true)}" th:class="|nav-link ${item=='codeCategory' ? 'active' : ''}|">
                                         <i class="nav-icon fas fa-table"></i><p>分類マスタ</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" th:href="@{/system/codes/find(page=1)}" th:class="|nav-link ${item=='code' ? 'active' : ''}|">
+                                    <a href="#" th:href="@{/codes/find(init=true)}" th:class="|nav-link ${item=='code' ? 'active' : ''}|">
                                         <i class="nav-icon fas fa-list"></i><p>コードマスタ</p>
                                     </a>
                                 </li>

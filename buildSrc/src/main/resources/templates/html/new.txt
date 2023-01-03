@@ -3,41 +3,57 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/sidebarLayout}">
     <head>
-        <title>[[${funcStr}]]管理</title>
+        <title>[[${logicalFunctionName}]]</title>
     </head>
     <body>
         <div layout:fragment="sidebar">
-            <div th:replace="~{layouts/sidebar :: sidebar ('[[${subSystem}]]', '[[${lowerFuncName}]]')}"></div>
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', '[[${lowerPhysicalFunctionName}]]')}"></div>
         </div>
-        <section layout:fragment="content-header">
-            <h1 th:with="text=${[[${lowerFuncName}]]Form.isNew()} ? '[[${funcStr}]]登録' : '[[${funcStr}]]編集'" th:text="${text}">[[${funcStr}]]登録</h1>
-            <ol class="breadcrumb">
-                <li><a th:href="@{/}">Home</a></li>
-                <li><a th:href="@{/[[${subSystem}]]/[[${lowerFuncName}]]s/find(page=1)}">[[${funcStr}]]検索</a></li>
-                <li th:with="text=${[[${lowerFuncName}]]Form.isNew()} ? '[[${funcStr}]]登録' : '[[${funcStr}]]編集'" th:text="${text}">[[${funcStr}]]登録</li>
-            </ol>
-        </section>
+        <div class="content-header" layout:fragment="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-md d-none d-sm-inline-block" th:with="text=${[[${lowerPhysicalFunctionName}]]Form.isNew()} ? '[[${logicalFunctionName}]]登録' : '[[${logicalFunctionName}]]編集'" th:text="${text}">[[${logicalFunctionName}]]登録</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/[[${lowerPhysicalMultiFunctionName}]]/find(page=1)}">[[${logicalFunctionName}]]</a></li>
+                            <li class="breadcrumb-item active" th:with="text=${[[${lowerPhysicalFunctionName}]]Form.isNew()} ? '[[${logicalFunctionName}]]登録' : '[[${logicalFunctionName}]]編集'" th:text="${text}">[[${logicalFunctionName}]]登録</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
         <section layout:fragment="content">
-            <div class="box">
-                <form th:object="${[[${lowerFuncName}]]Form}" th:action="${action}"
-                      th:with="action=${[[${lowerFuncName}]]Form.isNew()} ? @{/[[${subSystem}]]/[[${lowerFuncName}]]s/new} : @{/[[${subSystem}]]/[[${lowerFuncName}]]s/edit/{id}(id=*{id})}"
-                      class="form-horizontal" enctype="multipart/form-data" method="post">
-                    <div class="box-body">
-                        <input th:replace="~{fragments/inputField :: input ('text', '[[${funcStr}]]名', '[[${lowerFuncName}]]Name')}" />
-                    </div>
-                    <div class="box-footer">
-                        <button class="btn btn-default bg-purple" type="submit"
-                                th:with="text=${[[${lowerFuncName}]]Form.isNew()} ? '登録' : '保存'" th:text="${text}">
-                            Add [[${upperFuncName}]]
-                        </button>
-                    </div>
-                </form>
+            <div class="container-fluid">
+                <div class="card card-outline card-purple shadow">
+                    <form th:object="${[[${lowerPhysicalFunctionName}]]Form}" th:action="${action}" id="form1"
+                          th:with="action=${[[${lowerPhysicalFunctionName}]]Form.isNew()} ? @{/[[${lowerPhysicalMultiFunctionName}]]/new} : @{/[[${lowerPhysicalMultiFunctionName}]]/edit/{id}(id=*{id})}"
+                          class="form-horizontal" enctype="multipart/form-data" method="post">
+                        <div class="card-header">
+                            <h3 class="card-title"
+                                th:with="text=${[[${lowerPhysicalFunctionName}]]Form.isNew()} ? '新規登録' : '編集'" th:text="${text}">新規登録</h3>
+                        </div>
+                        <div class="card-body">
+                            <input th:replace="~{fragments/inputField :: input ('text', '名称', '[[${lowerPhysicalFunctionName}]]Name')}" />
+                        </div>
+                        <div class="card-footer clearfix">
+                            <div class="row justify-content-md-center">
+                                <button class="btn btn-primary" type="submit" style="min-width: 140px;"
+                                        th:with="text=${[[${lowerPhysicalFunctionName}]]Form.isNew()} ? '登録' : '保存'" th:text="${text}">
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </section>
+        <div layout:fragment="scripts">
+            <script th:replace="~{fragments/validationScript :: script}" />
+            <script type="text/javascript" src="../public/static/js/[[${lowerPhysicalMultiFunctionName}]].js"
+                    th:src="@{/static/js/[[${lowerPhysicalMultiFunctionName}]].js}"></script>
+        </div>
     </body>
-    <div layout:fragment="scripts">
-        <script th:replace="~{fragments/validationScript :: script}" />
-        <script type="text/javascript" src="../public/static/js/[[${subSystem}]]/[[${lowerFuncName}]]s.js"
-                th:src="@{/static/js/[[${subSystem}]]/[[${lowerFuncName}]]s.js}"></script>
-    </div>
 </html>

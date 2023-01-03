@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS code_categories(
   , category_name VARCHAR(50) NOT NULL COMMENT '分類名'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (code_category_id)
@@ -34,9 +34,9 @@ CREATE TABLE IF NOT EXISTS codes(
   , display_order INT(11) DEFAULT 0 COMMENT '表示順'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (code_id)
@@ -49,9 +49,9 @@ CREATE TABLE IF NOT EXISTS permissions(
   , permission_name VARCHAR(50) NOT NULL COMMENT '権限名'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (permission_id)
@@ -64,9 +64,9 @@ CREATE TABLE IF NOT EXISTS roles(
   , role_name VARCHAR(100) NOT NULL COMMENT 'ロール名'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (role_id)
@@ -80,9 +80,9 @@ CREATE TABLE IF NOT EXISTS role_permissions(
   , is_enabled TINYINT(1) NOT NULL DEFAULT 0 COMMENT '有効フラグ'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (role_permission_id)
@@ -95,9 +95,9 @@ CREATE TABLE IF NOT EXISTS staff_roles(
   , role_code VARCHAR(50) NOT NULL COMMENT 'ロールコード'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (staff_role_id)
@@ -110,9 +110,9 @@ CREATE TABLE IF NOT EXISTS user_roles(
   , role_code VARCHAR(50) NOT NULL COMMENT 'ロールコード'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (user_role_id)
@@ -130,9 +130,9 @@ CREATE TABLE IF NOT EXISTS staffs(
   , token_expires_at DATETIME DEFAULT NULL COMMENT 'トークン失効日'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (staff_id)
@@ -151,9 +151,9 @@ CREATE TABLE IF NOT EXISTS users(
   , upload_file_id INT(11) unsigned DEFAULT NULL COMMENT '添付ファイル'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (user_id)
@@ -168,9 +168,9 @@ CREATE TABLE IF NOT EXISTS upload_files(
   , content LONGBLOB NOT NULL COMMENT 'コンテンツ'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (upload_file_id)
@@ -185,9 +185,9 @@ CREATE TABLE IF NOT EXISTS mail_templates(
   , template_body TEXT NOT NULL COMMENT 'メール本文'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (mail_template_id)
@@ -205,19 +205,14 @@ CREATE TABLE IF NOT EXISTS send_mail_queue(
   , sent_at DATETIME DEFAULT NULL COMMENT 'メール送信日時'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (send_mail_queue_id, created_at)
   , KEY idx_send_mail_queue (sent_at, deleted_at)
 ) COMMENT='メール送信キュー' PARTITION BY RANGE (YEAR(created_at))(
-  PARTITION p2017 VALUES LESS THAN (2017),
-  PARTITION p2018 VALUES LESS THAN (2018),
-  PARTITION p2019 VALUES LESS THAN (2019),
-  PARTITION p2020 VALUES LESS THAN (2020),
-  PARTITION p2021 VALUES LESS THAN (2021),
   PARTITION p2022 VALUES LESS THAN (2022),
   PARTITION p2023 VALUES LESS THAN (2023),
   PARTITION p2024 VALUES LESS THAN (2024),
@@ -235,9 +230,9 @@ CREATE TABLE IF NOT EXISTS holidays(
   , holiday_date DATE NOT NULL COMMENT '日付'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
   , created_at DATETIME NOT NULL COMMENT '登録日時'
-  , updated_by VARCHAR(50) DEFAULT NULL COMMENT '更新者'
+  , updated_by VARCHAR(255) DEFAULT NULL COMMENT '更新者'
   , updated_at DATETIME DEFAULT NULL COMMENT '更新日時'
-  , deleted_by VARCHAR(50) DEFAULT NULL COMMENT '削除者'
+  , deleted_by VARCHAR(255) DEFAULT NULL COMMENT '削除者'
   , deleted_at DATETIME DEFAULT NULL COMMENT '削除日時'
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (holiday_id)

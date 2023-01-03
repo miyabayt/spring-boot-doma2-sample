@@ -24,12 +24,12 @@
 								   th:href="@{${url}(page=${i})}" th:text="${i}"></a>
 								<span class="page-link" th:if="${i} == (${p.number} + 1)" th:text="${i}"></span>
 							</li>
-							<li th:class="${last} ? 'page-item disabled':'page-item'" th:with="last=(${p.number} + 1 == ${p.totalPages})">
+							<li th:class="${last} ? 'page-item disabled':'page-item'" th:with="last=(${p.number} + 1 >= ${p.totalPages})">
 								<a class="page-link" th:href="@{${url}(page=(${p.number} + 2))}">
 									<i class="fa fa-angle-right"></i>
 								</a>
 							</li>
-							<li th:class="${last} ? 'page-item disabled':'page-item'" th:with="last=(${p.number} + 1 == ${p.totalPages})">
+							<li th:class="${last} ? 'page-item disabled':'page-item'" th:with="last=(${p.number} + 1 >= ${p.totalPages})">
 								<a class="page-link" th:href="@{${url}(page=(${p.totalPages}))}">
 									<i class="fa fa-angle-double-right"></i>
 								</a>

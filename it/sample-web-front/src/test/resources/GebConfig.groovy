@@ -1,4 +1,4 @@
-import com.sample.web.front.geb.base.TestcontainersWebDriver
+import com.bigtreetc.sample.web.front.geb.base.TestcontainersWebDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.htmlunit.HtmlUnitDriver

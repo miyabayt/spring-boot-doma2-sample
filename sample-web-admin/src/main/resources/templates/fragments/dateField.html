@@ -1,11 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <body>
         <form>
-            <th:block th:fragment="input (type, label, name, value, format)">
+            <th:block th:fragment="input (type, label, name, value, format)" th:with="labelSize=${labelSize} ?: 2, formSize=${formSize} ?: 3">
                 <div th:with="valid=${!#fields.hasErrors(name)}" th:class="${'form-group' + (valid ? '' : ' has-error')}" class="form-group">
                     <div class="row form-group">
-                        <label class="col-sm-2 control-label" th:text="${label}">Label</label>
-                        <div class="input-group col-sm-3">
+                        <label th:class="|col-sm-${#strings.toString(labelSize)} col-form-label|" th:text="${label}">Label</label>
+                        <div th:class="|input-group col-sm-${#strings.toString(formSize)}|">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     <i class="far fa-calendar-alt"></i>

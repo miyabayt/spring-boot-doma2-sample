@@ -27,6 +27,10 @@ spring:
       schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
       table-name: SPRING_SESSION
     store-type: JDBC
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
   web:
     resources:
       # 静的コンテンツをキャッシュする
@@ -61,16 +65,14 @@ spring:
       connectionTestQuery: SELECT 1
       minimumIdle: 10
       maximumPoolSize: 30
+  flyway:
+    placeholder-replacement: false
   batch:
     job:
       # 自動的にバッチジョブが起動しないようにする
       enabled: false
   mail:
     protocol: smtp
-    host: 127.0.0.1
-    port: 25
-    username: test
-    password: test
     properties:
       mail:
         from: from@sample.com

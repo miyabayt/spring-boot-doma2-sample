@@ -1,4 +1,4 @@
-package [[${controllerPackageName}]].[[${subSystem}]].[[${lowerFuncName}]]s;
+package [[${controllerPackageName}]].[[${lowerPhysicalFunctionName}]];
 
 import [[${baseControllerPackageName}]].BaseSearchForm;
 import lombok.Getter;
@@ -6,11 +6,11 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class Search[[${upperFuncName}]]Form extends BaseSearchForm {
+public class Search[[${camelPhysicalFunctionName}]]Form extends BaseSearchForm {
 
     private static final long serialVersionUID = -1L; // TODO
 
     Long id;
 
-    String [[${lowerFuncName}]]Name;
+    String [[${lowerPhysicalFunctionName}]]Name;
 }

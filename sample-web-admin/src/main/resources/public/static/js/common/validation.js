@@ -4,10 +4,12 @@ $(function() {
         minlength: $.validator.format("{0}文字以上の文字を入力してください"),
         maxlength: $.validator.format("{0}文字以下の文字を入力してください"),
         rangelength: $.validator.format("{0}文字から{1}文字の値を入力してください。"),
-        required: "値を入力してください。",
+        required: "必須項目です。入力してください。",
         equalTo: "正しい値を入力してください。",
         email: "正しいメールアドレスを入力してください。",
-        digits: "数値を入力してください。"
+        digits: "数値を入力してください。",
+        date: "日付はyyyy/MM/dd形式で入力してください。",
+        extension: "正しい形式のファイルを選択してください。"
     });
 
     $.validator.setDefaults({
@@ -71,8 +73,16 @@ $(function() {
     });
 
     $.validator.methods.email = function(value, element) {
-        return isOptionalInput(this, value, element) || this.optional(element) || /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(value);
+        return isOptionalInput(this, value, element) || this.optional(element) || (!value.includes(".@") && /^([\w-\.]+@([\w-]+\.)+[\w-]{2,20})?$/.test(value));
     };
+
+    $.validator.addMethod("decimal", function(value, element) {
+        return isOptionalInput(this, value, element) || this.optional(element) || /^(0|[1-9]\d*)\.\d+$/.test(value);
+    }, "小数を入力してください。");
+
+    $.validator.addMethod("dateFormat", function(value, element) {
+        return isOptionalInput(this, value, element) || this.optional(element) || /^\d{4}\/\d{2}\/\d{2}$/.test(value);
+    }, "日付はyyyy/MM/dd形式で入力してください。");
 
     function isOptionalInput(_this, value, element) {
         var rules = $(element).rules();

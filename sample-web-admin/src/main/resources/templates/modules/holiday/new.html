@@ -1,0 +1,60 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/sidebarLayout}">
+    <head>
+        <title>祝日マスタ</title>
+    </head>
+    <body>
+        <div layout:fragment="sidebar">
+            <div th:replace="~{layouts/sidebar :: sidebar ('system', 'holiday')}"></div>
+        </div>
+        <div class="content-header" layout:fragment="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-md d-none d-sm-inline-block" th:with="text=${holidayForm.isNew()} ? '祝日マスタ登録' : '祝日マスタ編集'" th:text="${text}">祝日マスタ登録</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/holidays/find(page=1)}">祝日マスタ</a></li>
+                            <li class="breadcrumb-item active" th:with="text=${holidayForm.isNew()} ? '祝日マスタ登録' : '祝日マスタ編集'" th:text="${text}">祝日マスタ登録</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section layout:fragment="content">
+            <div class="container-fluid">
+                <div class="card card-outline card-purple shadow">
+                    <form th:object="${holidayForm}" th:action="${action}" id="form1"
+                          th:with="action=${holidayForm.isNew()} ? @{/holidays/new} : @{/holidays/edit/{id}(id=*{id})}"
+                          class="form-horizontal" enctype="multipart/form-data" method="post">
+                        <div class="card-header">
+                            <h3 class="card-title"
+                                th:with="text=${holidayForm.isNew()} ? '新規登録' : '編集'" th:text="${text}">新規登録</h3>
+                        </div>
+                        <div class="card-body">
+                            <input th:replace="~{fragments/inputField :: input ('text', '名称', 'holidayName')}" />
+                            <input th:replace="~{fragments/dateField :: input ('text', '日付', 'holidayDate', *{holidayDate}, 'yyyy/MM/dd')}" />
+                        </div>
+                        <div class="card-footer clearfix">
+                            <div class="row justify-content-md-center">
+                                <button class="btn btn-primary" type="submit" style="min-width: 140px;"
+                                        th:with="text=${holidayForm.isNew()} ? '登録' : '保存'" th:text="${text}">
+                                    Add Holiday
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <div layout:fragment="scripts">
+            <script th:replace="~{fragments/validationScript :: script}" />
+            <script type="text/javascript" src="../public/static/js/holidays.js"
+                    th:src="@{/static/js/holidays.js}"></script>
+        </div>
+    </body>
+</html>

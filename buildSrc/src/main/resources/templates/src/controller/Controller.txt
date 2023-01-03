@@ -1,13 +1,13 @@
-package [[${controllerPackageName}]].[[${subSystem}]].[[${lowerFuncName}]]s;
+package [[${controllerPackageName}]].[[${lowerPhysicalFunctionName}]];
 
-import static com.sample.domain.util.TypeUtils.toListType;
-import static [[${webBasePackageName}]].WebConst.MESSAGE_DELETED;
-import static [[${webBasePackageName}]].WebConst.GLOBAL_MESSAGE;
+import static com.bigtreetc.sample.common.util.ValidateUtils.isTrue;
+import static com.bigtreetc.sample.common.util.ValidateUtils.isTrue;
+import static com.bigtreetc.sample.domain.util.TypeUtils.toListType;
+import static [[${webBasePackageName}]].WebConst.*;
 
-import [[${commonDtoPackageName}]].Pageable;
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]];
-import [[${dtoPackageName}]].[[${subSystem}]].[[${upperFuncName}]]Criteria;
-import [[${servicePackageName}]].[[${subSystem}]].[[${upperFuncName}]]Service;
+import [[${dtoPackageName}]].[[${camelPhysicalFunctionName}]];
+import [[${dtoPackageName}]].[[${camelPhysicalFunctionName}]]Criteria;
+import [[${servicePackageName}]].[[${lowerPhysicalFunctionName}]].[[${camelPhysicalFunctionName}]]Service;
 import [[${baseControllerPackageName}]].AbstractHtmlController;
 import [[${webBasePackageName}]].view.CsvView;
 import java.util.List;
@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,36 +27,36 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** [[${funcStr}]] */
+/** [[${logicalFunctionName}]] */
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/[[${subSystem}]]/[[${lowerFuncName}]]s")
-@SessionAttributes(types = { Search[[${upperFuncName}]]Form.class, [[${upperFuncName}]]Form.class })
+@RequestMapping("/[[${lowerPhysicalMultiFunctionName}]]")
+@SessionAttributes(types = { Search[[${camelPhysicalFunctionName}]]Form.class, [[${camelPhysicalFunctionName}]]Form.class })
 @Slf4j
-public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
+public class [[${camelPhysicalFunctionName}]]Controller extends AbstractHtmlController {
 
-    @NonNull final [[${upperFuncName}]]FormValidator [[${lowerFuncName}]]FormValidator;
+    @NonNull final [[${camelPhysicalFunctionName}]]FormValidator [[${lowerPhysicalFunctionName}]]FormValidator;
 
-    @NonNull final [[${upperFuncName}]]Service [[${lowerFuncName}]]Service;
+    @NonNull final [[${camelPhysicalFunctionName}]]Service [[${lowerPhysicalFunctionName}]]Service;
 
-    @ModelAttribute("[[${lowerFuncName}]]Form")
-    public [[${upperFuncName}]]Form [[${lowerFuncName}]]Form() {
-        return new [[${upperFuncName}]]Form();
+    @ModelAttribute("[[${lowerPhysicalFunctionName}]]Form")
+    public [[${camelPhysicalFunctionName}]]Form [[${lowerPhysicalFunctionName}]]Form() {
+        return new [[${camelPhysicalFunctionName}]]Form();
     }
 
-    @ModelAttribute("search[[${upperFuncName}]]Form")
-    public Search[[${upperFuncName}]]Form search[[${upperFuncName}]]Form() {
-        return new Search[[${upperFuncName}]]Form();
+    @ModelAttribute("search[[${camelPhysicalFunctionName}]]Form")
+    public Search[[${camelPhysicalFunctionName}]]Form search[[${camelPhysicalFunctionName}]]Form() {
+        return new Search[[${camelPhysicalFunctionName}]]Form();
     }
 
-    @InitBinder("[[${lowerFuncName}]]Form")
+    @InitBinder("[[${lowerPhysicalFunctionName}]]Form")
     public void validatorBinder(WebDataBinder binder) {
-        binder.addValidators([[${lowerFuncName}]]FormValidator);
+        binder.addValidators([[${lowerPhysicalFunctionName}]]FormValidator);
     }
 
     @Override
     public String getFunctionName() {
-        return "A_[[${upperFuncName}]]";
+        return "A_[[${upperPhysicalFunctionName}]]";
     }
 
     /**
@@ -65,40 +66,47 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
      * @param model
      * @return
      */
+    @PreAuthorize("hasAuthority('[[${lowerPhysicalFunctionName}]]:save')")
     @GetMapping("/new")
-    public String new[[${upperFuncName}]](@ModelAttribute("[[${lowerFuncName}]]Form") [[${upperFuncName}]]Form form, Model model) {
+    public String new[[${camelPhysicalFunctionName}]](@ModelAttribute("[[${lowerPhysicalFunctionName}]]Form") [[${camelPhysicalFunctionName}]]Form form, Model model) {
         if (!form.isNew()) {
             // SessionAttributeに残っている場合は再生成する
-            model.addAttribute("[[${lowerFuncName}]]Form", new [[${upperFuncName}]]Form());
+            model.addAttribute("[[${lowerPhysicalFunctionName}]]Form", new [[${camelPhysicalFunctionName}]]Form());
         }
 
-        return "modules/[[${subSystem}]]/[[${lowerFuncName}]]s/new";
+        return "modules/[[${lowerPhysicalFunctionName}]]/new";
     }
 
     /**
      * 登録処理
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
+    @PreAuthorize("hasAuthority('[[${lowerPhysicalFunctionName}]]:save')")
     @PostMapping("/new")
-    public String new[[${upperFuncName}]](@Validated @ModelAttribute("[[${lowerFuncName}]]Form") [[${upperFuncName}]]Form form, BindingResult result,
-            RedirectAttributes attributes) {
+    public String new[[${camelPhysicalFunctionName}]](
+         @Validated @ModelAttribute("[[${lowerPhysicalFunctionName}]]Form") [[${camelPhysicalFunctionName}]]Form form,
+         BindingResult br,
+         RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
-            return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/new";
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
+            return "redirect:/[[${lowerPhysicalMultiFunctionName}]]/new";
         }
 
         // 入力値からDTOを作成する
-        val input[[${upperFuncName}]] = modelMapper.map(form, [[${upperFuncName}]].class);
+        val input[[${camelPhysicalFunctionName}]] = modelMapper.map(form, [[${camelPhysicalFunctionName}]].class);
 
         // 登録する
-        val created[[${upperFuncName}]] = [[${lowerFuncName}]]Service.create(input[[${upperFuncName}]]);
+        val created[[${camelPhysicalFunctionName}]] = [[${lowerPhysicalFunctionName}]]Service.create(input[[${camelPhysicalFunctionName}]]);
 
-        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/show/" + created[[${upperFuncName}]].getId();
+        // 登録成功メッセージ
+        attributes.addFlashAttribute(SUCCESS_MESSAGE, getMessage(MESSAGE_CREATED));
+
+        return "redirect:/[[${lowerPhysicalMultiFunctionName}]]/show/" + created[[${camelPhysicalFunctionName}]].getId();
     }
 
     /**
@@ -107,148 +115,174 @@ public class [[${upperFuncName}]]HtmlController extends AbstractHtmlController {
      * @param model
      * @return
      */
+    @PreAuthorize("hasAuthority('[[${lowerPhysicalFunctionName}]]:read')")
     @GetMapping("/find")
-    public String find[[${upperFuncName}]](@ModelAttribute("search[[${upperFuncName}]]Form") Search[[${upperFuncName}]]Form form, Pageable pageable, Model model) {
+    public String find[[${camelPhysicalFunctionName}]](
+         @ModelAttribute("search[[${camelPhysicalFunctionName}]]Form") Search[[${camelPhysicalFunctionName}]]Form form,
+         @RequestParam(name = "init", required = false) Boolean init,
+         Pageable pageable,
+         Model model) {
+        // 検索条件の初期化
+        if (isTrue(init)) {
+          form = new Search[[${camelPhysicalFunctionName}]]Form();
+          model.addAttribute("search[[${camelPhysicalFunctionName}]]Form", form);
+        }
+
         // 入力値から検索条件を作成する
-        val criteria = modelMapper.map(form, [[${upperFuncName}]]Criteria.class);
+        val criteria = modelMapper.map(form, [[${camelPhysicalFunctionName}]]Criteria.class);
 
         // 10件区切りで取得する
-        val pages = [[${lowerFuncName}]]Service.findAll(criteria, pageable);
+        val pages = [[${lowerPhysicalFunctionName}]]Service.findAll(criteria, pageable);
 
         // 画面に検索結果を渡す
         model.addAttribute("pages", pages);
 
-        return "modules/[[${subSystem}]]/[[${lowerFuncName}]]s/find";
+        return "modules/[[${lowerPhysicalFunctionName}]]/find";
     }
 
     /**
      * 検索結果
      *
      * @param form
-     * @param result
+     * @param br
      * @param attributes
      * @return
      */
+    @PreAuthorize("hasAuthority('[[${lowerPhysicalFunctionName}]]:read')")
     @PostMapping("/find")
-    public String find[[${upperFuncName}]](@Validated @ModelAttribute("search[[${upperFuncName}]]Form") Search[[${upperFuncName}]]Form form, BindingResult result,
-            RedirectAttributes attributes) {
+    public String find[[${camelPhysicalFunctionName}]](
+         @Validated @ModelAttribute("search[[${camelPhysicalFunctionName}]]Form") Search[[${camelPhysicalFunctionName}]]Form form,
+         BindingResult br,
+         RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
-            return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/find";
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
+            return "redirect:/[[${lowerPhysicalMultiFunctionName}]]/find";
         }
 
-        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/find";
+        return "redirect:/[[${lowerPhysicalMultiFunctionName}]]/find";
     }
 
     /**
      * 詳細画面
      *
-     * @param [[${lowerFuncName}]]Id
+     * @param [[${lowerPhysicalFunctionName}]]Id
      * @param model
      * @return
      */
-    @GetMapping("/show/{[[${lowerFuncName}]]Id}")
-    public String show[[${upperFuncName}]](@PathVariable Long [[${lowerFuncName}]]Id, Model model) {
+    @GetMapping("/show/{[[${lowerPhysicalFunctionName}]]Id}")
+    public String show[[${camelPhysicalFunctionName}]](@PathVariable Long [[${lowerPhysicalFunctionName}]]Id, Model model) {
         // 1件取得する
-        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById([[${lowerFuncName}]]Id);
-        model.addAttribute("[[${lowerFuncName}]]", [[${lowerFuncName}]]);
-        return "modules/[[${subSystem}]]/[[${lowerFuncName}]]s/show";
+        val [[${lowerPhysicalFunctionName}]] = [[${lowerPhysicalFunctionName}]]Service.findById([[${lowerPhysicalFunctionName}]]Id);
+        model.addAttribute("[[${lowerPhysicalFunctionName}]]", [[${lowerPhysicalFunctionName}]]);
+        return "modules/[[${lowerPhysicalFunctionName}]]/show";
     }
 
     /**
      * 編集画面 初期表示
      *
-     * @param [[${lowerFuncName}]]Id
+     * @param [[${lowerPhysicalFunctionName}]]Id
      * @param form
      * @param model
      * @return
      */
-    @GetMapping("/edit/{[[${lowerFuncName}]]Id}")
-    public String edit[[${upperFuncName}]](@PathVariable Long [[${lowerFuncName}]]Id, @ModelAttribute("[[${lowerFuncName}]]Form") [[${upperFuncName}]]Form form, Model model) {
+    @GetMapping("/edit/{[[${lowerPhysicalFunctionName}]]Id}")
+    public String edit[[${camelPhysicalFunctionName}]](
+         @PathVariable Long [[${lowerPhysicalFunctionName}]]Id, @ModelAttribute("[[${lowerPhysicalFunctionName}]]Form") [[${camelPhysicalFunctionName}]]Form form, Model model) {
         // セッションから取得できる場合は、読み込み直さない
         if (!hasErrors(model)) {
             // 1件取得する
-            val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById([[${lowerFuncName}]]Id);
+            val [[${lowerPhysicalFunctionName}]] = [[${lowerPhysicalFunctionName}]]Service.findById([[${lowerPhysicalFunctionName}]]Id);
 
             // 取得したDtoをFromに詰め替える
-            modelMapper.map([[${lowerFuncName}]], form);
+            modelMapper.map([[${lowerPhysicalFunctionName}]], form);
         }
 
-        return "modules/[[${subSystem}]]/[[${lowerFuncName}]]s/new";
+        return "modules/[[${lowerPhysicalFunctionName}]]/new";
     }
 
     /**
      * 編集画面 更新処理
      *
      * @param form
-     * @param result
-     * @param [[${lowerFuncName}]]Id
+     * @param br
+     * @param [[${lowerPhysicalFunctionName}]]Id
      * @param sessionStatus
      * @param attributes
      * @return
      */
-    @PostMapping("/edit/{[[${lowerFuncName}]]Id}")
-    public String edit[[${upperFuncName}]](@Validated @ModelAttribute("[[${lowerFuncName}]]Form") [[${upperFuncName}]]Form form, BindingResult result,
-            @PathVariable Long [[${lowerFuncName}]]Id, SessionStatus sessionStatus, RedirectAttributes attributes) {
+    @PreAuthorize("hasAuthority('[[${lowerPhysicalFunctionName}]]:save')")
+    @PostMapping("/edit/{[[${lowerPhysicalFunctionName}]]Id}")
+    public String edit[[${camelPhysicalFunctionName}]](
+         @Validated @ModelAttribute("[[${lowerPhysicalFunctionName}]]Form") [[${camelPhysicalFunctionName}]]Form form,
+         BindingResult br,
+         @PathVariable Long [[${lowerPhysicalFunctionName}]]Id,
+         SessionStatus sessionStatus,
+         RedirectAttributes attributes) {
         // 入力チェックエラーがある場合は、元の画面にもどる
-        if (result.hasErrors()) {
-            setFlashAttributeErrors(attributes, result);
-            return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/edit/" + [[${lowerFuncName}]]Id;
+        if (br.hasErrors()) {
+            setFlashAttributeErrors(attributes, br);
+            return "redirect:/[[${lowerPhysicalMultiFunctionName}]]/edit/" + [[${lowerPhysicalFunctionName}]]Id;
         }
 
         // 更新対象を取得する
-        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById([[${lowerFuncName}]]Id);
+        val [[${lowerPhysicalFunctionName}]] = [[${lowerPhysicalFunctionName}]]Service.findById([[${lowerPhysicalFunctionName}]]Id);
 
         // 入力値を詰め替える
-        modelMapper.map(form, [[${lowerFuncName}]]);
+        modelMapper.map(form, [[${lowerPhysicalFunctionName}]]);
 
         // 更新する
-        val updated[[${upperFuncName}]] = [[${lowerFuncName}]]Service.update([[${lowerFuncName}]]);
+        val updated[[${camelPhysicalFunctionName}]] = [[${lowerPhysicalFunctionName}]]Service.update([[${lowerPhysicalFunctionName}]]);
 
-        // セッションの[[${lowerFuncName}]]Formをクリアする
+        // セッションのFormをクリアする
         sessionStatus.setComplete();
 
-        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/show/" + updated[[${upperFuncName}]].getId();
+        // 更新成功メッセージ
+        attributes.addFlashAttribute(SUCCESS_MESSAGE, getMessage(MESSAGE_UPDATED));
+
+        return "redirect:/[[${lowerPhysicalMultiFunctionName}]]/show/" + updated[[${camelPhysicalFunctionName}]].getId();
     }
 
     /**
      * 削除処理
      *
-     * @param [[${lowerFuncName}]]Id
+     * @param [[${lowerPhysicalFunctionName}]]Id
      * @param attributes
      * @return
      */
-    @PostMapping("/remove/{[[${lowerFuncName}]]Id}")
-    public String remove[[${upperFuncName}]](@PathVariable Long [[${lowerFuncName}]]Id, RedirectAttributes attributes) {
-        // 削除対象を取得する
-        val [[${lowerFuncName}]] = [[${lowerFuncName}]]Service.findById([[${lowerFuncName}]]Id);
-
+    @PreAuthorize("hasAuthority('[[${lowerPhysicalFunctionName}]]:save')")
+    @PostMapping("/remove/{[[${lowerPhysicalFunctionName}]]Id}")
+    public String remove[[${camelPhysicalFunctionName}]](@PathVariable Long [[${lowerPhysicalFunctionName}]]Id, RedirectAttributes attributes) {
         // 論理削除する
-        [[${lowerFuncName}]]Service.delete([[${lowerFuncName}]].getId());
+        [[${lowerPhysicalFunctionName}]]Service.delete([[${lowerPhysicalFunctionName}]]Id);
 
         // 削除成功メッセージ
-        attributes.addFlashAttribute(GLOBAL_MESSAGE, getMessage(MESSAGE_DELETED));
+        attributes.addFlashAttribute(SUCCESS_MESSAGE, getMessage(MESSAGE_DELETED));
 
-        return "redirect:/[[${subSystem}]]/[[${lowerFuncName}]]s/find";
+        return "redirect:/[[${lowerPhysicalMultiFunctionName}]]/find";
     }
 
     /**
      * CSVダウンロード
      *
      * @param filename
+     * @param form
      * @return
      */
+    @PreAuthorize("hasAuthority('[[${lowerPhysicalFunctionName}]]:read')")
     @GetMapping("/download/{filename:.+\\.csv}")
-    public ModelAndView downloadCsv(@PathVariable String filename) {
+    public ModelAndView downloadCsv(@PathVariable String filename, @ModelAttribute("search[[${camelPhysicalFunctionName}]]Form") Search[[${camelPhysicalFunctionName}]]Form form) {
+        // 入力値から検索条件を作成する
+        val criteria = modelMapper.map(form, [[${camelPhysicalFunctionName}]]Criteria.class);
+
         // 全件取得する
-        val [[${lowerFuncName}]]s = [[${lowerFuncName}]]Service.findAll(new [[${upperFuncName}]]Criteria(), Pageable.unpaged());
+        val [[${lowerPhysicalMultiFunctionName}]] = [[${lowerPhysicalFunctionName}]]Service.findAll(criteria, Pageable.unpaged());
 
         // 詰め替える
-        List<[[${upperFuncName}]]Csv> csvList = modelMapper.map([[${lowerFuncName}]]s.getContent(), toListType([[${upperFuncName}]]Csv.class));
+        List<[[${camelPhysicalFunctionName}]]Csv> csvList = modelMapper.map([[${lowerPhysicalMultiFunctionName}]].getContent(), toListType([[${camelPhysicalFunctionName}]]Csv.class));
 
         // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
-        val view = new CsvView([[${upperFuncName}]]Csv.class, csvList, filename);
+        val view = new CsvView([[${camelPhysicalFunctionName}]]Csv.class, csvList, filename);
 
         return new ModelAndView(view);
     }

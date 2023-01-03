@@ -1,20 +1,9 @@
 # Spring Boot Sample Application
 
-[![Build Status](https://travis-ci.org/miyabayt/spring-boot-doma2-sample.svg?branch=master)](https://travis-ci.org/miyabayt/spring-boot-doma2-sample)
+[![Java CI with Gradle](https://github.com/miyabayt/spring-boot-doma2-sample/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/miyabayt/spring-boot-doma2-sample/actions/workflows/gradle.yml)
 [![Documentation Status](https://readthedocs.org/projects/spring-boot-doma2-sample/badge/?version=latest)](http://spring-boot-doma2-sample.readthedocs.io/ja/latest/?badge=latest)
 
 ## ローカル環境
-
-### 開発環境（IntelliJ）
-
-#### 必要なプラグイン・設定
-
-- Lombok pluginをインストールする。
-  - Settings > Build, Excecution, Deployment > Compiler > Annotation Processor > `Enable Annotation Processing`をONにする。
-- bootRunを実行している場合でもビルドされるようにする。
-  - Intellij > Ctrl+Shift+A > type Registry... > `compiler.automake.allow.when.app.running`をONにする。
-- Windowsの場合は、コンソール出力が文字化けするため、`C:¥Program Files¥JetBrains¥IntelliJ Idea xx.x.x¥bin`の中にある`idea64.exe.vmoptions`ファイルに`-Dfile.encoding=UTF-8`を追記する。
-- ブラウザにLiveReload機能拡張をインストールする。
 
 ### Dockerの起動
 MySQLなどのサーバーを立ち上げる。
@@ -28,33 +17,37 @@ $ ./gradlew composeUp
 
 #### 管理側
 ```bash
-$ # admin application
-$ cd /path/to/spring-boot-doma2-sample
 $ ./gradlew :sample-web-admin:bootRun
 ```
 
 #### フロント側
 ```bash
-$ # front application
-$ cd /path/to/spring-boot-doma2-sample
 $ ./gradlew :sample-web-front:bootRun
 ```
 
 #### バッチ
 ```bash
-$ # 担当者情報取り込みバッチを起動する
-$ cd /path/to/spring-boot-doma2-sample
-$ ./gradlew :sample-batch:bootRun -Pargs="--job=importStaffJob"
+$ # 担当者情報取込バッチを起動する
+$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.names=importStaffJob"
+
+$ # ユーザー情報取込バッチを起動する
+$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.names=importUserJob"
+
+$ # バースデーメール送信キュー登録バッチを起動する
+$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.names=birthdayMailJob"
+
+$ # メール送信バッチを起動する
+$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.names=sendMailJob"
 ```
 
 ### 接続先情報
 #### テストユーザー test@sample.com / passw0rd
 
-| 接続先| URL|
-| :-----| :---------------------------------------|
-| 管理側画面| http://localhost:18081/admin|
-| 管理側API| http://localhost:18081/admin/api/v1/users|
-| フロント側| http://localhost:18080/|
+| 接続先| URL                                       |
+| :-----|:------------------------------------------|
+| 管理側画面| http://localhost:18081/admin              |
+| 管理側API| http://localhost:18082/api/v1/users |
+| フロント側| http://localhost:18080/                   |
 
 #### データベース接続先
 
@@ -80,7 +73,7 @@ $ ./gradlew clean test --info -x :it/sample-web-admin:test -x :it/sample-web-fro
 ### コード自動生成（おまけ）
 ```bash
 $ cd /path/to/spring-boot-doma2-sample
-$ ./gradlew codegen -PsubSystem=system -Pfunc=client -PfuncStr=取引先 [-Ptarget=dao|dto|repository|service|controller|html]
+$ ./gradlew codegen -PphysicalFunctionName=client -PphysicalMultiFunctionName=clients -PlogicalFunctionName=取引先 [-Ptarget=dao|entity|repository|service|controller|html]
 ```
 
 ## 参考

@@ -7,22 +7,22 @@
 出力したい内容に合わせて変更すること。
 
 ```groovy
-apply plugin: com.sample.CodeGenPlugin
+apply plugin: com.bigtreetc.sample.CodeGenPlugin
 
 codegen {
     domainProjectName = "sample-domain" // ドメインのプロジェクト名
     webProjectName = "sample-web-admin" // メインプロジェクト（SpringBootのメインメソッドを実装している）
 
-    commonDtoPackageName = "com.sample.domain.dto.common"             // IDなどの共通的なエンティティのパッケージ名
-    daoPackageName = "com.sample.domain.dao"                          // Daoを配置するパッケージ名
-    dtoPackageName = "com.sample.domain.dto"                          // Dtoを配置するパッケージ名
-    servicePackageName = "com.sample.domain.service"                  // サービスを配置するパッケージ名
-    commonServicePackageName = "com.sample.domain.service"            // サービスの基底クラスを配置するパッケージ名
-    exceptionPackageName = "com.sample.domain.exception"              // 例外クラスを配置するパッケージ名
-    webBasePackageName = "com.sample.web.base"                        // コントローラー関連の基底クラスを配置するパッケージ名
-    baseValidatorPackageName = com.sample.domain.validator            // バリデーターを配置するパッケージ名
-    baseControllerPackageName = "com.sample.web.base.controller.html" // コントローラーの基底クラスを配置するパッケージ名
-    controllerPackageName = "com.sample.web.admin.controller.html"    // 生成するコントローラのパッケージ名
+    commonDtoPackageName = "com.bigtreetc.sample.domain.entity.common"          // IDなどの共通的なエンティティのパッケージ名
+    daoPackageName = "com.bigtreetc.sample.domain.dao"                          // Daoを配置するパッケージ名
+    entityPackageName = "com.bigtreetc.sample.domain.entity"                    // エンティティを配置するパッケージ名
+    servicePackageName = "com.bigtreetc.sample.domain.service"                  // サービスを配置するパッケージ名
+    commonServicePackageName = "com.bigtreetc.sample.domain.service"            // サービスの基底クラスを配置するパッケージ名
+    exceptionPackageName = "com.bigtreetc.sample.domain.exception"              // 例外クラスを配置するパッケージ名
+    webBasePackageName = "com.bigtreetc.sample.web.base"                        // コントローラー関連の基底クラスを配置するパッケージ名
+    baseValidatorPackageName = "com.bigtreetc.sample.domain.validator"          // バリデーターを配置するパッケージ名
+    baseControllerPackageName = "com.bigtreetc.sample.web.base.controller.html" // コントローラーの基底クラスを配置するパッケージ名
+    controllerPackageName = "com.bigtreetc.sample.web.admin.controller"         // 生成するコントローラのパッケージ名
 }
 ```
 

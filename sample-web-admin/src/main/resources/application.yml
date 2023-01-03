@@ -62,6 +62,8 @@ spring:
       connectionTestQuery: SELECT 1
       minimumIdle: 10
       maximumPoolSize: 30
+  flyway:
+    placeholder-replacement: false
   data:
     web:
       pageable:
@@ -80,10 +82,15 @@ doma:
   dialect: mysql
   # 小文字のスネークケースに変換する（firstName → first_name）
   naming: SNAKE_LOWER_CASE
+  # SQLファイルをキャッシュする
+  sql-file-repository: greedy_cache
   # バルクインサート・アップデートのサイズ
   batch-size: 1000
 jmx:
   enabled: false
+management:
+  security:
+    enabled: false
 server:
   port: 18081
   compression:

@@ -3,15 +3,20 @@ apply plugin: "com.google.cloud.tools.jib"
 dependencies {
     implementation project(":sample-web-base")
 
-    testImplementation "org.testcontainers:spock:1.17.3"
-    testImplementation "org.testcontainers:mysql:1.17.3"
+    testImplementation "org.testcontainers:spock:1.17.6"
+    testImplementation "org.testcontainers:mysql:1.17.6"
 
     developmentOnly "org.springframework.boot:spring-boot-devtools"
 }
 
 jib {
+    pluginExtensions {
+        pluginExtension {
+            implementation = "com.google.cloud.tools.jib.gradle.extension.springboot.JibSpringBootExtension"
+        }
+    }
     from {
-        image = "amazoncorretto:17"
+        image = "public.ecr.aws/amazoncorretto/amazoncorretto:17"
     }
     container {
         jvmFlags = [

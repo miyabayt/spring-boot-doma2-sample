@@ -1,37 +1,40 @@
 # 共通の設定を定義する
 spring:
-    profiles:
-        # デフォルトを明示的に指定する
-        # 開発環境以外は環境変数でプロファイルを切り替える
-        default: development
-        active: development
-    datasource:
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/spring-boot-doma2-sample?useSSL=false&useUnicode=true&characterEncoding=UTF-8
-        username: root
-        password: passw0rd
-        autoCommit: false
-    mail:
-        protocol: smtp
-        host: 127.0.0.1
-        port: 25
-        username: test
-        password: test
-        properties:
-            mail:
-                from: from@sample.com
-# Doma2
+  main:
+    # DataValueProcessorのBean上書きのため暫定対応
+    allow-bean-definition-overriding: true
+  jackson:
+    # 日付型をISO形式で出力する
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/spring-boot-doma2-sample?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: passw0rd
+  mail:
+    protocol: smtp
+    host: 127.0.0.1
+    port: 25
+    username: test
+    password: test
+    properties:
+      mail:
+        from: test@example.com
+  flyway:
+    baseline-on-migrate: true
+    placeholder-replacement: false
 doma:
-    dialect: mysql
-    # 小文字のスネークケースに変換する（firstName → first_name）
-    naming: SNAKE_LOWER_CASE
-    # SQLファイルをキャッシュする
-    sql-file-repository: no_cache
-    # バルクインサート・アップデートのサイズ
-    batch-size: 1000
-
+  dialect: mysql
+  # 小文字のスネークケースに変換する（firstName → first_name）
+  naming: SNAKE_LOWER_CASE
+  # バルクインサート・アップデートのサイズ
+  batch-size: 1000
+logging:
+  level:
+    com.bigtreetc.sample: DEBUG
 
 ####
 # アプリケーションの設定
 application:
-    fileUploadLocation: /tmp/sample
+  fileUploadLocation: build/sample
