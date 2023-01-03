@@ -29,6 +29,6 @@ dependencies {
     api "org.modelmapper:modelmapper:3.1.0"
     api "net.sf.jasperreports:jasperreports:6.20.0"
     api "org.apache.poi:poi:5.2.2"
-    api "org.apache.poi:poi-ooxml:5.2.2"
+    api "org.apache.poi:poi-ooxml:5.2.3"
     api "com.github.ben-manes.caffeine:caffeine"
 }
