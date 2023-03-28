@@ -1,8 +1,8 @@
 package com.bigtreetc.sample.domain.validator.annotation;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.Arrays;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 
 /** 入力チェック（指定した値のいずれか） */

@@ -1,11 +1,11 @@
 package com.bigtreetc.sample.domain.validator.annotation;
 
 import com.bigtreetc.sample.common.util.ValidateUtils;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 
 /** 入力チェック（電話番号） */

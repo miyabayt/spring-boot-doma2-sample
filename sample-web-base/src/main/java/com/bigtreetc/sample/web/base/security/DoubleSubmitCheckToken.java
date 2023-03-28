@@ -2,7 +2,7 @@ package com.bigtreetc.sample.web.base.security;
 
 import com.bigtreetc.sample.common.XORShiftRandom;
 import com.bigtreetc.sample.web.base.util.SessionUtils;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.val;
 import org.apache.commons.collections.map.LRUMap;
 

@@ -13,7 +13,7 @@ spring:
         from: from@example.com
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/spring-boot-doma2-sample?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://127.0.0.1:3306/spring-boot-doma2-sample?allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: passw0rd
   flyway:
@@ -23,6 +23,7 @@ spring:
 logging:
   level:
     org.springframework: INFO
+    # org.springframework.boot.autoconfigure.batch: DEBUG
     com.bigtreetc.sample.batch: DEBUG
     # SQL文を表示したいときはINFOにする
     org.seasar.doma.jdbc: WARN

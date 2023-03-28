@@ -1,7 +1,7 @@
 package com.bigtreetc.sample.web.base.util;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.val;
 import org.springframework.web.util.WebUtils;
 

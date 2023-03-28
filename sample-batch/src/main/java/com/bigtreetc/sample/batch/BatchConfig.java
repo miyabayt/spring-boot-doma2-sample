@@ -4,7 +4,6 @@ import com.bigtreetc.sample.common.util.MessageUtils;
 import com.bigtreetc.sample.domain.DefaultModelMapperFactory;
 import lombok.val;
 import org.modelmapper.ModelMapper;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -14,7 +13,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
-@EnableBatchProcessing
 public class BatchConfig {
 
   @Value("${application.batch.corePoolSize:2}")

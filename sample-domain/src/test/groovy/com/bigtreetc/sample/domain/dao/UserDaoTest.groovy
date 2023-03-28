@@ -1,6 +1,6 @@
 package com.bigtreetc.sample.domain.dao
 
-
+import com.bigtreetc.sample.domain.BaseTestContainerSpec
 import com.bigtreetc.sample.domain.entity.User
 import com.bigtreetc.sample.domain.entity.UserCriteria
 import com.bigtreetc.sample.domain.exception.NoDataFoundException
@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toList
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE
 
 @SpringBootTest(webEnvironment = NONE)
-class UserDaoTest extends com.bigtreetc.sample.domain.BaseTestContainerSpec {
+class UserDaoTest extends BaseTestContainerSpec {
 
     @Autowired
     UserDao userDao

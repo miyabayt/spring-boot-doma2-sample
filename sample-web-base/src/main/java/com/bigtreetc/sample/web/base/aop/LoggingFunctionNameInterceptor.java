@@ -2,8 +2,8 @@ package com.bigtreetc.sample.web.base.aop;
 
 import com.bigtreetc.sample.common.FunctionNameAware;
 import com.bigtreetc.sample.web.base.WebConst;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.slf4j.MDC;

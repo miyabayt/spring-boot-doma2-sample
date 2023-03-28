@@ -7,8 +7,7 @@ buildscript {
 plugins {
     id "idea"
     id "org.springframework.boot" version "${springBootVersion}" apply false
-    id "io.spring.dependency-management" version "${dependencyManagementVersion}" apply false
-    id "org.seasar.doma.compile" version "1.1.0" apply false
+    id "org.domaframework.doma.compile" version "2.0.0" apply false
     id "com.google.cloud.tools.jib" version "3.2.1" apply false
     id "com.avast.gradle.docker-compose" version "0.16.11" apply false
     id "com.diffplug.spotless" version "${spotlessVersion}"
@@ -16,6 +15,7 @@ plugins {
 
 apply plugin: "docker-compose"
 apply plugin: com.bigtreetc.sample.CodeGenPlugin
+apply plugin: "io.spring.dependency-management"
 
 subprojects {
     apply plugin: "java"
@@ -73,8 +73,8 @@ subprojects {
 
         testImplementation "org.springframework.security:spring-security-test"
         testImplementation "org.springframework.boot:spring-boot-starter-test"
+        testImplementation "org.spockframework:spock-core:${spockVersion}"
         testImplementation "org.spockframework:spock-spring:${spockVersion}"
-        testImplementation "org.codehaus.groovy:groovy-all:3.0.14"
 
         runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
     }

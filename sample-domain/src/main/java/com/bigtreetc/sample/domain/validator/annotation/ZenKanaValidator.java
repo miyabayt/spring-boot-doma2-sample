@@ -1,10 +1,10 @@
 package com.bigtreetc.sample.domain.validator.annotation;
 
 import com.bigtreetc.sample.common.util.ValidateUtils;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 /** 入力チェック（全角カナ） */
 public class ZenKanaValidator implements ConstraintValidator<ZenKana, String> {

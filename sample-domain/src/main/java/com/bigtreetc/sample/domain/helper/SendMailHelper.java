@@ -1,6 +1,7 @@
 package com.bigtreetc.sample.domain.helper;
 
 import com.bigtreetc.sample.common.util.ValidateUtils;
+import java.util.Arrays;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -10,7 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.StringTemplateResolver;
 
@@ -31,6 +32,28 @@ public class SendMailHelper {
    */
   public void sendMail(String fromAddress, String toAddress, String subject, String body) {
     this.sendMail(fromAddress, new String[] {toAddress}, null, null, subject, body);
+  }
+
+  /**
+   * メールを送信します。
+   *
+   * @param fromAddress
+   * @param toAddress
+   * @param tempCcAddress
+   * @param tempBccAddress
+   * @param subject
+   * @param body
+   */
+  public void sendMail(
+      String fromAddress,
+      String toAddress,
+      String tempCcAddress,
+      String tempBccAddress,
+      String subject,
+      String body) {
+    val ccAddress = getCommaSeparatedStrings(tempCcAddress);
+    val bccAddress = getCommaSeparatedStrings(tempBccAddress);
+    this.sendMail(fromAddress, new String[] {toAddress}, ccAddress, bccAddress, subject, body);
   }
 
   /**
@@ -94,5 +117,11 @@ public class SendMailHelper {
     resolver.setTemplateMode("TEXT");
     resolver.setCacheable(false); // 安全をとってキャッシュしない
     return resolver;
+  }
+
+  private String[] getCommaSeparatedStrings(String str) {
+    return (str != null)
+        ? Arrays.stream(str.split(",")).map(String::strip).toArray(String[]::new)
+        : null;
   }
 }

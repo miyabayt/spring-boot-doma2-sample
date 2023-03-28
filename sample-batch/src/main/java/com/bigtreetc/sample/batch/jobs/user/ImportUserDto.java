@@ -2,8 +2,8 @@ package com.bigtreetc.sample.batch.jobs.user;
 
 import com.bigtreetc.sample.batch.item.ItemPosition;
 import com.bigtreetc.sample.domain.validator.annotation.PhoneNumber;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 

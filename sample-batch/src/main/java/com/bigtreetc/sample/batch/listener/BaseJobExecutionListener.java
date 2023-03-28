@@ -8,22 +8,22 @@ import com.bigtreetc.sample.batch.context.BatchContextHolder;
 import com.bigtreetc.sample.common.util.DateUtils;
 import com.bigtreetc.sample.common.util.MDCUtils;
 import com.bigtreetc.sample.domain.dao.AuditInfoHolder;
+import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.slf4j.MDC;
 import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.listener.JobExecutionListenerSupport;
+import org.springframework.batch.core.JobExecutionListener;
 
 @Slf4j
-public abstract class BaseJobExecutionListener extends JobExecutionListenerSupport {
+public abstract class BaseJobExecutionListener implements JobExecutionListener {
 
   @Override
   public void beforeJob(JobExecution jobExecution) {
     val batchId = getBatchId();
     val batchName = getBatchName();
     val startTime = jobExecution.getStartTime();
-    val startDateTime = DateUtils.toLocalDateTime(startTime);
 
     MDCUtils.putIfAbsent(MDC_BATCH_ID, batchId);
 
@@ -34,11 +34,11 @@ public abstract class BaseJobExecutionListener extends JobExecutionListenerSuppo
     log.info("*********************************************");
 
     // 監査情報を設定する
-    AuditInfoHolder.set(batchId, startDateTime);
+    AuditInfoHolder.set(batchId, startTime);
 
     // コンテキストを設定する
     val context = BatchContextHolder.getContext();
-    context.set(batchId, batchName, startDateTime);
+    context.set(batchId, batchName, startTime);
 
     // 機能別の初期化処理を呼び出す
     before(jobExecution, context);
@@ -68,23 +68,29 @@ public abstract class BaseJobExecutionListener extends JobExecutionListenerSuppo
           val jobId = jobExecution.getJobId();
           val jobInstance = jobExecution.getJobInstance();
           val jobInstanceId = jobInstance.getInstanceId();
+
           log.debug(
               "job executed. [job={}(JobInstanceId:{} status:{})] in {}ms",
               jobId,
               jobInstanceId,
               jobStatus,
-              took(jobExecution));
+              took(jobExecution.getStartTime(), jobExecution.getEndTime()));
+
           jobExecution
               .getStepExecutions()
               .forEach(
-                  s -> log.debug("step executed. [step={}] in {}ms", s.getStepName(), took(s)));
+                  s ->
+                      log.debug(
+                          "step executed. [step={}] in {}ms",
+                          s.getStepName(),
+                          took(s.getStartTime(), s.getEndTime())));
         }
 
         if (!jobStatus.isRunning()) {
           log.info("*********************************************");
           log.info("* バッチID\t\t: {}", batchId);
           log.info("* バッチ名\t\t: {}", batchName);
-          log.info("* ステータス\t\t: {}", jobStatus.getBatchStatus().toString());
+          log.info("* ステータス\t\t: {}", jobStatus);
           log.info("* 対象件数\t\t: {}", context.getTotalCount());
           log.info("* 処理件数\t\t: {}", context.getProcessCount());
           log.info("* エラー件数\t\t: {}", context.getErrorCount());
@@ -104,12 +110,9 @@ public abstract class BaseJobExecutionListener extends JobExecutionListenerSuppo
     }
   }
 
-  protected long took(JobExecution jobExecution) {
-    return jobExecution.getEndTime().getTime() - jobExecution.getStartTime().getTime();
-  }
-
-  protected long took(StepExecution stepExecution) {
-    return stepExecution.getEndTime().getTime() - stepExecution.getStartTime().getTime();
+  protected long took(LocalDateTime startTime, LocalDateTime endTime) {
+    if (startTime == null || endTime == null) return -1;
+    return TimeUnit.NANOSECONDS.toMillis(startTime.getNano() - endTime.getNano());
   }
 
   /**
