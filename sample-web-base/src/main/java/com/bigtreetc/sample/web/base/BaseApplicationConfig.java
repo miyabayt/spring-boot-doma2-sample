@@ -105,7 +105,7 @@ public abstract class BaseApplicationConfig
     val source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", corsConfig);
 
-    val bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(source));
+    val bean = new FilterRegistrationBean<>(new CorsFilter(source));
     bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
     return bean;
   }
