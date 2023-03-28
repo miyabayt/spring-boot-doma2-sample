@@ -1,7 +1,7 @@
 package com.bigtreetc.sample.web.front.controller.login;
 
+import jakarta.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 

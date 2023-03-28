@@ -7,7 +7,6 @@ import com.bigtreetc.sample.domain.entity.MailTemplate;
 import com.bigtreetc.sample.domain.entity.MailTemplateCriteria;
 import com.bigtreetc.sample.domain.entity.SendMailQueue;
 import com.bigtreetc.sample.domain.entity.User;
-import com.bigtreetc.sample.domain.entity.common.CommaSeparatedString;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
 import com.bigtreetc.sample.domain.helper.SendMailHelper;
 import java.util.HashMap;
@@ -41,7 +40,7 @@ public class BirthdayMailProcessor extends BaseItemProcessor<User, SendMailQueue
     objects.put("user", user);
 
     val body = sendMailHelper.getMailBody(templateBody, objects);
-    val to = CommaSeparatedString.of(user.getEmail());
+    val to = user.getEmail();
 
     val transform = new SendMailQueue();
     transform.setFrom(fromAddress);
@@ -60,15 +59,12 @@ public class BirthdayMailProcessor extends BaseItemProcessor<User, SendMailQueue
   protected MailTemplate getMailTemplate(String templateCode) {
     val criteria = new MailTemplateCriteria();
     criteria.setTemplateCode(templateCode);
-    val mailTemplate =
-        mailTemplateDao
-            .select(criteria)
-            .orElseThrow(
-                () ->
-                    new NoDataFoundException(
-                        "templateCode=" + criteria.getTemplateCode() + " のデータが見つかりません。"));
-
-    return mailTemplate;
+    return mailTemplateDao
+        .select(criteria)
+        .orElseThrow(
+            () ->
+                new NoDataFoundException(
+                    "templateCode=" + criteria.getTemplateCode() + " のデータが見つかりません。"));
   }
 
   @Override

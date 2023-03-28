@@ -7,6 +7,8 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URLEncoder;
@@ -14,8 +16,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.Setter;
 import lombok.val;
 import org.springframework.web.servlet.view.AbstractView;

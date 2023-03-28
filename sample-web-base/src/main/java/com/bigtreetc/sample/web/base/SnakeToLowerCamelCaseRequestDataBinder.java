@@ -1,8 +1,8 @@
 package com.bigtreetc.sample.web.base;
 
+import jakarta.servlet.ServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.ServletRequest;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;

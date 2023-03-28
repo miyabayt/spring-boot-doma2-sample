@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,9 +20,7 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@EnableGlobalMethodSecurity(
-    prePostEnabled = true,
-    securedEnabled = true) // アノテーションでロール、権限チェックを行うために定義する
+@EnableMethodSecurity // アノテーションでロール、権限チェックを行うために定義する
 @Configuration
 @EnableConfigurationProperties({CorsProperties.class})
 @EnableWebSecurity
@@ -50,8 +48,8 @@ public class SecurityConfig extends BaseSecurityConfig {
       WebConst.STATIC_RESOURCES_URL
     };
 
-    http.authorizeRequests()
-        .antMatchers(WebConst.API_BASE_URL)
+    http.authorizeHttpRequests()
+        .requestMatchers(WebConst.API_BASE_URL)
         .authenticated()
         // Basic認証をかける
         .and()
@@ -63,9 +61,9 @@ public class SecurityConfig extends BaseSecurityConfig {
         .csrf()
         .disable();
 
-    http.authorizeRequests()
+    http.authorizeHttpRequests()
         // エラー画面は認証をかけない
-        .antMatchers(permittedUrls)
+        .requestMatchers(permittedUrls)
         .permitAll()
         // エラー画面以外は、認証をかける
         .anyRequest()

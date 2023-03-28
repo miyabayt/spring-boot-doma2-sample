@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
@@ -24,16 +23,16 @@ public class SendMailQueueProcessor extends BaseItemProcessor<SendMailQueue, Sen
   @Override
   protected SendMailQueue doProcess(BatchContext context, SendMailQueue sendMailQueue) {
     val from = sendMailQueue.getFrom();
-    val to = sendMailQueue.getTo().getSplitedString();
-    val cc = sendMailQueue.getCc().getSplitedString();
-    val bcc = sendMailQueue.getBcc().getSplitedString();
+    val to = sendMailQueue.getTo();
+    val cc = sendMailQueue.getCc();
+    val bcc = sendMailQueue.getBcc();
     val subject = sendMailQueue.getSubject();
     val body = sendMailQueue.getBody();
     try {
       sendMailHelper.sendMail(from, to, cc, bcc, subject, body);
       sendMailQueue.setSentAt(LocalDateTime.now());
       context.increaseProcessCount();
-    } catch (MailException e) {
+    } catch (Exception e) {
       // skip
       context.increaseErrorCount();
       log.warn("cloud not send mail. [id={}]", sendMailQueue.getId());

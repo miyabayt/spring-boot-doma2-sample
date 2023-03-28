@@ -1,9 +1,9 @@
 package com.bigtreetc.sample.domain.entity;
 
 import com.bigtreetc.sample.domain.entity.common.DomaEntityImpl;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Email;
 import java.time.LocalDateTime;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 import org.seasar.doma.*;

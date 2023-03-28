@@ -1,6 +1,6 @@
 package com.bigtreetc.sample.web.base.util;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.val;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;

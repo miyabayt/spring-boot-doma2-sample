@@ -6,27 +6,25 @@ import lombok.val;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /** 担当者情報取込 */
 @Configuration
 public class ImportStaffJobConfig {
-
-  @Autowired JobBuilderFactory jobBuilderFactory;
-
-  @Autowired StepBuilderFactory stepBuilderFactory;
 
   @Bean
   public ItemReader<Staff> staffItemReader() {
@@ -69,11 +67,11 @@ public class ImportStaffJobConfig {
   }
 
   @Bean
-  public Step importStaffStep() {
-    return stepBuilderFactory
-        .get("importStaffStep")
+  public Step importStaffStep(
+      JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    return new StepBuilder("importStaffStep", jobRepository)
         .listener(new DefaultStepExecutionListener())
-        .<Staff, Staff>chunk(100)
+        .<Staff, Staff>chunk(100, transactionManager)
         .reader(staffItemReader())
         .processor(staffItemProcessor())
         .writer(staffItemWriter())
@@ -81,12 +79,11 @@ public class ImportStaffJobConfig {
   }
 
   @Bean
-  public Job importStaffJob() {
-    return jobBuilderFactory
-        .get("importStaffJob")
+  public Job importStaffJob(JobRepository jobRepository, @Qualifier("importStaffStep") Step step) {
+    return new JobBuilder("importStaffJob", jobRepository)
         .incrementer(new RunIdIncrementer())
         .listener(importStaffJobListener())
-        .flow(importStaffStep())
+        .flow(step)
         .end()
         .build();
   }

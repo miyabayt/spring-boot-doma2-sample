@@ -14,7 +14,9 @@ import lombok.val;
 import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -108,12 +110,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleExceptionInternal(
-      Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+      Exception ex,
+      @Nullable Object body,
+      HttpHeaders headers,
+      HttpStatusCode statusCode,
+      WebRequest request) {
     String parameterDump = this.dumpParameterMap(request.getParameterMap());
     log.error(String.format("unexpected error has occurred. dump: %s", parameterDump), ex);
 
     val locale = request.getLocale();
-    val message = MessageUtils.getMessage(UNEXPECTED_ERROR, null, "unexpected error", locale);
+    val message = MessageUtils.getMessage(UNEXPECTED_ERROR, locale);
     val errorResource = new ErrorResourceImpl();
     errorResource.setRequestId(String.valueOf(MDC.get("X-Track-Id")));
     errorResource.setMessage(message);
@@ -122,7 +128,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
       errorResource.setFieldErrors(new ArrayList<>());
     }
 
-    return new ResponseEntity<>(errorResource, headers, status);
+    return new ResponseEntity<>(errorResource, headers, statusCode);
   }
 
   /**

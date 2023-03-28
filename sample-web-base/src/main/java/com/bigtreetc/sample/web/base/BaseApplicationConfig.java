@@ -11,7 +11,6 @@ import com.bigtreetc.sample.web.base.controller.LocalDateConverter;
 import com.bigtreetc.sample.web.base.controller.LocalDateTimeConverter;
 import com.bigtreetc.sample.web.base.controller.api.resource.DefaultResourceFactoryImpl;
 import com.bigtreetc.sample.web.base.controller.api.resource.ResourceFactory;
-import com.bigtreetc.sample.web.base.filter.CheckOverflowFilter;
 import com.bigtreetc.sample.web.base.filter.ClearMDCFilter;
 import com.bigtreetc.sample.web.base.filter.LoginUserTrackingFilter;
 import com.bigtreetc.sample.web.base.security.CorsProperties;
@@ -63,7 +62,6 @@ public abstract class BaseApplicationConfig
     // コントローラーを追加する
     registry.addViewController(WebConst.FORBIDDEN_URL).setViewName(WebConst.FORBIDDEN_VIEW);
     registry.addViewController(WebConst.ERROR_URL).setViewName(WebConst.ERROR_VIEW);
-    registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
   }
 
   @Override
@@ -107,7 +105,7 @@ public abstract class BaseApplicationConfig
     val source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", corsConfig);
 
-    val bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(source));
+    val bean = new FilterRegistrationBean<>(new CorsFilter(source));
     bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
     return bean;
   }
@@ -130,14 +128,6 @@ public abstract class BaseApplicationConfig
   }
 
   @Bean
-  public FilterRegistrationBean<CheckOverflowFilter> checkOverflowFilterBean() {
-    val filter = new CheckOverflowFilter();
-    val bean = new FilterRegistrationBean<>(filter);
-    bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-    return bean;
-  }
-
-  @Bean
   public ModelMapper modelMapper() {
     // ObjectMappingのためのマッパー
     return DefaultModelMapperFactory.create();
@@ -146,9 +136,7 @@ public abstract class BaseApplicationConfig
   @Bean
   public LocaleResolver localeResolver() {
     // Cookieに言語を保存する
-    val resolver = new CookieLocaleResolver();
-    resolver.setCookieName("lang");
-    return resolver;
+    return new CookieLocaleResolver("lang");
   }
 
   @Bean

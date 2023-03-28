@@ -1,6 +1,6 @@
 package com.bigtreetc.sample.web.base.controller.html;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.web.bind.WebDataBinder;

@@ -1,7 +1,7 @@
 package com.bigtreetc.sample.web.base.security;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import lombok.val;
 import org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;

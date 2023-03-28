@@ -2,7 +2,6 @@ package com.bigtreetc.sample.batch.jobs.birthdayMail;
 
 import com.bigtreetc.sample.batch.context.BatchContext;
 import com.bigtreetc.sample.batch.jobs.BaseItemWriter;
-import com.bigtreetc.sample.common.util.ListUtils;
 import com.bigtreetc.sample.domain.dao.SendMailQueueDao;
 import com.bigtreetc.sample.domain.entity.SendMailQueue;
 import java.util.List;
@@ -17,7 +16,7 @@ public class BirthdayMailItemWriter extends BaseItemWriter<SendMailQueue> {
   @Override
   protected void doWrite(BatchContext context, List<SendMailQueue> items) {
     if (log.isDebugEnabled()) {
-      log.debug("{} items to write.", ListUtils.size(items));
+      log.debug("{} items to write.", items.size());
     }
 
     sendMailQueueDao.insert(items);

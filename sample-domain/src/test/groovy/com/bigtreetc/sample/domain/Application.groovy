@@ -11,5 +11,4 @@ import org.springframework.cache.annotation.EnableCaching
 @TestConfiguration
 class Application {
 
-
 }

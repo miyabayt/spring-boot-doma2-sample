@@ -1,7 +1,7 @@
 package com.bigtreetc.sample.web.admin.controller.codecategory;
 
 import com.bigtreetc.sample.web.base.controller.html.BaseForm;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 

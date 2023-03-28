@@ -14,16 +14,13 @@ dependencies {
 
     api "org.springframework.boot:spring-boot-starter-validation"
     api "org.springframework.boot:spring-boot-starter-cache"
-    api("org.springframework.boot:spring-boot-starter-web") {
-        // exclude embedded tomcat to use Jetty
-        exclude module: "spring-boot-starter-tomcat"
-    }
+    api "org.springframework.boot:spring-boot-starter-web"
     api "org.springframework.boot:spring-boot-starter-security"
     api "org.springframework.boot:spring-boot-starter-jetty"
     api "org.springframework.session:spring-session-jdbc" // セッション格納先にDBを使う場合
     //api "org.springframework.boot:spring-boot-starter-data-redis" // セッション格納先にredisを使う場合
 
-    api "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
+    api "org.thymeleaf.extras:thymeleaf-extras-springsecurity6"
     api "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
     api "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
     api "org.modelmapper:modelmapper:3.1.0"

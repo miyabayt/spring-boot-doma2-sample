@@ -1,7 +1,8 @@
 plugins {
     id "org.springframework.boot" version "${springBootVersion}"
-    id "io.spring.dependency-management" version "${dependencyManagementVersion}"
 }
+
+apply plugin: "io.spring.dependency-management"
 
 bootJar {
     enabled = false

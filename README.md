@@ -28,16 +28,16 @@ $ ./gradlew :sample-web-front:bootRun
 #### バッチ
 ```bash
 $ # 担当者情報取込バッチを起動する
-$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.names=importStaffJob"
+$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.name=importStaffJob"
 
 $ # ユーザー情報取込バッチを起動する
-$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.names=importUserJob"
+$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.name=importUserJob"
 
 $ # バースデーメール送信キュー登録バッチを起動する
-$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.names=birthdayMailJob"
+$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.name=birthdayMailJob"
 
 $ # メール送信バッチを起動する
-$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.names=sendMailJob"
+$ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.name=sendMailJob"
 ```
 
 ### 接続先情報

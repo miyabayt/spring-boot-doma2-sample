@@ -1,9 +1,9 @@
 package com.bigtreetc.sample.web.admin.controller.role;
 
 import com.bigtreetc.sample.web.base.controller.html.BaseForm;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.HashMap;
 import java.util.Map;
-import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 

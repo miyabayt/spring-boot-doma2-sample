@@ -1,6 +1,5 @@
 package com.bigtreetc.sample.domain.entity;
 
-import com.bigtreetc.sample.domain.entity.common.CommaSeparatedString;
 import com.bigtreetc.sample.domain.entity.common.DomaEntityImpl;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -27,13 +26,13 @@ public class SendMailQueue extends DomaEntityImpl {
   String from;
 
   @Column(name = "to_address")
-  CommaSeparatedString to;
+  String to;
 
   @Column(name = "cc_address")
-  CommaSeparatedString cc;
+  String cc;
 
   @Column(name = "bcc_address")
-  CommaSeparatedString bcc;
+  String bcc;
 
   LocalDateTime sentAt;
 

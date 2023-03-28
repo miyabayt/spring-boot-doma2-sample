@@ -43,9 +43,6 @@ public abstract class BasePageableItemReader<T> extends AbstractPagingItemReader
     results.addAll(getList());
   }
 
-  @Override
-  protected void doJumpToPage(int itemIndex) {}
-
   /**
    * 検索オプションを返します。
    *

@@ -2,9 +2,9 @@ package com.bigtreetc.sample.web.base.aop;
 
 import com.bigtreetc.sample.domain.dao.DoubleSubmitCheckTokenHolder;
 import com.bigtreetc.sample.web.base.security.DoubleSubmitCheckToken;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Objects;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.web.servlet.ModelAndView;

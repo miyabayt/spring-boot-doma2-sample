@@ -10,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.listener.StepExecutionListenerSupport;
+import org.springframework.batch.core.StepExecutionListener;
 
 @Slf4j
-public abstract class BaseStepExecutionListener extends StepExecutionListenerSupport {
+public abstract class BaseStepExecutionListener implements StepExecutionListener {
 
   @Override
   public void beforeStep(StepExecution stepExecution) {

@@ -7,24 +7,23 @@ import lombok.val;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /** バースデーメール作成バッチ */
 @Configuration
 public class BirthdayMailJobConfig {
-
-  @Autowired JobBuilderFactory jobBuilderFactory;
-
-  @Autowired StepBuilderFactory stepBuilderFactory;
 
   @Autowired TaskExecutor taskExecutor;
 
@@ -52,27 +51,25 @@ public class BirthdayMailJobConfig {
   }
 
   @Bean
-  public Step birthdayMailStep() {
-    return stepBuilderFactory
-        .get("birthdayMailStep")
+  public Step birthdayMailStep(
+      JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    return new StepBuilder("birthdayMailStep", jobRepository)
         .listener(new DefaultStepExecutionListener())
-        .<User, SendMailQueue>chunk(100)
+        .<User, SendMailQueue>chunk(100, transactionManager)
         .reader(birthdayMailUserItemReader())
         .processor(birthdayMailProcessor())
         .writer(birthdayMailItemWriter())
         .taskExecutor(taskExecutor)
-        // 2つのスレッドで処理するサンプル
-        .throttleLimit(2)
         .build();
   }
 
   @Bean
-  public Job birthdayMailJob() {
-    return jobBuilderFactory
-        .get("birthdayMailJob")
+  public Job birthdayMailJob(
+      JobRepository jobRepository, @Qualifier("birthdayMailStep") Step step) {
+    return new JobBuilder("birthdayMailJob", jobRepository)
         .incrementer(new RunIdIncrementer())
         .listener(birthdayMailJobListener())
-        .flow(birthdayMailStep())
+        .flow(step)
         .end()
         .build();
   }
