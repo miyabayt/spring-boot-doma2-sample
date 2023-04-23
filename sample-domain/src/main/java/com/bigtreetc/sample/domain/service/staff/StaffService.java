@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/** 担当者サービス */
+/** 担当者マスタサービス */
 @RequiredArgsConstructor
 @Service
 public class StaffService extends BaseTransactionalService {
@@ -25,7 +25,7 @@ public class StaffService extends BaseTransactionalService {
   @NonNull final StaffRepository staffRepository;
 
   /**
-   * 担当者を複数取得します。
+   * 担当者マスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -38,7 +38,7 @@ public class StaffService extends BaseTransactionalService {
   }
 
   /**
-   * 担当者を取得します。
+   * 担当者マスタを1件取得します。
    *
    * @return
    */
@@ -49,7 +49,7 @@ public class StaffService extends BaseTransactionalService {
   }
 
   /**
-   * 担当者を取得します。
+   * 担当者マスタを1件取得します。
    *
    * @return
    */
@@ -60,7 +60,7 @@ public class StaffService extends BaseTransactionalService {
   }
 
   /**
-   * 担当者を追加します。
+   * 担当者マスタを追加します。
    *
    * @param inputStaff
    * @return
@@ -71,7 +71,7 @@ public class StaffService extends BaseTransactionalService {
   }
 
   /**
-   * 担当者を更新します。
+   * 担当者マスタを更新します。
    *
    * @param inputStaff
    * @return
@@ -82,7 +82,7 @@ public class StaffService extends BaseTransactionalService {
   }
 
   /**
-   * 担当者を論理削除します。
+   * 担当者マスタを論理削除します。
    *
    * @return
    */

@@ -4,16 +4,20 @@ import com.bigtreetc.sample.domain.entity.User;
 import com.bigtreetc.sample.domain.entity.UserCriteria;
 import com.bigtreetc.sample.domain.repository.UserRepository;
 import com.bigtreetc.sample.domain.service.BaseTransactionalService;
+import com.bigtreetc.sample.domain.util.CsvUtils;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/** ユーザーサービス */
+/** 顧客マスタサービス */
 @RequiredArgsConstructor
 @Service
 public class UserService extends BaseTransactionalService {
@@ -21,7 +25,7 @@ public class UserService extends BaseTransactionalService {
   @NonNull final UserRepository userRepository;
 
   /**
-   * ユーザーを複数取得します。
+   * 顧客マスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -34,7 +38,7 @@ public class UserService extends BaseTransactionalService {
   }
 
   /**
-   * ユーザーを取得します。
+   * 顧客マスタを1件取得します。
    *
    * @return
    */
@@ -45,18 +49,7 @@ public class UserService extends BaseTransactionalService {
   }
 
   /**
-   * ユーザーを取得します。
-   *
-   * @return
-   */
-  @Transactional(readOnly = true)
-  public Optional<User> findById(UserCriteria criteria) {
-    Assert.notNull(criteria, "criteria must not be null");
-    return userRepository.findOne(criteria);
-  }
-
-  /**
-   * ユーザーを取得します。
+   * 顧客マスタを1件取得します。
    *
    * @return
    */
@@ -67,7 +60,7 @@ public class UserService extends BaseTransactionalService {
   }
 
   /**
-   * ユーザーを追加します。
+   * 顧客マスタを追加します。
    *
    * @param inputUser
    * @return
@@ -78,7 +71,7 @@ public class UserService extends BaseTransactionalService {
   }
 
   /**
-   * ユーザーを更新します。
+   * 顧客マスタを更新します。
    *
    * @param inputUser
    * @return
@@ -89,7 +82,7 @@ public class UserService extends BaseTransactionalService {
   }
 
   /**
-   * ユーザーを論理削除します。
+   * 顧客マスタを論理削除します。
    *
    * @return
    */

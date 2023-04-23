@@ -9,14 +9,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 @JsonIgnoreProperties(ignoreUnknown = true) // 定義されていないプロパティを無視してマッピングする
-@JsonPropertyOrder({"ユーザーID", "姓", "名", "メールアドレス", "電話番号", "郵便番号", "住所"}) // CSVのヘッダ順
+@JsonPropertyOrder({"顧客ID", "姓", "名", "メールアドレス", "電話番号", "郵便番号", "住所"}) // CSVのヘッダ順
 @Getter
 @Setter
 public class UserCsv implements Serializable {
 
   private static final long serialVersionUID = -1883999589975469540L;
 
-  @JsonProperty("ユーザーID")
+  @JsonProperty("顧客ID")
   Long id;
 
   // ハッシュ化されたパスワード

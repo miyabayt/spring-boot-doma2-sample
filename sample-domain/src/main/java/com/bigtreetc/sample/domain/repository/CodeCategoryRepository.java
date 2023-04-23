@@ -18,7 +18,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-/** コード分類リポジトリ */
+/** コード分類マスタリポジトリ */
 @RequiredArgsConstructor
 @Repository
 public class CodeCategoryRepository {
@@ -26,7 +26,7 @@ public class CodeCategoryRepository {
   @NonNull final CodeCategoryDao codeCategoryDao;
 
   /**
-   * コード分類を全件取得します。
+   * コード分類マスタを全件取得します。
    *
    * @return
    */
@@ -37,7 +37,7 @@ public class CodeCategoryRepository {
   }
 
   /**
-   * コード分類を複数取得します。
+   * コード分類マスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -70,7 +70,7 @@ public class CodeCategoryRepository {
   }
 
   /**
-   * コード分類を取得します。
+   * コード分類マスタを取得します。
    *
    * @return
    */
@@ -81,7 +81,7 @@ public class CodeCategoryRepository {
   }
 
   /**
-   * コード分類を追加します。
+   * コード分類マスタを登録します。
    *
    * @param inputCodeCategory
    * @return
@@ -92,7 +92,7 @@ public class CodeCategoryRepository {
   }
 
   /**
-   * コード分類を更新します。
+   * コード分類マスタを更新します。
    *
    * @param inputCodeCategory
    * @return
@@ -109,7 +109,7 @@ public class CodeCategoryRepository {
   }
 
   /**
-   * コード分類を論理削除します。
+   * コード分類マスタを論理削除します。
    *
    * @return
    */

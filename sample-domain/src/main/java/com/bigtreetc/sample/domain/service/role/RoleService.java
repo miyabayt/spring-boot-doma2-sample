@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/** ロールサービス */
+/** ロールマスタサービス */
 @RequiredArgsConstructor
 @Service
 public class RoleService extends BaseTransactionalService {
@@ -31,7 +31,7 @@ public class RoleService extends BaseTransactionalService {
   @NonNull final PermissionRepository permissionRepository;
 
   /**
-   * ロールを複数取得します。
+   * ロールマスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -44,7 +44,7 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * ロールを取得します。
+   * ロールマスタを1件取得します。
    *
    * @return
    */
@@ -63,7 +63,7 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * ロールを取得します。
+   * ロールマスタを1件取得します。
    *
    * @return
    */
@@ -77,7 +77,7 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * ロールを追加します。
+   * ロールマスタを追加します。
    *
    * @param inputRole
    * @return
@@ -88,7 +88,7 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * ロールを更新します。
+   * ロールマスタを更新します。
    *
    * @param inputRole
    * @return
@@ -99,7 +99,7 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * ロールを論理削除します。
+   * ロールマスタを論理削除します。
    *
    * @return
    */

@@ -20,7 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-/** 担当者リポジトリ */
+/** 担当者マスタリポジトリ */
 @RequiredArgsConstructor
 @Repository
 public class StaffRepository {
@@ -32,7 +32,7 @@ public class StaffRepository {
   @NonNull final RolePermissionDao rolePermissionDao;
 
   /**
-   * 担当者を複数取得します。
+   * 担当者マスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -64,7 +64,7 @@ public class StaffRepository {
   }
 
   /**
-   * 担当者を取得します。
+   * 担当者マスタを1件取得します。
    *
    * @return
    */
@@ -75,7 +75,7 @@ public class StaffRepository {
   }
 
   /**
-   * 担当者を追加します。
+   * 担当者マスタを登録します。
    *
    * @param inputStaff
    * @return
@@ -93,7 +93,7 @@ public class StaffRepository {
   }
 
   /**
-   * 担当者を更新します。
+   * 担当者マスタを更新します。
    *
    * @param inputStaff
    * @return
@@ -109,7 +109,7 @@ public class StaffRepository {
   }
 
   /**
-   * 担当者を論理削除します。
+   * 担当者マスタを論理削除します。
    *
    * @return
    */

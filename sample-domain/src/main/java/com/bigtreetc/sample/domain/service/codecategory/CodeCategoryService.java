@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/** コード分類サービス */
+/** コード分類マスタサービス */
 @RequiredArgsConstructor
 @Service
 public class CodeCategoryService extends BaseTransactionalService {
@@ -27,7 +27,7 @@ public class CodeCategoryService extends BaseTransactionalService {
   @NonNull final CodeCategoryRepository codeCategoryRepository;
 
   /**
-   * コード分類を全件取得します。
+   * コード分類マスタマスタを全件取得します。
    *
    * @return
    */
@@ -37,7 +37,7 @@ public class CodeCategoryService extends BaseTransactionalService {
   }
 
   /**
-   * コード分類を複数取得します。
+   * コード分類マスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -50,7 +50,7 @@ public class CodeCategoryService extends BaseTransactionalService {
   }
 
   /**
-   * コード分類を取得します。
+   * コード分類マスタを取得します。
    *
    * @return
    */
@@ -61,7 +61,7 @@ public class CodeCategoryService extends BaseTransactionalService {
   }
 
   /**
-   * コード分類を取得します。
+   * コード分類マスタを取得します。
    *
    * @return
    */
@@ -72,7 +72,7 @@ public class CodeCategoryService extends BaseTransactionalService {
   }
 
   /**
-   * コード分類を取得します。
+   * コード分類マスタを取得します。
    *
    * @param categoryCode
    * @return
@@ -91,7 +91,7 @@ public class CodeCategoryService extends BaseTransactionalService {
   }
 
   /**
-   * コード分類を追加します。
+   * コード分類マスタを登録します。
    *
    * @param inputCodeCategory
    * @return
@@ -102,7 +102,7 @@ public class CodeCategoryService extends BaseTransactionalService {
   }
 
   /**
-   * コード分類を更新します。
+   * コード分類マスタを更新します。
    *
    * @param inputCodeCategory
    * @return
@@ -113,7 +113,7 @@ public class CodeCategoryService extends BaseTransactionalService {
   }
 
   /**
-   * コード分類を論理削除します。
+   * コード分類マスタを論理削除します。
    *
    * @return
    */

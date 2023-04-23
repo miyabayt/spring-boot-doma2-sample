@@ -21,7 +21,7 @@ public class PermissionService extends BaseTransactionalService {
   @NonNull final PermissionRepository permissionRepository;
 
   /**
-   * 権限を複数取得します。
+   * 権限を検索します。
    *
    * @param criteria
    * @param pageable

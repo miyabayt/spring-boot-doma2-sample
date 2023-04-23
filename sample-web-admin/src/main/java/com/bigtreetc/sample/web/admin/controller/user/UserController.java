@@ -30,7 +30,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** ユーザー管理 */
+/** 顧客マスタ */
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/users")

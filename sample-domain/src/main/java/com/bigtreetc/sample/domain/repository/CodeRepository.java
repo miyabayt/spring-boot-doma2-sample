@@ -17,7 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-/** コードリポジトリ */
+/** コードマスタリポジトリ */
 @RequiredArgsConstructor
 @Repository
 public class CodeRepository {
@@ -47,7 +47,7 @@ public class CodeRepository {
   }
 
   /**
-   * コードを取得します。
+   * コードマスタを1件取得します。
    *
    * @param criteria
    * @return
@@ -57,7 +57,7 @@ public class CodeRepository {
   }
 
   /**
-   * コードを取得します。
+   * コードマスタを1件取得します。
    *
    * @return
    */
@@ -68,7 +68,7 @@ public class CodeRepository {
   }
 
   /**
-   * コードを追加します。
+   * コードマスタを登録します。
    *
    * @param inputCode
    * @return
@@ -79,7 +79,7 @@ public class CodeRepository {
   }
 
   /**
-   * コードを更新します。
+   * コードマスタを更新します。
    *
    * @param inputCode
    * @return
@@ -95,7 +95,7 @@ public class CodeRepository {
   }
 
   /**
-   * コードを論理削除します。
+   * コードマスタを論理削除します。
    *
    * @return
    */

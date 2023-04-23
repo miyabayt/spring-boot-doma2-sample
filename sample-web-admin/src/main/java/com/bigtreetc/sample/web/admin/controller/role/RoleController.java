@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** ロール管理 */
+/** ロールマスタ */
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/roles")
@@ -267,7 +267,7 @@ public class RoleController extends AbstractHtmlController {
     // 更新する
     val updatedRole = roleService.update(role);
 
-    // セッションのroleFormをクリアする
+    // セッションのFormをクリアする
     sessionStatus.setComplete();
 
     // 更新成功メッセージ

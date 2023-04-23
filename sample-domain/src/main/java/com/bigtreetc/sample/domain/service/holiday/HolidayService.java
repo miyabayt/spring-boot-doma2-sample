@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/** 祝日サービス */
+/** 祝日マスタサービス */
 @RequiredArgsConstructor
 @Service
 public class HolidayService extends BaseTransactionalService {
@@ -25,7 +25,7 @@ public class HolidayService extends BaseTransactionalService {
   @NonNull final HolidayRepository holidayRepository;
 
   /**
-   * 祝日を複数取得します。
+   * 祝日マスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -38,7 +38,7 @@ public class HolidayService extends BaseTransactionalService {
   }
 
   /**
-   * 祝日を取得します。
+   * 祝日マスタを1件取得します。
    *
    * @return
    */
@@ -49,7 +49,7 @@ public class HolidayService extends BaseTransactionalService {
   }
 
   /**
-   * 祝日を取得します。
+   * 祝日マスタを1件取得します。
    *
    * @return
    */
@@ -60,7 +60,7 @@ public class HolidayService extends BaseTransactionalService {
   }
 
   /**
-   * 祝日を追加します。
+   * 祝日マスタを追加します。
    *
    * @param inputHoliday
    * @return
@@ -71,7 +71,7 @@ public class HolidayService extends BaseTransactionalService {
   }
 
   /**
-   * 祝日を更新します。
+   * 祝日マスタを更新します。
    *
    * @param inputHoliday
    * @return
@@ -82,7 +82,7 @@ public class HolidayService extends BaseTransactionalService {
   }
 
   /**
-   * 祝日を論理削除します。
+   * 祝日マスタを論理削除します。
    *
    * @return
    */

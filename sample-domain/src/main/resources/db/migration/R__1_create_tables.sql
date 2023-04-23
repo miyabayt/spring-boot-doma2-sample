@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS staff_roles(
 ) COMMENT='担当者ロール';
 
 CREATE TABLE IF NOT EXISTS user_roles(
-  user_role_id INT(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ユーザーロールID'
+  user_role_id INT(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '顧客ロールID'
   , user_id INT(11) unsigned NOT NULL COMMENT 'ユーザーID'
   , role_code VARCHAR(50) NOT NULL COMMENT 'ロールコード'
   , created_by VARCHAR(50) NOT NULL COMMENT '登録者'
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS user_roles(
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (user_role_id)
   , KEY idx_user_roles (user_id, role_code, deleted_at)
-) COMMENT='ユーザーロール';
+) COMMENT='顧客ロール';
 
 CREATE TABLE IF NOT EXISTS staffs(
   staff_id INT(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '担当者ID'
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS users(
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (user_id)
   , KEY idx_users (email, deleted_at)
-) COMMENT='ユーザー';
+) COMMENT='顧客';
 
 CREATE TABLE IF NOT EXISTS upload_files(
   upload_file_id INT(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ファイルID'

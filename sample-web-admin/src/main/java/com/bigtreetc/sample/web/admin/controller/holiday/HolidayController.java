@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** 祝日管理 */
+/** 祝日マスタ */
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/holidays")
@@ -235,7 +235,7 @@ public class HolidayController extends AbstractHtmlController {
     // 更新する
     val updatedHoliday = holidayService.update(holiday);
 
-    // セッションのholidayFormをクリアする
+    // セッションのFormをクリアする
     sessionStatus.setComplete();
 
     // 更新成功メッセージ

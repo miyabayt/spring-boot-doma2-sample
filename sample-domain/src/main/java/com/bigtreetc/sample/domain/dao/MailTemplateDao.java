@@ -16,10 +16,11 @@ import org.seasar.doma.message.Message;
 public interface MailTemplateDao {
 
   /**
-   * メールテンプレートを取得します。
+   * メールテンプレートを検索します。
    *
    * @param criteria
    * @param options
+   * @param collector
    * @return
    */
   @Select(strategy = SelectType.COLLECT)
@@ -59,11 +60,11 @@ public interface MailTemplateDao {
   /**
    * メールテンプレートを登録します。
    *
-   * @param mailtemplate
+   * @param mailTemplate
    * @return
    */
   @Insert
-  int insert(MailTemplate mailtemplate);
+  int insert(MailTemplate mailTemplate);
 
   /**
    * メールテンプレートを更新します。
@@ -80,8 +81,7 @@ public interface MailTemplateDao {
    * @param mailTemplate
    * @return
    */
-  @Update(excludeNull = true)
-  // NULLの項目は更新対象にしない
+  @Update(excludeNull = true) // NULLの項目は更新対象にしない
   int delete(MailTemplate mailTemplate);
 
   /**
@@ -96,9 +96,9 @@ public interface MailTemplateDao {
   /**
    * メールテンプレートを一括更新します。
    *
-   * @param mailtemplates
+   * @param mailTemplates
    * @return
    */
   @BatchUpdate
-  int[] update(List<MailTemplate> mailtemplates);
+  int[] update(List<MailTemplate> mailTemplates);
 }

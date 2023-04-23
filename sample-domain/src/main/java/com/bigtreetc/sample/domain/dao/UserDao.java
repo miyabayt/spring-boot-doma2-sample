@@ -16,10 +16,11 @@ import org.seasar.doma.message.Message;
 public interface UserDao {
 
   /**
-   * ユーザーを取得します。
+   * 顧客マスタを検索します。
    *
    * @param criteria
    * @param options
+   * @param collector
    * @return
    */
   @Select(strategy = SelectType.COLLECT)
@@ -48,7 +49,7 @@ public interface UserDao {
   Optional<User> selectById(Long id);
 
   /**
-   * ユーザーを1件取得します。
+   * 顧客マスタを1件取得します。
    *
    * @param criteria
    * @return
@@ -57,7 +58,7 @@ public interface UserDao {
   Optional<User> select(UserCriteria criteria);
 
   /**
-   * ユーザーを登録します。
+   * 顧客マスタを登録します。
    *
    * @param user
    * @return
@@ -66,7 +67,7 @@ public interface UserDao {
   int insert(User user);
 
   /**
-   * ユーザーを更新します。
+   * 顧客マスタを更新します。
    *
    * @param user
    * @return
@@ -75,7 +76,7 @@ public interface UserDao {
   int update(User user);
 
   /**
-   * ユーザーを論理削除します。
+   * 顧客マスタを論理削除します。
    *
    * @param user
    * @return
@@ -84,7 +85,7 @@ public interface UserDao {
   int delete(User user);
 
   /**
-   * ユーザーを一括登録します。
+   * 顧客マスタを一括登録します。
    *
    * @param users
    * @return
@@ -93,7 +94,7 @@ public interface UserDao {
   int[] insert(List<User> users);
 
   /**
-   * ユーザーを一括更新します。
+   * 顧客マスタを一括更新します。
    *
    * @param users
    * @return

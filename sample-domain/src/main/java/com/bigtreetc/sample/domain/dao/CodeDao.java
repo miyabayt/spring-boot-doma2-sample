@@ -16,10 +16,11 @@ import org.seasar.doma.message.Message;
 public interface CodeDao {
 
   /**
-   * コードを取得します。
+   * コードマスタを検索します。
    *
    * @param criteria
    * @param options
+   * @param collector
    * @return
    */
   @Select(strategy = SelectType.COLLECT)
@@ -48,7 +49,7 @@ public interface CodeDao {
   Optional<Code> selectById(Long id);
 
   /**
-   * コードを1件取得します。
+   * コードマスタを1件取得します。
    *
    * @param criteria
    * @return
@@ -57,16 +58,16 @@ public interface CodeDao {
   Optional<Code> select(CodeCriteria criteria);
 
   /**
-   * コードを登録します。
+   * コードマスタを登録します。
    *
-   * @param Code
+   * @param code
    * @return
    */
   @Insert
-  int insert(Code Code);
+  int insert(Code code);
 
   /**
-   * コードを更新します。
+   * コードマスタを更新します。
    *
    * @param code
    * @return
@@ -75,7 +76,7 @@ public interface CodeDao {
   int update(Code code);
 
   /**
-   * コードを論理削除します。
+   * コードマスタを論理削除します。
    *
    * @param code
    * @return
@@ -84,11 +85,20 @@ public interface CodeDao {
   int delete(Code code);
 
   /**
-   * コードを一括登録します。
+   * コードマスタを一括登録します。
    *
    * @param codes
    * @return
    */
   @BatchInsert
   int[] insert(List<Code> codes);
+
+  /**
+   * コードマスタを一括更新します。
+   *
+   * @param codes
+   * @return
+   */
+  @BatchUpdate
+  int[] update(List<Code> codes);
 }

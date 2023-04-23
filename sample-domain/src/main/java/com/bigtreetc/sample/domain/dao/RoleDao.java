@@ -16,10 +16,11 @@ import org.seasar.doma.message.Message;
 public interface RoleDao {
 
   /**
-   * ロールを取得します。
+   * ロールマスタを検索します。
    *
    * @param criteria
    * @param options
+   * @param collector
    * @return
    */
   @Select(strategy = SelectType.COLLECT)
@@ -48,7 +49,7 @@ public interface RoleDao {
   Optional<Role> selectById(Long id);
 
   /**
-   * ロールを1件取得します。
+   * ロールマスタを1件取得します。
    *
    * @param criteria
    * @return
@@ -57,7 +58,7 @@ public interface RoleDao {
   Optional<Role> select(RoleCriteria criteria);
 
   /**
-   * ロールを登録します。
+   * ロールマスタを登録します。
    *
    * @param role
    * @return
@@ -66,7 +67,7 @@ public interface RoleDao {
   int insert(Role role);
 
   /**
-   * ロールを更新します。
+   * ロールマスタを更新します。
    *
    * @param role
    * @return
@@ -75,7 +76,7 @@ public interface RoleDao {
   int update(Role role);
 
   /**
-   * ロールを論理削除します。
+   * ロールマスタを論理削除します。
    *
    * @param role
    * @return
@@ -84,7 +85,7 @@ public interface RoleDao {
   int delete(Role role);
 
   /**
-   * ロールを一括登録します。
+   * ロールマスタを一括登録します。
    *
    * @param roles
    * @return
@@ -93,7 +94,7 @@ public interface RoleDao {
   int[] insert(List<Role> roles);
 
   /**
-   * ロールを一括更新します。
+   * ロールマスタを一括更新します。
    *
    * @param roles
    * @return

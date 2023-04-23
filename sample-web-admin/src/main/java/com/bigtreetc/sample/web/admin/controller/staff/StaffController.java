@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** 担当者管理 */
+/** 担当者マスタ */
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/staffs")

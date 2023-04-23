@@ -25,7 +25,7 @@ public class MailTemplateRepository {
   @NonNull final MailTemplateDao mailTemplateDao;
 
   /**
-   * メールテンプレートを複数取得します。
+   * メールテンプレートを検索します。
    *
    * @param criteria
    * @param pageable
@@ -57,7 +57,7 @@ public class MailTemplateRepository {
   }
 
   /**
-   * メールテンプレートを取得します。
+   * メールテンプレートを1件取得します。
    *
    * @return
    */
@@ -68,7 +68,7 @@ public class MailTemplateRepository {
   }
 
   /**
-   * メールテンプレートを追加します。
+   * メールテンプレートを登録します。
    *
    * @param inputMailTemplate
    * @return

@@ -16,7 +16,7 @@ import org.seasar.doma.message.Message;
 public interface CodeCategoryDao {
 
   /**
-   * コード分類定義を取得します。
+   * コード分類マスタを取得します。
    *
    * @param criteria
    * @param options
@@ -29,8 +29,9 @@ public interface CodeCategoryDao {
       final Collector<CodeCategory, ?, R> collector);
 
   /**
-   * コード分類定義を全件取得します。
+   * コード分類マスタを検索します。
    *
+   * @param criteria
    * @return
    */
   @Select
@@ -38,7 +39,7 @@ public interface CodeCategoryDao {
   Stream<CodeCategory> selectAll(final CodeCategoryCriteria criteria);
 
   /**
-   * コード分類を1件取得します。
+   * コード分類マスタを1件取得します。
    *
    * @param id
    * @return
@@ -47,7 +48,7 @@ public interface CodeCategoryDao {
   Optional<CodeCategory> selectById(Long id);
 
   /**
-   * コード分類を1件取得します。
+   * コード分類マスタを1件取得します。
    *
    * @param criteria
    * @return
@@ -56,7 +57,7 @@ public interface CodeCategoryDao {
   Optional<CodeCategory> select(CodeCategoryCriteria criteria);
 
   /**
-   * コード分類を登録します。
+   * コード分類マスタを登録します。
    *
    * @param CodeCategory
    * @return
@@ -65,7 +66,7 @@ public interface CodeCategoryDao {
   int insert(CodeCategory CodeCategory);
 
   /**
-   * コード分類を更新します。
+   * コード分類マスタを更新します。
    *
    * @param codeCategory
    * @return
@@ -74,7 +75,7 @@ public interface CodeCategoryDao {
   int update(CodeCategory codeCategory);
 
   /**
-   * コード分類を論理削除します。
+   * コード分類マスタを論理削除します。
    *
    * @param codeCategory
    * @return
@@ -83,7 +84,7 @@ public interface CodeCategoryDao {
   int delete(CodeCategory codeCategory);
 
   /**
-   * コード分類を一括登録します。
+   * コード分類マスタを一括登録します。
    *
    * @param codes
    * @return

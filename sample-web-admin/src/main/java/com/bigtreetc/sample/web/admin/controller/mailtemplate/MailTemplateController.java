@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** メールテンプレート管理 */
+/** メールテンプレート */
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/mailTemplates")
@@ -53,7 +53,7 @@ public class MailTemplateController extends AbstractHtmlController {
 
   @Override
   public String getFunctionName() {
-    return "A_MAIL_TEMPLATE";
+    return "A_MAILTEMPLATE";
   }
 
   /**
@@ -238,7 +238,7 @@ public class MailTemplateController extends AbstractHtmlController {
     // 更新する
     val updatedMailTemplate = mailTemplateService.update(mailTemplate);
 
-    // セッションのmailTemplateFormをクリアする
+    // セッションのFormをクリアする
     sessionStatus.setComplete();
 
     // 更新成功メッセージ

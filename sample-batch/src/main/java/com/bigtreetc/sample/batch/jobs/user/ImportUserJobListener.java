@@ -11,6 +11,6 @@ public class ImportUserJobListener extends BaseJobExecutionListener {
 
   @Override
   protected String getBatchName() {
-    return "ユーザー情報取込";
+    return "顧客マスタ取込";
   }
 }

@@ -13,7 +13,7 @@ import static com.bigtreetc.sample.domain.util.DomaUtils.createSelectOptions
 import static java.util.stream.Collectors.toList
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE
 
-@SpringBootTest( webEnvironment = NONE)
+@SpringBootTest(webEnvironment = NONE)
 class HolidayDaoTest extends BaseTestContainerSpec {
 
     @Autowired

@@ -16,10 +16,11 @@ import org.seasar.doma.message.Message;
 public interface HolidayDao {
 
   /**
-   * 祝日を取得します。
+   * 祝日マスタを検索します。
    *
    * @param criteria
    * @param options
+   * @param collector
    * @return
    */
   @Select(strategy = SelectType.COLLECT)
@@ -48,7 +49,7 @@ public interface HolidayDao {
   Optional<Holiday> selectById(Long id);
 
   /**
-   * 祝日を1件取得します。
+   * 祝日マスタを1件取得します。
    *
    * @param criteria
    * @return
@@ -57,7 +58,7 @@ public interface HolidayDao {
   Optional<Holiday> select(HolidayCriteria criteria);
 
   /**
-   * 祝日を登録します。
+   * 祝日マスタを登録します。
    *
    * @param holiday
    * @return
@@ -66,7 +67,7 @@ public interface HolidayDao {
   int insert(Holiday holiday);
 
   /**
-   * 祝日を更新します。
+   * 祝日マスタを更新します。
    *
    * @param holiday
    * @return
@@ -75,7 +76,7 @@ public interface HolidayDao {
   int update(Holiday holiday);
 
   /**
-   * 祝日を論理削除します。
+   * 祝日マスタを論理削除します。
    *
    * @param holiday
    * @return
@@ -84,7 +85,7 @@ public interface HolidayDao {
   int delete(Holiday holiday);
 
   /**
-   * 祝日を一括登録します。
+   * 祝日マスタを一括登録します。
    *
    * @param holidays
    * @return
@@ -93,7 +94,7 @@ public interface HolidayDao {
   int[] insert(List<Holiday> holidays);
 
   /**
-   * 祝日を一括更新します。
+   * 祝日マスタを一括更新します。
    *
    * @param holidays
    * @return

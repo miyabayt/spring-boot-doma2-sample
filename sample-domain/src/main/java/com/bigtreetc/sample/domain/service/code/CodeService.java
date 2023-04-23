@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/** コードサービス */
+/** コードマスタサービス */
 @RequiredArgsConstructor
 @Service
 public class CodeService extends BaseTransactionalService {
@@ -26,8 +26,10 @@ public class CodeService extends BaseTransactionalService {
   @NonNull final CodeRepository codeRepository;
 
   /**
-   * コードを複数取得します。
+   * コードマスタを検索します。
    *
+   * @param criteria
+   * @param pageable
    * @return
    */
   @Transactional(readOnly = true) // 読み取りのみの場合は指定する
@@ -37,7 +39,7 @@ public class CodeService extends BaseTransactionalService {
   }
 
   /**
-   * コードを取得します。
+   * コードマスタを1件取得します。
    *
    * @return
    */
@@ -48,17 +50,14 @@ public class CodeService extends BaseTransactionalService {
   }
 
   /**
-   * コードを取得します。
+   * コードマスタを1件取得します。
    *
    * @return
    */
   @Transactional(readOnly = true)
   public Code findById(final Long id) {
     Assert.notNull(id, "id must not be null");
-    return codeRepository.fetchAll().stream()
-        .filter(c -> c.getId() == id.longValue())
-        .findFirst()
-        .orElseThrow(() -> new NoDataFoundException("id=" + id + " のデータが見つかりません。"));
+    return codeRepository.findById(id);
   }
 
   /**
@@ -90,7 +89,7 @@ public class CodeService extends BaseTransactionalService {
   }
 
   /**
-   * コードを更新します。
+   * コードマスタを更新します。
    *
    * @param inputCode
    * @return
@@ -101,7 +100,7 @@ public class CodeService extends BaseTransactionalService {
   }
 
   /**
-   * コードを論理削除します。
+   * コードマスタを論理削除します。
    *
    * @return
    */

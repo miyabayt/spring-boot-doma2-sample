@@ -19,7 +19,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-/** ロールリポジトリ */
+/** ロールマスタリポジトリ */
 @RequiredArgsConstructor
 @Repository
 public class RoleRepository {
@@ -29,7 +29,7 @@ public class RoleRepository {
   @NonNull final RolePermissionDao rolePermissionDao;
 
   /**
-   * ロールを複数取得します。
+   * ロールマスタを検索します。
    *
    * @param criteria
    * @param pageable

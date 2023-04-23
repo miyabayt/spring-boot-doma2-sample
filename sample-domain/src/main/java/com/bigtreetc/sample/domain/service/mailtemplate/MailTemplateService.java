@@ -25,8 +25,10 @@ public class MailTemplateService extends BaseTransactionalService {
   @NonNull final MailTemplateRepository mailTemplateRepository;
 
   /**
-   * メールテンプレートを複数取得します。
+   * メールテンプレートを検索します。
    *
+   * @param criteria
+   * @param pageable
    * @return
    */
   @Transactional(readOnly = true) // 読み取りのみの場合は指定する
@@ -36,7 +38,7 @@ public class MailTemplateService extends BaseTransactionalService {
   }
 
   /**
-   * メールテンプレートを取得します。
+   * メールテンプレートを1件取得します。
    *
    * @return
    */
@@ -47,7 +49,7 @@ public class MailTemplateService extends BaseTransactionalService {
   }
 
   /**
-   * メールテンプレートを取得します。
+   * メールテンプレートを1件取得します。
    *
    * @return
    */

@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** コード管理 */
+/** コードマスタ */
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/codes")
@@ -250,7 +250,7 @@ public class CodeController extends AbstractHtmlController {
     // 更新する
     val updatedCode = codeService.update(code);
 
-    // セッションのcodeFormをクリアする
+    // セッションのFormをクリアする
     sessionStatus.setComplete();
 
     // 更新成功メッセージ
