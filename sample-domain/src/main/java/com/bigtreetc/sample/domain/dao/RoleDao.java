@@ -5,19 +5,22 @@ import com.bigtreetc.sample.domain.entity.RoleCriteria;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
+import org.seasar.doma.message.Message;
 
 @ConfigAutowireable
 @Dao
 public interface RoleDao {
 
   /**
-   * ロールを取得します。
+   * ロールマスタを検索します。
    *
    * @param criteria
    * @param options
+   * @param collector
    * @return
    */
   @Select(strategy = SelectType.COLLECT)
@@ -27,7 +30,17 @@ public interface RoleDao {
       final Collector<Role, ?, R> collector);
 
   /**
-   * ロールを1件取得します。
+   * ロールマスタを検索します。
+   *
+   * @param criteria
+   * @return
+   */
+  @Select
+  @Suppress(messages = {Message.DOMA4274})
+  Stream<Role> selectAll(final RoleCriteria criteria);
+
+  /**
+   * ロールマスタを1件取得します。
    *
    * @param id
    * @return
@@ -36,7 +49,7 @@ public interface RoleDao {
   Optional<Role> selectById(Long id);
 
   /**
-   * ロールを1件取得します。
+   * ロールマスタを1件取得します。
    *
    * @param criteria
    * @return
@@ -45,7 +58,7 @@ public interface RoleDao {
   Optional<Role> select(RoleCriteria criteria);
 
   /**
-   * ロールを登録します。
+   * ロールマスタを登録します。
    *
    * @param role
    * @return
@@ -54,7 +67,7 @@ public interface RoleDao {
   int insert(Role role);
 
   /**
-   * ロールを更新します。
+   * ロールマスタを更新します。
    *
    * @param role
    * @return
@@ -63,7 +76,7 @@ public interface RoleDao {
   int update(Role role);
 
   /**
-   * ロールを論理削除します。
+   * ロールマスタを論理削除します。
    *
    * @param role
    * @return
@@ -72,7 +85,7 @@ public interface RoleDao {
   int delete(Role role);
 
   /**
-   * ロールを一括登録します。
+   * ロールマスタを一括登録します。
    *
    * @param roles
    * @return
@@ -81,7 +94,7 @@ public interface RoleDao {
   int[] insert(List<Role> roles);
 
   /**
-   * ロールを一括更新します。
+   * ロールマスタを一括更新します。
    *
    * @param roles
    * @return

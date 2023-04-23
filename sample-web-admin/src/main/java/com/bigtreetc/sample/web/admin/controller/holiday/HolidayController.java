@@ -1,15 +1,14 @@
 package com.bigtreetc.sample.web.admin.controller.holiday;
 
 import static com.bigtreetc.sample.common.util.ValidateUtils.isTrue;
-import static com.bigtreetc.sample.domain.util.TypeUtils.toListType;
 import static com.bigtreetc.sample.web.base.WebConst.*;
 
 import com.bigtreetc.sample.domain.entity.Holiday;
 import com.bigtreetc.sample.domain.entity.HolidayCriteria;
 import com.bigtreetc.sample.domain.service.holiday.HolidayService;
 import com.bigtreetc.sample.web.base.controller.html.AbstractHtmlController;
-import com.bigtreetc.sample.web.base.view.CsvView;
-import java.util.List;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +22,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** 祝日管理 */
+/** 祝日マスタ */
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/holidays")
@@ -237,7 +235,7 @@ public class HolidayController extends AbstractHtmlController {
     // 更新する
     val updatedHoliday = holidayService.update(holiday);
 
-    // セッションのholidayFormをクリアする
+    // セッションのFormをクリアする
     sessionStatus.setComplete();
 
     // 更新成功メッセージ
@@ -270,24 +268,25 @@ public class HolidayController extends AbstractHtmlController {
    *
    * @param filename
    * @param form
+   * @param response
    * @return
    */
   @PreAuthorize("hasAuthority('holiday:read')")
   @GetMapping("/download/{filename:.+\\.csv}")
-  public ModelAndView downloadCsv(
-      @PathVariable String filename, @ModelAttribute("searchHolidayForm") SearchHolidayForm form) {
+  public void downloadCsv(
+      @PathVariable String filename,
+      @ModelAttribute("searchHolidayForm") SearchHolidayForm form,
+      HttpServletResponse response)
+      throws IOException {
+    // ダウンロード時のファイル名をセットする
+    setContentDispositionHeader(response, filename, true);
+
     // 入力値から検索条件を作成する
     val criteria = modelMapper.map(form, HolidayCriteria.class);
 
-    // 全件取得する
-    val holidays = holidayService.findAll(criteria, Pageable.unpaged());
-
-    // 詰め替える
-    List<HolidayCsv> csvList = modelMapper.map(holidays.getContent(), toListType(HolidayCsv.class));
-
-    // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
-    val view = new CsvView(HolidayCsv.class, csvList, filename);
-
-    return new ModelAndView(view);
+    // CSV出力する
+    try (val outputStream = response.getOutputStream()) {
+      holidayService.writeToOutputStream(outputStream, criteria, HolidayCsv.class);
+    }
   }
 }

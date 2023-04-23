@@ -1,7 +1,6 @@
 package com.bigtreetc.sample.web.admin.controller.code;
 
 import static com.bigtreetc.sample.common.util.ValidateUtils.isTrue;
-import static com.bigtreetc.sample.domain.util.TypeUtils.toListType;
 import static com.bigtreetc.sample.web.base.WebConst.*;
 
 import com.bigtreetc.sample.domain.entity.Code;
@@ -9,8 +8,8 @@ import com.bigtreetc.sample.domain.entity.CodeCriteria;
 import com.bigtreetc.sample.domain.service.code.CodeService;
 import com.bigtreetc.sample.domain.service.codecategory.CodeCategoryService;
 import com.bigtreetc.sample.web.base.controller.html.AbstractHtmlController;
-import com.bigtreetc.sample.web.base.view.CsvView;
-import java.util.List;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +23,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** コード管理 */
+/** コードマスタ */
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/codes")
@@ -252,7 +250,7 @@ public class CodeController extends AbstractHtmlController {
     // 更新する
     val updatedCode = codeService.update(code);
 
-    // セッションのcodeFormをクリアする
+    // セッションのFormをクリアする
     sessionStatus.setComplete();
 
     // 更新成功メッセージ
@@ -285,24 +283,25 @@ public class CodeController extends AbstractHtmlController {
    *
    * @param filename
    * @param form
+   * @param response
    * @return
    */
   @PreAuthorize("hasAuthority('code:read')")
   @GetMapping("/download/{filename:.+\\.csv}")
-  public ModelAndView downloadCsv(
-      @PathVariable String filename, @ModelAttribute("searchCodeForm") SearchCodeForm form) {
+  public void downloadCsv(
+      @PathVariable String filename,
+      @ModelAttribute("searchCodeForm") SearchCodeForm form,
+      HttpServletResponse response)
+      throws IOException {
+    // ダウンロード時のファイル名をセットする
+    setContentDispositionHeader(response, filename, true);
+
     // 入力値から検索条件を作成する
     val criteria = modelMapper.map(form, CodeCriteria.class);
 
-    // 全件取得する
-    val codes = codeService.findAll(criteria, Pageable.unpaged());
-
-    // 詰め替える
-    List<CodeCsv> csvList = modelMapper.map(codes.getContent(), toListType(CodeCsv.class));
-
-    // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
-    val view = new CsvView(CodeCsv.class, csvList, filename);
-
-    return new ModelAndView(view);
+    // CSV出力する
+    try (val outputStream = response.getOutputStream()) {
+      codeService.writeToOutputStream(outputStream, criteria, CodeCsv.class);
+    }
   }
 }

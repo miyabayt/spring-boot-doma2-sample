@@ -56,12 +56,11 @@ public class SetModelAndViewInterceptor extends BaseHandlerInterceptor {
   }
 
   /**
-   * コード分類一覧を画面に設定する
+   * コード分類マスタ一覧を画面に設定する
    *
    * @return
    */
   protected List<CodeCategory> getCodeCategories() {
-    // コード分類をすべて取得する
     return codeCategoryRepository.fetchAll();
   }
 

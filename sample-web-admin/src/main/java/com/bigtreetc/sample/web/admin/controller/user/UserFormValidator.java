@@ -5,7 +5,7 @@ import com.bigtreetc.sample.domain.validator.AbstractValidator;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-/** ユーザー登録 入力チェック */
+/** 顧客マスタ登録 入力チェック */
 @Component
 public class UserFormValidator extends AbstractValidator<UserForm> {
 

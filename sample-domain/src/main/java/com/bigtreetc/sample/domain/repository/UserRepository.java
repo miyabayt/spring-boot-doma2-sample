@@ -12,6 +12,7 @@ import com.bigtreetc.sample.domain.entity.UserCriteria;
 import com.bigtreetc.sample.domain.entity.UserRole;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -20,7 +21,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-/** ユーザーリポジトリ */
+/** 顧客マスタリポジトリ */
 @RequiredArgsConstructor
 @Repository
 public class UserRepository {
@@ -32,7 +33,7 @@ public class UserRepository {
   @NonNull final UploadFileDao uploadFileDao;
 
   /**
-   * ユーザーを取得します。
+   * 顧客マスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -45,7 +46,16 @@ public class UserRepository {
   }
 
   /**
-   * ユーザーを取得します。
+   * 顧客マスタを検索します。
+   *
+   * @return
+   */
+  public Stream<User> findAll(UserCriteria criteria) {
+    return userDao.selectAll(criteria);
+  }
+
+  /**
+   * 顧客マスタを1件取得します。
    *
    * @param criteria
    * @return
@@ -65,7 +75,7 @@ public class UserRepository {
   }
 
   /**
-   * ユーザー取得します。
+   * 顧客マスタを1件取得します。
    *
    * @return
    */
@@ -84,7 +94,7 @@ public class UserRepository {
   }
 
   /**
-   * ユーザーを追加します。
+   * 顧客マスタを登録します。
    *
    * @param inputUser
    * @return
@@ -102,7 +112,7 @@ public class UserRepository {
   }
 
   /**
-   * ユーザーを更新します。
+   * 顧客マスタを更新します。
    *
    * @param inputUser
    * @return
@@ -131,7 +141,7 @@ public class UserRepository {
   }
 
   /**
-   * ユーザーを論理削除します。
+   * 顧客マスタを論理削除します。
    *
    * @return
    */

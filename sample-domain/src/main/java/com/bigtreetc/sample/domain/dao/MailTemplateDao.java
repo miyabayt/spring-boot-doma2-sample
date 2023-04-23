@@ -5,19 +5,22 @@ import com.bigtreetc.sample.domain.entity.MailTemplateCriteria;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
+import org.seasar.doma.message.Message;
 
 @ConfigAutowireable
 @Dao
 public interface MailTemplateDao {
 
   /**
-   * メールテンプレートを取得します。
+   * メールテンプレートを検索します。
    *
    * @param criteria
    * @param options
+   * @param collector
    * @return
    */
   @Select(strategy = SelectType.COLLECT)
@@ -25,6 +28,16 @@ public interface MailTemplateDao {
       final MailTemplateCriteria criteria,
       final SelectOptions options,
       final Collector<MailTemplate, ?, R> collector);
+
+  /**
+   * メールテンプレートを検索します。
+   *
+   * @param criteria
+   * @return
+   */
+  @Select
+  @Suppress(messages = {Message.DOMA4274})
+  Stream<MailTemplate> selectAll(final MailTemplateCriteria criteria);
 
   /**
    * メールテンプレートを1件取得します。
@@ -47,11 +60,11 @@ public interface MailTemplateDao {
   /**
    * メールテンプレートを登録します。
    *
-   * @param mailtemplate
+   * @param mailTemplate
    * @return
    */
   @Insert
-  int insert(MailTemplate mailtemplate);
+  int insert(MailTemplate mailTemplate);
 
   /**
    * メールテンプレートを更新します。
@@ -68,8 +81,7 @@ public interface MailTemplateDao {
    * @param mailTemplate
    * @return
    */
-  @Update(excludeNull = true)
-  // NULLの項目は更新対象にしない
+  @Update(excludeNull = true) // NULLの項目は更新対象にしない
   int delete(MailTemplate mailTemplate);
 
   /**
@@ -84,9 +96,9 @@ public interface MailTemplateDao {
   /**
    * メールテンプレートを一括更新します。
    *
-   * @param mailtemplates
+   * @param mailTemplates
    * @return
    */
   @BatchUpdate
-  int[] update(List<MailTemplate> mailtemplates);
+  int[] update(List<MailTemplate> mailTemplates);
 }

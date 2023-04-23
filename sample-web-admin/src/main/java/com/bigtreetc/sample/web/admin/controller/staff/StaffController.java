@@ -1,15 +1,14 @@
 package com.bigtreetc.sample.web.admin.controller.staff;
 
 import static com.bigtreetc.sample.common.util.ValidateUtils.isTrue;
-import static com.bigtreetc.sample.domain.util.TypeUtils.toListType;
 import static com.bigtreetc.sample.web.base.WebConst.*;
 
 import com.bigtreetc.sample.domain.entity.Staff;
 import com.bigtreetc.sample.domain.entity.StaffCriteria;
 import com.bigtreetc.sample.domain.service.staff.StaffService;
 import com.bigtreetc.sample.web.base.controller.html.AbstractHtmlController;
-import com.bigtreetc.sample.web.base.view.CsvView;
-import java.util.List;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +24,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** 担当者管理 */
+/** 担当者マスタ */
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/staffs")
@@ -251,7 +249,7 @@ public class StaffController extends AbstractHtmlController {
     // 更新する
     val updatedStaff = staffService.update(staff);
 
-    // セッションのstaffFormをクリアする
+    // セッションのFormをクリアする
     sessionStatus.setComplete();
 
     // 更新成功メッセージ
@@ -288,20 +286,20 @@ public class StaffController extends AbstractHtmlController {
    */
   @PreAuthorize("hasAuthority('staff:read')")
   @GetMapping("/download/{filename:.+\\.csv}")
-  public ModelAndView downloadCsv(
-      @PathVariable String filename, @ModelAttribute("searchStaffForm") SearchStaffForm form) {
+  public void downloadCsv(
+      @PathVariable String filename,
+      @ModelAttribute("searchStaffForm") SearchStaffForm form,
+      HttpServletResponse response)
+      throws IOException {
+    // ダウンロード時のファイル名をセットする
+    setContentDispositionHeader(response, filename, true);
+
     // 入力値から検索条件を作成する
     val criteria = modelMapper.map(form, StaffCriteria.class);
 
-    // 全件取得する
-    val staffs = staffService.findAll(criteria, Pageable.unpaged());
-
-    // 詰め替える
-    List<StaffCsv> csvList = modelMapper.map(staffs.getContent(), toListType(StaffCsv.class));
-
-    // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
-    val view = new CsvView(StaffCsv.class, csvList, filename);
-
-    return new ModelAndView(view);
+    // CSV出力する
+    try (val outputStream = response.getOutputStream()) {
+      staffService.writeToOutputStream(outputStream, criteria, StaffCsv.class);
+    }
   }
 }

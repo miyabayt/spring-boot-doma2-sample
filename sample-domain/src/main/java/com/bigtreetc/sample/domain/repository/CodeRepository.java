@@ -7,8 +7,8 @@ import com.bigtreetc.sample.domain.dao.CodeDao;
 import com.bigtreetc.sample.domain.entity.Code;
 import com.bigtreetc.sample.domain.entity.CodeCriteria;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -17,7 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-/** コードリポジトリ */
+/** コードマスタリポジトリ */
 @RequiredArgsConstructor
 @Repository
 public class CodeRepository {
@@ -25,18 +25,7 @@ public class CodeRepository {
   @NonNull final CodeDao codeDao;
 
   /**
-   * コードを全件取得します。
-   *
-   * @return
-   */
-  public List<Code> fetchAll() {
-    val pageable = Pageable.unpaged();
-    val options = createSelectOptions(pageable).count();
-    return codeDao.selectAll(new CodeCriteria(), options, toList());
-  }
-
-  /**
-   * コードを複数取得します。
+   * コードマスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -49,7 +38,16 @@ public class CodeRepository {
   }
 
   /**
-   * コードを取得します。
+   * コードマスタを検索します。
+   *
+   * @return
+   */
+  public Stream<Code> findAll(CodeCriteria criteria) {
+    return codeDao.selectAll(criteria);
+  }
+
+  /**
+   * コードマスタを1件取得します。
    *
    * @param criteria
    * @return
@@ -59,7 +57,7 @@ public class CodeRepository {
   }
 
   /**
-   * コードを取得します。
+   * コードマスタを1件取得します。
    *
    * @return
    */
@@ -70,7 +68,7 @@ public class CodeRepository {
   }
 
   /**
-   * コードを追加します。
+   * コードマスタを登録します。
    *
    * @param inputCode
    * @return
@@ -81,7 +79,7 @@ public class CodeRepository {
   }
 
   /**
-   * コードを更新します。
+   * コードマスタを更新します。
    *
    * @param inputCode
    * @return
@@ -97,7 +95,7 @@ public class CodeRepository {
   }
 
   /**
-   * コードを論理削除します。
+   * コードマスタを論理削除します。
    *
    * @return
    */

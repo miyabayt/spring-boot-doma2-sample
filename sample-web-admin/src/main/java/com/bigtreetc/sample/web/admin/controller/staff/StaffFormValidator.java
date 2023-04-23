@@ -5,7 +5,7 @@ import com.bigtreetc.sample.domain.validator.AbstractValidator;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-/** 担当者登録 入力チェック */
+/** 担当者マスタ登録 入力チェック */
 @Component
 public class StaffFormValidator extends AbstractValidator<StaffForm> {
 

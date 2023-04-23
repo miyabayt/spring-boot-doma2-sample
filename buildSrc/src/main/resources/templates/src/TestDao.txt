@@ -8,14 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.data.domain.Pageable
-import spock.lang.Specification
 
 import static com.bigtreetc.sample.domain.util.DomaUtils.createSelectOptions
 import static java.util.stream.Collectors.toList
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE
 
 @SpringBootTest(webEnvironment = NONE)
-class [[${camelPhysicalFunctionName}]]DaoTest extends Specification {
+class [[${camelPhysicalFunctionName}]]DaoTest extends BaseTestContainerSpec {
 
     @Autowired
     [[${camelPhysicalFunctionName}]]Dao [[${lowerPhysicalFunctionName}]]Dao

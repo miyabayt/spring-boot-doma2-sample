@@ -16,7 +16,7 @@ class BaseTestContainerSpec extends Specification {
     static final GenericContainer<?> MAILHOG_CONTAINER =
             new GenericContainer<>("mailhog/mailhog")
                     .withExposedPorts(1025, 8025)
-                    .waitingFor(Wait.forHttp("/").forPort(8025));
+                    .waitingFor(Wait.forHttp("/").forPort(8025))
 
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {

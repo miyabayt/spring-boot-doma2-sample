@@ -8,6 +8,7 @@ import com.bigtreetc.sample.domain.entity.Holiday;
 import com.bigtreetc.sample.domain.entity.HolidayCriteria;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -16,7 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-/** 祝日リポジトリ */
+/** 祝日マスタリポジトリ */
 @RequiredArgsConstructor
 @Repository
 public class HolidayRepository {
@@ -24,7 +25,7 @@ public class HolidayRepository {
   @NonNull final HolidayDao holidayDao;
 
   /**
-   * 祝日を複数取得します。
+   * 祝日マスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -37,7 +38,16 @@ public class HolidayRepository {
   }
 
   /**
-   * 祝日を取得します。
+   * 祝日マスタを検索します。
+   *
+   * @return
+   */
+  public Stream<Holiday> findAll(HolidayCriteria criteria) {
+    return holidayDao.selectAll(criteria);
+  }
+
+  /**
+   * 祝日マスタを1件取得します。
    *
    * @param criteria
    * @return
@@ -47,7 +57,7 @@ public class HolidayRepository {
   }
 
   /**
-   * 祝日を取得します。
+   * 祝日マスタを1件取得します。
    *
    * @return
    */
@@ -58,7 +68,7 @@ public class HolidayRepository {
   }
 
   /**
-   * 祝日を追加します。
+   * 祝日マスタを登録します。
    *
    * @param inputHoliday
    * @return
@@ -69,7 +79,7 @@ public class HolidayRepository {
   }
 
   /**
-   * 祝日を更新します。
+   * 祝日マスタを更新します。
    *
    * @param inputHoliday
    * @return
@@ -85,7 +95,7 @@ public class HolidayRepository {
   }
 
   /**
-   * 祝日を論理削除します。
+   * 祝日マスタを論理削除します。
    *
    * @return
    */

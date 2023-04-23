@@ -17,7 +17,7 @@ ext["flyway.version"] = "4.2.0"
 
 ```sql
 CREATE TABLE IF NOT EXISTS users(
-  user_id INT(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ユーザID'
+  user_id INT(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '顧客ID'
   , first_name VARCHAR(40) NOT NULL COMMENT '名前'
   , last_name VARCHAR(40) NOT NULL COMMENT '苗字'
   , email VARCHAR(100) DEFAULT NULL COMMENT 'メールアドレス'
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS users(
   , version INT(11) unsigned NOT NULL DEFAULT 1 COMMENT '改訂番号'
   , PRIMARY KEY (user_id)
   , KEY idx_users (email, deleted_at)
-) COMMENT='ユーザー';
+) COMMENT='顧客';
 ```
 
 ## flywayの設定

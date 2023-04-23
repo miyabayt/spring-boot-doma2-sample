@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
-/** ユーザー情報取込タスク */
+/** 顧客マスタ取込タスク */
 @Slf4j
 public class ImportUserTasklet extends BaseTasklet<ImportUserDto> {
 

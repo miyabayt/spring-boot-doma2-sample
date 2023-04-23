@@ -1,7 +1,6 @@
 package com.bigtreetc.sample.web.admin.controller.user;
 
 import static com.bigtreetc.sample.common.util.ValidateUtils.isTrue;
-import static com.bigtreetc.sample.domain.util.TypeUtils.toListType;
 import static com.bigtreetc.sample.web.base.WebConst.*;
 
 import com.bigtreetc.sample.domain.entity.UploadFile;
@@ -10,10 +9,10 @@ import com.bigtreetc.sample.domain.entity.UserCriteria;
 import com.bigtreetc.sample.domain.service.user.UserService;
 import com.bigtreetc.sample.web.base.controller.html.AbstractHtmlController;
 import com.bigtreetc.sample.web.base.util.MultipartFileUtils;
-import com.bigtreetc.sample.web.base.view.CsvView;
 import com.bigtreetc.sample.web.base.view.ExcelView;
 import com.bigtreetc.sample.web.base.view.PdfView;
-import java.util.List;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +30,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** ユーザー管理 */
+/** 顧客マスタ */
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/users")
@@ -213,7 +212,6 @@ public class UserController extends AbstractHtmlController {
   @GetMapping("/edit/{userId}")
   public String editUser(
       @PathVariable Long userId, @ModelAttribute("userForm") UserForm form, Model model) {
-
     // セッションから取得できる場合は、読み込み直さない
     if (!hasErrors(model)) {
       // 1件取得する
@@ -269,7 +267,7 @@ public class UserController extends AbstractHtmlController {
     // 更新する
     val updatedUser = userService.update(user);
 
-    // セッションのuserFormをクリアする
+    // セッションのFormをクリアする
     sessionStatus.setComplete();
 
     // 更新成功メッセージ
@@ -301,25 +299,26 @@ public class UserController extends AbstractHtmlController {
    * CSVダウンロード
    *
    * @param filename
+   * @param form
    * @return
    */
   @PreAuthorize("hasAuthority('user:read')")
   @GetMapping("/download/{filename:.+\\.csv}")
-  public ModelAndView downloadCsv(
-      @PathVariable String filename, @ModelAttribute("searchUserForm") SearchUserForm form) {
+  public void downloadCsv(
+      @PathVariable String filename,
+      @ModelAttribute("searchUserForm") SearchUserForm form,
+      HttpServletResponse response)
+      throws IOException {
+    // ダウンロード時のファイル名をセットする
+    setContentDispositionHeader(response, filename, true);
+
     // 入力値から検索条件を作成する
     val criteria = modelMapper.map(form, UserCriteria.class);
 
-    // 全件取得する
-    val users = userService.findAll(criteria, Pageable.unpaged());
-
-    // 詰め替える
-    List<UserCsv> csvList = modelMapper.map(users.getContent(), toListType(UserCsv.class));
-
-    // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
-    val view = new CsvView(UserCsv.class, csvList, filename);
-
-    return new ModelAndView(view);
+    // CSV出力する
+    try (val outputStream = response.getOutputStream()) {
+      userService.writeToOutputStream(outputStream, criteria, UserCsv.class);
+    }
   }
 
   /**

@@ -7,6 +7,9 @@ import com.bigtreetc.sample.domain.entity.RoleCriteria;
 import com.bigtreetc.sample.domain.repository.PermissionRepository;
 import com.bigtreetc.sample.domain.repository.RoleRepository;
 import com.bigtreetc.sample.domain.service.BaseTransactionalService;
+import com.bigtreetc.sample.domain.util.CsvUtils;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 import lombok.NonNull;
@@ -18,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/** ロールサービス */
+/** ロールマスタサービス */
 @RequiredArgsConstructor
 @Service
 public class RoleService extends BaseTransactionalService {
@@ -28,7 +31,7 @@ public class RoleService extends BaseTransactionalService {
   @NonNull final PermissionRepository permissionRepository;
 
   /**
-   * ロールを複数取得します。
+   * ロールマスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -41,7 +44,7 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * ロールを取得します。
+   * ロールマスタを1件取得します。
    *
    * @return
    */
@@ -60,7 +63,7 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * ロールを取得します。
+   * ロールマスタを1件取得します。
    *
    * @return
    */
@@ -74,7 +77,7 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * ロールを追加します。
+   * ロールマスタを追加します。
    *
    * @param inputRole
    * @return
@@ -85,7 +88,7 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * ロールを更新します。
+   * ロールマスタを更新します。
    *
    * @param inputRole
    * @return
@@ -96,13 +99,29 @@ public class RoleService extends BaseTransactionalService {
   }
 
   /**
-   * ロールを論理削除します。
+   * ロールマスタを論理削除します。
    *
    * @return
    */
   public Role delete(final Long id) {
     Assert.notNull(id, "id must not be null");
     return roleRepository.delete(id);
+  }
+
+  /**
+   * ロールマスタを書き出します。
+   *
+   * @param outputStream
+   * @param
+   * @return
+   */
+  @Transactional(readOnly = true) // 読み取りのみの場合は指定する
+  public void writeToOutputStream(OutputStream outputStream, RoleCriteria criteria, Class<?> clazz)
+      throws IOException {
+    Assert.notNull(criteria, "criteria must not be null");
+    try (val data = roleRepository.findAll(criteria)) {
+      CsvUtils.writeCsv(outputStream, clazz, data, role -> modelMapper.map(role, clazz));
+    }
   }
 
   private List<Permission> getPermissions() {

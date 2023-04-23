@@ -6,12 +6,11 @@ import static java.util.stream.Collectors.toList;
 import com.bigtreetc.sample.common.util.ValidateUtils;
 import com.bigtreetc.sample.domain.dao.RoleDao;
 import com.bigtreetc.sample.domain.dao.RolePermissionDao;
-import com.bigtreetc.sample.domain.entity.Role;
-import com.bigtreetc.sample.domain.entity.RoleCriteria;
-import com.bigtreetc.sample.domain.entity.RolePermission;
-import com.bigtreetc.sample.domain.entity.RolePermissionCriteria;
+import com.bigtreetc.sample.domain.entity.*;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -20,7 +19,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-/** ロールリポジトリ */
+/** ロールマスタリポジトリ */
 @RequiredArgsConstructor
 @Repository
 public class RoleRepository {
@@ -30,7 +29,7 @@ public class RoleRepository {
   @NonNull final RolePermissionDao rolePermissionDao;
 
   /**
-   * ロールを複数取得します。
+   * ロールマスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -43,7 +42,16 @@ public class RoleRepository {
   }
 
   /**
-   * ロールを取得します。
+   * ロールマスタを検索します。
+   *
+   * @return
+   */
+  public Stream<Role> findAll(RoleCriteria criteria) {
+    return roleDao.selectAll(criteria);
+  }
+
+  /**
+   * ロールマスタを検索します。
    *
    * @param criteria
    * @return

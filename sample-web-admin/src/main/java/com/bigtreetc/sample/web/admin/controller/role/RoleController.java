@@ -1,15 +1,14 @@
 package com.bigtreetc.sample.web.admin.controller.role;
 
 import static com.bigtreetc.sample.common.util.ValidateUtils.isTrue;
-import static com.bigtreetc.sample.domain.util.TypeUtils.toListType;
 import static com.bigtreetc.sample.web.base.WebConst.*;
 
 import com.bigtreetc.sample.domain.entity.*;
 import com.bigtreetc.sample.domain.service.permission.PermissionService;
 import com.bigtreetc.sample.domain.service.role.RoleService;
 import com.bigtreetc.sample.web.base.controller.html.AbstractHtmlController;
-import com.bigtreetc.sample.web.base.view.CsvView;
-import java.util.List;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +23,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/** ロール管理 */
+/** ロールマスタ */
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/roles")
@@ -269,7 +267,7 @@ public class RoleController extends AbstractHtmlController {
     // 更新する
     val updatedRole = roleService.update(role);
 
-    // セッションのroleFormをクリアする
+    // セッションのFormをクリアする
     sessionStatus.setComplete();
 
     // 更新成功メッセージ
@@ -306,21 +304,21 @@ public class RoleController extends AbstractHtmlController {
    */
   @PreAuthorize("hasAuthority('role:read')")
   @GetMapping("/download/{filename:.+\\.csv}")
-  public ModelAndView downloadCsv(
-      @PathVariable String filename, @ModelAttribute("searchRoleForm") SearchRoleForm form) {
+  public void downloadCsv(
+      @PathVariable String filename,
+      @ModelAttribute("searchRoleForm") SearchRoleForm form,
+      HttpServletResponse response)
+      throws IOException {
+    // ダウンロード時のファイル名をセットする
+    setContentDispositionHeader(response, filename, true);
+
     // 入力値から検索条件を作成する
     val criteria = modelMapper.map(form, RoleCriteria.class);
 
-    // 全件取得する
-    val roles = roleService.findAll(criteria, Pageable.unpaged());
-
-    // 詰め替える
-    List<RoleCsv> csvList = modelMapper.map(roles.getContent(), toListType(RoleCsv.class));
-
-    // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
-    val view = new CsvView(RoleCsv.class, csvList, filename);
-
-    return new ModelAndView(view);
+    // CSV出力する
+    try (val outputStream = response.getOutputStream()) {
+      roleService.writeToOutputStream(outputStream, criteria, RoleCsv.class);
+    }
   }
 
   private Page<Permission> getPermissions() {

@@ -27,10 +27,10 @@ $ ./gradlew :sample-web-front:bootRun
 
 #### バッチ
 ```bash
-$ # 担当者情報取込バッチを起動する
+$ # 担当者マスタ取込バッチを起動する
 $ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.name=importStaffJob"
 
-$ # ユーザー情報取込バッチを起動する
+$ # 顧客マスタ取込バッチを起動する
 $ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.name=importUserJob"
 
 $ # バースデーメール送信キュー登録バッチを起動する

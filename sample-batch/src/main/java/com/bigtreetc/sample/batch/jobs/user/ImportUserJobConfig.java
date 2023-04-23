@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-/** ユーザー情報取込 */
+/** 顧客マスタ取込 */
 @Configuration
 public class ImportUserJobConfig {
 

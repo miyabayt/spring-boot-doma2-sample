@@ -24,7 +24,7 @@ public class PermissionRepository {
   @NonNull final PermissionDao permissionDao;
 
   /**
-   * 権限を複数取得します。
+   * 権限を検索します。
    *
    * @param criteria
    * @param pageable
