@@ -5,9 +5,11 @@ import com.bigtreetc.sample.domain.entity.CodeCategoryCriteria;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
+import org.seasar.doma.message.Message;
 
 @ConfigAutowireable
 @Dao
@@ -32,7 +34,8 @@ public interface CodeCategoryDao {
    * @return
    */
   @Select
-  List<CodeCategory> fetchAll();
+  @Suppress(messages = {Message.DOMA4274})
+  Stream<CodeCategory> selectAll(final CodeCategoryCriteria criteria);
 
   /**
    * コード分類を1件取得します。

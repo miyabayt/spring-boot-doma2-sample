@@ -8,6 +8,7 @@ import com.bigtreetc.sample.domain.entity.MailTemplate;
 import com.bigtreetc.sample.domain.entity.MailTemplateCriteria;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -37,7 +38,16 @@ public class MailTemplateRepository {
   }
 
   /**
-   * メールテンプレートを取得します。
+   * メールテンプレートを検索します。
+   *
+   * @return
+   */
+  public Stream<MailTemplate> findAll(MailTemplateCriteria criteria) {
+    return mailTemplateDao.selectAll(criteria);
+  }
+
+  /**
+   * メールテンプレートを1件取得します。
    *
    * @param criteria
    * @return

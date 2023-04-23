@@ -5,9 +5,11 @@ import com.bigtreetc.sample.domain.entity.UserCriteria;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
+import org.seasar.doma.message.Message;
 
 @ConfigAutowireable
 @Dao
@@ -27,7 +29,17 @@ public interface UserDao {
       final Collector<User, ?, R> collector);
 
   /**
-   * ユーザーを1件取得します。
+   * 顧客マスタを検索します。
+   *
+   * @param criteria
+   * @return
+   */
+  @Select
+  @Suppress(messages = {Message.DOMA4274})
+  Stream<User> selectAll(final UserCriteria criteria);
+
+  /**
+   * 顧客マスタを1件取得します。
    *
    * @param id
    * @return

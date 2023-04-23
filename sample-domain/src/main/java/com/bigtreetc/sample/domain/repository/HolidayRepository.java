@@ -8,6 +8,7 @@ import com.bigtreetc.sample.domain.entity.Holiday;
 import com.bigtreetc.sample.domain.entity.HolidayCriteria;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -37,7 +38,16 @@ public class HolidayRepository {
   }
 
   /**
-   * 祝日を取得します。
+   * 祝日マスタを検索します。
+   *
+   * @return
+   */
+  public Stream<Holiday> findAll(HolidayCriteria criteria) {
+    return holidayDao.selectAll(criteria);
+  }
+
+  /**
+   * 祝日マスタを1件取得します。
    *
    * @param criteria
    * @return

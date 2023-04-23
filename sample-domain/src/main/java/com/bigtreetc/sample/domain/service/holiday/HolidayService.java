@@ -4,9 +4,13 @@ import com.bigtreetc.sample.domain.entity.Holiday;
 import com.bigtreetc.sample.domain.entity.HolidayCriteria;
 import com.bigtreetc.sample.domain.repository.HolidayRepository;
 import com.bigtreetc.sample.domain.service.BaseTransactionalService;
+import com.bigtreetc.sample.domain.util.CsvUtils;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -85,5 +89,21 @@ public class HolidayService extends BaseTransactionalService {
   public Holiday delete(final Long id) {
     Assert.notNull(id, "id must not be null");
     return holidayRepository.delete(id);
+  }
+
+  /**
+   * 祝日マスタを書き出します。
+   *
+   * @param outputStream
+   * @param
+   * @return
+   */
+  @Transactional(readOnly = true) // 読み取りのみの場合は指定する
+  public void writeToOutputStream(
+      OutputStream outputStream, HolidayCriteria criteria, Class<?> clazz) throws IOException {
+    Assert.notNull(criteria, "criteria must not be null");
+    try (val data = holidayRepository.findAll(criteria)) {
+      CsvUtils.writeCsv(outputStream, clazz, data, holiday -> modelMapper.map(holiday, clazz));
+    }
   }
 }

@@ -11,6 +11,7 @@ import com.bigtreetc.sample.domain.entity.StaffCriteria;
 import com.bigtreetc.sample.domain.entity.StaffRole;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -44,7 +45,16 @@ public class StaffRepository {
   }
 
   /**
-   * 担当者を取得します。
+   * 担当者マスタを検索します。
+   *
+   * @return
+   */
+  public Stream<Staff> findAll(StaffCriteria criteria) {
+    return staffDao.selectAll(criteria);
+  }
+
+  /**
+   * 担当者マスタを1件取得します。
    *
    * @param criteria
    * @return

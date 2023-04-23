@@ -9,6 +9,7 @@ import com.bigtreetc.sample.domain.entity.CodeCategoryCriteria;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -49,7 +50,17 @@ public class CodeCategoryRepository {
   }
 
   /**
-   * コード分類を取得します。
+   * コード分類マスタを検索します。
+   *
+   * @param criteria
+   * @return
+   */
+  public Stream<CodeCategory> findAll(CodeCategoryCriteria criteria) {
+    return codeCategoryDao.selectAll(criteria);
+  }
+
+  /**
+   * コード分類マスタを取得します。
    *
    * @param criteria
    * @return

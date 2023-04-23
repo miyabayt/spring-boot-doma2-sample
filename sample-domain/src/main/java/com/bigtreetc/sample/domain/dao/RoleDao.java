@@ -5,9 +5,11 @@ import com.bigtreetc.sample.domain.entity.RoleCriteria;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
+import org.seasar.doma.message.Message;
 
 @ConfigAutowireable
 @Dao
@@ -27,7 +29,17 @@ public interface RoleDao {
       final Collector<Role, ?, R> collector);
 
   /**
-   * ロールを1件取得します。
+   * ロールマスタを検索します。
+   *
+   * @param criteria
+   * @return
+   */
+  @Select
+  @Suppress(messages = {Message.DOMA4274})
+  Stream<Role> selectAll(final RoleCriteria criteria);
+
+  /**
+   * ロールマスタを1件取得します。
    *
    * @param id
    * @return

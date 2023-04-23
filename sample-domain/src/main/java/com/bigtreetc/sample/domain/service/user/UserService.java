@@ -97,4 +97,20 @@ public class UserService extends BaseTransactionalService {
     Assert.notNull(id, "id must not be null");
     return userRepository.delete(id);
   }
+
+  /**
+   * 顧客マスタを書き出します。
+   *
+   * @param outputStream
+   * @param
+   * @return
+   */
+  @Transactional(readOnly = true) // 読み取りのみの場合は指定する
+  public void writeToOutputStream(OutputStream outputStream, UserCriteria criteria, Class<?> clazz)
+      throws IOException {
+    Assert.notNull(criteria, "criteria must not be null");
+    try (val data = userRepository.findAll(criteria)) {
+      CsvUtils.writeCsv(outputStream, clazz, data, user -> modelMapper.map(user, clazz));
+    }
+  }
 }

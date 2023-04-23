@@ -7,8 +7,8 @@ import com.bigtreetc.sample.domain.dao.CodeDao;
 import com.bigtreetc.sample.domain.entity.Code;
 import com.bigtreetc.sample.domain.entity.CodeCriteria;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -25,18 +25,7 @@ public class CodeRepository {
   @NonNull final CodeDao codeDao;
 
   /**
-   * コードを全件取得します。
-   *
-   * @return
-   */
-  public List<Code> fetchAll() {
-    val pageable = Pageable.unpaged();
-    val options = createSelectOptions(pageable).count();
-    return codeDao.selectAll(new CodeCriteria(), options, toList());
-  }
-
-  /**
-   * コードを複数取得します。
+   * コードマスタを検索します。
    *
    * @param criteria
    * @param pageable
@@ -46,6 +35,15 @@ public class CodeRepository {
     val options = createSelectOptions(pageable).count();
     val data = codeDao.selectAll(criteria, options, toList());
     return new PageImpl<>(data, pageable, options.getCount());
+  }
+
+  /**
+   * コードマスタを検索します。
+   *
+   * @return
+   */
+  public Stream<Code> findAll(CodeCriteria criteria) {
+    return codeDao.selectAll(criteria);
   }
 
   /**

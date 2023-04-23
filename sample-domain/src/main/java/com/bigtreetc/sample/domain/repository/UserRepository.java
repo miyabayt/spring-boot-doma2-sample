@@ -12,6 +12,7 @@ import com.bigtreetc.sample.domain.entity.UserCriteria;
 import com.bigtreetc.sample.domain.entity.UserRole;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -45,7 +46,16 @@ public class UserRepository {
   }
 
   /**
-   * ユーザーを取得します。
+   * 顧客マスタを検索します。
+   *
+   * @return
+   */
+  public Stream<User> findAll(UserCriteria criteria) {
+    return userDao.selectAll(criteria);
+  }
+
+  /**
+   * 顧客マスタを1件取得します。
    *
    * @param criteria
    * @return

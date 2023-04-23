@@ -9,6 +9,7 @@ import [[${dtoPackageName}]].[[${camelPhysicalFunctionName}]]Criteria;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -24,88 +25,93 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class [[${camelPhysicalFunctionName}]]Repository {
 
-    @NonNull final [[${camelPhysicalFunctionName}]]Dao [[${lowerPhysicalFunctionName}]]Dao;
+  @NonNull final [[${camelPhysicalFunctionName}]]Dao [[${lowerPhysicalFunctionName}]]Dao;
 
-    /**
-     * [[${logicalFunctionName}]]を検索します。
-     *
-     * @param criteria
-     * @param pageable
-     * @return
-     */
-    public Page<[[${camelPhysicalFunctionName}]]> findAll([[${camelPhysicalFunctionName}]]Criteria criteria, Pageable pageable) {
-        val options = createSelectOptions(pageable).count();
-        val data = [[${lowerPhysicalFunctionName}]]Dao.selectAll(criteria, options, toList());
-        return new PageImpl<>(data, pageable, options.getCount());
+  /**
+   * [[${logicalFunctionName}]]を検索します。
+   *
+   * @param criteria
+   * @param pageable
+   * @return
+   */
+  public Page<[[${camelPhysicalFunctionName}]]> findAll([[${camelPhysicalFunctionName}]]Criteria criteria, Pageable pageable) {
+    val options = createSelectOptions(pageable).count();
+    val data = [[${lowerPhysicalFunctionName}]]Dao.selectAll(criteria, options, toList());
+    return new PageImpl<>(data, pageable, options.getCount());
+  }
+
+  /**
+   * [[${logicalFunctionName}]]を検索します。
+   *
+   * @param criteria
+   * @return
+   */
+  public Stream<[[${camelPhysicalFunctionName}]]> findAll([[${camelPhysicalFunctionName}]]Criteria criteria) {
+    return [[${lowerPhysicalFunctionName}]]Dao.selectAll(criteria);
+  }
+
+  /**
+   * [[${logicalFunctionName}]]を1件取得します。
+   *
+   * @param criteria
+   * @return
+   */
+  public Optional<[[${camelPhysicalFunctionName}]]> findOne([[${camelPhysicalFunctionName}]]Criteria criteria) {
+    return [[${lowerPhysicalFunctionName}]]Dao.select(criteria);
+  }
+
+  /**
+   * [[${logicalFunctionName}]]を1件取得します。
+   *
+   * @return
+   */
+  public [[${camelPhysicalFunctionName}]] findById(final Long id) {
+    return [[${lowerPhysicalFunctionName}]]Dao.selectById(id)
+        .orElseThrow(() -> new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + id + " のデータが見つかりません。"));
+  }
+
+  /**
+   * [[${logicalFunctionName}]]を登録します。
+   *
+   * @param input[[${camelPhysicalFunctionName}]]
+   * @return
+   */
+  public [[${camelPhysicalFunctionName}]] create(final [[${camelPhysicalFunctionName}]] input[[${camelPhysicalFunctionName}]]) {
+    [[${lowerPhysicalFunctionName}]]Dao.insert(input[[${camelPhysicalFunctionName}]]);
+    return input[[${camelPhysicalFunctionName}]];
+  }
+
+  /**
+   * [[${logicalFunctionName}]]を更新します。
+   *
+   * @param input[[${camelPhysicalFunctionName}]]
+   * @return
+   */
+  public [[${camelPhysicalFunctionName}]] update(final [[${camelPhysicalFunctionName}]] input[[${camelPhysicalFunctionName}]]) {
+    int updated = [[${lowerPhysicalFunctionName}]]Dao.update(input[[${camelPhysicalFunctionName}]]);
+
+    if (updated < 1) {
+      throw new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + input[[${camelPhysicalFunctionName}]].getId() + " のデータが見つかりません。");
     }
 
-    /**
-     * [[${logicalFunctionName}]]を1件取得します。
-     *
-     * @param criteria
-     * @return
-     */
-    public Optional<[[${camelPhysicalFunctionName}]]> findOne([[${camelPhysicalFunctionName}]]Criteria criteria) {
-        // 1件取得
-        return [[${lowerPhysicalFunctionName}]]Dao.select(criteria);
+    return input[[${camelPhysicalFunctionName}]];
+  }
+
+  /**
+   * [[${logicalFunctionName}]]を論理削除します。
+   *
+   * @return
+   */
+  public [[${camelPhysicalFunctionName}]] delete(final Long id) {
+    val [[${lowerPhysicalFunctionName}]] = [[${lowerPhysicalFunctionName}]]Dao.selectById(id)
+        .orElseThrow(() -> new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + id + " のデータが見つかりません。"));
+
+    int updated = [[${lowerPhysicalFunctionName}]]Dao.delete([[${lowerPhysicalFunctionName}]]);
+
+    if (updated < 1) {
+      throw new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + id + " は更新できませんでした。");
     }
 
-    /**
-     * [[${logicalFunctionName}]]を1件取得します。
-     *
-     * @return
-     */
-    public [[${camelPhysicalFunctionName}]] findById(final Long id) {
-        // 1件取得
-        return [[${lowerPhysicalFunctionName}]]Dao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + id + " のデータが見つかりません。"));
-    }
-
-    /**
-     * [[${logicalFunctionName}]]を登録します。
-     *
-     * @param input[[${camelPhysicalFunctionName}]]
-     * @return
-     */
-    public [[${camelPhysicalFunctionName}]] create(final [[${camelPhysicalFunctionName}]] input[[${camelPhysicalFunctionName}]]) {
-        // 1件登録
-        [[${lowerPhysicalFunctionName}]]Dao.insert(input[[${camelPhysicalFunctionName}]]);
-
-        return input[[${camelPhysicalFunctionName}]];
-    }
-
-    /**
-     * [[${logicalFunctionName}]]を更新します。
-     *
-     * @param input[[${camelPhysicalFunctionName}]]
-     * @return
-     */
-    public [[${camelPhysicalFunctionName}]] update(final [[${camelPhysicalFunctionName}]] input[[${camelPhysicalFunctionName}]]) {
-        // 1件更新
-        int updated = [[${lowerPhysicalFunctionName}]]Dao.update(input[[${camelPhysicalFunctionName}]]);
-
-        if (updated < 1) {
-            throw new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + input[[${camelPhysicalFunctionName}]].getId() + " のデータが見つかりません。");
-        }
-
-        return input[[${camelPhysicalFunctionName}]];
-    }
-
-    /**
-     * [[${logicalFunctionName}]]を論理削除します。
-     *
-     * @return
-     */
-    public [[${camelPhysicalFunctionName}]] delete(final Long id) {
-        val [[${lowerPhysicalFunctionName}]] = [[${lowerPhysicalFunctionName}]]Dao.selectById(id)
-                .orElseThrow(() -> new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + id + " のデータが見つかりません。"));
-
-        int updated = [[${lowerPhysicalFunctionName}]]Dao.delete([[${lowerPhysicalFunctionName}]]);
-
-        if (updated < 1) {
-            throw new NoDataFoundException("[[${lowerPhysicalFunctionName}]]_id=" + id + " は更新できませんでした。");
-        }
-
-        return [[${lowerPhysicalFunctionName}]];
-    }
+    return [[${lowerPhysicalFunctionName}]];
+  }
 }

@@ -1,15 +1,14 @@
 package com.bigtreetc.sample.web.admin.controller.codecategory;
 
 import static com.bigtreetc.sample.common.util.ValidateUtils.isTrue;
-import static com.bigtreetc.sample.domain.util.TypeUtils.toListType;
 import static com.bigtreetc.sample.web.base.WebConst.*;
 
 import com.bigtreetc.sample.domain.entity.CodeCategory;
 import com.bigtreetc.sample.domain.entity.CodeCategoryCriteria;
 import com.bigtreetc.sample.domain.service.codecategory.CodeCategoryService;
 import com.bigtreetc.sample.web.base.controller.html.AbstractHtmlController;
-import com.bigtreetc.sample.web.base.view.CsvView;
-import java.util.List;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +22,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /** コード分類 */
@@ -277,26 +275,25 @@ public class CodeCategoryController extends AbstractHtmlController {
    *
    * @param filename
    * @param form
+   * @param response
    * @return
    */
   @PreAuthorize("hasAuthority('codeCategory:read')")
   @GetMapping("/download/{filename:.+\\.csv}")
-  public ModelAndView downloadCsv(
+  public void downloadCsv(
       @PathVariable String filename,
-      @ModelAttribute("searchCodeCategoryForm") SearchCodeCategoryForm form) {
+      @ModelAttribute("searchCodeCategoryForm") SearchCodeCategoryForm form,
+      HttpServletResponse response)
+      throws IOException {
+    // ダウンロード時のファイル名をセットする
+    setContentDispositionHeader(response, filename, true);
+
     // 入力値から検索条件を作成する
     val criteria = modelMapper.map(form, CodeCategoryCriteria.class);
 
-    // 全件取得する
-    val codes = codeCategoryService.findAll(criteria, Pageable.unpaged());
-
-    // 詰め替える
-    List<CodeCategoryCsv> csvList =
-        modelMapper.map(codes.getContent(), toListType(CodeCategoryCsv.class));
-
-    // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
-    val view = new CsvView(CodeCategoryCsv.class, csvList, filename);
-
-    return new ModelAndView(view);
+    // CSV出力する
+    try (val outputStream = response.getOutputStream()) {
+      codeCategoryService.writeToOutputStream(outputStream, criteria, CodeCategoryCsv.class);
+    }
   }
 }

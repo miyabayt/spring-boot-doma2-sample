@@ -5,9 +5,11 @@ import com.bigtreetc.sample.domain.entity.HolidayCriteria;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.SelectOptions;
+import org.seasar.doma.message.Message;
 
 @ConfigAutowireable
 @Dao
@@ -27,7 +29,17 @@ public interface HolidayDao {
       final Collector<Holiday, ?, R> collector);
 
   /**
-   * 祝日を1件取得します。
+   * 祝日マスタを検索します。
+   *
+   * @param criteria
+   * @return
+   */
+  @Select
+  @Suppress(messages = {Message.DOMA4274})
+  Stream<Holiday> selectAll(final HolidayCriteria criteria);
+
+  /**
+   * 祝日マスタを1件取得します。
    *
    * @param id
    * @return
