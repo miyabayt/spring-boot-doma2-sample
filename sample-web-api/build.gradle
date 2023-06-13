@@ -1,0 +1,35 @@
+apply plugin: "com.google.cloud.tools.jib"
+
+dependencies {
+    implementation project(":sample-web-base")
+
+    testImplementation "org.springframework.boot:spring-boot-testcontainers"
+    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation "org.testcontainers:spock"
+    testImplementation "org.testcontainers:mysql"
+
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    developmentOnly "org.springframework.boot:spring-boot-docker-compose"
+}
+
+jib {
+    pluginExtensions {
+        pluginExtension {
+            implementation = "com.google.cloud.tools.jib.gradle.extension.springboot.JibSpringBootExtension"
+        }
+    }
+    from {
+        image = "public.ecr.aws/amazoncorretto/amazoncorretto:17"
+    }
+    container {
+        jvmFlags = [
+            "-Djava.awt.headless=true",
+            "-Djava.security.egd=file:/dev/./urandom",
+            "-Dfile.encoding=UTF-8",
+            "-Duser.language=ja",
+            "-Duser.country=JP",
+            "-Duser.timezone=Asia/Tokyo",
+            "-XX:MaxRAMPercentage=90"
+        ]
+    }
+}

@@ -1,4 +1,4 @@
-package com.bigtreetc.sample.web.base.controller.api.resource;
+package com.bigtreetc.sample.web.api.base.resource;
 
 /** リソースファクトリ */
 public interface ResourceFactory {

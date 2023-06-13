@@ -1,0 +1,35 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  messages:
+    cache-duration: -1
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/spring-boot-doma2-sample?useSSL=false
+    username: root
+    password: passw0rd
+  flyway:
+    enable: true
+    baseline-on-migrate: true
+  mail:
+    host: 127.0.0.1
+    port: 1025
+    username: test
+    password: test
+  docker:
+    compose:
+      file: ../docker-compose.yml
+doma:
+  # SQLファイルをキャッシュしない
+  sql-file-repository: no_cache
+logging:
+  level:
+    org.springframework: INFO
+    org.springframework.jdbc: INFO
+    org.thymeleaf: INFO
+    com.bigtreetc.sample: DEBUG
+
+####
+# アプリケーションの設定
+application:

@@ -1,8 +1,8 @@
-package com.bigtreetc.sample.web.base.controller.api;
+package com.bigtreetc.sample.web.api.base;
 
 import com.bigtreetc.sample.common.FunctionNameAware;
+import com.bigtreetc.sample.web.api.base.resource.ResourceFactory;
 import com.bigtreetc.sample.web.base.controller.BaseController;
-import com.bigtreetc.sample.web.base.controller.api.resource.ResourceFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

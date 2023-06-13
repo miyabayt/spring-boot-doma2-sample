@@ -1,12 +1,13 @@
-package com.bigtreetc.sample.web.base.controller.api;
+package com.bigtreetc.sample.web.api.base;
 
+import static com.bigtreetc.sample.web.api.WebApiConst.ACCESS_DENIED_ERROR;
 import static com.bigtreetc.sample.web.base.WebConst.*;
 
 import com.bigtreetc.sample.common.util.MessageUtils;
 import com.bigtreetc.sample.domain.exception.NoDataFoundException;
 import com.bigtreetc.sample.domain.exception.ValidationErrorException;
-import com.bigtreetc.sample.web.base.controller.api.resource.ErrorResourceImpl;
-import com.bigtreetc.sample.web.base.controller.api.resource.FieldErrorResource;
+import com.bigtreetc.sample.web.api.base.resource.ErrorResourceImpl;
+import com.bigtreetc.sample.web.api.base.resource.FieldErrorResource;
 import java.util.ArrayList;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -94,6 +96,26 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     errorResource.setFieldErrors(new ArrayList<>());
 
     return new ResponseEntity<>(errorResource, headers, status);
+  }
+
+  /**
+   * 不正アクセスエラーのハンドリング
+   *
+   * @param ex
+   * @param request
+   * @return
+   */
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<Object> handleAccessDeniedException(Exception ex, WebRequest request) {
+    val headers = new HttpHeaders();
+    val status = HttpStatus.FORBIDDEN;
+    val message =
+        MessageUtils.getMessage(ACCESS_DENIED_ERROR, null, "access denied", request.getLocale());
+
+    val response = new ErrorResourceImpl();
+    response.setMessage(message);
+
+    return new ResponseEntity<>(response, headers, status);
   }
 
   /**

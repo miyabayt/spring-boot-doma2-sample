@@ -5,14 +5,6 @@
 
 ## ローカル環境
 
-### Dockerの起動
-MySQLなどのサーバーを立ち上げる。
-
-```bash
-$ cd /path/to/spring-boot-doma2-sample
-$ ./gradlew composeUp
-```
-
 ### アプリケーションの起動
 
 #### 管理側
@@ -23,6 +15,11 @@ $ ./gradlew :sample-web-admin:bootRun
 #### フロント側
 ```bash
 $ ./gradlew :sample-web-front:bootRun
+```
+
+#### API
+```bash
+$ ./gradlew :sample-web-api:bootRun
 ```
 
 #### バッチ
@@ -43,11 +40,11 @@ $ ./gradlew :sample-batch:bootRun --args="--spring.batch.job.name=sendMailJob"
 ### 接続先情報
 #### テストユーザー test@sample.com / passw0rd
 
-| 接続先| URL                                       |
-| :-----|:------------------------------------------|
-| 管理側画面| http://localhost:18081/admin              |
-| 管理側API| http://localhost:18082/api/v1/users |
-| フロント側| http://localhost:18080/                   |
+| 接続先   | URL                                 |
+|:------|:------------------------------------|
+| 管理側画面 | http://localhost:18081/admin        |
+| API   | http://localhost:18082/api/v1/users |
+| フロント側 | http://localhost:18080/             |
 
 #### データベース接続先
 

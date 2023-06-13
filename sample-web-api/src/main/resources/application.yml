@@ -1,0 +1,76 @@
+# 共通の設定を定義する
+spring:
+  profiles:
+    # デフォルトを明示的に指定する
+    # ローカル環境以外は環境変数でプロファイルを切り替える
+    default: local
+    active: local
+  main:
+    # DataValueProcessorのBean上書きのため暫定対応
+    allow-bean-definition-overriding: true
+  messages:
+    # メッセージ定義ファイルのパスを含めて設定する
+    basename: messages,ValidationMessages
+    cache-duration: -1
+    encoding: UTF-8
+  jackson:
+    # 日付型をISO形式で出力する
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  servlet:
+    multipart:
+      # アップロードのサイズ制限を設定する
+      max-file-size: 5MB
+      max-request-size: 5MB
+  security:
+    filter:
+      dispatcher-types: forward,async,error,request
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      autoCommit: false
+      connectionTimeout: 30000
+      idleTimeout: 30000
+      maxLifetime: 1800000
+      connectionTestQuery: SELECT 1
+      minimumIdle: 10
+      maximumPoolSize: 30
+  flyway:
+    placeholder-replacement: false
+  batch:
+    job:
+      # 自動的にバッチジョブが起動しないようにする
+      enabled: false
+  mail:
+    protocol: smtp
+    properties:
+      mail:
+        from: from@sample.com
+doma:
+  dialect: mysql
+  # 小文字のスネークケースに変換する（firstName → first_name）
+  naming: SNAKE_LOWER_CASE
+  # SQLファイルをキャッシュする
+  sql-file-repository: greedy_cache
+  # バルクインサート・アップデートのサイズ
+  batch-size: 1000
+jmx:
+  enabled: false
+management:
+  security:
+    enabled: false
+server:
+  port: 18082
+  compression:
+    enabled: true
+  servlet:
+    contextPath: /api
+logging:
+  pattern:
+    # MDCで設定した値を出力する
+    level: "[%X{FUNCTION_NAME}:%X{X-Track-Id}:%X{LOGIN_USER_ID}] %5p"
+
+
+####
+# アプリケーションの設定
+application:

@@ -1,4 +1,4 @@
-package com.bigtreetc.sample.web.base.controller.api.resource;
+package com.bigtreetc.sample.web.api.base.resource;
 
 /** リソースファクトリのデフォルト実装 */
 public class DefaultResourceFactoryImpl implements ResourceFactory {
