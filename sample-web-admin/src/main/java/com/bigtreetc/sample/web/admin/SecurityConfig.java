@@ -8,14 +8,12 @@ import lombok.val;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -36,7 +34,7 @@ public class SecurityConfig extends BaseSecurityConfig {
     val authenticationManager = authenticationManagerBuilder.build();
 
     // CookieにCSRFトークンを保存する
-    http.csrf().csrfTokenRepository(new CookieCsrfTokenRepository());
+    http.csrf(csrf -> csrf.csrfTokenRepository(new CookieCsrfTokenRepository()));
 
     String[] permittedUrls = {
       WebConst.LOGIN_TIMEOUT_URL,
@@ -48,65 +46,64 @@ public class SecurityConfig extends BaseSecurityConfig {
       WebConst.STATIC_RESOURCES_URL
     };
 
-    http.authorizeHttpRequests()
-        .requestMatchers(WebConst.API_BASE_URL)
-        .authenticated()
-        // Basic認証をかける
-        .and()
-        .authenticationManager(authenticationManager)
-        .httpBasic()
-        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-        // CSRFチェックをしない
-        .and()
-        .csrf()
-        .disable();
+    http.authorizeHttpRequests(
+        authorize -> {
+          // エラー画面は認証をかけない
+          authorize
+              .requestMatchers(permittedUrls)
+              .permitAll()
+              // エラー画面以外は、認証をかける
+              .anyRequest()
+              .authenticated();
+        });
 
-    http.authorizeHttpRequests()
-        // エラー画面は認証をかけない
-        .requestMatchers(permittedUrls)
-        .permitAll()
-        // エラー画面以外は、認証をかける
-        .anyRequest()
-        .authenticated()
-        .and()
-        .authenticationManager(authenticationManager)
-        .exceptionHandling()
-        .authenticationEntryPoint(authenticationEntryPoint())
-        .accessDeniedHandler(accessDeniedHandler());
+    http.authenticationManager(authenticationManager)
+        .exceptionHandling(
+            exceptionHandling ->
+                exceptionHandling
+                    .authenticationEntryPoint(authenticationEntryPoint())
+                    .accessDeniedHandler(accessDeniedHandler()));
 
-    http.formLogin()
-        // ログイン画面のURL
-        .loginPage(WebConst.LOGIN_URL)
-        // 認可を処理するURL
-        .loginProcessingUrl(WebConst.LOGIN_PROCESSING_URL)
-        // ログイン成功時の遷移先
-        .successForwardUrl(WebConst.LOGIN_SUCCESS_URL)
-        // ログイン失敗時の遷移先
-        .failureUrl(WebConst.LOGIN_FAILURE_URL)
-        // ログインIDのパラメータ名
-        .usernameParameter("loginId")
-        // パスワードのパラメータ名
-        .passwordParameter("password")
-        .permitAll();
+    http.formLogin(
+        formLogin -> {
+          // ログイン画面のURL
+          formLogin
+              .loginPage(WebConst.LOGIN_URL)
+              // 認可を処理するURL
+              .loginProcessingUrl(WebConst.LOGIN_PROCESSING_URL)
+              // ログイン成功時の遷移先
+              .successForwardUrl(WebConst.LOGIN_SUCCESS_URL)
+              // ログイン失敗時の遷移先
+              .failureUrl(WebConst.LOGIN_FAILURE_URL)
+              // ログインIDのパラメータ名
+              .usernameParameter("loginId")
+              // パスワードのパラメータ名
+              .passwordParameter("password")
+              .permitAll();
+        });
 
     // ログアウト設定
-    http.logout() //
-        .logoutRequestMatcher(new AntPathRequestMatcher(WebConst.LOGOUT_URL))
-        // Cookieを破棄する
-        .deleteCookies("SESSION", "JSESSIONID", rememberMeCookieName)
-        // ログアウト画面のURL
-        .logoutUrl(WebConst.LOGOUT_URL)
-        // ログアウト後の遷移先
-        .logoutSuccessUrl(WebConst.LOGOUT_SUCCESS_URL)
-        // ajaxの場合は、HTTPステータスを返す
-        .defaultLogoutSuccessHandlerFor(
-            new HttpStatusReturningLogoutSuccessHandler(), RequestUtils::isAjaxRequest)
-        // セッションを破棄する
-        .invalidateHttpSession(true)
-        .permitAll();
+    http.logout(
+        logout ->
+            logout
+                .logoutRequestMatcher(new AntPathRequestMatcher(WebConst.LOGOUT_URL))
+                // Cookieを破棄する
+                .deleteCookies("SESSION", "JSESSIONID", rememberMeCookieName)
+                // ログアウト画面のURL
+                .logoutUrl(WebConst.LOGOUT_URL)
+                // ログアウト後の遷移先
+                .logoutSuccessUrl(WebConst.LOGOUT_SUCCESS_URL)
+                // ajaxの場合は、HTTPステータスを返す
+                .defaultLogoutSuccessHandlerFor(
+                    new HttpStatusReturningLogoutSuccessHandler(), RequestUtils::isAjaxRequest)
+                // セッションを破棄する
+                .invalidateHttpSession(true)
+                .permitAll());
 
     // RememberMe
-    http.rememberMe().key(REMEMBER_ME_KEY).rememberMeServices(multiDeviceRememberMeServices());
+    http.rememberMe(
+        rememberMe ->
+            rememberMe.key(REMEMBER_ME_KEY).rememberMeServices(multiDeviceRememberMeServices()));
 
     return http.build();
   }

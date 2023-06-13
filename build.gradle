@@ -9,11 +9,9 @@ plugins {
     id "org.springframework.boot" version "${springBootVersion}" apply false
     id "org.domaframework.doma.compile" version "2.0.0" apply false
     id "com.google.cloud.tools.jib" version "3.2.1" apply false
-    id "com.avast.gradle.docker-compose" version "0.16.12" apply false
     id "com.diffplug.spotless" version "${spotlessVersion}"
 }
 
-apply plugin: "docker-compose"
 apply plugin: com.bigtreetc.sample.CodeGenPlugin
 apply plugin: "io.spring.dependency-management"
 
