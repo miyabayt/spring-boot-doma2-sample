@@ -20,9 +20,10 @@ dependencies {
     testImplementation "org.seleniumhq.selenium:selenium-remote-driver:${seleniumVersion}"
     testImplementation "org.seleniumhq.selenium:selenium-support:${seleniumVersion}"
     testImplementation "org.seleniumhq.selenium:selenium-api:${seleniumVersion}"
-    testImplementation "org.testcontainers:spock:1.17.6"
-    testImplementation "org.testcontainers:selenium:1.17.6"
-    testImplementation "org.testcontainers:mysql:1.17.6"
+    testImplementation "org.springframework.boot:spring-boot-testcontainers"
+    testImplementation "org.testcontainers:spock"
+    testImplementation "org.testcontainers:selenium"
+    testImplementation "org.testcontainers:mysql"
 }
 
 drivers.each { driver ->

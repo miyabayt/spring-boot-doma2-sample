@@ -15,10 +15,12 @@ dependencies {
     implementation "org.webjars:dropzone:5.9.2"
 
     testImplementation "org.flywaydb.flyway-test-extensions:flyway-spring-test:7.0.0"
-    testImplementation "org.testcontainers:spock:1.17.6"
-    testImplementation "org.testcontainers:mysql:1.17.6"
+    testImplementation "org.springframework.boot:spring-boot-testcontainers"
+    testImplementation "org.testcontainers:spock"
+    testImplementation "org.testcontainers:mysql"
 
     developmentOnly "org.springframework.boot:spring-boot-devtools"
+    developmentOnly "org.springframework.boot:spring-boot-docker-compose"
 }
 
 jib {

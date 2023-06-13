@@ -23,6 +23,9 @@ spring:
     port: 1025
     username: test
     password: test
+  docker:
+    compose:
+      file: ../docker-compose.yml
 doma:
   # SQLファイルをキャッシュしない
   sql-file-repository: no_cache
