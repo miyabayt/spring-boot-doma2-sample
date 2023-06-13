@@ -1,6 +1,5 @@
 package com.bigtreetc.sample.web.base.aop;
 
-import com.bigtreetc.sample.web.base.controller.api.AbstractRestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.val;
@@ -34,22 +33,6 @@ public abstract class BaseHandlerInterceptor implements HandlerInterceptor {
       HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
       throws Exception {
     // 処理完了後
-  }
-
-  /**
-   * RestControllerであるかどうかを示す値を返します。
-   *
-   * @param handler
-   * @return
-   */
-  protected boolean isRestController(Object handler) {
-    val bean = getBean(handler, AbstractRestController.class);
-
-    if (bean instanceof AbstractRestController) {
-      return true;
-    }
-
-    return false;
   }
 
   /**

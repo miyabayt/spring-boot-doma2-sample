@@ -30,11 +30,6 @@ public class SetModelAndViewInterceptor extends BaseHandlerInterceptor {
       ModelAndView modelAndView)
       throws Exception {
     // コントローラーの動作後
-    if (isRestController(handler)) {
-      // APIの場合はスキップする
-      return;
-    }
-
     if (modelAndView == null) {
       return;
     }

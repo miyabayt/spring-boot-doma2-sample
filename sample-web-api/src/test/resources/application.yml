@@ -1,0 +1,43 @@
+spring:
+  main:
+    # DataValueProcessorのBean上書きのため暫定対応
+    allow-bean-definition-overriding: true
+  messages:
+    basename: messages,ValidationMessages
+    encoding: UTF-8
+  thymeleaf:
+    encoding: UTF-8
+  jackson:
+    # 日付型をISO形式で出力する
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  mail:
+    protocol: smtp
+    username: test
+    password: test
+    properties:
+      mail:
+        from: from@sample.com
+  flyway:
+    baseline-on-migrate: true
+    placeholder-replacement: false
+  data:
+    redis:
+      repositories:
+        enabled: false
+doma:
+  dialect: mysql
+  # 小文字のスネークケースに変換する（firstName → first_name）
+  naming: SNAKE_LOWER_CASE
+  # バルクインサート・アップデートのサイズ
+  batch-size: 1000
+server:
+  servlet:
+    contextPath: /api
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG
+
+####
+# アプリケーションの設定
+application:

@@ -9,8 +9,6 @@ import com.bigtreetc.sample.domain.repository.CodeRepository;
 import com.bigtreetc.sample.web.base.aop.*;
 import com.bigtreetc.sample.web.base.controller.LocalDateConverter;
 import com.bigtreetc.sample.web.base.controller.LocalDateTimeConverter;
-import com.bigtreetc.sample.web.base.controller.api.resource.DefaultResourceFactoryImpl;
-import com.bigtreetc.sample.web.base.controller.api.resource.ResourceFactory;
 import com.bigtreetc.sample.web.base.filter.ClearMDCFilter;
 import com.bigtreetc.sample.web.base.filter.LoginUserTrackingFilter;
 import com.bigtreetc.sample.web.base.security.CorsProperties;
@@ -228,10 +226,5 @@ public abstract class BaseApplicationConfig
   public SetModelAndViewInterceptor setModelAndViewInterceptor() {
     // 共通的な定数定義などを画面変数に設定する
     return new SetModelAndViewInterceptor();
-  }
-
-  @Bean
-  public ResourceFactory resourceFactory() {
-    return new DefaultResourceFactoryImpl();
   }
 }
