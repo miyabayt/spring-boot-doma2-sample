@@ -13,7 +13,7 @@ dependencies {
     api "org.springframework.boot:spring-boot-starter"
 
     api "org.apache.commons:commons-lang3"
-    api "org.apache.commons:commons-text:1.9"
+    api "org.apache.commons:commons-text:1.11.0"
     api "org.apache.commons:commons-compress:1.21"
     api "commons-codec:commons-codec"
     api "org.apache.commons:commons-digester3:3.2"
