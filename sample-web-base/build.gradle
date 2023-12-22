@@ -23,9 +23,9 @@ dependencies {
     api "org.thymeleaf.extras:thymeleaf-extras-springsecurity6"
     api "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
     api "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
-    api "org.modelmapper:modelmapper:3.1.1"
-    api "net.sf.jasperreports:jasperreports:6.20.6"
-    api "org.apache.poi:poi:5.2.4"
-    api "org.apache.poi:poi-ooxml:5.2.4"
+    api "org.modelmapper:modelmapper:3.2.0"
+    api "net.sf.jasperreports:jasperreports:6.21.0"
+    api "org.apache.poi:poi:5.2.5"
+    api "org.apache.poi:poi-ooxml:5.2.5"
     api "com.github.ben-manes.caffeine:caffeine"
 }
