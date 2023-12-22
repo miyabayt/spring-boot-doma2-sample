@@ -78,7 +78,11 @@ public class UserService extends BaseTransactionalService {
    */
   public User update(final User inputUser) {
     Assert.notNull(inputUser, "inputUser must not be null");
-    return userRepository.update(inputUser);
+
+    val user = userRepository.findById(inputUser.getId());
+    modelMapper.map(inputUser, user);
+
+    return userRepository.update(user);
   }
 
   /**

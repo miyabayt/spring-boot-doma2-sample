@@ -1,4 +1,4 @@
-package com.bigtreetc.sample.web.admin.controller.html.home
+package com.bigtreetc.sample.web.admin.controller.home
 
 import com.bigtreetc.sample.domain.BaseTestContainerSpec
 import org.flywaydb.test.annotation.FlywayTest
@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @FlywayTest
 @SpringBootTest
-class HomeHtmlControllerTest extends BaseTestContainerSpec {
+class HomeControllerTest extends BaseTestContainerSpec {
 
     @Autowired
     WebApplicationContext wac
