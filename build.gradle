@@ -7,10 +7,12 @@ buildscript {
 plugins {
     id "idea"
     id "org.springframework.boot" version "${springBootVersion}" apply false
+    id "org.owasp.dependencycheck" version "9.0.2" apply false
     id "org.domaframework.doma.compile" version "2.0.0" apply false
     id "com.google.cloud.tools.jib" version "3.2.1" apply false
     id "com.avast.gradle.docker-compose" version "0.16.11" apply false
     id "com.diffplug.spotless" version "${spotlessVersion}"
+    id "com.github.ben-manes.versions" version "0.50.0" apply false
 }
 
 apply plugin: com.bigtreetc.sample.CodeGenPlugin
@@ -22,7 +24,9 @@ subprojects {
     apply plugin: "groovy"
     apply plugin: "org.springframework.boot"
     apply plugin: "io.spring.dependency-management"
+    apply plugin: "org.owasp.dependencycheck"
     apply plugin: "com.diffplug.spotless"
+    apply plugin: "com.github.ben-manes.versions"
 
     repositories {
         mavenCentral()
