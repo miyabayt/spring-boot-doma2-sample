@@ -69,7 +69,7 @@ subprojects {
 
     sourceCompatibility = "17"
     [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.encoding = "UTF-8"
-    [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.compilerArgs = ["-Xlint:all"]
+    [compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.compilerArgs = ["-parameters", "-Xlint:all"]
 
     dependencies {
         compileOnly "org.projectlombok:lombok"

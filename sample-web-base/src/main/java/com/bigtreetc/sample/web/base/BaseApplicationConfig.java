@@ -91,7 +91,7 @@ public abstract class BaseApplicationConfig
   }
 
   @Bean
-  public FilterRegistrationBean<CorsFilter> corsFilter(CorsProperties corsProperties) {
+  public CorsFilter corsFilter(CorsProperties corsProperties) {
     val corsConfig = new CorsConfiguration();
     corsConfig.setAllowCredentials(corsProperties.getAllowCredentials());
     corsConfig.setAllowedHeaders(corsProperties.getAllowedHeaders());
@@ -102,10 +102,7 @@ public abstract class BaseApplicationConfig
 
     val source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", corsConfig);
-
-    val bean = new FilterRegistrationBean<>(new CorsFilter(source));
-    bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-    return bean;
+    return new CorsFilter(source);
   }
 
   @Bean

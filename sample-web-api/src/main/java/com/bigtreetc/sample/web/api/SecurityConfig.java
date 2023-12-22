@@ -3,10 +3,8 @@ package com.bigtreetc.sample.web.api;
 import com.bigtreetc.sample.web.base.security.CorsProperties;
 import lombok.val;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,7 +27,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
   @Bean
-  public FilterRegistrationBean<CorsFilter> corsFilter(CorsProperties corsProperties) {
+  public CorsFilter corsFilter(CorsProperties corsProperties) {
     val corsConfig = new CorsConfiguration();
     corsConfig.setAllowCredentials(corsProperties.getAllowCredentials());
     corsConfig.setAllowedHeaders(corsProperties.getAllowedHeaders());
@@ -40,10 +38,7 @@ public class SecurityConfig {
 
     val source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", corsConfig);
-
-    val bean = new FilterRegistrationBean<>(new CorsFilter(source));
-    bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-    return bean;
+    return new CorsFilter(source);
   }
 
   @Bean
