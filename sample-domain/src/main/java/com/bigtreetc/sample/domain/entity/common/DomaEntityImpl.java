@@ -18,22 +18,25 @@ import org.seasar.doma.Version;
 public abstract class DomaEntityImpl implements DomaEntity, Serializable {
 
   // 作成者
-  @JsonIgnore String createdBy;
+  @Column(updatable = false)
+  @JsonIgnore
+  String createdBy;
 
   // 作成日時
-  @JsonIgnore LocalDateTime createdAt;
+  @Column(updatable = false)
+  LocalDateTime createdAt;
 
   // 更新者
   @JsonIgnore String updatedBy;
 
   // 更新日時
-  @JsonIgnore LocalDateTime updatedAt;
+  LocalDateTime updatedAt;
 
   // 削除者
   @JsonIgnore String deletedBy;
 
   // 削除日時
-  @JsonIgnore LocalDateTime deletedAt;
+  LocalDateTime deletedAt;
 
   // 楽観的排他制御で使用する改定番号
   @Version
