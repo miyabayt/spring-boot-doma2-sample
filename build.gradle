@@ -13,6 +13,7 @@ plugins {
     id "com.avast.gradle.docker-compose" version "0.16.11" apply false
     id "com.diffplug.spotless" version "${spotlessVersion}"
     id "com.github.ben-manes.versions" version "0.50.0" apply false
+    id "jacoco"
 }
 
 apply plugin: com.bigtreetc.sample.CodeGenPlugin
@@ -27,6 +28,7 @@ subprojects {
     apply plugin: "org.owasp.dependencycheck"
     apply plugin: "com.diffplug.spotless"
     apply plugin: "com.github.ben-manes.versions"
+    apply plugin: "jacoco"
 
     repositories {
         mavenCentral()
@@ -87,10 +89,17 @@ subprojects {
         useJUnitPlatform()
         testLogging {
             events "passed", "skipped", "failed"
+            exceptionFormat = "full"
+            showCauses = true
+            showExceptions = true
+            showStackTraces = true
         }
+        finalizedBy jacocoTestReport // report is always generated after tests run
     }
 
-    task allDeps(type: DependencyReportTask) {}
+    jacocoTestReport {
+        dependsOn test // tests are required to run before generating the report
+    }
 
     compileJava.dependsOn "spotlessApply"
 }
