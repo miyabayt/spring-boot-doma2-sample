@@ -86,6 +86,10 @@ doma:
   sql-file-repository: greedy_cache
   # バルクインサート・アップデートのサイズ
   batch-size: 1000
+  # SQLログの出力形式
+  exception-sql-log-type: FORMATTED
+  # SQLログのロガー（SLF4J / JUL）
+  jdbc-logger: SLF4J
 jmx:
   enabled: false
 management:

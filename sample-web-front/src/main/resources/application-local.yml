@@ -35,6 +35,7 @@ logging:
     org.springframework: INFO
     org.springframework.jdbc: INFO
     org.thymeleaf: INFO
+    org.seasar.doma.jdbc: DEBUG
     com.bigtreetc.sample: DEBUG
 
 ####

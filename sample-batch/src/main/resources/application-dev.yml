@@ -24,8 +24,6 @@ logging:
   level:
     org.springframework: INFO
     com.bigtreetc.sample.batch: DEBUG
-    # SQL文を表示したいときはINFOにする
-    org.seasar.doma.jdbc: WARN
 
 
 ####

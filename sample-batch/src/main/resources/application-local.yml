@@ -23,10 +23,8 @@ spring:
 logging:
   level:
     org.springframework: INFO
-    # org.springframework.boot.autoconfigure.batch: DEBUG
+    org.seasar.doma.jdbc: DEBUG
     com.bigtreetc.sample.batch: DEBUG
-    # SQL文を表示したいときはINFOにする
-    org.seasar.doma.jdbc: WARN
 
 
 ####
