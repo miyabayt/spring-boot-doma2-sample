@@ -10,7 +10,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public class BaseTestContainerTest {
 
-  private static final MySQLContainer<?> MYSQL_CONTAINER = new MySQLContainer<>("mysql:8");
+  private static final MySQLContainer<?> MYSQL_CONTAINER = new MySQLContainer<>("mysql:8.2");
 
   private static final GenericContainer<?> MAILHOG_CONTAINER =
       new GenericContainer<>("mailhog/mailhog")

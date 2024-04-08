@@ -11,7 +11,7 @@ import spock.lang.Specification
 @Testcontainers
 class BaseTestContainerSpec extends Specification {
 
-    static final MySQLContainer<?> MYSQL_CONTAINER = new MySQLContainer<>("mysql:8")
+    static final MySQLContainer<?> MYSQL_CONTAINER = new MySQLContainer<>("mysql:8.2")
 
     static final GenericContainer<?> MAILHOG_CONTAINER =
             new GenericContainer<>("mailhog/mailhog")
