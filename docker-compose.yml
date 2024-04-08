@@ -17,13 +17,12 @@ services:
   #  localstack:
   #    image: localstack/localstack
   #    environment:
-  #      DATA_DIR: /tmp/localstack/data
-  #      HOSTNAME_EXTERNAL: host.docker.internal
+  #      PERSISTENCE: 1
+  #      LOCALSTACK_HOST: host.docker.internal
   #    ports:
   #      - '4566:4566'
-  #      - '4572:4572'
   #    volumes:
-  #      - /tmp/localstack:/tmp/localstack
+  #      - /tmp/localstack:/var/lib/localstack
   mailhog:
     image: mailhog/mailhog
     ports:
