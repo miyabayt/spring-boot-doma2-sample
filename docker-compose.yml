@@ -4,6 +4,7 @@ services:
     image: mysql:8
     command: 'mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci'
     environment:
+      MYSQL_ROOT_HOST: '%'
       MYSQL_DATABASE: spring-boot-doma2-sample
       MYSQL_ROOT_PASSWORD: passw0rd
       TZ: 'Asia/Tokyo'
