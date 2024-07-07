@@ -4,7 +4,7 @@ dependencies {
     implementation project(":sample-web-base")
 
     implementation "org.webjars:webjars-locator-core"
-    implementation "org.webjars:bootstrap:3.3.7-1"
+    implementation "org.webjars:bootstrap:3.4.1"
     implementation "org.webjars:jquery:3.6.4"
 
     testImplementation "org.springframework.boot:spring-boot-testcontainers"
