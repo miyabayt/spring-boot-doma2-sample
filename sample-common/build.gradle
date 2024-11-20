@@ -17,6 +17,6 @@ dependencies {
     api "org.apache.commons:commons-compress:1.25.0"
     api "commons-codec:commons-codec"
     api "org.apache.commons:commons-digester3:3.2"
-    api "commons-io:commons-io:2.15.1"
+    api "commons-io:commons-io:2.18.0"
     api "com.ibm.icu:icu4j:74.2"
 }
