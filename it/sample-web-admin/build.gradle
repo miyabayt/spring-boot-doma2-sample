@@ -21,7 +21,7 @@ dependencies {
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation "org.testcontainers:mysql"
     testImplementation "org.testcontainers:selenium"
-    testImplementation "com.codeborne:selenide:7.0.6"
+    testImplementation "com.codeborne:selenide:7.6.1"
 }
 
 test {
