@@ -14,7 +14,7 @@ dependencies {
 
     api "org.apache.commons:commons-lang3"
     api "org.apache.commons:commons-text:1.11.0"
-    api "org.apache.commons:commons-compress:1.25.0"
+    api "org.apache.commons:commons-compress:1.27.1"
     api "commons-codec:commons-codec"
     api "org.apache.commons:commons-digester3:3.2"
     api "commons-io:commons-io:2.18.0"
