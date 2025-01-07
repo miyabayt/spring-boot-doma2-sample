@@ -20,6 +20,6 @@ public class SendMailQueueItemWriter extends BaseItemWriter<SendMailQueue> {
       log.debug("{} items to write.", ListUtils.size(items));
     }
 
-    sendMailQueueDao.insert(items);
+    sendMailQueueDao.update(items);
   }
 }

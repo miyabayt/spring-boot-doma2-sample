@@ -50,7 +50,7 @@ public class SendMailJobConfig {
       SendMailQueueItemWriter itemWriter) {
     return new StepBuilder("sendMailStep", jobRepository)
         .listener(new DefaultStepExecutionListener())
-        .<SendMailQueue, SendMailQueue>chunk(100, transactionManager)
+        .<SendMailQueue, SendMailQueue>chunk(1, transactionManager) // 1件ずつコミットする
         .reader(itemReader)
         .processor(processor)
         .writer(itemWriter)

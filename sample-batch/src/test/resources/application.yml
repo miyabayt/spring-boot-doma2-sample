@@ -1,0 +1,50 @@
+spring:
+  profiles:
+    default: test
+    active: test
+  messages:
+    basename: messages
+    encoding: UTF-8
+  thymeleaf:
+    encoding: UTF-8
+    check-template-location: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/spring-boot-doma2-sample?useSSL=false
+    username: root
+    password: passw0rd
+  mail:
+    protocol: smtp
+    properties:
+      mail:
+        from: test@example.com
+  flyway:
+    baseline-on-migrate: true
+    placeholder-replacement: false
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
+doma:
+  dialect: mysql
+  # 小文字のスネークケースに変換する（firstName → first_name）
+  naming: SNAKE_LOWER_CASE
+  # バルクインサート・アップデートのサイズ
+  batch-size: 1000
+  # SQLログの出力形式
+  exception-sql-log-type: FORMATTED
+  # SQLログのロガー（SLF4J / JUL）
+  jdbc-logger: SLF4J
+logging:
+  level:
+    org.springframework: INFO
+    org.springframework.transaction: DEBUG
+    org.springframework.cloud.task: DEBUG
+    org.seasar.doma.jdbc: DEBUG
+    com.bigtreetc.sample.batch: DEBUG
+
+####
+# アプリケーションの設定
+application:
+  fileUploadLocation: build/sample

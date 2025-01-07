@@ -24,6 +24,7 @@ dependencies {
     api "org.seasar.doma:doma-core:${domaVersion}"
     api "org.seasar.doma:doma-slf4j:${domaVersion}"
     annotationProcessor "org.seasar.doma:doma-processor:${domaVersion}"
+    testAnnotationProcessor "org.seasar.doma:doma-processor:${domaVersion}"
 
     // thymeleaf
     api "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"

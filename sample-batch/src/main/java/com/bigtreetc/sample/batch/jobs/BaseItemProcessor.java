@@ -38,7 +38,7 @@ public abstract class BaseItemProcessor<I, O> implements ItemProcessor<I, O> {
         onValidationError(context, result, item);
 
         // エラー件数をカウントする
-        increaseErrorCount(context, result, item);
+        context.increaseErrorCount();
 
         // nullを返すとItemWriterに渡されない
         return null;
@@ -46,43 +46,7 @@ public abstract class BaseItemProcessor<I, O> implements ItemProcessor<I, O> {
     }
 
     // 実処理
-    O output = doProcess(context, item);
-
-    // 処理件数をカウントする
-    increaseProcessCount(context, item);
-
-    return output;
-  }
-
-  /**
-   * エラー件数を加算します。
-   *
-   * @param context
-   * @param result
-   * @param item
-   */
-  protected void increaseErrorCount(BatchContext context, BindingResult result, I item) {
-    context.increaseErrorCount();
-  }
-
-  /**
-   * 処理件数を加算します。
-   *
-   * @param context
-   * @param item
-   */
-  protected void increaseProcessCount(BatchContext context, I item) {
-    context.increaseProcessCount();
-  }
-
-  /**
-   * 対象件数を加算します。
-   *
-   * @param context
-   * @param item
-   */
-  protected void increaseTotalCount(BatchContext context, I item) {
-    context.increaseProcessCount();
+    return doProcess(context, item);
   }
 
   /**
