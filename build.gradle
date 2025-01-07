@@ -95,6 +95,7 @@ subprojects {
             showStackTraces = true
         }
         finalizedBy jacocoTestReport // report is always generated after tests run
+        systemProperty "spring.profiles.active", "test"
     }
 
     jacocoTestReport {

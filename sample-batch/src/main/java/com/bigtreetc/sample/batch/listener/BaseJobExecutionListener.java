@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.slf4j.MDC;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 
@@ -57,55 +56,45 @@ public abstract class BaseJobExecutionListener implements JobExecutionListener {
       throw new IllegalStateException(t);
     } finally {
       // 共通の終了処理
-      try {
-        val batchId = context.getBatchId();
-        val batchName = context.getBatchName();
-        val jobStatus = jobExecution.getStatus();
-        val startTime = jobExecution.getStartTime();
-        val endTime = jobExecution.getEndTime();
+      val batchId = context.getBatchId();
+      val batchName = context.getBatchName();
+      val jobStatus = jobExecution.getStatus();
+      val startTime = jobExecution.getStartTime();
+      val endTime = jobExecution.getEndTime();
 
-        if (log.isDebugEnabled()) {
-          val jobId = jobExecution.getJobId();
-          val jobInstance = jobExecution.getJobInstance();
-          val jobInstanceId = jobInstance.getInstanceId();
+      if (log.isDebugEnabled()) {
+        val jobId = jobExecution.getJobId();
+        val jobInstance = jobExecution.getJobInstance();
+        val jobInstanceId = jobInstance.getInstanceId();
 
-          log.debug(
-              "job executed. [job={}(JobInstanceId:{} status:{})] in {}ms",
-              jobId,
-              jobInstanceId,
-              jobStatus,
-              took(jobExecution.getStartTime(), jobExecution.getEndTime()));
+        log.debug(
+            "job executed. [job={}(JobInstanceId:{} status:{})] in {}ms",
+            jobId,
+            jobInstanceId,
+            jobStatus,
+            took(jobExecution.getStartTime(), jobExecution.getEndTime()));
 
-          jobExecution
-              .getStepExecutions()
-              .forEach(
-                  s ->
-                      log.debug(
-                          "step executed. [step={}] in {}ms",
-                          s.getStepName(),
-                          took(s.getStartTime(), s.getEndTime())));
-        }
+        jobExecution
+            .getStepExecutions()
+            .forEach(
+                s ->
+                    log.debug(
+                        "step executed. [step={}] in {}ms",
+                        s.getStepName(),
+                        took(s.getStartTime(), s.getEndTime())));
+      }
 
-        if (!jobStatus.isRunning()) {
-          log.info("*********************************************");
-          log.info("* バッチID\t\t: {}", batchId);
-          log.info("* バッチ名\t\t: {}", batchName);
-          log.info("* ステータス\t\t: {}", jobStatus);
-          log.info("* 対象件数\t\t: {}", context.getTotalCount());
-          log.info("* 処理件数\t\t: {}", context.getProcessCount());
-          log.info("* エラー件数\t\t: {}", context.getErrorCount());
-          log.info("* 開始時刻\t\t: {}", DateUtils.format(startTime, YYYY_MM_DD_HHmmss));
-          log.info("* 終了時刻\t\t: {}", DateUtils.format(endTime, YYYY_MM_DD_HHmmss));
-          log.info("*********************************************");
-        }
-      } finally {
-        MDC.remove(MDC_BATCH_ID);
-
-        // 監査情報をクリアする
-        AuditInfoHolder.clear();
-
-        // ジョブコンテキストをクリアする
-        context.clear();
+      if (!jobStatus.isRunning()) {
+        log.info("*********************************************");
+        log.info("* バッチID\t\t: {}", batchId);
+        log.info("* バッチ名\t\t: {}", batchName);
+        log.info("* ステータス\t\t: {}", jobStatus);
+        log.info("* 対象件数\t\t: {}", context.getTotalCount());
+        log.info("* 処理件数\t\t: {}", context.getProcessCount());
+        log.info("* エラー件数\t\t: {}", context.getErrorCount());
+        log.info("* 開始時刻\t\t: {}", DateUtils.format(startTime, YYYY_MM_DD_HHmmss));
+        log.info("* 終了時刻\t\t: {}", DateUtils.format(endTime, YYYY_MM_DD_HHmmss));
+        log.info("*********************************************");
       }
     }
   }

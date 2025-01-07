@@ -49,10 +49,8 @@ public abstract class BasePageableItemReader<T> extends AbstractPagingItemReader
    * @return
    */
   protected SelectOptions getSelectOptions() {
-    val page = getPage(); // 1ページは0になる
     val perpage = getPageSize();
-    val offset = page * perpage;
-    return SelectOptions.get().offset(offset).limit(perpage);
+    return SelectOptions.get().offset(0).limit(perpage);
   }
 
   /**
