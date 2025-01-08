@@ -33,7 +33,7 @@ dependencies {
     api "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
 
     // modelmapper
-    api "org.modelmapper:modelmapper:3.2.0"
+    api "org.modelmapper:modelmapper:3.2.2"
 
     // mysql database
     api "com.mysql:mysql-connector-j"
