@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   mysql:
-    image: mysql:8
+    image: mysql:9
     command: 'mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci'
     environment:
       MYSQL_ROOT_HOST: '%'
