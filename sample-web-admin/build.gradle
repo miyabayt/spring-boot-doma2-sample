@@ -7,7 +7,7 @@ dependencies {
     implementation "org.webjars:webjars-locator-core"
     implementation "org.webjars:bootstrap:4.6.2"
     implementation "org.webjars:jquery:3.6.4"
-    implementation "org.webjars:jquery-validation:1.19.5"
+    implementation "org.webjars:jquery-validation:1.20.0"
     implementation "org.webjars:bootstrap-daterangepicker:3.1"
     implementation "org.webjars:momentjs:2.29.4"
     implementation "org.webjars:AdminLTE:3.2.0"
