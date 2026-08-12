@@ -25,7 +25,7 @@ dependencies {
     api "com.fasterxml.jackson.dataformat:jackson-dataformat-csv"
     api "org.modelmapper:modelmapper:3.2.6"
     api "net.sf.jasperreports:jasperreports:6.21.5"
-    api "org.apache.poi:poi:5.3.0"
-    api "org.apache.poi:poi-ooxml:5.3.0"
+    api "org.apache.poi:poi:5.5.1"
+    api "org.apache.poi:poi-ooxml:5.5.1"
     api "com.github.ben-manes.caffeine:caffeine"
 }
